@@ -43,7 +43,7 @@ CREATE TABLE `t_account_info` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of t_account_info
+-- Records of t_account_info 
 -- ----------------------------
 
 -- ----------------------------
