@@ -90,7 +90,7 @@ public class BaseUserDaoImpl extends BaseDaoImpl  implements
 					 ps.setByte(6, baseUser.getStatus());
 					 ps.setString(7, baseUser.getRemark());
 					 ps.setString(8, baseUser.getOfficePhone());
-					 ps.setLong(9, baseUser.getMobile());
+					 ps.setString(9, baseUser.getMobile()==null?"":baseUser.getMobile().toString());
 					return ps;
 				}
 			},  gkHolder);

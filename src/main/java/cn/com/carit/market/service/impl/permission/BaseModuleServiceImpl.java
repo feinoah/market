@@ -25,21 +25,22 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(BaseModule baseModule) {
+	public void saveOrUpdate(BaseModule baseModule) {
 		if (baseModule==null) {
 			throw new NullPointerException("baseModule object is null...");
 		}
 		if (baseModule.getId()==0) {
-			return baseModuleDao.add(baseModule);
+			baseModuleDao.add(baseModule);
+		} else {
+			baseModuleDao.update(baseModule);
 		}
-		return baseModuleDao.update(baseModule);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=1) {//顶级模块不能删除
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		// 删除角色模块
 		baseRoleModuleDao.deleteByModuleId(id);
@@ -50,7 +51,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	@Override
 	public BaseModule queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return baseModuleDao.queryById(id);
 	}
@@ -87,7 +88,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	@Override
 	public List<BaseModule> queryByUserId(int userId) {
 		if (userId<=0) {
-			throw new IllegalArgumentException("userId must bigger than 0...");
+			throw new IllegalArgumentException("userId must be bigger than 0...");
 		}
 		return baseModuleDao.queryByUserId(userId);
 	}
@@ -95,7 +96,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	@Override
 	public List<BaseModule> queryByRoleId(int roleId) {
 		if (roleId<=0) {
-			throw new IllegalArgumentException("roleId must bigger than 0...");
+			throw new IllegalArgumentException("roleId must be bigger than 0...");
 		}
 		return baseModuleDao.queryByRoleId(roleId);
 	}

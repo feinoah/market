@@ -1,6 +1,5 @@
 package cn.com.carit.market.dao.impl.app;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +34,7 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AppComment mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AppComment appComment=new AppComment();
+				appComment.setId(rs.getInt("id"));
 				appComment.setAppId(rs.getInt("app_id"));
 				appComment.setUserId(rs.getInt("user_id"));
 				appComment.setGrade(rs.getInt("grade"));
@@ -48,24 +48,14 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public int add(final AppComment appComment) {
-			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_app_comment ("
-					+", app_id"
+					+"	app_id"
 					+", user_id"
 					+", grade"
 					+", comment"
-					+", status"
 					+", create_time"
 					+", update_time"
-					+") values ("
-					+", app_id"
-					+", user_id"
-					+", grade"
-					+", comment"
-					+", status"
-					+", create_time"
-					+", update_time"
-					+")";
+					+") values (?, ?, ?, ?, now(), now())";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
 			jdbcTemplate.update(new PreparedStatementCreator() {
@@ -78,8 +68,6 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 					 ps.setInt(3, appComment.getGrade());
 					 ps.setString(4, appComment.getComment());
 					 ps.setInt(5, appComment.getStatus());
-					 ps.setDate(6, new Date(appComment.getCreateTime().getTime()));
-					 ps.setDate(7, new Date(appComment.getUpdateTime().getTime()));
 					return ps;
 				}
 			},  gkHolder);
@@ -92,12 +80,18 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql, id);
 		}
+		
+		@Override
+		public int deleteByAppId(int appId) {
+			String sql="delete from t_app_comment where app_id=?";
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.update(sql, appId);
+		}
 
 		@Override
 		public int update(AppComment appComment) {
 			StringBuilder sql=new StringBuilder("update t_app_comment set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (appComment.getAppId()!=null) {
 				sql.append(", app_id=?");
 				args.add(appComment.getAppId());
@@ -126,6 +120,7 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 				sql.append(", update_time=?");
 				args.add(appComment.getUpdateTime());
 			}
+			sql.append(" where id=?");
 			args.add(appComment.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

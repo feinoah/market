@@ -1,8 +1,8 @@
 package cn.com.carit.market.dao.impl.permission;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.stereotype.Repository;
 
@@ -27,17 +27,21 @@ public class BaseUserRoleDaoImpl extends BaseDaoImpl  implements
 		@Override
 		public int[]  bathAdd(final BaseUser baseUser) {
 			String sql = "insert into t_base_user_role (user_id, role_id) values (?,?)";
-			final List<Integer> roles=baseUser.getRoles();
+//			final List<Integer> roles=baseUser.getRoles();
+			final String [] roles=StringUtils.split(baseUser.getRoles(), ",");
+			if(roles==null || roles.length<=0){
+				return null;
+			}
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 				@Override
 				public void setValues(PreparedStatement ps, int i) throws SQLException {
 					ps.setInt(1, baseUser.getId());
-					ps.setInt(2, roles.get(i)); 
+					ps.setInt(2,Integer.parseInt(roles[i])); 
 				}
 				@Override
 				public int getBatchSize() {
-					return roles.size();
+					return roles.length;
 				}
 			});
 		}

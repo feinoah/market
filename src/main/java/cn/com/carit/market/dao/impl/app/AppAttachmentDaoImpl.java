@@ -1,6 +1,5 @@
 package cn.com.carit.market.dao.impl.app;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +8,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AppAttachment;
+import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.common.utils.StringUtil;
@@ -35,8 +36,8 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AppAttachment mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AppAttachment appAttachment=new AppAttachment();
+				appAttachment.setId(rs.getInt("id"));
 				appAttachment.setAppId(rs.getInt("app_id"));
-				appAttachment.setName(rs.getString("name"));
 				appAttachment.setFilePath(rs.getString("file_path"));
 				appAttachment.setStatus(rs.getInt("status"));
 				appAttachment.setCreateTime(rs.getTimestamp("create_time"));
@@ -47,22 +48,12 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public int add(final AppAttachment appAttachment) {
-			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_app_attachment ("
-					+", app_id"
-					+", name"
+					+" app_id"
 					+", file_path"
-					+", status"
 					+", create_time"
 					+", update_time"
-					+") values ("
-					+", app_id"
-					+", name"
-					+", file_path"
-					+", status"
-					+", create_time"
-					+", update_time"
-					+")";
+					+") values (?, ?, now(), now())";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
 			jdbcTemplate.update(new PreparedStatementCreator() {
@@ -71,15 +62,34 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 						throws SQLException {
 					 PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 					 ps.setInt(1, appAttachment.getAppId());
-					 ps.setString(2, appAttachment.getName());
-					 ps.setString(3, appAttachment.getFilePath());
-					 ps.setInt(4, appAttachment.getStatus());
-					 ps.setDate(5, new Date(appAttachment.getCreateTime().getTime()));
-					 ps.setDate(6, new Date(appAttachment.getUpdateTime().getTime()));
+					 ps.setString(2, appAttachment.getFilePath());
 					return ps;
 				}
 			},  gkHolder);
 			return gkHolder.getKey().intValue();
+		}
+
+		@Override
+		public int[] bathAdd(final Application application) {
+			final String sql = "insert into t_app_attachment ("
+					+"app_id, file_path, create_time, update_time)"
+					+" values (?, ?, now(), now())";
+			final String [] atts=org.apache.commons.lang.StringUtils.split(application.getAttachments(), ",");
+			if (atts==null||atts.length<=0) {
+				return null;
+			}
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+				@Override
+				public void setValues(PreparedStatement ps, int i) throws SQLException {
+					ps.setInt(1, application.getId());
+					ps.setString(2, atts[i]); 
+				}
+				@Override
+				public int getBatchSize() {
+					return atts.length;
+				}
+			});
 		}
 
 		@Override
@@ -90,17 +100,19 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 		}
 
 		@Override
+		public int deleteByAppId(int appId) {
+			String sql="delete from t_app_attachment where app_id=?";
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.update(sql, appId);
+		}
+
+		@Override
 		public int update(AppAttachment appAttachment) {
 			StringBuilder sql=new StringBuilder("update t_app_attachment set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (appAttachment.getAppId()!=null) {
 				sql.append(", app_id=?");
 				args.add(appAttachment.getAppId());
-			}
-			if (StringUtils.hasText(appAttachment.getName())) {
-				sql.append(", name=?");
-				args.add(appAttachment.getName());
 			}
 			if (StringUtils.hasText(appAttachment.getFilePath())) {
 				sql.append(", file_path=?");
@@ -118,6 +130,7 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 				sql.append(", update_time=?");
 				args.add(appAttachment.getUpdateTime());
 			}
+			sql.append(" where id=?");
 			args.add(appAttachment.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());
@@ -186,11 +199,6 @@ public class AppAttachmentDaoImpl extends BaseDaoImpl  implements
 				sql.append(" and app_id=?");
 				args.add(appAttachment.getAppId());
 				argTypes.add(4);//java.sql.Types type
-			}
-			if (StringUtils.hasText(appAttachment.getName())) {
-				sql.append(" and name like CONCAT('%',?,'%')");
-				args.add(appAttachment.getName());
-				argTypes.add(12);//java.sql.Types type
 			}
 			if (StringUtils.hasText(appAttachment.getFilePath())) {
 				sql.append(" and file_path like CONCAT('%',?,'%')");

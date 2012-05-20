@@ -15,7 +15,7 @@ public interface AppCommentService {
 	 * @param appComment
 	 * @return
 	 */
-	int saveOrUpdate(AppComment appComment);
+	void saveOrUpdate(AppComment appComment);
 	
 	/**
 	 * 删除
@@ -23,6 +23,13 @@ public interface AppCommentService {
 	 * @return
 	 */
 	int delete(int id);
+	
+	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
 	
 	/**
 	 * 按Id查询

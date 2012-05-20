@@ -46,7 +46,7 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 					+", module_url"
 					+", parent_id"
 					+", expanded"
-					+", iconCss"
+//					+", iconCss"
 					+", display"
 					+", display_index"
 					+", level"
@@ -54,10 +54,11 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 					+", create_time"
 					+", update_time"
 					+") values ("
-					+" ?"
+					+"?"
 					+", ?"
 					+", ?"
 					+", ?"
+//					+", iconCss"
 					+", ?"
 					+", ?"
 					+", ?"
@@ -71,7 +72,7 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 					,baseModule.getModuleUrl()
 					,baseModule.getParentId()
 					,baseModule.getExpanded()
-					,baseModule.getIconCss()
+//					,baseModule.getIconCss()
 					,baseModule.getDisplay()
 					,baseModule.getDisplayIndex()
 					,baseModule.getLevel()

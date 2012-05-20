@@ -15,7 +15,7 @@ public interface AppDownloadLogService {
 	 * @param appDownloadLog
 	 * @return
 	 */
-	int saveOrUpdate(AppDownloadLog appDownloadLog);
+	void saveOrUpdate(AppDownloadLog appDownloadLog);
 	
 	/**
 	 * 删除
@@ -23,6 +23,13 @@ public interface AppDownloadLogService {
 	 * @return
 	 */
 	int delete(int id);
+	
+	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
 	
 	/**
 	 * 按Id查询

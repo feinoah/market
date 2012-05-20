@@ -19,15 +19,11 @@ public class AppAttachment  implements Serializable{
 	/**
 	 * id
 	 */
-	private Integer id;
+	private int id;
 	/**
 	 * appId
 	 */
 	private Integer appId;
-	/**
-	 * name
-	 */
-	private String name;
 	/**
 	 * filePath
 	 */
@@ -45,10 +41,10 @@ public class AppAttachment  implements Serializable{
 	 */
 	private Date updateTime;
 
-	public void setId(Integer value) {
+	public void setId(int value) {
 		this.id = value;
 	}
-	public Integer getId() {
+	public int getId() {
 		return this.id;
 	}
 	public void setAppId(Integer value) {
@@ -56,12 +52,6 @@ public class AppAttachment  implements Serializable{
 	}
 	public Integer getAppId() {
 		return this.appId;
-	}
-	public void setName(String value) {
-		this.name = value;
-	}
-	public String getName() {
-		return this.name;
 	}
 	public void setFilePath(String value) {
 		this.filePath = value;

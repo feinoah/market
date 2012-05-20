@@ -2,7 +2,6 @@ package cn.com.carit.market.bean;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -99,7 +98,7 @@ public class BaseUser implements Serializable {
 	
 	/**封装表单角色信息*/
 	@JsonIgnore
-	private List<Integer> roles;
+	private String roles;
 	
 	public int getId() {
 		return id;
@@ -207,10 +206,10 @@ public class BaseUser implements Serializable {
 	public void setLastLoginTimeEnd(Date lastLoginTimeEnd) {
 		this.lastLoginTimeEnd = lastLoginTimeEnd;
 	}
-	public List<Integer> getRoles() {
+	public String getRoles() {
 		return roles;
 	}
-	public void setRoles(List<Integer> roles) {
+	public void setRoles(String roles) {
 		this.roles = roles;
 	}
 }

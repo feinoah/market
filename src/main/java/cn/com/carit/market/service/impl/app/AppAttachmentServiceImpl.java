@@ -26,29 +26,39 @@ public class AppAttachmentServiceImpl implements AppAttachmentService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AppAttachment appAttachment) {
+	public void saveOrUpdate(AppAttachment appAttachment) {
 		if (appAttachment==null) {
 			throw new NullPointerException("appAttachment object is null...");
 		}
 		if (appAttachment.getId()==0) {
-			return appAttachmentDao.add(appAttachment);
+			appAttachmentDao.add(appAttachment);
+		} else {
+			appAttachmentDao.update(appAttachment);
 		}
-		return appAttachmentDao.update(appAttachment);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appAttachmentDao.delete(id);
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int deleteByAppId(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appAttachmentDao.deleteByAppId(appId);
+	}
+
+	@Override
 	public AppAttachment queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appAttachmentDao.queryById(id);
 	}

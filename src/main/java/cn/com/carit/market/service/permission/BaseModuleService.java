@@ -10,7 +10,7 @@ public interface BaseModuleService {
 	 * @param baseModule
 	 * @return
 	 */
-	int saveOrUpdate(BaseModule baseModule);
+	void saveOrUpdate(BaseModule baseModule);
 	
 	/**
 	 * 删除

@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.BaseModule;
 import cn.com.carit.market.bean.BaseRole;
@@ -37,7 +38,8 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 		}
 		if (baseRole.getId()==0) {
 			int id=baseRoleDao.add(baseRole);
-			if (id>0 && baseRole.getModules()!=null && baseRole.getModules().size()>0) {
+			if (id>0 &&StringUtils.hasText( baseRole.getModules())) {
+				baseRole.setId(id);
 				// 增加模块信息
 				baseRoleModuleDao.bathAdd(baseRole);
 			} 
@@ -47,19 +49,18 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 			baseRoleModuleDao.deleteByRoleId(baseRole.getId());
 			// 更新角色
 			baseRoleDao.update(baseRole);
-			if ( baseRole.getModules()!=null && baseRole.getModules().size()>0) {
+			if (StringUtils.hasText( baseRole.getModules())) {
 				// 增加模块信息
 				baseRoleModuleDao.bathAdd(baseRole);
 			} 
 		}
-		baseRoleDao.update(baseRole);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		// 删除关联的用户信息
 		baseUserRoleDao.deleteByRoleId(id);
@@ -71,7 +72,7 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 	@Override
 	public BaseRole queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		BaseRole role=baseRoleDao.queryById(id);
 		if (role!=null) {

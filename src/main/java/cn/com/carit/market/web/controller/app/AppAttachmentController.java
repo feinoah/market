@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ import cn.com.carit.market.common.utils.JsonPage;
  * Auto generated Code
  */
 @Controller
-@RequestMapping(value="app/appAttachment")
+@RequestMapping(value="admin/app/attachment")
 public class AppAttachmentController {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -29,18 +30,18 @@ public class AppAttachmentController {
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * app/appAttachment/
+	 * admin/app/attachment/
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppAttachment());
-		return "/app/appAttachment";
+		return "admin/app/attachment";
 	}
 	
 	/**
 	 * 增加/更新
-	 * app/appAttachment/save
+	 * admin/app/attachment/save
 	 * @param user
 	 * @param result
 	 * @return
@@ -48,17 +49,18 @@ public class AppAttachmentController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(AppAttachment appAttachment, BindingResult result){
+	public int save(@ModelAttribute AppAttachment appAttachment, BindingResult result){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
-		return appAttachmentService.saveOrUpdate(appAttachment);
+		appAttachmentService.saveOrUpdate(appAttachment);
+		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * app/appAttachment/{id}
+	 * admin/app/attachment/{id}
 	 * @param id
 	 * @return
 	 */
@@ -66,7 +68,7 @@ public class AppAttachmentController {
 	@ResponseBody
 	public AppAttachment view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return appAttachmentService.queryById(id);
@@ -74,7 +76,7 @@ public class AppAttachmentController {
 	
 	/**
 	 * 删除
-	 * app/appAttachment/delete/{id}
+	 * admin/app/attachment/delete/{id}
 	 * @param id
 	 * @return
 	 */
@@ -82,7 +84,7 @@ public class AppAttachmentController {
 	@ResponseBody
 	public int delete(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		return appAttachmentService.delete(id);
@@ -90,12 +92,12 @@ public class AppAttachmentController {
 	
 	/**
 	 * 查询
-	 * app/appAttachment/query
+	 * admin/app/attachment/query
 	 * @return json
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(AppAttachment appAttachment,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute AppAttachment appAttachment, BindingResult result,DataGridModel dgm){
 		return appAttachmentService.queryByExemple(appAttachment, dgm);
 	}
 }

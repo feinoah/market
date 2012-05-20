@@ -1,9 +1,9 @@
 package cn.com.carit.market.service.app;
 import java.util.List;
 
+import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import  cn.com.carit.market.bean.app.Application;
 
 /**
  * ApplicationService
@@ -15,7 +15,7 @@ public interface ApplicationService {
 	 * @param application
 	 * @return
 	 */
-	int saveOrUpdate(Application application);
+	void saveOrUpdate(Application application);
 	
 	/**
 	 * 删除

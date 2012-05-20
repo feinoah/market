@@ -15,7 +15,7 @@ public interface AppVersionFileService {
 	 * @param appVersionFile
 	 * @return
 	 */
-	int saveOrUpdate(AppVersionFile appVersionFile);
+	void saveOrUpdate(AppVersionFile appVersionFile);
 	
 	/**
 	 * 删除
@@ -23,6 +23,13 @@ public interface AppVersionFileService {
 	 * @return
 	 */
 	int delete(int id);
+	
+	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
 	
 	/**
 	 * 按Id查询

@@ -3,6 +3,7 @@ package cn.com.carit.market.bean.app;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
@@ -19,7 +20,7 @@ public class Application  implements Serializable{
 	/**
 	 * id
 	 */
-	private Integer id;
+	private int id;
 	/**
 	 * appName
 	 */
@@ -88,11 +89,15 @@ public class Application  implements Serializable{
 	 * updateTime
 	 */
 	private Date updateTime;
+	
+	/**封装前台传来的附件路径（截图）*/
+	@JsonIgnore
+	private String attachments;
 
-	public void setId(Integer value) {
+	public void setId(int value) {
 		this.id = value;
 	}
-	public Integer getId() {
+	public int getId() {
 		return this.id;
 	}
 	public void setAppName(String value) {
@@ -198,6 +203,12 @@ public class Application  implements Serializable{
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getUpdateTime() {
 		return this.updateTime;
+	}
+	public String getAttachments() {
+		return attachments;
+	}
+	public void setAttachments(String attachments) {
+		this.attachments = attachments;
 	}
 
 }

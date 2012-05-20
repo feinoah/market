@@ -36,6 +36,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AccountInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AccountInfo accountInfo=new AccountInfo();
+				accountInfo.setId(rs.getInt("id"));
 				accountInfo.setEmail(rs.getString("email"));
 				accountInfo.setPassword(rs.getString("password"));
 				accountInfo.setNickName(rs.getString("nick_name"));
@@ -59,9 +60,8 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public int add(final AccountInfo accountInfo) {
-			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_account_info ("
-					+", email"
+					+"	email"
 					+", password"
 					+", nick_name"
 					+", gender"
@@ -73,29 +73,23 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 					+", office_phone"
 					+", mobile"
 					+", address"
-					+", last_login_ip"
-					+", last_login_time"
-					+", status"
 					+", update_time"
 					+", create_time"
 					+") values ("
-					+", email"
-					+", password"
-					+", nick_name"
-					+", gender"
-					+", birthday"
-					+", photo"
-					+", balance"
-					+", real_name"
-					+", id_card"
-					+", office_phone"
-					+", mobile"
-					+", address"
-					+", last_login_ip"
-					+", last_login_time"
-					+", status"
-					+", update_time"
-					+", create_time"
+					+"	?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", now()"
+					+", now()"
 					+")";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
@@ -108,7 +102,11 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 					 ps.setString(2, accountInfo.getPassword());
 					 ps.setString(3, accountInfo.getNickName());
 					 ps.setByte(4, accountInfo.getGender());
-					 ps.setDate(5, new Date(accountInfo.getBirthday().getTime()));
+					 if(accountInfo.getBirthday()!=null){
+						 ps.setDate(5, new Date(accountInfo.getBirthday().getTime()));
+					 }else{
+						 ps.setDate(5, null);
+					 }
 					 ps.setString(6, accountInfo.getPhoto());
 					 ps.setDouble(7, accountInfo.getBalance());
 					 ps.setString(8, accountInfo.getRealName());
@@ -116,11 +114,6 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 					 ps.setString(10, accountInfo.getOfficePhone());
 					 ps.setString(11, accountInfo.getMobile());
 					 ps.setString(12, accountInfo.getAddress());
-					 ps.setString(13, accountInfo.getLastLoginIp());
-					 ps.setDate(14, new Date(accountInfo.getLastLoginTime().getTime()));
-					 ps.setByte(15, accountInfo.getStatus());
-					 ps.setDate(16, new Date(accountInfo.getUpdateTime().getTime()));
-					 ps.setDate(17, new Date(accountInfo.getCreateTime().getTime()));
 					return ps;
 				}
 			},  gkHolder);
@@ -138,7 +131,6 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 		public int update(AccountInfo accountInfo) {
 			StringBuilder sql=new StringBuilder("update t_account_info set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (StringUtils.hasText(accountInfo.getEmail())) {
 				sql.append(", email=?");
 				args.add(accountInfo.getEmail());
@@ -207,6 +199,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl  implements
 				sql.append(", create_time=?");
 				args.add(accountInfo.getCreateTime());
 			}
+			sql.append(" where id=?");
 			args.add(accountInfo.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

@@ -26,6 +26,13 @@ public interface AppVersionFileDao {
 	int delete(int id);
 	
 	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
+	
+	/**
 	 * 更新
 	 * @param AppVersionFile
 	 * @return

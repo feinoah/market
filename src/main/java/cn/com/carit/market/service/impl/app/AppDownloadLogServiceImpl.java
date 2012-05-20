@@ -26,29 +26,39 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AppDownloadLog appDownloadLog) {
+	public void saveOrUpdate(AppDownloadLog appDownloadLog) {
 		if (appDownloadLog==null) {
 			throw new NullPointerException("appDownloadLog object is null...");
 		}
 		if (appDownloadLog.getId()==0) {
-			return appDownloadLogDao.add(appDownloadLog);
+			appDownloadLogDao.add(appDownloadLog);
+		} else {
+			appDownloadLogDao.update(appDownloadLog);
 		}
-		return appDownloadLogDao.update(appDownloadLog);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appDownloadLogDao.delete(id);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int deleteByAppId(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appDownloadLogDao.deleteByAppId(appId);
 	}
 
 	@Override
 	public AppDownloadLog queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appDownloadLogDao.queryById(id);
 	}

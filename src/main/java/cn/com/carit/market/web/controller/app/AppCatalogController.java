@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ import cn.com.carit.market.service.app.AppCatalogService;
  * Auto generated Code
  */
 @Controller
-@RequestMapping(value="app/appCatalog")
+@RequestMapping(value="admin/app/catalog")
 public class AppCatalogController {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -29,18 +30,18 @@ public class AppCatalogController {
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * app/appCatalog/
+	 * admin/app/catalog
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppCatalog());
-		return "/app/appCatalog";
+		return "admin/app/catalog";
 	}
 	
 	/**
 	 * 增加/更新
-	 * app/appCatalog/save
+	 * admin/app/catalog/save
 	 * @param user
 	 * @param result
 	 * @return
@@ -48,17 +49,18 @@ public class AppCatalogController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(AppCatalog appCatalog, BindingResult result){
+	public int save(@ModelAttribute AppCatalog appCatalog, BindingResult result){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
-		return appCatalogService.saveOrUpdate(appCatalog);
+		appCatalogService.saveOrUpdate(appCatalog);
+		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * app/appCatalog/{id}
+	 * admin/app/catalog/{id}
 	 * @param id
 	 * @return
 	 */
@@ -66,7 +68,7 @@ public class AppCatalogController {
 	@ResponseBody
 	public AppCatalog view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return appCatalogService.queryById(id);
@@ -74,7 +76,7 @@ public class AppCatalogController {
 	
 	/**
 	 * 删除
-	 * app/appCatalog/delete/{id}
+	 * admin/app/catalog/delete/{id}
 	 * @param id
 	 * @return
 	 */
@@ -82,7 +84,7 @@ public class AppCatalogController {
 	@ResponseBody
 	public int delete(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		return appCatalogService.delete(id);
@@ -90,12 +92,12 @@ public class AppCatalogController {
 	
 	/**
 	 * 查询
-	 * app/appCatalog/query
+	 * admin/app/catalog/query
 	 * @return json
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(AppCatalog appCatalog,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute AppCatalog appCatalog, BindingResult result,DataGridModel dgm){
 		return appCatalogService.queryByExemple(appCatalog, dgm);
 	}
 }

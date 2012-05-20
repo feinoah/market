@@ -5,18 +5,11 @@
 	<head>
 		<base href="${ctx}"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
-			$('#roles').combobox({
-				method:'get',
-				url:'${ctx}/back/role/query/all?t='+(new Date().getTime()),
-				valueField:'id',
-				textField:'roleName'
-			});
-			checkEditControl('admin/permission/user');
+			checkEditControl('admin/app/account');
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -26,12 +19,17 @@
 				$('#editForm input[name=email]').val(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
+				$('#editForm input[name=gender]').val(m.gender);
 				$('#editForm input[name=officePhone]').val(m.officePhone);
 				$('#editForm input[name=mobile]').val(m.mobile);
 				$('#editForm input[name=status]').val(m.status);
-				$('#editForm input[name=gender]').val(m.gender);
-				$('#remark').val(m.remark);
 				$('#password').attr('disabled',true);//密码不能在这里修改
+				$('#idCard').attr('idCard',true);//idCard不能在这里修改
+				$('#idCard').val(m.idCard);
+				$('#birthday').val(m.birthday);
+				$('#photo').attr('src',m.photo);
+				$('#balance').val(m.balance);
+				$('#address').val(m.address);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -43,22 +41,20 @@
 		}
 
 		function del() {
-			var user = $('#tt').datagrid('getSelected');
-			if (user) {
-				$.messager.confirm('提示信息','您确认要删除吗?',function(data) {
+			var m = $('#tt').datagrid('getSelected');
+			if (m) {
+				$.messager.confirm('警告','您确认要删除吗?',function(data) {
 					if (data) {
 						$.ajax({
-							url : '${ctx}/admin/permission/user/delete/'+ user.id,
+							url : '${ctx}/admin/app/account/delete/'+ m.id,
 							type : 'GET',
 							timeout : 1000,
 							error : function() {
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
-								if(data==-2){
-									$.messager.alert('错误','不能删除当前登录用户!','error');
-								}else if (data == -1) {
-									$.messager.alert('错误','非法参数!','error');
+								if (data == -1) {
+									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {
 									$.messager.alert('成功','删除成功','info');
 									// update rows
@@ -86,8 +82,8 @@
 	</head>
 	<body>
 		<div style="width: 100%;">
-		<form:form modelAttribute="baseUser"
-			action="${ctx}/admin/permission/user/query"
+		<form:form modelAttribute="baseModule"
+			action="${ctx}/admin/app/account/query"
 			method="get" id="searchForm">
 			<table>
 				<tr>
@@ -144,34 +140,34 @@
 		<div style="text-align: center; padding: 5px;">
 				<a href="javascript:void(0);" class="easyui-linkbutton" id="submit"
 					iconCls="icon-search">查 询</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" id="reset"
+				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" singleSelect="true" nowrap="false"
-			idField="id" url="${ctx}/admin/permission/user/query" pagination="true" rownumbers="true"
-			fitColumns="true" pageList="[ 5, 10, 30 ]" sortName="updateTime" sortOrder="desc">
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="账号列表" align="left" singleSelect="true" 
+			idField="id" url="${ctx}/admin/app/account/query" pagination="true" rownumbers="true"
+			fitColumns="true" pageList="[ 5, 10]" sortName="level" sortOrder="asc">
 				<thead>
 					<tr>
 						<th field="email" width="150" align="center">邮箱</th>
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>
 						<th field="gender" width="150" align="center" formatter="genderFormatter">性别</th>
+						<th field="birthday" width="60" align="center" hidden="true">生日</th>
+						<th field="photo" width="60" align="center" hidden="true">头像</th>
+						<th field="balance" width="60" align="center">余额</th>
+						<th field="idCard" width="100" align="center" hidden="true">身份证号码</th>
 						<th field="mobile" width="100" align="center">手机</th>
 						<th field="officePhone" width="100" align="center">办公电话</th>
-						<th field="lastLoginTime" width="100" align="center">最后登录时间</th>
+						<th field="address" width="100" align="center" hidden="true">地址</th>
 						<th field="lastLoginIp" width="100" align="center">最后登录地址</th>
-						<th field="remark" width="60" align="remark">备注</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
-						<!-- 
-						<th field="createTime" width="80" align="center">创建时间</th>
-						 -->
-						<th field="updateTime" width="80" align="center">更新时间</th>
+						<th field="updateTime" width="90" align="center">更新时间</th>
 					</tr>
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑用户" closed="true" style="width:650px;height:400px;padding:5px;" modal="true">
-			<form:form modelAttribute="baseUser" id="editForm" action="${ctx}/admin/permission/user/save" method="post" cssStyle="padding:10px 20px;">
+		<div id="editWin" class="easyui-window" title="编辑账号" closed="true" style="width:700px;height:380px;padding:5px;" modal="true">
+			<form:form modelAttribute="baseModule" id="editForm" action="${ctx}/admin/app/account/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
 						<td><form:label	for="email" path="email"  cssClass="mustInput">邮箱：</form:label></td>
@@ -209,21 +205,31 @@
 						</td>
 					</tr>
 					<tr>
-						<td><form:label for="roles" path="roles" cssClass="easyui-validatebox">角色：</form:label></td>
-						<td>
-							<form:input path="roles" lass="easyui-combobox" multiple="true" panelHeight="auto"/>
-						</td>
+						<td><form:label	for="birthday" path="birthday" cssClass="easyui-validatebox">生日：</form:label></td>
+						<td><form:input path="birthday" cssClass="easyui-datebox datebox-f combo-f"/></td>
+						<td><form:label	for="balance" path="balance" cssClass="easyui-validatebox">余额：</form:label></td>
+						<td><form:input path="balance" cssClass="asyui-validatebox"/></td>
 					</tr>
-					<tr><td><form:label for="remark" path="remark" cssClass="easyui-validatebox">备注：</form:label></td></tr>
 					<tr>
-						<td colspan="4"><form:textarea path="remark" cssStyle="width:580px;height:80px;" /></td>
+						<td><form:label	for="idCard" path="idCard" cssClass="easyui-validatebox">身份证：</form:label></td>
+						<td><form:input path="idCard" cssClass="easyui-datebox datebox-f combo-f"/></td>
+						<td><form:label	for="address" path="address" cssClass="easyui-validatebox">地址：</form:label></td>
+						<td><form:input path="address" cssClass="asyui-validatebox"/></td>
+					</tr>
+					<tr>
+						<td><form:label	for="photo" path="photo" cssClass="easyui-validatebox">头像：</form:label></td>
+					</tr>
+					<tr>
+						<td colspan="4">
+						<img id="photo"  src="" alt="头像" />
+						</td>
 					</tr>
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0);" class="easyui-linkbutton" id="edit_submit"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit"
 						iconCls="icon-save">保 存</a>
-					<a href="javascript:void(0);" class="easyui-linkbutton" id="edit_reset"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
 						iconCls="icon-undo">重 置</a>
 				</div>
 			</form:form>

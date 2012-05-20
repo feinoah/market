@@ -13,7 +13,7 @@
 			$('#tree').tree({
 				method:'get',
 				checkbox:true,
-				url: '${ctx}/back/module/query/all',
+				url: '${ctx}/back/module/query/all?t='+(new Date().getTime()),
 				onClick: function(node){
 					if(node.attributes.url&&node.attributes.url!=null){
 						addTab(node.text, '${ctx}/'+node.attributes.url);
@@ -24,7 +24,7 @@
 			$('#edit_submit_r').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){
-						var arr = new Array();
+						var arr = [];
 						$.each($('#tree').tree('getChecked'), function(i, n){
 							arr.push(n.id);
 						}); 

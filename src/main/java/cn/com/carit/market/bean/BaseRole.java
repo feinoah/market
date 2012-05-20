@@ -2,9 +2,9 @@ package cn.com.carit.market.bean;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
@@ -38,7 +38,8 @@ public class BaseRole implements Serializable {
 	private Date updateTime;
 	
 	/**添加时封装模块Id*/
-	private List<Integer> modules;
+	@JsonIgnore
+	private String  modules;
 	/**查询时关联模块集*/
 	private Set<BaseModule> moduleSet;
 
@@ -90,11 +91,11 @@ public class BaseRole implements Serializable {
 		this.updateTime = updateTime;
 	}
 
-	public List<Integer> getModules() {
+	public String getModules() {
 		return modules;
 	}
 
-	public void setModules(List<Integer> modules) {
+	public void setModules(String modules) {
 		this.modules = modules;
 	}
 

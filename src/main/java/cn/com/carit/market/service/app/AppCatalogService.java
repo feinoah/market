@@ -15,7 +15,7 @@ public interface AppCatalogService {
 	 * @param appCatalog
 	 * @return
 	 */
-	int saveOrUpdate(AppCatalog appCatalog);
+	void saveOrUpdate(AppCatalog appCatalog);
 	
 	/**
 	 * 删除

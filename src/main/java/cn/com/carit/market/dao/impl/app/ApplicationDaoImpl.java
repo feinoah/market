@@ -1,17 +1,11 @@
 package cn.com.carit.market.dao.impl.app;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -34,6 +28,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public Application mapRow(ResultSet rs, int rowNum) throws SQLException {
 				Application application=new Application();
+				application.setId(rs.getInt("id"));
 				application.setAppName(rs.getString("app_name"));
 				application.setDisplayName(rs.getString("display_name"));
 				application.setVersion(rs.getString("version"));
@@ -57,9 +52,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public int add(final Application application) {
-			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_application ("
-					+", app_name"
+					+"	app_name"
 					+", display_name"
 					+", version"
 					+", icon"
@@ -77,7 +71,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					+", create_time"
 					+", update_time"
 					+") values ("
-					+", ?"
+					+"	?"
 					+", ?"
 					+", ?"
 					+", ?"
@@ -96,7 +90,24 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					+", now()"
 					+")";
 			log.debug(String.format("\n%1$s\n", sql));
-			KeyHolder gkHolder = new GeneratedKeyHolder(); 
+//			KeyHolder gkHolder = new GeneratedKeyHolder(); 
+			return jdbcTemplate.update(sql
+					, application.getAppName()
+					, application.getDisplayName()
+					, application.getVersion()
+					, application.getIcon()
+					, application.getCatalogId()
+					, application.getSize()
+					, application.getAppFilePath()
+					, application.getPlatform()
+					, application.getSupportLanguages()
+					, application.getPrice()
+					, application.getDownCount()
+					, application.getAppLevel()
+					, application.getDescription()
+					, application.getPermissionDesc()
+					 , application.getStatus());
+			/*
 			jdbcTemplate.update(new PreparedStatementCreator() {
 				@Override
 				public PreparedStatement createPreparedStatement(Connection con)
@@ -120,7 +131,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					return ps;
 				}
 			},  gkHolder);
-			return gkHolder.getKey().intValue();
+			return gkHolder.getKey().intValue();*/
 		}
 
 		@Override
@@ -134,7 +145,6 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 		public int update(Application application) {
 			StringBuilder sql=new StringBuilder("update t_application set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (StringUtils.hasText(application.getAppName())) {
 				sql.append(", app_name=?");
 				args.add(application.getAppName());
@@ -203,6 +213,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 				sql.append(", update_time=?");
 				args.add(application.getUpdateTime());
 			}
+			sql.append(" where id=?");
 			args.add(application.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

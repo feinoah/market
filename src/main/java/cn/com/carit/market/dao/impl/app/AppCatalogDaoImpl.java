@@ -1,6 +1,5 @@
 package cn.com.carit.market.dao.impl.app;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +34,7 @@ public class AppCatalogDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AppCatalog mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AppCatalog appCatalog=new AppCatalog();
+				appCatalog.setId(rs.getInt("id"));
 				appCatalog.setName(rs.getString("name"));
 				appCatalog.setDescription(rs.getString("description"));
 				appCatalog.setDisplayIndex(rs.getInt("display_index"));
@@ -49,20 +49,13 @@ public class AppCatalogDaoImpl extends BaseDaoImpl  implements
 		public int add(final AppCatalog appCatalog) {
 			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_app_catalog ("
-					+", name"
+					+"	name"
 					+", description"
 					+", display_index"
 					+", status"
 					+", create_time"
 					+", update_time"
-					+") values ("
-					+", name"
-					+", description"
-					+", display_index"
-					+", status"
-					+", create_time"
-					+", update_time"
-					+")";
+					+") values (?, ?, ?, ?, now(), now())";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
 			jdbcTemplate.update(new PreparedStatementCreator() {
@@ -74,8 +67,8 @@ public class AppCatalogDaoImpl extends BaseDaoImpl  implements
 					 ps.setString(2, appCatalog.getDescription());
 					 ps.setInt(3, appCatalog.getDisplayIndex());
 					 ps.setByte(4, appCatalog.getStatus());
-					 ps.setDate(5, new Date(appCatalog.getCreateTime().getTime()));
-					 ps.setDate(6, new Date(appCatalog.getUpdateTime().getTime()));
+//					 ps.setDate(5, new Date(appCatalog.getCreateTime().getTime()));
+//					 ps.setDate(6, new Date(appCatalog.getUpdateTime().getTime()));
 					return ps;
 				}
 			},  gkHolder);
@@ -93,7 +86,6 @@ public class AppCatalogDaoImpl extends BaseDaoImpl  implements
 		public int update(AppCatalog appCatalog) {
 			StringBuilder sql=new StringBuilder("update t_app_catalog set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (StringUtils.hasText(appCatalog.getName())) {
 				sql.append(", name=?");
 				args.add(appCatalog.getName());
@@ -118,6 +110,7 @@ public class AppCatalogDaoImpl extends BaseDaoImpl  implements
 				sql.append(", update_time=?");
 				args.add(appCatalog.getUpdateTime());
 			}
+			sql.append(" where id=?");
 			args.add(appCatalog.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

@@ -26,21 +26,22 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AccountInfo accountInfo) {
+	public void saveOrUpdate(AccountInfo accountInfo) {
 		if (accountInfo==null) {
 			throw new NullPointerException("accountInfo object is null...");
 		}
 		if (accountInfo.getId()==0) {
-			return accountInfoDao.add(accountInfo);
+			accountInfoDao.add(accountInfo);
+		} else {
+			accountInfoDao.update(accountInfo);
 		}
-		return accountInfoDao.update(accountInfo);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return accountInfoDao.delete(id);
 	}
@@ -48,7 +49,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	@Override
 	public AccountInfo queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return accountInfoDao.queryById(id);
 	}

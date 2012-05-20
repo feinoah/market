@@ -1,10 +1,12 @@
 package cn.com.carit.market.common.utils;
 
+import cn.com.carit.market.common.Constants;
+
 public class DataGridModel  implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 7232798260610351343L;
 	private int page; //当前页,名字必须为page
-	private int rows ; //每页大小,名字必须为rows
+	private int rows=Constants.PAGE_SIZE ; //每页大小,名字必须为rows
 	private String sort; //排序字段
 	private String order; //排序规则
 	public int getPage() {

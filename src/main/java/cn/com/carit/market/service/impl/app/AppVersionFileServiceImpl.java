@@ -8,9 +8,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
+import cn.com.carit.market.dao.app.ApplicationDao;
 import cn.com.carit.market.service.app.AppVersionFileService;
 
 /**
@@ -23,32 +25,54 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 	
 	@Resource
 	private AppVersionFileDao appVersionFileDao;
+	@Resource
+	private ApplicationDao applicationDao;
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AppVersionFile appVersionFile) {
+	public void saveOrUpdate(AppVersionFile appVersionFile) {
 		if (appVersionFile==null) {
 			throw new NullPointerException("appVersionFile object is null...");
 		}
-		if (appVersionFile.getId()==0) {
-			return appVersionFileDao.add(appVersionFile);
+		if (appVersionFile.getAppId()==null || appVersionFile.getAppId().intValue()<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
 		}
-		return appVersionFileDao.update(appVersionFile);
+		if (appVersionFile.getId()==0) {
+			appVersionFileDao.add(appVersionFile);
+		} else {
+			appVersionFileDao.update(appVersionFile);
+		}
+		// 更新应用
+		Application app=new Application();
+		app.setId(appVersionFile.getAppId());
+		app.setSize(appVersionFile.getSize());
+		app.setAppFilePath(appVersionFile.getFilePath());
+		app.setVersion(appVersionFile.getVersion());
+		applicationDao.update(app);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appVersionFileDao.delete(id);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int deleteByAppId(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appVersionFileDao.deleteByAppId(appId);
 	}
 
 	@Override
 	public AppVersionFile queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appVersionFileDao.queryById(id);
 	}

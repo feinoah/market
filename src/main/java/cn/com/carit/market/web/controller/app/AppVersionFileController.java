@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ import cn.com.carit.market.service.app.AppVersionFileService;
  * Auto generated Code
  */
 @Controller
-@RequestMapping(value="app/appVersionFile")
+@RequestMapping(value="admin/app/version")
 public class AppVersionFileController {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -29,18 +30,18 @@ public class AppVersionFileController {
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * app/appVersionFile/
+	 * admin/app/version/
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppVersionFile());
-		return "/app/appVersionFile";
+		return "admin/app/version";
 	}
 	
 	/**
 	 * 增加/更新
-	 * app/appVersionFile/save
+	 * admin/app/version/save
 	 * @param user
 	 * @param result
 	 * @return
@@ -48,17 +49,18 @@ public class AppVersionFileController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(AppVersionFile appVersionFile, BindingResult result){
+	public int save(@ModelAttribute AppVersionFile appVersionFile, BindingResult result){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
-		return appVersionFileService.saveOrUpdate(appVersionFile);
+		appVersionFileService.saveOrUpdate(appVersionFile);
+		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * app/appVersionFile/{id}
+	 * admin/app/version/{id}
 	 * @param id
 	 * @return
 	 */
@@ -66,7 +68,7 @@ public class AppVersionFileController {
 	@ResponseBody
 	public AppVersionFile view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return appVersionFileService.queryById(id);
@@ -74,7 +76,7 @@ public class AppVersionFileController {
 	
 	/**
 	 * 删除
-	 * app/appVersionFile/delete/{id}
+	 * admin/app/version/delete/{id}
 	 * @param id
 	 * @return
 	 */
@@ -82,7 +84,7 @@ public class AppVersionFileController {
 	@ResponseBody
 	public int delete(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		return appVersionFileService.delete(id);
@@ -90,12 +92,12 @@ public class AppVersionFileController {
 	
 	/**
 	 * 查询
-	 * app/appVersionFile/query
+	 * admin/app/version/query
 	 * @return json
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(AppVersionFile appVersionFile,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute AppVersionFile appVersionFile, BindingResult result,DataGridModel dgm){
 		return appVersionFileService.queryByExemple(appVersionFile, dgm);
 	}
 }

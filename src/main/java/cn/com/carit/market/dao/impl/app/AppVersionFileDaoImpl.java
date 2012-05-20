@@ -1,6 +1,5 @@
 package cn.com.carit.market.dao.impl.app;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +34,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AppVersionFile mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AppVersionFile appVersionFile=new AppVersionFile();
+				appVersionFile.setId(rs.getInt("id"));
 				appVersionFile.setAppId(rs.getInt("app_id"));
 				appVersionFile.setVersion(rs.getString("version"));
 				appVersionFile.setSize(rs.getString("size"));
@@ -51,23 +51,23 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 		public int add(final AppVersionFile appVersionFile) {
 			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_app_version_file ("
-					+", app_id"
+					+"	app_id"
 					+", version"
 					+", size"
 					+", file_path"
 					+", new_features"
-					+", status"
+//					+", status"
 					+", create_time"
 					+", update_time"
 					+") values ("
-					+", app_id"
-					+", version"
-					+", size"
-					+", file_path"
-					+", new_features"
-					+", status"
-					+", create_time"
-					+", update_time"
+					+"	?"
+					+", ?"
+					+", ?"
+					+", ?"
+					+", ?"
+//					+", status"
+					+", now()"
+					+", now()"
 					+")";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
@@ -82,8 +82,8 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 					 ps.setString(4, appVersionFile.getFilePath());
 					 ps.setString(5, appVersionFile.getNewFeatures());
 					 ps.setInt(6, appVersionFile.getStatus());
-					 ps.setDate(7, new Date(appVersionFile.getCreateTime().getTime()));
-					 ps.setDate(8, new Date(appVersionFile.getUpdateTime().getTime()));
+//					 ps.setDate(7, new Date(appVersionFile.getCreateTime().getTime()));
+//					 ps.setDate(8, new Date(appVersionFile.getUpdateTime().getTime()));
 					return ps;
 				}
 			},  gkHolder);
@@ -98,10 +98,16 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 		}
 
 		@Override
+		public int deleteByAppId(int appId) {
+			String sql="delete from t_app_version_file where app_id=?";
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.update(sql, appId);
+		}
+
+		@Override
 		public int update(AppVersionFile appVersionFile) {
 			StringBuilder sql=new StringBuilder("update t_app_version_file set update_time=now()");
 			List<Object> args=new ArrayList<Object>();
-			sql.append(" where id=?");
 			if (appVersionFile.getAppId()!=null) {
 				sql.append(", app_id=?");
 				args.add(appVersionFile.getAppId());
@@ -134,6 +140,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 				sql.append(", update_time=?");
 				args.add(appVersionFile.getUpdateTime());
 			}
+			sql.append(" where id=?");
 			args.add(appVersionFile.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

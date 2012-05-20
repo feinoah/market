@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,7 +21,7 @@ import cn.com.carit.market.common.utils.JsonPage;
  * Auto generated Code
  */
 @Controller
-@RequestMapping(value="app/appDownloadLog")
+@RequestMapping(value="admin/app/downloadLog")
 public class AppDownloadLogController {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -29,18 +30,18 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * app/appDownloadLog/
+	 * admin/app/downloadLog
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppDownloadLog());
-		return "/app/appDownloadLog";
+		return "admin/app/downloadLog";
 	}
 	
 	/**
 	 * 增加/更新
-	 * app/appDownloadLog/save
+	 * admin/app/downloadLog/save
 	 * @param user
 	 * @param result
 	 * @return
@@ -48,17 +49,18 @@ public class AppDownloadLogController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(AppDownloadLog appDownloadLog, BindingResult result){
+	public int save(@ModelAttribute AppDownloadLog appDownloadLog, BindingResult result){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
-		return appDownloadLogService.saveOrUpdate(appDownloadLog);
+		appDownloadLogService.saveOrUpdate(appDownloadLog);
+		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * app/appDownloadLog/{id}
+	 * admin/app/downloadLog/{id}
 	 * @param id
 	 * @return
 	 */
@@ -66,7 +68,7 @@ public class AppDownloadLogController {
 	@ResponseBody
 	public AppDownloadLog view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return appDownloadLogService.queryById(id);
@@ -74,7 +76,7 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 删除
-	 * app/appDownloadLog/delete/{id}
+	 * admin/app/downloadLog/delete/{id}
 	 * @param id
 	 * @return
 	 */
@@ -82,7 +84,7 @@ public class AppDownloadLogController {
 	@ResponseBody
 	public int delete(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		return appDownloadLogService.delete(id);
@@ -90,12 +92,12 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 查询
-	 * app/appDownloadLog/query
+	 * admin/app/downloadLog/query
 	 * @return json
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(AppDownloadLog appDownloadLog,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute AppDownloadLog appDownloadLog, BindingResult result,DataGridModel dgm){
 		return appDownloadLogService.queryByExemple(appDownloadLog, dgm);
 	}
 }

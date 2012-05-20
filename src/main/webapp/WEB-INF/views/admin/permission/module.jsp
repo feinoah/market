@@ -10,10 +10,11 @@
 		<script type="text/javascript">
 		var modules;
 		$(function(){
-			$.getJSON('${ctx}/back/module/query/all', function(data) {
-				modules=data
+			// 查询所有模块 page=1起始页，rows=10000总记录树，默认是10的
+			$.getJSON('${ctx}/admin/permission/module/query?page=1&rows=10000&t='+(new Date().getTime()), function(data) {
+				modules=data.rows
 			});
-			checkEditControl('admin/permission/module');
+			checkEditControl('${ctx}/admin/permission/module');
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -72,10 +73,11 @@
 			}
 		}
 		function moudleFormatter(v){
-			var result='未知模块';
+			var result='-';
 			$.each(modules, function(key,val) {
 				if(v==val.id){
 					result=val.moduleName;
+					return false;
 				}
 			});
 			return result;
@@ -170,7 +172,7 @@
 					<tr>
 						<td><form:label	for="moduleName" path="moduleName"  cssClass="mustInput">名称：</form:label></td>
 						<td><form:input path="moduleName" cssClass="easyui-validatebox" required="true" /></td>
-						<td><form:label	for="moduleUrl" path="moduleUrl"  cssClass="mustInput">路径：</form:label></td>
+						<td><form:label	for="moduleUrl" path="moduleUrl">路径：</form:label></td>
 						<td><form:input path="moduleUrl" cssClass="easyui-validatebox"/></td>
 					</tr>
 					<tr>

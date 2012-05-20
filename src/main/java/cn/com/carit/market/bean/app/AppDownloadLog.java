@@ -19,7 +19,7 @@ public class AppDownloadLog  implements Serializable{
 	/**
 	 * id
 	 */
-	private Integer id;
+	private int id;
 	/**
 	 * accountId
 	 */
@@ -33,10 +33,10 @@ public class AppDownloadLog  implements Serializable{
 	 */
 	private Date downloadTime;
 
-	public void setId(Integer value) {
+	public void setId(int value) {
 		this.id = value;
 	}
-	public Integer getId() {
+	public int getId() {
 		return this.id;
 	}
 	public void setAccountId(Integer value) {

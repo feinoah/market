@@ -26,21 +26,22 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AppCatalog appCatalog) {
+	public void saveOrUpdate(AppCatalog appCatalog) {
 		if (appCatalog==null) {
 			throw new NullPointerException("appCatalog object is null...");
 		}
 		if (appCatalog.getId()==0) {
-			return appCatalogDao.add(appCatalog);
+			appCatalogDao.add(appCatalog);
+		} else {
+			appCatalogDao.update(appCatalog);
 		}
-		return appCatalogDao.update(appCatalog);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appCatalogDao.delete(id);
 	}
@@ -48,7 +49,7 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 	@Override
 	public AppCatalog queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appCatalogDao.queryById(id);
 	}

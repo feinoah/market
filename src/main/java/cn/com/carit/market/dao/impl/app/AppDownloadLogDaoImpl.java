@@ -1,7 +1,6 @@
 package cn.com.carit.market.dao.impl.app;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -36,6 +35,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl  implements
 			@Override
 			public AppDownloadLog mapRow(ResultSet rs, int rowNum) throws SQLException {
 				AppDownloadLog appDownloadLog=new AppDownloadLog();
+				appDownloadLog.setId(rs.getInt("id"));
 				appDownloadLog.setAccountId(rs.getInt("account_id"));
 				appDownloadLog.setAppId(rs.getInt("app_id"));
 				appDownloadLog.setDownloadTime(rs.getTimestamp("download_time"));
@@ -45,16 +45,11 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public int add(final AppDownloadLog appDownloadLog) {
-			// TODO change values field name to ? and deal with date field
 			final String sql = "insert into t_app_download_log ("
-					+", account_id"
+					+"	account_id"
 					+", app_id"
 					+", download_time"
-					+") values ("
-					+", account_id"
-					+", app_id"
-					+", download_time"
-					+")";
+					+") values (?, ?, now())";
 			log.debug(String.format("\n%1$s\n", sql));
 			KeyHolder gkHolder = new GeneratedKeyHolder(); 
 			jdbcTemplate.update(new PreparedStatementCreator() {
@@ -64,7 +59,6 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl  implements
 					 PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 					 ps.setInt(1, appDownloadLog.getAccountId());
 					 ps.setInt(2, appDownloadLog.getAppId());
-					 ps.setDate(3, new Date(appDownloadLog.getDownloadTime().getTime()));
 					return ps;
 				}
 			},  gkHolder);
@@ -76,6 +70,13 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl  implements
 			String sql="delete from t_app_download_log where id=?";
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql, id);
+		}
+		
+		@Override
+		public int deleteByAppId(int appId) {
+			String sql="delete from t_app_download_log where app_id=?";
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.update(sql, appId);
 		}
 
 		@Override
@@ -95,6 +96,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl  implements
 				sql.append(", download_time=?");
 				args.add(appDownloadLog.getDownloadTime());
 			}
+			sql.append(" where id=?");
 			args.add(appDownloadLog.getId());
 			log.debug(String.format("\n%1$s\n", sql));
 			return jdbcTemplate.update(sql.toString(), args.toArray());

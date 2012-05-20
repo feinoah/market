@@ -19,7 +19,7 @@ public class AppCatalog  implements Serializable{
 	/**
 	 * id
 	 */
-	private Integer id;
+	private int id;
 	/**
 	 * name
 	 */
@@ -45,10 +45,10 @@ public class AppCatalog  implements Serializable{
 	 */
 	private Date updateTime;
 
-	public void setId(Integer value) {
+	public void setId(int value) {
 		this.id = value;
 	}
-	public Integer getId() {
+	public int getId() {
 		return this.id;
 	}
 	public void setName(String value) {

@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,7 +26,7 @@ private final Logger log = Logger.getLogger(getClass());
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * admin/ permission/module/
+	 * admin/permission/module/
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
@@ -45,12 +46,13 @@ private final Logger log = Logger.getLogger(getClass());
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(BaseModule baseModule, HttpServletRequest req, BindingResult result){
+	public int save(@ModelAttribute BaseModule baseModule, BindingResult result, HttpServletRequest req){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
-		return baseModuleService.saveOrUpdate(baseModule);
+		baseModuleService.saveOrUpdate(baseModule);
+		return 1;
 	}
 	
 	/**
@@ -63,7 +65,7 @@ private final Logger log = Logger.getLogger(getClass());
 	@ResponseBody
 	public BaseModule view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return baseModuleService.queryById(id);
@@ -90,7 +92,7 @@ private final Logger log = Logger.getLogger(getClass());
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(BaseModule baseModule,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute BaseModule baseModule, BindingResult result, DataGridModel dgm){
 		return baseModuleService.queryByExemple(baseModule, dgm);
 	}
 	

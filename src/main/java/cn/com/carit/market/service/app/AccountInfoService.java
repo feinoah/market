@@ -15,7 +15,7 @@ public interface AccountInfoService {
 	 * @param accountInfo
 	 * @return
 	 */
-	int saveOrUpdate(AccountInfo accountInfo);
+	void saveOrUpdate(AccountInfo accountInfo);
 	
 	/**
 	 * 删除

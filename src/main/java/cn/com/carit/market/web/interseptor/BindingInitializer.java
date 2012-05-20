@@ -23,8 +23,13 @@ public class BindingInitializer implements WebBindingInitializer {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);
 		dateFormat.setLenient(false);
 		binder.registerCustomEditor(String.class,new StringTrimmerEditor(false));
+//		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class, null, true));
+//		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class,null, true));
+//		binder.registerCustomEditor(Double.class,  new CustomNumberEditor(Double.class, null, true));
+//		binder.registerCustomEditor(Byte.class, new CustomNumberEditor(Byte.class, null, true));
+//		binder.registerCustomEditor(Float.class, new CustomNumberEditor(Float.class, null, true));
+//		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		binder.registerCustomEditor(Date.class,new DateConvertEditor());
-
 	}
 
 }

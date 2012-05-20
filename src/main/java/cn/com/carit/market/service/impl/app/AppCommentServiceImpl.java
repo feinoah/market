@@ -26,29 +26,38 @@ public class AppCommentServiceImpl implements AppCommentService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int saveOrUpdate(AppComment appComment) {
+	public void saveOrUpdate(AppComment appComment) {
 		if (appComment==null) {
 			throw new NullPointerException("appComment object is null...");
 		}
 		if (appComment.getId()==0) {
-			return appCommentDao.add(appComment);
+			appCommentDao.add(appComment);
+		} else {
+			appCommentDao.update(appComment);
 		}
-		return appCommentDao.update(appComment);
 	}
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appCommentDao.delete(id);
+	}
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int deleteByAppId(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appCommentDao.deleteByAppId(appId);
 	}
 
 	@Override
 	public AppComment queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return appCommentDao.queryById(id);
 	}

@@ -1,5 +1,7 @@
 package cn.com.carit.market.common;
 
+import java.io.File;
+
 public class Constants {
 	public static final int PAGE_SIZE=10;
 	public static final int STATUS_VALID=1;
@@ -13,4 +15,7 @@ public class Constants {
 	public static final int MAX_PWD_ERROR_COUNT=5;
 	public static final String USER_ALL_MOUDLE="userAllMoudle";
 	public static final String ANSWER_CODE="answerCode";
+	
+	public static final String BASE_PATH_ICON=File.separator+"resources"+File.separator+"attachment"+File.separator+"icons";
+	public static final String BASE_PATH_IMAGE=File.separator+"resources"+File.separator+"attachment"+File.separator+"images";
 }

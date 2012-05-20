@@ -4,6 +4,7 @@ import java.util.List;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import  cn.com.carit.market.bean.app.AppAttachment;
+import cn.com.carit.market.bean.app.Application;
 
 /**
  * AppAttachmentDao
@@ -19,11 +20,25 @@ public interface AppAttachmentDao {
 	int add(final AppAttachment AppAttachment);
 	
 	/**
+	 * 批量
+	 * @param application
+	 * @return
+	 */
+	int[] bathAdd(final Application application);
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @return
 	 */
 	int delete(int id);
+	
+	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
 	
 	/**
 	 * 更新

@@ -46,8 +46,8 @@ public class BaseUserServiceImpl implements BaseUserService{
 		if (baseUser.getId()==0) {
 			// 增加
 			int id=baseUserDao.add(baseUser);
-			if (id>0 && baseUser.getRoles()!=null && baseUser.getRoles().size()>0) {
-				baseUser.setId((int)id);
+			if (id>0 && StringUtils.hasText(baseUser.getRoles())) {
+				baseUser.setId(id);
 				// 增加用户角色
 				baseUserRoleDao.bathAdd(baseUser);
 			}
@@ -57,7 +57,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 			baseUserRoleDao.deleteByUserId(baseUser.getId());
 			// 更新用户
 			baseUserDao.update(baseUser);
-			if (baseUser.getRoles()!=null && baseUser.getRoles().size()>0) {
+			if ( StringUtils.hasText(baseUser.getRoles())) {
 				// 增加用户角色
 				baseUserRoleDao.bathAdd(baseUser);
 			}
@@ -68,7 +68,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		// 删除用户角色信息
 		baseUserRoleDao.deleteByUserId(id);
@@ -78,7 +78,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 	@Override
 	public BaseUser queryById(int id) {
 		if (id<=0) {
-			throw new IllegalArgumentException("id must bigger than 0...");
+			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		BaseUser baseUser=baseUserDao.queryById(id);
 		if (baseUser!=null) {

@@ -15,7 +15,7 @@ public interface AppAttachmentService {
 	 * @param appAttachment
 	 * @return
 	 */
-	int saveOrUpdate(AppAttachment appAttachment);
+	void saveOrUpdate(AppAttachment appAttachment);
 	
 	/**
 	 * 删除
@@ -23,6 +23,13 @@ public interface AppAttachmentService {
 	 * @return
 	 */
 	int delete(int id);
+	
+	/**
+	 * 按应用Id删除
+	 * @param appId
+	 * @return
+	 */
+	int deleteByAppId(int appId);
 	
 	/**
 	 * 按Id查询

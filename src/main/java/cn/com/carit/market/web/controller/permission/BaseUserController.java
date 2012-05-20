@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -50,7 +51,7 @@ public class BaseUserController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(BaseUser baseUser, BindingResult result) throws Exception{
+	public int save(@ModelAttribute BaseUser baseUser, BindingResult result) throws Exception{
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
@@ -69,7 +70,7 @@ public class BaseUserController {
 	@ResponseBody
 	public BaseUser view(@PathVariable int id){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return null;
 		}
 		return baseUserService.queryById(id);
@@ -91,7 +92,7 @@ public class BaseUserController {
 	@ResponseBody
 	public int delete(@PathVariable int id, HttpServletRequest req){
 		if (id<=0) {
-			log.debug("The param id must bigger than 0...");
+			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		BaseUser user=(BaseUser) req.getSession().getAttribute(
@@ -104,7 +105,7 @@ public class BaseUserController {
 	
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(BaseUser baseUser,DataGridModel dgm){
+	public JsonPage query(@ModelAttribute BaseUser baseUser, BindingResult result, DataGridModel dgm){
 		return baseUserService.queryByExemple(baseUser, dgm);
 	}
 }
