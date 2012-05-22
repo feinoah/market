@@ -1,5 +1,7 @@
 package cn.com.carit.market.web.controller.app;
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,34 +66,65 @@ public class ApplicationController {
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
 	public int save(@ModelAttribute Application application, BindingResult result
-			, HttpServletRequest request) throws Exception{
+			, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-		String filePath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_ICON );
+		String iconPath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_ICON );
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
-        // 获取文件的后缀 
-		String suffix = multipartFile.getOriginalFilename().substring(
-				multipartFile.getOriginalFilename().lastIndexOf("."));
-		// 随机文件名
-		String fileName =  System.nanoTime() + suffix;// 构建文件名称
-		File file = new File(filePath+File.separator+fileName);
-		multipartFile.transferTo(file);
-		application.setIcon(Constants.BASE_PATH_ICON+File.separator+fileName);
+        StringBuilder images=new StringBuilder();
+        try {
+	        if (multipartFile!=null&&multipartFile.getOriginalFilename().length()>0) {
+	        	// 获取文件的后缀 
+	        	String suffix = multipartFile.getOriginalFilename().substring(
+	        			multipartFile.getOriginalFilename().lastIndexOf("."));
+	        	// 随机文件名
+	        	String fileName =  System.nanoTime() + suffix;// 构建文件名称
+	        	File file = new File(iconPath+File.separator+fileName);
+        		multipartFile.transferTo(file);
+	        	application.setIcon(Constants.BASE_PATH_ICON+File.separator+fileName);
+			}
+	        String imagePath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_IMAGE);
+			//页面控件的文件流
+	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
+	        int i=0;
+	        long random=System.currentTimeMillis();
+	        for (MultipartFile imageFile : imageFiles) {
+	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
+	        		String filename = imageFile.getOriginalFilename();  
+	        		String extName = filename.substring(filename.lastIndexOf(".")).toLowerCase();  
+	        		String lastFileName = random+"_"+(i+1)+extName;
+	        		FileCopyUtils.copy(imageFile.getBytes(),new File(imagePath+File.separator+lastFileName)); 
+	        		if (i<4) {
+	        			images.append(Constants.BASE_PATH_IMAGE+File.separator+lastFileName).append(";");
+	        		} else {
+	        			images.append(Constants.BASE_PATH_IMAGE+File.separator+lastFileName);
+	        		}
+				}
+        		i++;
+			}
+        } catch (IllegalStateException e) {
+        	log.error("upload file error..."+e.getMessage());
+        	return -1;
+        } catch (IOException e) {
+        	log.error("upload file error..."+e.getMessage());
+        	return -1;
+        }
+        application.setImages(images.toString());
 		applicationService.saveOrUpdate(application);
 		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * admin/app/application/{id}
+	 * admin/app/application/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public Application view(@PathVariable int id){
 		if (id<=0) {

@@ -77,6 +77,12 @@ public class Application  implements Serializable{
 	 * permissionDesc
 	 */
 	private String permissionDesc;
+	
+	/**
+	 * 截图路径，以“;”分隔
+	 */
+	@JsonIgnore
+	private String images;
 	/**
 	 * status
 	 */
@@ -90,9 +96,6 @@ public class Application  implements Serializable{
 	 */
 	private Date updateTime;
 	
-	/**封装前台传来的附件路径（截图）*/
-	@JsonIgnore
-	private String attachments;
 
 	public void setId(int value) {
 		this.id = value;
@@ -204,11 +207,17 @@ public class Application  implements Serializable{
 	public Date getUpdateTime() {
 		return this.updateTime;
 	}
-	public String getAttachments() {
-		return attachments;
+	public String getImages() {
+		return images;
 	}
-	public void setAttachments(String attachments) {
-		this.attachments = attachments;
+	public void setImages(String images) {
+		this.images = images;
 	}
 
+	public String [] getImageList(){
+		if (this.images!=null && this.images.trim().length()>0) {
+			return this.images.trim().split(";");
+		}
+		return null;
+	}
 }

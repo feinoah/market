@@ -121,8 +121,9 @@ public class AdminController {
 	@RequestMapping(value="back/logout")
 	public String logout(HttpServletRequest req){
 		HttpSession session=req.getSession();
+		BaseUser baseUser=(BaseUser) session.getAttribute(Constants.ADMIN_USER);
 		session.setAttribute(Constants.ADMIN_USER, null);
-		session.setAttribute(Constants.USER_ALL_MOUDLE, null);
+		session.setAttribute(Constants.USER_ALL_MOUDLE+baseUser.getEmail(), 0);
 		return "/admin/loginForm";
 	}
 	
@@ -209,6 +210,39 @@ public class AdminController {
 				}
 				if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
 					result.put("del", 1);
+				}
+			}
+		}
+		return result;
+	}
+	/**
+	 * back/permission/account
+	 * 检测账号管理权限
+	 * @param baseUri
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="back/permission/account", method=RequestMethod.GET)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	public Map<String, Integer> checkAccountControl(@RequestParam("baseUri") String baseUri, HttpServletRequest req){
+		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
+				Constants.USER_ALL_MOUDLE);
+		Map<String, Integer> result=new HashMap<String, Integer>();
+		result.put("save", 0);
+		result.put("lock", 0);
+		result.put("unlock", 0);
+		if (moduleList!=null && moduleList.size()>0) {
+			String [] array={"/save","/delete", "/unlock"};
+			for (BaseModule baseModule : moduleList) {
+				if ((baseUri+array[0]).equals(baseModule.getModuleUrl())) {
+					result.put("save", 1);
+				}
+				if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
+					result.put("delete", 1);
+				}
+				if ((baseUri+array[2]).equals(baseModule.getModuleUrl())) {
+					result.put("unlock", 1);
 				}
 			}
 		}

@@ -60,11 +60,11 @@ public class AppCatalogController {
 	
 	/**
 	 * 查看
-	 * admin/app/catalog/{id}
+	 * admin/app/catalog/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public AppCatalog view(@PathVariable int id){
 		if (id<=0) {

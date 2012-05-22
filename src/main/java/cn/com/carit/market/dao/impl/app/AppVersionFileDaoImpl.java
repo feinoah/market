@@ -81,7 +81,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl  implements
 					 ps.setString(3, appVersionFile.getSize());
 					 ps.setString(4, appVersionFile.getFilePath());
 					 ps.setString(5, appVersionFile.getNewFeatures());
-					 ps.setInt(6, appVersionFile.getStatus());
+//					 ps.setInt(6, appVersionFile.getStatus());
 //					 ps.setDate(7, new Date(appVersionFile.getCreateTime().getTime()));
 //					 ps.setDate(8, new Date(appVersionFile.getUpdateTime().getTime()));
 					return ps;

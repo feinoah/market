@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 
 import org.apache.commons.lang.StringUtils;
 
+import cn.com.carit.market.common.Constants;
+
 /**
  * spring中日期转换
  * 
@@ -26,7 +28,7 @@ public class DateConvertEditor extends PropertyEditorSupport {
 	private DateFormat format;
 
 	public DateConvertEditor() {
-		this.format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		this.format = new SimpleDateFormat(Constants.DATE_FORMATTER);
 	}
 
 	public DateConvertEditor(String format) {

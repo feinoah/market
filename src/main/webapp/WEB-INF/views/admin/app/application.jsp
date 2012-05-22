@@ -9,6 +9,55 @@
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
+			// 初始化
+			/*$('#ttt').datagrid({
+				width:'100%',
+				method:'get',
+				toolbar:[{
+					text:'新增',
+					iconCls:'icon-add',
+					handler:function() {
+						$('#editWin').window('open');
+						$('#editWin').show();
+					}
+				}, '-', {
+					text:'修改',
+					iconCls:'icon-edit',
+					handler:edit
+				}, '-', {
+					text :'删除',
+					iconCls:'icon-remove',
+					handler:del
+				}, '-', {
+					text :'版本',
+					iconCls:'icon-add',
+					handler:function() {
+					}
+				}, '-', {
+					text :'版本',
+					iconCls:'icon-search',
+					handler:searchVersion
+				} ]
+			});
+			// edit form
+			$('#edit_submit_app').bind('click',function(){
+				$('#editForm').form({
+			    	success:function(data){
+			    		if(data==-1){
+							$.messager.alert('错误', "编辑失败", 'error');
+			    		} else if(data>0){
+							$.messager.alert('成功', "编辑成功", 'info');
+				        	$('#editWin').window('close');
+				        	// clear form
+				        	$('#editForm').form('clear');
+				        	// update rows
+				        	$('#tt').datagrid('reload');
+						}else{
+			    			$.messager.alert('异常', "后台系统异常", 'error');
+						}
+				    }
+				}).submit();
+			});*/
 			checkEditControl('${ctx}/admin/app/application');
 		});
 		function edit() {
@@ -16,20 +65,17 @@
 			if (m) {
 				$('#editWin').window('open');
 				// init data
-				$('#editForm input[name=email]').val(m.email);
-				$('#editForm input[name=nickName]').val(m.nickName);
-				$('#editForm input[name=realName]').val(m.realName);
-				$('#editForm input[name=gender]').val(m.gender);
-				$('#editForm input[name=officePhone]').val(m.officePhone);
-				$('#editForm input[name=mobile]').val(m.mobile);
+				$('#editForm input[name=appName]').val(m.appName);
+				$('#editForm input[name=displayName]').val(m.displayName);
+				$('#editForm input[name=version]').val(m.version);
+				$('#editForm input[name=catalogId]').val(m.catalogId);
+				$('#editForm input[name=platform]').val(m.platform);
+				$('#editForm input[name=supportLanguages]').val(m.supportLanguages);
+				$('#editForm input[name=appLevel]').val(m.appLevel);
+				$('#editForm input[name=price]').val(m.price);
 				$('#editForm input[name=status]').val(m.status);
-				$('#password').attr('disabled',true);//密码不能在这里修改
-				$('#idCard').attr('idCard',true);//idCard不能在这里修改
-				$('#idCard').val(m.idCard);
-				$('#birthday').val(m.birthday);
-				$('#photo').attr('src',m.photo);
-				$('#balance').val(m.balance);
-				$('#address').val(m.address);
+				$('#permissionDesc').val(m.permissionDesc);
+				$('#description').val(m.description);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -85,12 +131,24 @@
 			}
 			return v;
 		}
+		
+		function searchVersion() {
+			var m = $('#tt').datagrid('getSelected');
+			if (m) {
+				location.href='${ctx}/admin/app/version/?appId='+m.id;
+			} else {
+				$.messager.show({
+					title : '警告',
+					msg : '请先选泽应用记录。'
+				});
+			}
+		}
 		</script>
 		<style>
 		#editWin label {width: 115px;}
 		#editWin input {width: 180px;}
 		#editWin select {width: 185px;}
-		#editWin textarea {width: 485px;height: 55px;}
+		#editWin textarea {width: 485px;height: 40px;}
 		</style>
 	</head>
 	<body>
@@ -118,7 +176,7 @@
 						<form:label for="catalogId" path="catalogId">分类：</form:label>
 					</td>
 					<td>
-						<form:select path="catalogId">
+						<form:select path="catalogId" cssClass="easyui-combobox">
 							<form:option value="">-请选择-</form:option>
 							<form:options items="${catalogList}"  itemValue="id"  itemLabel="name" />
 						</form:select>
@@ -147,27 +205,24 @@
 			fitColumns="true" pageList="[ 5, 10]" sortName="downCount" sortOrder="desc">
 				<thead>
 					<tr>
-						<th field="appName" width="80" align="center" hidden="true">名称</th>
+						<th field="appName" width="100" align="center">名称</th>
 						<th field="displayName" width="100" align="center">显示名称</th>
 						<th field="version" width="60" align="center">版本</th>
-						<th field="icon" width="10" align="center"  hidden="true">图标路径</th>
+						<th field="icon" width="60" align="center" hidden="true">图标路径</th>
 						<th field="catalogId" width="80" align="center" formmatter="catalogFormatter">分类</th>
-						<th field="appFilePath" width="10" align="center"  hidden="true">应用文件路径</th>
+						<th field="appFilePath" width="100" align="center"  hidden="true">应用文件路径</th>
 						<th field="platform" width="100" align="center">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
 						<th field="appLevel" width="80" align="center">应用分级</th>
-						<th field="description" width="150" align="center"  hidden="true">描述</th>
-						<th field="permissionDesc"  align="center"  hidden="true">权限描述</th>
+						<th field="description" width="80" align="center"  hidden="true">描述</th>
+						<th field="permissionDesc" width="80" hidden="true">权限描述</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
-						<!-- 
-						<th field="updateTime" width="90" align="center">更新时间</th>
-						 -->
 					</tr>
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用" closed="true" style="width:700px;height:400px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑应用" closed="true" style="width:700px;height:480px;padding:5px;" modal="true">
 			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
@@ -196,7 +251,7 @@
 				<tr>
 						<td><form:label	for="supportLanguages" path="supportLanguages">支持语言：</form:label></td>
 						<td>
-							<form:select path="supportLanguages" cssClass="easyui-combobox" required="true" validType="number">
+							<form:select path="supportLanguages" cssClass="easyui-combobox" required="true" validType="notempty">
 							<form:option value="">请选择</form:option>
 							<form:option value="0">简体中文</form:option>
 							<form:option value="1">繁体中文</form:option>
@@ -228,10 +283,19 @@
 							<form:textarea path="description" />
 						</td>
 					</tr>
+					<tr>
+						<td><label>截图1：</label></td><td><input type="file" name="image" /></td>
+						<td><label>截图2：</label></td><td><input type="file" name="image" /></td>
+					</tr>
+					<tr>
+						<td><label>截图3：</label></td><td><input type="file" name="image" /></td>
+						<td><label>截图4：</label></td><td><input type="file" name="image" /></td>
+					</tr>
+					<tr><td><label>截图5：</label></td><td><input type="file" name="image" /></td></tr>
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
 						iconCls="icon-save">保 存</a>
 					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
 						iconCls="icon-undo">重 置</a>

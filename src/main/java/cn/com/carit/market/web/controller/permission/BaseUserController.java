@@ -62,11 +62,11 @@ public class BaseUserController {
 	
 	/**
 	 * 查看
-	 * admin/permission/user/{id}
+	 * admin/permission/user/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public BaseUser view(@PathVariable int id){
 		if (id<=0) {

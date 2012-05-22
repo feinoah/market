@@ -1,5 +1,9 @@
 package cn.com.carit.market.web.controller.app;
+import java.io.File;
+import java.io.IOException;
+
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -10,11 +14,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.AppVersionFileService;
+import cn.com.carit.market.service.app.ApplicationService;
 
 /**
  * AppVersionFileController
@@ -27,6 +36,8 @@ public class AppVersionFileController {
 	
 	@Resource
 	private AppVersionFileService appVersionFileService;
+	@Resource
+	private ApplicationService applicationService;
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
@@ -36,6 +47,9 @@ public class AppVersionFileController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppVersionFile());
+		Application app=new Application();
+		app.setStatus(Constants.STATUS_VALID);
+		model.addAttribute("allApps", applicationService.queryByExemple(app));
 		return "admin/app/version";
 	}
 	
@@ -49,22 +63,46 @@ public class AppVersionFileController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(@ModelAttribute AppVersionFile appVersionFile, BindingResult result){
+	public int save(@ModelAttribute AppVersionFile appVersionFile, BindingResult result
+			, HttpServletRequest request){
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+		String apkPath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_APK);
+		//页面控件的文件流
+        MultipartFile multipartFile = multipartRequest.getFile("file");
+        try {
+	        if (multipartFile!=null&&multipartFile.getOriginalFilename().length()>0) {
+	        	// 获取文件的后缀 
+	        	String suffix = multipartFile.getOriginalFilename().substring(
+	        			multipartFile.getOriginalFilename().lastIndexOf("."));
+	        	// 随机文件名
+	        	String fileName =  "app_"+appVersionFile.getAppId()
+	        			+"_"+System.nanoTime() + suffix;// 构建文件名称
+	        	File file = new File(apkPath+File.separator+fileName);
+					multipartFile.transferTo(file);
+	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+File.separator+fileName);
+			}
+        } catch (IllegalStateException e) {
+        	log.error("upload file error..."+e.getMessage());
+        	return -1;
+        } catch (IOException e) {
+        	log.error("upload file error..."+e.getMessage());
+        	return -1;
+        }
 		appVersionFileService.saveOrUpdate(appVersionFile);
 		return 1;
 	}
 	
 	/**
 	 * 查看
-	 * admin/app/version/{id}
+	 * admin/app/version/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public AppVersionFile view(@PathVariable int id){
 		if (id<=0) {

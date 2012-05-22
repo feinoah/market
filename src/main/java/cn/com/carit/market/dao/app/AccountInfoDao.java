@@ -40,6 +40,13 @@ public interface AccountInfoDao {
 	AccountInfo queryById(int id);
 	
 	/**
+	 * 按邮箱查询
+	 * @param email
+	 * @return
+	 */
+	AccountInfo queryByEmail(String email);
+	
+	/**
 	 * 查询
 	 * @return
 	 */
@@ -66,5 +73,27 @@ public interface AccountInfoDao {
 	 * @return
 	 */
 	int getCount(AccountInfo accountInfo);
+	
+	/**
+	 * 修改密码
+	 * @param id
+	 * @param newPassword
+	 * @return
+	 */
+	int updatePwd(int id, String newPassword);
+	
+	/**
+	 * 锁定账号
+	 * @param id
+	 * @return
+	 */
+	int lockAccount(int id);
+	
+	/**
+	 * 解封账号
+	 * @param id
+	 * @return
+	 */
+	int unLockAccount(int id);
 	
 }

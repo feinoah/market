@@ -55,7 +55,10 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 			throws ServletException, IOException{
 		List<BaseModule> allModule=(List<BaseModule>) req.getSession().getAttribute(
 				Constants.USER_ALL_MOUDLE);
-		if (uri.indexOf("delete")!=-1) { // 删除、查看特殊处理
+		if (uri.indexOf("delete")!=-1
+				||uri.indexOf("view")!=-1
+				||uri.indexOf("lock")!=-1
+				||uri.indexOf("unlock")!=-1) { // 删除、查看特殊处理
 			uri=uri.substring(0, uri.lastIndexOf("/"));
 		}
 		for (BaseModule module : allModule) {

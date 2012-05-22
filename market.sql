@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-05-17 19:03:42
+Date: 2012-05-22 17:28:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -35,16 +35,18 @@ CREATE TABLE `t_account_info` (
   `address` varchar(200) DEFAULT NULL COMMENT '联系地址',
   `last_login_ip` varchar(18) DEFAULT NULL COMMENT '最后登录Ip',
   `last_login_time` timestamp NULL DEFAULT NULL COMMENT '最后登录时间',
-  `status` tinyint(4) NOT NULL COMMENT '状态：0 停用；0x1 启用；0x2：禁止登录（密码错误次数过多，一定时间内禁止登录）；0x4：封号',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态：0 停用；0x1 启用；0x2：禁止登录（密码错误次数过多，一定时间内禁止登录）；0x4：封号',
   `update_time` timestamp NULL DEFAULT NULL,
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_account_info_email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of t_account_info 
+-- Records of t_account_info
 -- ----------------------------
+INSERT INTO `t_account_info` VALUES ('1', 'test@test.com', '11111', 'test', '1', '2012-05-22', null, '0', null, null, null, null, null, null, null, '1', '2012-05-22 16:47:10', '2012-05-22 10:21:03');
+INSERT INTO `t_account_info` VALUES ('2', 'test2@test.com', '11111', 'test2', '0', null, null, '0', null, null, null, null, null, null, null, '1', '2012-05-22 16:47:05', '2012-05-22 11:19:22');
 
 -- ----------------------------
 -- Table structure for `t_application`
@@ -66,35 +68,18 @@ CREATE TABLE `t_application` (
   `app_level` int(11) DEFAULT NULL COMMENT '应用分级',
   `description` varchar(500) DEFAULT NULL COMMENT '描述',
   `permission_desc` varchar(500) DEFAULT NULL COMMENT '权限描述',
+  `images` varchar(500) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_application
 -- ----------------------------
-
--- ----------------------------
--- Table structure for `t_app_attachment`
--- ----------------------------
-DROP TABLE IF EXISTS `t_app_attachment`;
-CREATE TABLE `t_app_attachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app_id` int(11) NOT NULL COMMENT '应用Id',
-  `name` varchar(20) NOT NULL COMMENT '附件名称',
-  `file_path` varchar(200) NOT NULL COMMENT '附件路径',
-  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
-  `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_t_app_attachment_app_id` (`app_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_app_attachment
--- ----------------------------
+INSERT INTO `t_application` VALUES ('6', 'test', 'test', 'v1', '\\resources\\attachment\\icons\\29533256882152.sql', '2', '60k', '\\resources\\attachment\\apk\\5429771808558.sql', '', '0', '0', null, '1', 'test', 'test1', null, '1', '2012-05-21 09:39:17', '2012-05-22 10:09:46');
+INSERT INTO `t_application` VALUES ('7', '111', '111', '111', '\\resources\\attachment\\icons\\29752289263020.sql', '2', null, null, '11', '0', null, null, '1', '111111111', '11111111', '\\resources\\attachment\\images\\1337592293031_1.sql;\\resources\\attachment\\images\\1337592293031_3.sql;\\resources\\attachment\\images\\1337592293031_4.xml;\\resources\\attachment\\images\\1337592293031_5.xml', '1', '2012-05-21 17:24:53', '2012-05-21 17:24:53');
 
 -- ----------------------------
 -- Table structure for `t_app_catalog`
@@ -110,11 +95,13 @@ CREATE TABLE `t_app_catalog` (
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_catalog
 -- ----------------------------
+INSERT INTO `t_app_catalog` VALUES ('2', '车载', '车载应用 导航', '1', '1', '2012-05-20 12:25:46', '2012-05-20 13:54:36');
+INSERT INTO `t_app_catalog` VALUES ('4', '生活', '生活应用', '2', '1', '2012-05-20 14:20:16', '2012-05-20 14:20:16');
 
 -- ----------------------------
 -- Table structure for `t_app_comment`
@@ -132,11 +119,12 @@ CREATE TABLE `t_app_comment` (
   PRIMARY KEY (`id`),
   KEY `idx_t_user_comment_app_id` (`app_id`) USING BTREE,
   KEY `idx_t_user_comment_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_comment
 -- ----------------------------
+INSERT INTO `t_app_comment` VALUES ('1', '6', '1', '2', '测试111', '1', '2012-05-22 10:45:24', '2012-05-22 11:28:07');
 
 -- ----------------------------
 -- Table structure for `t_app_download_log`
@@ -171,10 +159,31 @@ CREATE TABLE `t_app_version_file` (
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_version_file
+-- ----------------------------
+INSERT INTO `t_app_version_file` VALUES ('1', '6', 'v1', '60k', '\\resources\\attachment\\apk\\5429771808558.sql', '55555555', '1', '2012-05-22 09:24:41', '2012-05-22 10:09:46');
+
+-- ----------------------------
+-- Table structure for `t_attachment`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_attachment`;
+CREATE TABLE `t_attachment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_id` int(11) NOT NULL COMMENT '应用Id',
+  `name` varchar(20) NOT NULL COMMENT '附件名称',
+  `file_path` varchar(200) NOT NULL COMMENT '附件路径',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
+  `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_t_attachment_app_id` (`app_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_attachment
 -- ----------------------------
 
 -- ----------------------------
@@ -220,7 +229,7 @@ CREATE TABLE `t_base_module` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `t_base_module_name` (`module_name`),
   KEY `t_base_module_url` (`module_url`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_base_module
@@ -241,6 +250,31 @@ INSERT INTO `t_base_module` VALUES ('13', '删除模块', 'admin/permission/modu
 INSERT INTO `t_base_module` VALUES ('14', '查询模块', 'admin/permission/module/query', '11', '3', '1', null, '0', '17', null, '2012-05-16 00:26:18', '2012-05-14 21:50:02');
 INSERT INTO `t_base_module` VALUES ('15', 'Market管理', null, '1', '1', '1', null, '1', '25', 'Market管理', '2012-05-17 10:36:21', '2012-05-17 10:36:21');
 INSERT INTO `t_base_module` VALUES ('16', '查询所有模块', 'admin/permission/module/queryAll', '11', '3', '1', null, '0', '20', null, '2012-05-16 00:31:41', '2012-05-16 00:23:31');
+INSERT INTO `t_base_module` VALUES ('17', '应用管理', 'admin/app/application', '15', '2', '1', null, '1', '30', '应用管理', '2012-05-21 17:30:46', '2012-05-18 17:21:53');
+INSERT INTO `t_base_module` VALUES ('18', '查询应用', 'admin/app/application/query', '17', '3', '1', null, '0', '31', '查询应用', '2012-05-21 17:30:47', '2012-05-20 11:05:09');
+INSERT INTO `t_base_module` VALUES ('19', '编辑应用', 'admin/app/application/save', '17', '3', '1', null, '0', '32', '编辑应用', '2012-05-21 17:30:49', '2012-05-20 11:06:44');
+INSERT INTO `t_base_module` VALUES ('20', '删除应用', 'admin/app/application/delete', '17', '3', '1', null, '0', '33', '删除应用', '2012-05-21 17:30:52', '2012-05-20 11:08:54');
+INSERT INTO `t_base_module` VALUES ('21', '分类管理', 'admin/app/catalog', '15', '2', '1', null, '1', '26', '应用分类管理', '2012-05-21 17:30:23', '2012-05-20 11:09:48');
+INSERT INTO `t_base_module` VALUES ('22', '查询分类', 'admin/app/catalog/query', '21', '3', '1', null, '0', '27', '查询应用分类', '2012-05-21 17:30:25', '2012-05-20 11:40:08');
+INSERT INTO `t_base_module` VALUES ('23', '编辑分类', 'admin/app/catalog/save', '21', '3', '1', null, '0', '28', '编辑应用分类', '2012-05-21 17:30:27', '2012-05-20 11:41:14');
+INSERT INTO `t_base_module` VALUES ('24', '删除分类', 'admin/app/catalog/delete', '21', '3', '1', null, '0', '29', '删除应用分类', '2012-05-21 17:30:34', '2012-05-20 11:41:55');
+INSERT INTO `t_base_module` VALUES ('25', '评论管理', 'admin/app/comment', '15', '2', '1', null, '1', '39', '应用评论管理', '2012-05-21 17:29:36', '2012-05-21 11:33:13');
+INSERT INTO `t_base_module` VALUES ('26', '查询评论', 'admin/app/comment/query', '25', '3', '1', null, '0', '40', '查询评论图片', '2012-05-21 17:29:39', '2012-05-21 11:33:59');
+INSERT INTO `t_base_module` VALUES ('27', '编辑评论', 'admin/app/comment/save', '25', '3', '1', null, '0', '41', '编辑评论', '2012-05-21 17:29:41', '2012-05-21 11:34:35');
+INSERT INTO `t_base_module` VALUES ('28', '删除评论', 'admin/app/comment/delete', '25', '3', '1', null, '0', '42', '删除评论', '2012-05-21 17:29:43', '2012-05-21 11:35:18');
+INSERT INTO `t_base_module` VALUES ('29', '查看图片', 'admin/app/comment/view', '25', '3', '1', null, '0', '43', '查看评论', '2012-05-21 17:29:46', '2012-05-21 11:35:47');
+INSERT INTO `t_base_module` VALUES ('30', '版本管理', 'admin/app/version/', '15', '2', '1', null, '1', '34', '应用版本管理', '2012-05-21 17:29:49', '2012-05-21 11:36:39');
+INSERT INTO `t_base_module` VALUES ('31', '查询版本', 'admin/app/version/query', '30', '3', '1', null, '0', '35', '查询版本', '2012-05-21 17:29:51', '2012-05-21 11:37:08');
+INSERT INTO `t_base_module` VALUES ('32', '编辑版本', 'admin/app/version/save', '30', '3', '1', null, '0', '36', '编辑版本', '2012-05-21 17:29:52', '2012-05-21 11:37:39');
+INSERT INTO `t_base_module` VALUES ('33', '删除版本', 'admin/app/version/delete', '30', '3', '1', null, '0', '37', '删除版本', '2012-05-21 17:29:54', '2012-05-21 11:38:16');
+INSERT INTO `t_base_module` VALUES ('34', '查看版本', 'admin/app/version/view', '30', '3', '1', null, '0', '38', '查看版本', '2012-05-21 17:29:57', '2012-05-21 11:38:49');
+INSERT INTO `t_base_module` VALUES ('35', '帐号管理', 'admin/app/account', '1', '1', '1', null, '1', '42', '帐号管理', '2012-05-22 11:06:12', '2012-05-22 11:06:15');
+INSERT INTO `t_base_module` VALUES ('36', '查询帐号', 'admin/app/account/query', '35', '2', '1', null, '0', '43', '查询帐号', '2012-05-22 11:07:06', '2012-05-22 11:07:08');
+INSERT INTO `t_base_module` VALUES ('37', '编辑帐号', 'admin/app/account/save', '35', '2', '1', null, '0', '44', '编辑帐号', '2012-05-22 11:07:48', '2012-05-22 11:07:50');
+INSERT INTO `t_base_module` VALUES ('38', '封号', 'admin/app/account/lock', '35', '2', '1', null, '0', '45', '封号帐号', '2012-05-22 11:09:36', '2012-05-22 11:08:33');
+INSERT INTO `t_base_module` VALUES ('39', '解封', 'admin/app/account/unlock', '35', '2', '1', null, '0', '46', '解封帐号', '2012-05-22 11:09:40', '2012-05-22 11:09:38');
+INSERT INTO `t_base_module` VALUES ('40', '下载记录', 'admin/app/downloadLog', '15', '3', '1', null, '1', '47', '应用下载记录', '2012-05-22 11:38:58', '2012-05-22 11:37:44');
+INSERT INTO `t_base_module` VALUES ('41', '查询下载记录', 'admin/app/downloadLog/query', '40', '3', '1', null, '0', '48', '查询下载记录', '2012-05-22 11:38:52', '2012-05-22 11:38:50');
 
 -- ----------------------------
 -- Table structure for `t_base_role`
@@ -254,14 +288,15 @@ CREATE TABLE `t_base_role` (
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_base_role_name` (`role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_base_role
 -- ----------------------------
-INSERT INTO `t_base_role` VALUES ('1', 'Administrator', '超级管理员', '2012-05-17 19:00:47', '2012-05-17 19:00:47');
+INSERT INTO `t_base_role` VALUES ('1', 'Administrator', '超级管理员', '2012-05-18 22:01:19', '2012-05-18 22:01:19');
 INSERT INTO `t_base_role` VALUES ('2', 'Market管理员', 'Market管理员', '2012-05-17 10:35:08', '2012-05-17 10:35:08');
 INSERT INTO `t_base_role` VALUES ('3', '测试', '测试', '2012-05-17 09:19:33', '2012-05-17 09:19:33');
+INSERT INTO `t_base_role` VALUES ('5', '模块管理员', '模块管理员', '2012-05-18 13:01:54', '2012-05-18 13:01:54');
 
 -- ----------------------------
 -- Table structure for `t_base_role_module`
@@ -281,8 +316,10 @@ CREATE TABLE `t_base_role_module` (
 -- ----------------------------
 INSERT INTO `t_base_role_module` VALUES ('1', '1');
 INSERT INTO `t_base_role_module` VALUES ('3', '1');
+INSERT INTO `t_base_role_module` VALUES ('5', '1');
 INSERT INTO `t_base_role_module` VALUES ('1', '2');
 INSERT INTO `t_base_role_module` VALUES ('3', '2');
+INSERT INTO `t_base_role_module` VALUES ('5', '2');
 INSERT INTO `t_base_role_module` VALUES ('1', '3');
 INSERT INTO `t_base_role_module` VALUES ('3', '3');
 INSERT INTO `t_base_role_module` VALUES ('1', '4');
@@ -301,17 +338,47 @@ INSERT INTO `t_base_role_module` VALUES ('1', '10');
 INSERT INTO `t_base_role_module` VALUES ('3', '10');
 INSERT INTO `t_base_role_module` VALUES ('1', '11');
 INSERT INTO `t_base_role_module` VALUES ('3', '11');
+INSERT INTO `t_base_role_module` VALUES ('5', '11');
 INSERT INTO `t_base_role_module` VALUES ('1', '12');
 INSERT INTO `t_base_role_module` VALUES ('3', '12');
+INSERT INTO `t_base_role_module` VALUES ('5', '12');
 INSERT INTO `t_base_role_module` VALUES ('1', '13');
 INSERT INTO `t_base_role_module` VALUES ('3', '13');
+INSERT INTO `t_base_role_module` VALUES ('5', '13');
 INSERT INTO `t_base_role_module` VALUES ('1', '14');
 INSERT INTO `t_base_role_module` VALUES ('3', '14');
+INSERT INTO `t_base_role_module` VALUES ('5', '14');
 INSERT INTO `t_base_role_module` VALUES ('1', '15');
 INSERT INTO `t_base_role_module` VALUES ('2', '15');
 INSERT INTO `t_base_role_module` VALUES ('3', '15');
 INSERT INTO `t_base_role_module` VALUES ('1', '16');
 INSERT INTO `t_base_role_module` VALUES ('3', '16');
+INSERT INTO `t_base_role_module` VALUES ('5', '16');
+INSERT INTO `t_base_role_module` VALUES ('1', '17');
+INSERT INTO `t_base_role_module` VALUES ('1', '18');
+INSERT INTO `t_base_role_module` VALUES ('1', '19');
+INSERT INTO `t_base_role_module` VALUES ('1', '20');
+INSERT INTO `t_base_role_module` VALUES ('1', '21');
+INSERT INTO `t_base_role_module` VALUES ('1', '22');
+INSERT INTO `t_base_role_module` VALUES ('1', '23');
+INSERT INTO `t_base_role_module` VALUES ('1', '24');
+INSERT INTO `t_base_role_module` VALUES ('1', '25');
+INSERT INTO `t_base_role_module` VALUES ('1', '26');
+INSERT INTO `t_base_role_module` VALUES ('1', '27');
+INSERT INTO `t_base_role_module` VALUES ('1', '28');
+INSERT INTO `t_base_role_module` VALUES ('1', '29');
+INSERT INTO `t_base_role_module` VALUES ('1', '30');
+INSERT INTO `t_base_role_module` VALUES ('1', '31');
+INSERT INTO `t_base_role_module` VALUES ('1', '32');
+INSERT INTO `t_base_role_module` VALUES ('1', '33');
+INSERT INTO `t_base_role_module` VALUES ('1', '34');
+INSERT INTO `t_base_role_module` VALUES ('1', '35');
+INSERT INTO `t_base_role_module` VALUES ('1', '36');
+INSERT INTO `t_base_role_module` VALUES ('1', '37');
+INSERT INTO `t_base_role_module` VALUES ('1', '38');
+INSERT INTO `t_base_role_module` VALUES ('1', '39');
+INSERT INTO `t_base_role_module` VALUES ('1', '40');
+INSERT INTO `t_base_role_module` VALUES ('1', '41');
 
 -- ----------------------------
 -- Table structure for `t_base_user`
@@ -334,13 +401,14 @@ CREATE TABLE `t_base_user` (
   `mobile` varchar(11) DEFAULT NULL COMMENT '手机号码',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_base_user_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_base_user
 -- ----------------------------
-INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-17 18:56:02', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-17 18:56:02', null, null);
+INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-22 16:46:26', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-22 16:46:26', null, null);
 INSERT INTO `t_base_user` VALUES ('2', 'test2@test', '8cd7f598d2fbfd1ec76e5498054720f5', 'test2', null, '1', '2012-05-17 11:28:37', '2012-05-13 15:20:30', '1', null, null, null, null, '136');
+INSERT INTO `t_base_user` VALUES ('3', 'test@test', '7dc26a2c0c1d165dfc06340c26de432d', 'test', '', '2', '2012-05-18 13:12:02', '2012-05-18 13:11:30', '1', '', '127.0.0.1', '2012-05-18 13:12:02', '', '');
 
 -- ----------------------------
 -- Table structure for `t_base_user_role`
@@ -359,3 +427,26 @@ CREATE TABLE `t_base_user_role` (
 -- Records of t_base_user_role
 -- ----------------------------
 INSERT INTO `t_base_user_role` VALUES ('1', '1');
+INSERT INTO `t_base_user_role` VALUES ('3', '5');
+
+-- ----------------------------
+-- Table structure for `t_user_comment`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_user_comment`;
+CREATE TABLE `t_user_comment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `app_id` int(11) NOT NULL COMMENT '应用Id',
+  `user_id` int(11) NOT NULL COMMENT '用户Id',
+  `grade` int(11) DEFAULT NULL COMMENT '评分：1~5分',
+  `comment` varchar(200) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
+  `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `idx_t_user_comment_app_id` (`app_id`) USING BTREE,
+  KEY `idx_t_user_comment_user_id` (`user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of t_user_comment
+-- ----------------------------

@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import cn.com.carit.market.dao.app.AppAttachmentDao;
 import cn.com.carit.market.dao.app.AppCommentDao;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
 import cn.com.carit.market.dao.app.ApplicationDao;
@@ -25,8 +24,6 @@ import cn.com.carit.market.service.app.ApplicationService;
 public class ApplicationServiceImpl implements ApplicationService{
 	@Resource
 	private ApplicationDao applicationDao;
-	@Resource
-	private AppAttachmentDao appAttachmentDao;
 	@Resource
 	private AppCommentDao appCommentDao;
 	@Resource
@@ -51,8 +48,6 @@ public class ApplicationServiceImpl implements ApplicationService{
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
-		// 删除附件
-		appAttachmentDao.deleteByAppId(id);
 		// 删除评论
 		appCommentDao.deleteByAppId(id);
 		// 删除版本文件

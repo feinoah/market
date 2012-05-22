@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,10 +50,16 @@ public class AccountInfoController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(@ModelAttribute AccountInfo accountInfo, BindingResult result){
+	public int save(@ModelAttribute AccountInfo accountInfo, BindingResult result) throws Exception{
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
+		}
+		if (!StringUtils.hasText(accountInfo.getEmail())) {
+			return 0;
+		}
+		if (!StringUtils.hasText(accountInfo.getPassword())) {
+			return 0;
 		}
 		accountInfoService.saveOrUpdate(accountInfo);
 		return 1;
@@ -60,11 +67,11 @@ public class AccountInfoController {
 	
 	/**
 	 * 查看
-	 * admin/app/account/{id}
+	 * admin/app/account/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public AccountInfo view(@PathVariable int id){
 		if (id<=0) {
@@ -99,5 +106,28 @@ public class AccountInfoController {
 	@ResponseBody
 	public JsonPage query(@ModelAttribute AccountInfo accountInfo, BindingResult result,DataGridModel dgm){
 		return accountInfoService.queryByExemple(accountInfo, dgm);
+	}
+	
+	/**
+	 * 封号
+	 * admin/app/account/lock/{id}
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="lock/{id}", method=RequestMethod.GET)
+	@ResponseBody
+	public int lock(@PathVariable int id){
+		return accountInfoService.lockAccount(id);
+	}
+	/**
+	 * 解封
+	 * admin/app/account/unlock/{id}
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="unlock/{id}", method=RequestMethod.GET)
+	@ResponseBody
+	public int unlock(@PathVariable int id){
+		return accountInfoService.unLockAccount(id);
 	}
 }

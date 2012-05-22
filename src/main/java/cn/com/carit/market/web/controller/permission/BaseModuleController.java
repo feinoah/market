@@ -57,11 +57,11 @@ private final Logger log = Logger.getLogger(getClass());
 	
 	/**
 	 * 查看
-	 * admin/permission/module/{id}
+	 * admin/permission/module/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public BaseModule view(@PathVariable int id){
 		if (id<=0) {

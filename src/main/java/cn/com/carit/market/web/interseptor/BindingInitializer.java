@@ -1,14 +1,14 @@
 package cn.com.carit.market.web.interseptor;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.support.WebBindingInitializer;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
-import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.springmvc.DateConvertEditor;
 
 /**
@@ -20,15 +20,14 @@ public class BindingInitializer implements WebBindingInitializer {
 
 	@Override
 	public void initBinder(WebDataBinder binder, WebRequest request) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);
-		dateFormat.setLenient(false);
+//		dateFormat.setLenient(false);
 		binder.registerCustomEditor(String.class,new StringTrimmerEditor(false));
-//		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class, null, true));
-//		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class,null, true));
-//		binder.registerCustomEditor(Double.class,  new CustomNumberEditor(Double.class, null, true));
-//		binder.registerCustomEditor(Byte.class, new CustomNumberEditor(Byte.class, null, true));
-//		binder.registerCustomEditor(Float.class, new CustomNumberEditor(Float.class, null, true));
-//		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
+		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class, null, true));
+		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class,null, true));
+		binder.registerCustomEditor(Double.class,  new CustomNumberEditor(Double.class, null, true));
+		binder.registerCustomEditor(Byte.class, new CustomNumberEditor(Byte.class, null, true));
+		binder.registerCustomEditor(Float.class, new CustomNumberEditor(Float.class, null, true));
+		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		binder.registerCustomEditor(Date.class,new DateConvertEditor());
 	}
 

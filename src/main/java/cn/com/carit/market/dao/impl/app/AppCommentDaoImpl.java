@@ -67,7 +67,6 @@ public class AppCommentDaoImpl extends BaseDaoImpl  implements
 					 ps.setInt(2, appComment.getUserId());
 					 ps.setInt(3, appComment.getGrade());
 					 ps.setString(4, appComment.getComment());
-					 ps.setInt(5, appComment.getStatus());
 					return ps;
 				}
 			},  gkHolder);

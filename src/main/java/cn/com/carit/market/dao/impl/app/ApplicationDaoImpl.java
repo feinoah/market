@@ -43,6 +43,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 				application.setAppLevel(rs.getInt("app_level"));
 				application.setDescription(rs.getString("description"));
 				application.setPermissionDesc(rs.getString("permission_desc"));
+				application.setImages(rs.getString("images"));
 				application.setStatus(rs.getInt("status"));
 				application.setCreateTime(rs.getTimestamp("create_time"));
 				application.setUpdateTime(rs.getTimestamp("update_time"));
@@ -67,6 +68,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					+", app_level"
 					+", description"
 					+", permission_desc"
+					+", images"
 					+", status"
 					+", create_time"
 					+", update_time"
@@ -86,11 +88,13 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					+", ?"
 					+", ?"
 					+", ?"
+					+", ?"
 					+", now()"
 					+", now()"
 					+")";
 			log.debug(String.format("\n%1$s\n", sql));
 //			KeyHolder gkHolder = new GeneratedKeyHolder(); 
+			System.err.println(application.getImages());
 			return jdbcTemplate.update(sql
 					, application.getAppName()
 					, application.getDisplayName()
@@ -106,32 +110,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 					, application.getAppLevel()
 					, application.getDescription()
 					, application.getPermissionDesc()
-					 , application.getStatus());
-			/*
-			jdbcTemplate.update(new PreparedStatementCreator() {
-				@Override
-				public PreparedStatement createPreparedStatement(Connection con)
-						throws SQLException {
-					 PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-					 ps.setString(1, application.getAppName());
-					 ps.setString(2, application.getDisplayName());
-					 ps.setString(3, application.getVersion());
-					 ps.setString(4, application.getIcon());
-					 ps.setInt(5, application.getCatalogId());
-					 ps.setString(6, application.getSize());
-					 ps.setString(7, application.getAppFilePath());
-					 ps.setString(8, application.getPlatform());
-					 ps.setInt(9, application.getSupportLanguages());
-					 ps.setDouble(10, application.getPrice());
-					 ps.setInt(11, application.getDownCount());
-					 ps.setInt(12, application.getAppLevel());
-					 ps.setString(13, application.getDescription());
-					 ps.setString(14, application.getPermissionDesc());
-					 ps.setInt(15, application.getStatus());
-					return ps;
-				}
-			},  gkHolder);
-			return gkHolder.getKey().intValue();*/
+					, application.getImages()
+					, application.getStatus());
 		}
 
 		@Override
@@ -204,6 +184,10 @@ public class ApplicationDaoImpl extends BaseDaoImpl  implements
 			if (application.getStatus()!=null) {
 				sql.append(", status=?");
 				args.add(application.getStatus());
+			}
+			if (StringUtils.hasText(application.getImages())) {
+				sql.append(", images=?");
+				args.add(application.getImages());
 			}
 			if (application.getCreateTime()!=null) {
 				sql.append(", create_time=?");

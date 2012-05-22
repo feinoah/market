@@ -55,11 +55,11 @@ public class BaseRoleController {
 	
 	/**
 	 * 查看
-	 * admin/permission/role/{id}
+	 * admin/permission/role/view/{id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
 	@ResponseBody
 	public BaseRole view(@PathVariable int id){
 		if (id<=0) {
