@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import cn.com.carit.market.bean.app.AppCatalog;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.AppCatalogService;
@@ -72,7 +73,6 @@ public class ApplicationController {
 			return -1;
 		}
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-		String iconPath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_ICON );
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
         StringBuilder images=new StringBuilder();
@@ -83,11 +83,10 @@ public class ApplicationController {
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
 	        	String fileName =  System.nanoTime() + suffix;// 构建文件名称
-	        	File file = new File(iconPath+File.separator+fileName);
+	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
-	        	application.setIcon(Constants.BASE_PATH_ICON+File.separator+fileName);
+	        	application.setIcon(AttachmentUtil.getIconPath(fileName));
 			}
-	        String imagePath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_IMAGE);
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
 	        int i=0;
@@ -97,11 +96,11 @@ public class ApplicationController {
 	        		String filename = imageFile.getOriginalFilename();  
 	        		String extName = filename.substring(filename.lastIndexOf(".")).toLowerCase();  
 	        		String lastFileName = random+"_"+(i+1)+extName;
-	        		FileCopyUtils.copy(imageFile.getBytes(),new File(imagePath+File.separator+lastFileName)); 
+	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getIconFile(lastFileName)); 
 	        		if (i<4) {
-	        			images.append(Constants.BASE_PATH_IMAGE+File.separator+lastFileName).append(";");
+	        			images.append(AttachmentUtil.getImagePath(lastFileName)).append(";");
 	        		} else {
-	        			images.append(Constants.BASE_PATH_IMAGE+File.separator+lastFileName);
+	        			images.append(AttachmentUtil.getImagePath(lastFileName));
 	        		}
 				}
         		i++;

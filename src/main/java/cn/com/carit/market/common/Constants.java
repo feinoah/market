@@ -1,6 +1,5 @@
 package cn.com.carit.market.common;
 
-import java.io.File;
 
 public class Constants {
 	public static final int PAGE_SIZE=10;
@@ -17,8 +16,4 @@ public class Constants {
 	public static final String USER_ALL_MOUDLE="userAllMoudle";
 	public static final String ANSWER_CODE="answerCode";
 	
-	public static final String BASE_PATH_ICON=File.separator+"resources"+File.separator+"attachment"+File.separator+"icons";
-	public static final String BASE_PATH_IMAGE=File.separator+"resources"+File.separator+"attachment"+File.separator+"images";
-	public static final String BASE_PATH_APK=File.separator+"resources"+File.separator+"attachment"+File.separator+"apk";
-	public static final String BASE_PATH_PHOTOS=File.separator+"resources"+File.separator+"attachment"+File.separator+"photos";
 }

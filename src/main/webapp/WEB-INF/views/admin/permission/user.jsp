@@ -16,7 +16,7 @@
 				valueField:'id',
 				textField:'roleName'
 			});
-			checkEditControl('admin/permission/user');
+			checkEditControl('${ctx}/admin/permission/user');
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');

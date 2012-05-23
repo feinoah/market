@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.AppVersionFileService;
@@ -70,7 +71,6 @@ public class AppVersionFileController {
 			return -1;
 		}
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-		String apkPath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_APK);
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
         try {
@@ -81,9 +81,9 @@ public class AppVersionFileController {
 	        	// 随机文件名
 	        	String fileName =  "app_"+appVersionFile.getAppId()
 	        			+"_"+System.nanoTime() + suffix;// 构建文件名称
-	        	File file = new File(apkPath+File.separator+fileName);
+	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
-	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+File.separator+fileName);
+	        	appVersionFile.setFilePath(AttachmentUtil.getApkPath(fileName));
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());

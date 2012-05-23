@@ -16,7 +16,7 @@
 					url: '${ctx}/back/menu/tree',
 					onClick: function(node){
 						if(node.attributes.url&&node.attributes.url!=null){
-							addTab(node.text, '${ctx}'+'/'+node.attributes.url);
+							addTab(node.text, '${ctx}'+node.attributes.url);
 						}
 					}
 				});

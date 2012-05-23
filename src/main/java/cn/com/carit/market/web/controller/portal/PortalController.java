@@ -31,15 +31,18 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppCatalog;
 import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.app.AccountInfoService;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.AppCommentService;
+import cn.com.carit.market.service.app.AppDownloadLogService;
 import cn.com.carit.market.service.app.AppVersionFileService;
 import cn.com.carit.market.service.app.ApplicationService;
 
@@ -61,6 +64,9 @@ public class PortalController {
 	
 	@Resource
 	private AccountInfoService accountInfoService;
+	
+	@Resource
+	private AppDownloadLogService appDownloadLogService;
 	
 	/**
 	 * 注册帐号
@@ -220,7 +226,6 @@ public class PortalController {
 		AccountInfo updateAccount=new AccountInfo();
 		updateAccount.setId(account.getId());
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-		String photoPath = request.getSession().getServletContext().getRealPath(Constants.BASE_PATH_PHOTOS );
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
         try {
@@ -231,9 +236,9 @@ public class PortalController {
 	        	// 随机文件名
 	        	String fileName =  "user_"+account+"_"
 	        	+System.nanoTime() + suffix;// 构建文件名称
-	        	File file = new File(photoPath+File.separator+fileName);
+	        	File file = AttachmentUtil.getPhotoFile(fileName);
 					multipartFile.transferTo(file);
-					updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+File.separator+fileName);
+					updateAccount.setPhoto(AttachmentUtil.getPhotoPath(fileName));
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());
@@ -385,9 +390,17 @@ public class PortalController {
 	 * @param appId
 	 * @param res
 	 * @param req
+	 * @throws Exception 
 	 */
 	@RequestMapping(value="app/down/{appId}", method=RequestMethod.GET)
-	public void appDown(@PathVariable int appId,HttpServletResponse res,HttpServletRequest req){
+	public void appDown(@PathVariable int appId,HttpServletResponse res,HttpServletRequest req) throws Exception{
+		AccountInfo account=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+		if (account==null) {
+			//session超时
+			log.warn("session time out...");
+//			return -2;
+			throw new Exception("session time out...");
+		}
 		BufferedInputStream in=null;
 		BufferedOutputStream out=null;
 		Application app = applicationService.queryById(appId);
@@ -395,7 +408,7 @@ public class PortalController {
 		res.setContentType("application/x-msdownload");//oper save as 对话框
 		try {
 			res.setHeader("Content-Disposition",
-					"attachment;"+"filename="+URLEncoder.encode(app.getAppName(), "UTF-8"));
+					"attachment;filename="+URLEncoder.encode(app.getAppName()+app.getVersion(), "UTF-8")+".apk");
 			in=new BufferedInputStream(new FileInputStream(file));
 			out=new BufferedOutputStream(new BufferedOutputStream(res.getOutputStream()));
 			byte[] buffer=new byte[1024*8];
@@ -403,6 +416,10 @@ public class PortalController {
 			while((j=in.read(buffer))!=-1) {
 				out.write(buffer,0,j);
 			}
+			AppDownloadLog downlog=new AppDownloadLog();
+			downlog.setAccountId(account.getId());
+			downlog.setAppId(appId);
+			appDownloadLogService.saveOrUpdate(downlog);
 		} catch (UnsupportedEncodingException e) {
 			log.error("download error..."+e.getMessage());
 		} catch (IOException e) {
@@ -410,7 +427,7 @@ public class PortalController {
 		} finally {
 			try {
 				if (in != null) {
-						in.close();
+					in.close();
 				}
 				if (out != null) {
 					out.close();

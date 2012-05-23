@@ -26,7 +26,8 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 			HttpServletResponse response, Object handler) throws Exception {
 		String uri = request.getRequestURI();
 		log.debug("Request for: "+uri);
-		uri=uri.replaceFirst("/market/", "");//替换掉项目名（真实部署可以删除）
+		uri=uri.replaceFirst("/market", "");//替换掉项目名（真实部署可以删除）
+		log.debug("Request for: "+uri);
 		if (uri.indexOf("admin")!=-1) { // 管理员相关URL
 			BaseUser user=(BaseUser) request.getSession().getAttribute(
 					Constants.ADMIN_USER);
