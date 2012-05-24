@@ -6,8 +6,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppCommentDao;
@@ -38,6 +40,18 @@ public class ApplicationServiceImpl implements ApplicationService{
 		if (application.getId() == 0) {
 			applicationDao.add(application);
 		} else {
+			Application old=applicationDao.queryById(application.getId());
+			if (StringUtils.hasText(application.getIcon())) {
+				// 更新了图标
+				AttachmentUtil.deleteIcon(old.getIcon());
+			}
+			
+			if (StringUtils.hasText(application.getImages())&&old.getImageList()!=null) {
+				// 更新了截图
+				for (String path : old.getImageList()) {
+					AttachmentUtil.deleteImage(path);
+				}
+			}
 			applicationDao.update(application);
 		}
 	}

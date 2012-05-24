@@ -1,8 +1,4 @@
 package cn.com.carit.market.web.controller.app;
-import cn.com.carit.market.service.app.AccountInfoService;
-import cn.com.carit.market.service.app.AppDownloadLogService;
-import cn.com.carit.market.service.app.ApplicationService;
-
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -16,10 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
-import cn.com.carit.market.bean.app.Application;
-import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.service.app.AppDownloadLogService;
 
 /**
  * AppDownloadLogController
@@ -33,12 +28,6 @@ public class AppDownloadLogController {
 	@Resource
 	private AppDownloadLogService appDownloadLogService;
 
-	@Resource
-	private ApplicationService applicationService;
-	
-	@Resource
-	private AccountInfoService accountInfoService;
-	
 	/**
 	 * 啥都不干，单纯跳转到页面
 	 * admin/app/downloadLog
@@ -47,10 +36,6 @@ public class AppDownloadLogController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppDownloadLog());
-		Application app=new Application();
-		app.setStatus(Constants.STATUS_VALID);
-		model.addAttribute("allApps", applicationService.queryByExemple(app));
-		model.addAttribute("accountList", accountInfoService.query());
 		return "admin/app/download_log";
 	}
 	

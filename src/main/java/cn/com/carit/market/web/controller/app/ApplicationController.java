@@ -19,13 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import cn.com.carit.market.bean.app.AppCatalog;
 import cn.com.carit.market.bean.app.Application;
-import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.ApplicationService;
 
 /**
@@ -39,8 +36,6 @@ public class ApplicationController {
 	
 	@Resource
 	private ApplicationService applicationService;
-	@Resource
-	private AppCatalogService appCatalogService;
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
@@ -50,9 +45,6 @@ public class ApplicationController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new Application());
-		AppCatalog catalog=new AppCatalog();
-		catalog.setStatus((byte)Constants.STATUS_VALID);
-		model.addAttribute("catalogList", appCatalogService.queryByExemple(catalog));
 		return "admin/app/application";
 	}
 	
@@ -85,7 +77,7 @@ public class ApplicationController {
 	        	String fileName =  System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
-	        	application.setIcon(AttachmentUtil.getIconPath(fileName));
+	        	application.setIcon(fileName);
 			}
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
@@ -98,9 +90,9 @@ public class ApplicationController {
 	        		String lastFileName = random+"_"+(i+1)+extName;
 	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getIconFile(lastFileName)); 
 	        		if (i<4) {
-	        			images.append(AttachmentUtil.getImagePath(lastFileName)).append(";");
+	        			images.append(lastFileName).append(";");
 	        		} else {
-	        			images.append(AttachmentUtil.getImagePath(lastFileName));
+	        			images.append(lastFileName);
 	        		}
 				}
         		i++;

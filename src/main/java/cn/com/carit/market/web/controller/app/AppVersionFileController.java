@@ -18,13 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
-import cn.com.carit.market.bean.app.Application;
-import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.AppVersionFileService;
-import cn.com.carit.market.service.app.ApplicationService;
 
 /**
  * AppVersionFileController
@@ -37,8 +34,6 @@ public class AppVersionFileController {
 	
 	@Resource
 	private AppVersionFileService appVersionFileService;
-	@Resource
-	private ApplicationService applicationService;
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
@@ -48,9 +43,6 @@ public class AppVersionFileController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new AppVersionFile());
-		Application app=new Application();
-		app.setStatus(Constants.STATUS_VALID);
-		model.addAttribute("allApps", applicationService.queryByExemple(app));
 		return "admin/app/version";
 	}
 	
@@ -83,7 +75,7 @@ public class AppVersionFileController {
 	        			+"_"+System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
-	        	appVersionFile.setFilePath(AttachmentUtil.getApkPath(fileName));
+	        	appVersionFile.setFilePath(fileName);
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());

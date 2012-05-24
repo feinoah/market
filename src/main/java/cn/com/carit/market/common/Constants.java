@@ -15,5 +15,10 @@ public class Constants {
 	public static final int MAX_PWD_ERROR_COUNT=5;
 	public static final String USER_ALL_MOUDLE="userAllMoudle";
 	public static final String ANSWER_CODE="answerCode";
-	
+	/**应用截图*/
+	public static final int IMAGE_TYPE_DEFAULT=0;
+	/**应用图标*/
+	public static final int IMAGE_TYPE_ICON=1;
+	/**用户头像*/
+	public static final int IMAGE_TYPE_PHOTO=2;
 }

@@ -22,6 +22,8 @@ public class AttachmentUtil {
 	private AttachmentUtil(){
 		InputStream is = this.getClass().getClassLoader().getResourceAsStream(
 				"resources"+File.separator+"attachment.properties");   
+		
+		
 		p = new Properties();
 		try {
 			p.load(is);
@@ -78,8 +80,43 @@ public class AttachmentUtil {
 		return (String)getValue("attachment.photos")+(File.separator+fileName);
 	}
 	
-	public static void main(String[] args) {
+	public static boolean deleteFile(String fileName){
+		File file = new File(fileName);
+		return file.delete();
+	}
+	
+	public static boolean deleteIcon(String fileName){
+		return deleteFile(getIconPath(fileName));
+	}
+	
+	public static boolean deleteImage(String fileName){
+		return deleteFile(getImagePath(fileName));
+	}
+	
+	public static boolean deletePhoto(String fileName){
+		return deleteFile(getPhotoPath(fileName));
+	}
+	
+	public static boolean deleteApk(String fileName){
+		return deleteFile(getApkPath(fileName));
+	}
+	
+	public static void main(String[] args) throws IOException {
 		System.out.println(getIconFile("test"));
 		System.out.println(getIconPath("test"));
+//		System.out.println(getImageFile("test"));
+//		File image=getImageFile("Blue hills.jpg");
+//		FileOutputStream os=new FileOutputStream(getImageFile("test.txt"));
+//		FileImageOutputStream os=new FileImageOutputStream(getImageFile("test.jpg"));
+//		FileImageInputStream is=new FileImageInputStream(image);
+//		byte[] buffer = new byte[1024];
+//		int i=-1;
+//		while ((i = is.read(buffer)) != -1) {
+//			os.write(buffer, 0, i);
+//		   }
+//		os.flush();
+//		os.close();
+//		is.close();
+		System.out.println(deleteFile(getImagePath("test.jpg")));
 	}
 }

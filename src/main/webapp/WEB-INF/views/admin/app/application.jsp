@@ -9,6 +9,18 @@
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
+			$('#catalogId').combobox({  
+			    url:'${ctx}/portal/catalog/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'name'  
+			}); 
+			$('#editForm input[name=catalogId]').combobox({  
+			    url:'${ctx}/portal/catalog/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'name'  
+			}); 
 			// 初始化
 			/*$('#ttt').datagrid({
 				width:'100%',
@@ -176,10 +188,7 @@
 						<form:label for="catalogId" path="catalogId">分类：</form:label>
 					</td>
 					<td>
-						<form:select path="catalogId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${catalogList}"  itemValue="id"  itemLabel="name" />
-						</form:select>
+						<form:input path="catalogId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="status" path="status">状态：</form:label>
@@ -236,10 +245,7 @@
 						<td><form:input path="version" required="true" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="version" path="version"  cssClass="mustInput">分类：</form:label></td>
 						<td>
-						<form:select path="catalogId" cssClass="easyui-validatebox" required="true" >
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${catalogList}"  itemValue="id"  itemLabel="name" />
-						</form:select>
+						<form:input path="catalogId" cssClass="easyui-validatebox" required="true" />
 						</td>
 				</tr>
 				<tr>
@@ -295,7 +301,7 @@
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit"
 						iconCls="icon-save">保 存</a>
 					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
 						iconCls="icon-undo">重 置</a>

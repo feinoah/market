@@ -11,6 +11,30 @@
 		var apps;
 		var users;
 		$(function(){
+			$('#appId').combobox({  
+			    url:'${ctx}/portal/app/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'displayName'  
+			}); 
+			$('#editForm input[name=appId]').combobox({  
+				url:'${ctx}/portal/app/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'displayName'  
+			});
+			$('#userId').combobox({  
+			    url:'${ctx}/portal/account/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'nickName'  
+			}); 
+			$('#editForm input[name=userId]').combobox({  
+				url:'${ctx}/portal/account/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'nickName'  
+			});
 			checkEditControl('${ctx}/admin/app/comment');
 			$.getJSON('${ctx}/admin/app/application/query?page=1&rows=100000', function(data) {
 				if(data){
@@ -135,19 +159,13 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:select path="appId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allApps}"  itemValue="id" itemLabel="displayName"/>
-						</form:select>
+						<form:input path="appId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="userId" path="userId">评论人：</form:label>
 					</td>
 					<td>
-						<form:select path="userId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${accountList}"  itemValue="id" itemLabel="nickName"/>
-						</form:select>
+						<form:input path="userId" cssClass="easyui-validatebox" />
 					</td>
 				</tr>
 				<tr>
@@ -203,19 +221,13 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:select path="appId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allApps}"  itemValue="id" itemLabel="displayName"/>
-						</form:select>
+						<form:input path="appId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="userId" path="userId">评论人：</form:label>
 					</td>
 					<td>
-						<form:select path="userId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${accountList}"  itemValue="id" itemLabel="nickName"/>
-						</form:select>
+						<form:input path="userId" cssClass="easyui-validatebox" />
 					</td>
 				</tr>
 				<tr>

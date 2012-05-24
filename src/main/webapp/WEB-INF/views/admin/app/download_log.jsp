@@ -24,7 +24,19 @@
 					users=data.rows;
 				}
 			});
-			$('.datagrid-toolbar').hide();//没有新增
+			$('.datagrid-toolbar').hide();//没有编辑
+			$('#appId').combobox({  
+			    url:'${ctx}/portal/app/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'displayName'  
+			}); 
+			$('#accountId').combobox({  
+			    url:'${ctx}/portal/account/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'nickName'  
+			}); 
 		});
 
 		function appFormatter(v){
@@ -68,19 +80,13 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:select path="appId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allApps}"  itemValue="id" itemLabel="displayName"/>
-						</form:select>
+						<form:input path="appId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="accountId" path="accountId">下载帐号：</form:label>
 					</td>
 					<td>
-						<form:select path="accountId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${accountList}"  itemValue="id" itemLabel="nickName"/>
-						</form:select>
+						<form:input path="accountId" cssClass="easyui-validatebox" />
 					</td>
 				</tr>
 			</table>

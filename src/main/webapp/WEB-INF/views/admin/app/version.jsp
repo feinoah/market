@@ -16,6 +16,18 @@
 					apps=data.rows;
 				}
 			});
+			$('#appId').combobox({  
+			    url:'${ctx}/portal/app/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'displayName'  
+			}); 
+			$('#editForm input[name=appId]').combobox({  
+				url:'${ctx}/portal/app/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'displayName'  
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -101,10 +113,7 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:select path="appId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allApps}"  itemValue="id" itemLabel="displayName"/>
-						</form:select>
+						<form:input path="appId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="version" path="version">版本：</form:label>
@@ -161,10 +170,7 @@
 					<tr>
 						<td><form:label	for="appId" path="appId"  cssClass="mustInput">应用名称：</form:label></td>
 						<td>
-						<form:select path="appId"  cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allApps}"  itemValue="id" itemLabel="displayName" required="true" />
-						</form:select>
+						<form:input path="appId" cssClass="easyui-validatebox" />
 						</td>
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version" required="true" cssClass="easyui-validatebox"/></td>

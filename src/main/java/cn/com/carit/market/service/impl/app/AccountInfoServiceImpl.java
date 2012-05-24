@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.common.utils.MD5Util;
@@ -46,6 +47,11 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 		if (accountInfo.getId()==0) {
 			accountInfoDao.add(accountInfo);
 		} else {
+			// 更新了头像
+			if (StringUtils.hasText(accountInfo.getPhoto())) {
+				AccountInfo old=accountInfoDao.queryById(accountInfo.getId());
+				AttachmentUtil.deletePhoto(old.getPhoto());
+			}
 			accountInfoDao.update(accountInfo);
 		}
 	}

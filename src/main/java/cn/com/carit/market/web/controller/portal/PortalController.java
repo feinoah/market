@@ -4,13 +4,16 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -280,6 +283,19 @@ public class PortalController {
 	}
 	
 	/**
+	 * 所有用户
+	 * portal/account/all
+	 * @return
+	 */
+	@RequestMapping(value="account/all", method=RequestMethod.GET)
+	@ResponseBody
+	public List<AccountInfo> allAccount(){
+		AccountInfo account=new AccountInfo();
+		account.setStatus((byte)Constants.STATUS_VALID);
+		return accountInfoService.queryByExemple(account);
+	}
+	
+	/**
 	 * 所有应用分类接口
 	 * portal/catalog/all
 	 * @return json
@@ -287,9 +303,23 @@ public class PortalController {
 	@RequestMapping(value="catalog/all", method=RequestMethod.GET)
 	@ResponseBody
 	public List<AppCatalog> allCatalog(){
-		return appCatalogService.query();
+		AppCatalog catalog=new AppCatalog();
+		catalog.setStatus((byte)Constants.STATUS_VALID);
+		return appCatalogService.queryByExemple(catalog);
 	}
 	
+	/**
+	 * 所有应用
+	 * portal/app/all
+	 * @return
+	 */
+	@RequestMapping(value="app/all", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Application> allApps(){
+		Application application=new Application();
+		application.setStatus(Constants.STATUS_VALID);
+		return applicationService.queryByExemple(application);
+	}
 	/**
 	 * 按条件查询应用
 	 * portal/app/query
@@ -399,12 +429,12 @@ public class PortalController {
 			//session超时
 			log.warn("session time out...");
 //			return -2;
-			throw new Exception("session time out...");
+//			throw new Exception("session time out...");
 		}
 		BufferedInputStream in=null;
 		BufferedOutputStream out=null;
 		Application app = applicationService.queryById(appId);
-		File file = new File(app.getAppFilePath());
+		File file = new File(AttachmentUtil.getApkPath(app.getAppFilePath()));
 		res.setContentType("application/x-msdownload");//oper save as 对话框
 		try {
 			res.setHeader("Content-Disposition",
@@ -438,4 +468,35 @@ public class PortalController {
 		}
 	}
 	
+	/**
+	 * 取图片
+	 * partal/image/{fileName}/{type}
+	 * @param path
+	 * @param type
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	@RequestMapping(value="image/{fileName}/{type}", method=RequestMethod.GET)
+	public void getImage(@PathVariable String fileName, @PathVariable int type
+			, HttpServletResponse response) throws FileNotFoundException, IOException{
+		File image=null;
+		if (type==Constants.IMAGE_TYPE_ICON) { // 图标
+			image=AttachmentUtil.getIconFile(fileName);
+		} else if(type==Constants.IMAGE_TYPE_PHOTO) { // 用户头像
+			image=AttachmentUtil.getPhotoFile(fileName);
+		} else {
+			image=AttachmentUtil.getImageFile(fileName);
+		}
+		response.setContentType("image/jpeg; charset=UTF-8");
+		FileImageInputStream is=new FileImageInputStream(image);
+		OutputStream out=response.getOutputStream();
+		byte[] buffer = new byte[1024];
+		int i=-1;
+		while ((i = is.read(buffer)) != -1) {
+			out.write(buffer, 0, i);
+		   }
+		out.flush();
+		out.close();
+		is.close();
+	}
 }

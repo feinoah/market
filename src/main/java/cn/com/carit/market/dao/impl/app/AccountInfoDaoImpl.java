@@ -165,7 +165,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			args.add(accountInfo.getLastLoginTime());
 		}
 		if (accountInfo.getStatus() != null) {
-			sql.append(", status=?");
+			sql.append(", status=(status|?)");
 			args.add(accountInfo.getStatus());
 		}
 		if (accountInfo.getUpdateTime() != null) {
@@ -325,7 +325,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			argTypes.add(93);// java.sql.Types type
 		}
 		if (accountInfo.getStatus() != null) {
-			sql.append(" and status=?");
+			sql.append(" and (status&?)!=0");
 			args.add(accountInfo.getStatus());
 			argTypes.add(-6);// java.sql.Types type
 		}
