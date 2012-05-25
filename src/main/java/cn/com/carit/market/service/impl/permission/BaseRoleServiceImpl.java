@@ -86,6 +86,15 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 		return role;
 	}
 
+	
+	@Override
+	public List<BaseRole> queryByUserId(int userId) {
+		if (userId<=0) {
+			throw new IllegalArgumentException("userId must be bigger than 0...");
+		}
+		return baseRoleDao.queryByUserId(userId);
+	}
+
 	@Override
 	public List<BaseRole> query() {
 		return baseRoleDao.query();

@@ -13,6 +13,8 @@
 			$('#roles').combobox({
 				method:'get',
 				url:'${ctx}/back/role/query/all?t='+(new Date().getTime()),
+				multiple:true,
+				panelHeight:'auto',
 				valueField:'id',
 				textField:'roleName'
 			});
@@ -23,13 +25,21 @@
 			if (m) {
 				$('#editWin').window('open');
 				// init data
+				var r=[];
+				$.ajaxSettings.async = false;
+				$.getJSON('${ctx}/back/role/query/user/'+m.id, function(data) {
+					$.each(data, function(i,d){
+						r[i]=d.id;
+					});
+				});
+				$('#roles').combobox('setValues',r);
 				$('#editForm input[name=email]').val(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
 				$('#editForm input[name=officePhone]').val(m.officePhone);
-				$('#editForm input[name=mobile]').val(m.mobile);
-				$('#editForm input[name=status]').val(m.status);
-				$('#editForm input[name=gender]').val(m.gender);
+				$('#editForm input[name=mobile]').val(m.mobile);			
+				$('#status_edit').combobox('setValue',m.status);
+				$('#gender_edit').combobox('setValue',m.gender);
 				$('#remark').val(m.remark);
 				$('#password').attr('disabled',true);//密码不能在这里修改
 				$('#id').val(m.id);
@@ -81,7 +91,6 @@
 		<style>
 		#editWin label {width: 115px;}
 		#editWin input {width: 180px;}
-		#editWin select {width: 185px;}
 		</style>
 	</head>
 	<body>
@@ -92,7 +101,7 @@
 			<table>
 				<tr>
 					<td>
-						<form:label for="email" path="email">邮箱：</form:label>
+						<form:label for="email" path="email" >邮箱：</form:label>
 					</td>
 					<td>
 						<form:input path="email" cssClass="easyui-validatebox" />
@@ -136,18 +145,18 @@
 						<form:label for="mobile" path="mobile">手机号码：</form:label>
 					</td>
 					<td>
-						<form:input path="gender" cssClass="easyui-combobox"/>
+						<form:input path="mobile" cssClass="easyui-combobox"/>
 					</td>
 				</tr>
 			</table>
-		</form:form>
-		<div style="text-align: center; padding: 5px;">
+			<div style="text-align: center; padding: 5px;">
 				<a href="javascript:void(0);" class="easyui-linkbutton" id="submit"
 					iconCls="icon-search">查 询</a>
-				<a href="javascript:void(0);" class="easyui-linkbutton" id="reset"
-					iconCls="icon-undo">重 置</a>
+				<a href="javascript:void(0);"
+					class="easyui-linkbutton" id="reset" iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" singleSelect="true" nowrap="false"
+		</form:form>
+		<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" singleSelect="true" nowrap="false"
 			idField="id" url="${ctx}/admin/permission/user/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10, 30 ]" sortName="updateTime" sortOrder="desc">
 				<thead>
@@ -170,11 +179,11 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑用户" closed="true" style="width:650px;height:400px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑用户" closed="true" style="width:625px;height:400px;padding:5px;" modal="true">
 			<form:form modelAttribute="baseUser" id="editForm" action="${ctx}/admin/permission/user/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
-						<td><form:label	for="email" path="email"  cssClass="mustInput">邮箱：</form:label></td>
+						<td><form:label	for="email" path="email" cssClass="mustInput">邮箱：</form:label></td>
 						<td><form:input path="email" cssClass="easyui-validatebox" required="true" validType="email"/></td>
 						<td><form:label	for="nickName" path="nickName"  cssClass="mustInput">昵称：</form:label></td>
 						<td><form:input path="nickName" required="true" cssClass="easyui-validatebox"/></td>
@@ -194,14 +203,14 @@
 					<tr>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:select path="status" cssClass="easyui-combobox">
+							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;">
 								<form:option value="1">启用</form:option>
 								<form:option value="0">停用</form:option>
 							</form:select>
 						</td>
 						<td><form:label	for="gender" path="gender" cssClass="easyui-validatebox">性别：</form:label></td>
 						<td>
-							<form:select path="gender" cssClass="easyui-combobox">
+							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" cssStyle="width:180px;">
 							<form:option value="2">保密</form:option>
 							<form:option value="0">女</form:option>
 							<form:option value="1">男</form:option>
@@ -210,13 +219,13 @@
 					</tr>
 					<tr>
 						<td><form:label for="roles" path="roles" cssClass="easyui-validatebox">角色：</form:label></td>
-						<td>
-							<form:input path="roles" lass="easyui-combobox" multiple="true" panelHeight="auto"/>
+						<td colspan="3">
+							<form:input path="roles" cssClass="easyui-combobox" cssStyle="width:450px;"/>
 						</td>
 					</tr>
 					<tr><td><form:label for="remark" path="remark" cssClass="easyui-validatebox">备注：</form:label></td></tr>
 					<tr>
-						<td colspan="4"><form:textarea path="remark" cssStyle="width:580px;height:80px;" /></td>
+						<td colspan="4"><form:textarea path="remark" cssStyle="width:535px;height:80px;" /></td>
 					</tr>
 				</table>
 				<form:hidden path="id"/>

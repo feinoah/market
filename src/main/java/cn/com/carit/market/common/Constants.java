@@ -1,5 +1,7 @@
 package cn.com.carit.market.common;
 
+import java.io.File;
+
 
 public class Constants {
 	public static final int PAGE_SIZE=10;
@@ -21,4 +23,9 @@ public class Constants {
 	public static final int IMAGE_TYPE_ICON=1;
 	/**用户头像*/
 	public static final int IMAGE_TYPE_PHOTO=2;
+	
+	public static final String BASE_PATH_ICON="icons"+File.separator;
+	public static final String BASE_PATH_IMAGE="images"+File.separator;
+	public static final String BASE_PATH_APK="apk"+File.separator;
+	public static final String BASE_PATH_PHOTOS="photos"+File.separator;
 }

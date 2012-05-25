@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-05-23 12:01:34
+Date: 2012-05-25 18:08:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -62,7 +62,7 @@ CREATE TABLE `t_application` (
   `size` varchar(10) DEFAULT NULL COMMENT '应用大小',
   `app_file_path` varchar(100) DEFAULT NULL COMMENT '应用程序路径',
   `platform` varchar(20) NOT NULL COMMENT '应用平台',
-  `support_languages` int(11) DEFAULT '0' COMMENT '语言支持:0 简体中文；1 繁体中文；2 英语',
+  `support_languages` int(11) DEFAULT '0' COMMENT '语言支持:0 中文；1 英语；2 中英双语',
   `price` double DEFAULT '0' COMMENT '应用价格（0为免费）',
   `down_count` int(11) DEFAULT '0' COMMENT '下载次数',
   `app_level` int(11) DEFAULT NULL COMMENT '应用分级',
@@ -73,13 +73,12 @@ CREATE TABLE `t_application` (
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_application
 -- ----------------------------
-INSERT INTO `t_application` VALUES ('6', 'test', 'test', 'v1', '\\resources\\attachment\\icons\\29533256882152.sql', '2', '60k', '\\resources\\attachment\\apk\\5429771808558.sql', '', '0', '0', null, '1', 'test', 'test1', null, '1', '2012-05-21 09:39:17', '2012-05-22 10:09:46');
-INSERT INTO `t_application` VALUES ('7', '111', '111', '111', '\\resources\\attachment\\icons\\29752289263020.sql', '2', null, null, '11', '0', null, null, '1', '111111111', '11111111', '\\resources\\attachment\\images\\1337592293031_1.sql;\\resources\\attachment\\images\\1337592293031_3.sql;\\resources\\attachment\\images\\1337592293031_4.xml;\\resources\\attachment\\images\\1337592293031_5.xml', '1', '2012-05-21 17:24:53', '2012-05-21 17:24:53');
+INSERT INTO `t_application` VALUES ('6', '新浪微博', '新浪微博', 'v3', 'icons\\9441050539818.jpg', '4', '4M', 'apk\\app_6_20657332287969.apk', 'd', '2', '0', null, '3', 'test', 'test1', 'images\\1337914111343_1.jpg;', '1', '2012-05-21 09:39:17', '2012-05-25 14:26:16');
 
 -- ----------------------------
 -- Table structure for `t_app_catalog`
@@ -159,32 +158,13 @@ CREATE TABLE `t_app_version_file` (
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_version_file
 -- ----------------------------
-INSERT INTO `t_app_version_file` VALUES ('1', '6', 'v1', '60k', '\\resources\\attachment\\apk\\5429771808558.sql', '55555555', '1', '2012-05-22 09:24:41', '2012-05-22 10:09:46');
-
--- ----------------------------
--- Table structure for `t_attachment`
--- ----------------------------
-DROP TABLE IF EXISTS `t_attachment`;
-CREATE TABLE `t_attachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `app_id` int(11) NOT NULL COMMENT '应用Id',
-  `name` varchar(20) NOT NULL COMMENT '附件名称',
-  `file_path` varchar(200) NOT NULL COMMENT '附件路径',
-  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
-  `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
-  `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
-  PRIMARY KEY (`id`),
-  KEY `idx_t_attachment_app_id` (`app_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of t_attachment
--- ----------------------------
+INSERT INTO `t_app_version_file` VALUES ('1', '6', 'v1', '60k', 'apk\\app_6_2805613821646.apk', '55555555', '1', '2012-05-22 09:24:41', '2012-05-25 09:28:51');
+INSERT INTO `t_app_version_file` VALUES ('2', '6', 'v3', '4M', 'apk\\app_6_20657332287969.apk', '测试', '1', '2012-05-25 14:26:16', '2012-05-25 14:26:16');
 
 -- ----------------------------
 -- Table structure for `t_base_field`
@@ -406,7 +386,7 @@ CREATE TABLE `t_base_user` (
 -- ----------------------------
 -- Records of t_base_user
 -- ----------------------------
-INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-23 12:01:05', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-23 12:01:05', null, null);
+INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-25 17:46:27', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-25 17:46:27', null, null);
 INSERT INTO `t_base_user` VALUES ('2', 'test2@test', '8cd7f598d2fbfd1ec76e5498054720f5', 'test2', null, '1', '2012-05-17 11:28:37', '2012-05-13 15:20:30', '1', null, null, null, null, '136');
 INSERT INTO `t_base_user` VALUES ('3', 'test@test', '7dc26a2c0c1d165dfc06340c26de432d', 'test', '', '2', '2012-05-18 13:12:02', '2012-05-18 13:11:30', '1', '', '127.0.0.1', '2012-05-18 13:12:02', '', '');
 
@@ -427,6 +407,7 @@ CREATE TABLE `t_base_user_role` (
 -- Records of t_base_user_role
 -- ----------------------------
 INSERT INTO `t_base_user_role` VALUES ('1', '1');
+INSERT INTO `t_base_user_role` VALUES ('1', '5');
 INSERT INTO `t_base_user_role` VALUES ('3', '5');
 
 -- ----------------------------

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -77,7 +78,7 @@ public class ApplicationController {
 	        	String fileName =  System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
-	        	application.setIcon(fileName);
+	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
 			}
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
@@ -90,9 +91,9 @@ public class ApplicationController {
 	        		String lastFileName = random+"_"+(i+1)+extName;
 	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getIconFile(lastFileName)); 
 	        		if (i<4) {
-	        			images.append(lastFileName).append(";");
+	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");
 	        		} else {
-	        			images.append(lastFileName);
+	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName);
 	        		}
 				}
         		i++;

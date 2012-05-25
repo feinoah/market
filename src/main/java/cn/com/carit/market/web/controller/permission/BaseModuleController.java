@@ -32,7 +32,6 @@ private final Logger log = Logger.getLogger(getClass());
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new BaseModule());
-		model.addAttribute("allModule", baseModuleService.query());
 		return "admin/permission/module";
 	}
 	

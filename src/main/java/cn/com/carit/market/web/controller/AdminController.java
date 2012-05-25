@@ -122,8 +122,10 @@ public class AdminController {
 	public String logout(HttpServletRequest req){
 		HttpSession session=req.getSession();
 		BaseUser baseUser=(BaseUser) session.getAttribute(Constants.ADMIN_USER);
-		session.setAttribute(Constants.ADMIN_USER, null);
-		session.setAttribute(Constants.USER_ALL_MOUDLE+baseUser.getEmail(), 0);
+		if(baseUser!=null){
+			session.setAttribute(Constants.ADMIN_USER, null);
+			session.setAttribute(Constants.USER_ALL_MOUDLE+baseUser.getEmail(), 0);
+		}
 		return "/admin/loginForm";
 	}
 	
@@ -147,7 +149,7 @@ public class AdminController {
 	}
 	
 	/**
-	 * 查询所有模块
+	 * 查询所有模块(树结构)
 	 * back/module/query/all
 	 * @return
 	 */
@@ -164,6 +166,16 @@ public class AdminController {
 	}
 	
 	/**
+	 * 所有模块
+	 * @return
+	 */
+	@RequestMapping(value="back/module/all", method=RequestMethod.GET)
+	@ResponseBody
+	public List<BaseModule> allModule(){
+		return baseModuleService.query();
+	}
+	
+	/**
 	 * back/role/query/all
 	 * 查询所有角色
 	 * @return
@@ -172,6 +184,17 @@ public class AdminController {
 	@ResponseBody
 	public List<BaseRole> queryAllRole(){
 		return baseRoleService.query();
+	}
+	
+	/**
+	 * back/role/query/user/{userId}
+	 * 按用户Id查询角色
+	 * @return
+	 */
+	@RequestMapping(value="back/role/query/user/{userId}", method=RequestMethod.GET)
+	@ResponseBody
+	public List<BaseRole> queryByUser(@PathVariable int userId){
+		return baseRoleService.queryByUserId(userId);
 	}
 	
 	/**
@@ -230,19 +253,59 @@ public class AdminController {
 				Constants.USER_ALL_MOUDLE);
 		Map<String, Integer> result=new HashMap<String, Integer>();
 		result.put("save", 0);
+		result.put("del", 0);
 		result.put("lock", 0);
 		result.put("unlock", 0);
 		if (moduleList!=null && moduleList.size()>0) {
-			String [] array={"/save","/delete", "/unlock"};
+			String [] array={"/save","/delete", "/unlock", "/lock"};
 			for (BaseModule baseModule : moduleList) {
 				if ((baseUri+array[0]).equals(baseModule.getModuleUrl())) {
 					result.put("save", 1);
 				}
 				if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
-					result.put("delete", 1);
+					result.put("del", 1);
 				}
 				if ((baseUri+array[2]).equals(baseModule.getModuleUrl())) {
 					result.put("unlock", 1);
+				}
+				if ((baseUri+array[3]).equals(baseModule.getModuleUrl())) {
+					result.put("lock", 1);
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * 检测application页面操纵权限
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="back/permission/app", method=RequestMethod.GET)
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	public Map<String, Integer> checkApplicationControl(HttpServletRequest req){
+		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
+				Constants.USER_ALL_MOUDLE);
+		Map<String, Integer> result=new HashMap<String, Integer>();
+		result.put("save", 0);
+		result.put("del", 0);
+		result.put("searchVersion", 0);
+		result.put("addVersion", 0);
+		if (moduleList!=null && moduleList.size()>0) {
+			String [] array={"/admin/app/application/save","/admin/app/application/delete", "/admin/app/version/query", "/admin/app/version/save"};
+			for (BaseModule baseModule : moduleList) {
+				if (array[0].equals(baseModule.getModuleUrl())) {
+					result.put("save", 1);
+				}
+				if (array[1].equals(baseModule.getModuleUrl())) {
+					result.put("del", 1);
+				}
+				if (array[2].equals(baseModule.getModuleUrl())) {
+					result.put("searchVersion", 1);
+				}
+				if (array[3].equals(baseModule.getModuleUrl())) {
+					result.put("addVersion", 1);
 				}
 			}
 		}

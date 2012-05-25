@@ -14,6 +14,18 @@
 			$.getJSON('${ctx}/admin/permission/module/query?page=1&rows=10000&t='+(new Date().getTime()), function(data) {
 				modules=data.rows
 			});
+			$('#parentId').combobox({  
+			    url:'${ctx}/back/module/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'moduleName'  
+			}); 
+			$('#parentId_edit').combobox({  
+			    url:'${ctx}/back/module/all',
+			    method:'get',
+			    valueField:'id',  
+			    textField:'moduleName'  
+			}); 
 			checkEditControl('${ctx}/admin/permission/module');
 		});
 		function edit() {
@@ -23,11 +35,12 @@
 				// init data
 				$('#editForm input[name=moduleName]').val(m.moduleName);
 				$('#editForm input[name=moduleUrl]').val(m.moduleUrl);
-				$('#editForm input[name=parentId]').val(m.parentId);
-				$('#editForm input[name=level]').val(m.level);
-				$('#editForm input[name=expanded]').val(m.expanded);
+				$('#parentId_edit').combobox('setValue',m.parentId);
+				$('#level_edit').numberspinner('setValue',m.level);
+				$('#expanded_edit').combobox('setValue',m.expanded);
+				$('#display_edit').combobox('setValue',m.display);
 				$('#editForm input[name=display]').val(m.display==true?'1':'0');
-				$('#editForm input[name=displayIndex]').val(m.displayIndex);
+				$('#displayIndex_edit').numberspinner('setValue',m.displayIndex);
 				$('#editForm input[name=information]').val(m.information);
 				$('#id').val(m.id);
 				$('#editWin').show();
@@ -118,10 +131,7 @@
 						<form:label for="parentId" path="parentId">父模块：</form:label>
 					</td>
 					<td>
-						<form:select path="parentId" cssClass="easyui-combobox">
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allModule}"  itemValue="id"  itemLabel="moduleName" />
-						</form:select>
+						<form:input path="parentId" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="level" path="level">层级大于等于：</form:label>
@@ -178,27 +188,24 @@
 					<tr>
 						<td><form:label	for="parentId" path="parentId" >父模块：</form:label></td>
 						<td>
-						<form:select path="parentId" cssClass="easyui-combobox" required="true" >
-							<form:option value="">-请选择-</form:option>
-							<form:options items="${allModule}"  itemValue="id"  itemLabel="moduleName" />
-						</form:select>
+						<form:input path="parentId" id="parentId_edit" ssClass="easyui-validatebox"/>
 						</td>
 						<td><form:label	for="level" path="level" cssClass="easyui-validatebox">层级：</form:label></td>
 						<td>
-							<form:input path="level" cssClass="easyui-numberspinner" value="1" min="1" max="10" required="true"/>
+							<form:input path="level" id="level_edit" cssClass="easyui-numberspinner" value="1" min="1" max="10" required="true"/>
 						</td>
 					</tr>
 					<tr>
 						<td><form:label	for="expanded" path="expanded" cssClass="easyui-validatebox">展开：</form:label></td>
 						<td>
-							<form:select path="expanded" cssClass="easyui-combobox" required="true">
+							<form:select path="expanded" id="expanded_edit" cssClass="easyui-combobox" required="true">
 								<form:option value="0">-收起-</form:option>
 								<form:option value="1">-展开-</form:option>
 							</form:select>
 						</td>
 						<td><form:label for="display" path="display" cssClass="easyui-validatebox" required="true">是否隐藏：</form:label></td>
 						<td>
-							<form:select path="display" cssClass="easyui-combobox" required="true">
+							<form:select path="display" id="display_edit" cssClass="easyui-combobox" required="true">
 								<form:option value="0">-隐藏-</form:option>
 								<form:option value="1">-显示-</form:option>
 							</form:select>
@@ -206,7 +213,7 @@
 					</tr>
 					<tr>
 						<td><form:label for="displayIndex" path="displayIndex" cssClass="easyui-validatebox">顺序：</form:label></td>
-						<td><form:input path="displayIndex" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
+						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
 					</tr>
 					<tr><td><form:label for="information" path="information" cssClass="easyui-validatebox">描述：</form:label></td></tr>
 					<tr><td colspan="4"><form:textarea path="information" cssStyle="width:605px;height:100px;" /></td></tr>

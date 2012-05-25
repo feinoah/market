@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -75,7 +76,7 @@ public class AppVersionFileController {
 	        			+"_"+System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
-	        	appVersionFile.setFilePath(fileName);
+	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+fileName);
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());

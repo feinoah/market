@@ -26,6 +26,13 @@ public interface BaseRoleService {
 	BaseRole queryById(int id);
 	
 	/**
+	 * 按用户Id查询
+	 * @param userId
+	 * @return
+	 */
+	List<BaseRole> queryByUserId(int userId);
+	
+	/**
 	 * 查询
 	 * @return
 	 */
@@ -52,4 +59,5 @@ public interface BaseRoleService {
 	 * @return
 	 */
 	int getCount(BaseRole baseRole);
+	
 }

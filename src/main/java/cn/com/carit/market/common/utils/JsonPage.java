@@ -8,7 +8,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import cn.com.carit.market.common.Constants;
 
 @JsonAutoDetect
-@JsonIgnoreProperties(value = { "currentPage", "pageSize", "startRow"})
+@JsonIgnoreProperties(value = { "currentPage", "pageSize", "startRow", "endRow"})
 public class JsonPage {
 
 	// total row
@@ -111,6 +111,14 @@ public class JsonPage {
 	public void setRows(List<?> rows) {
 		this.rows = rows;
 	}
+	
+	public int getTotalPage(){
+		if (total%pageSize!=0) {
+			return (total/pageSize)+1;
+		}
+		return total/pageSize;
+	}
+	
 	/*
 	 * public int getTotalPage() { this.totalPage = this.total / this.pageSize;
 	 * if (this.total % this.pageSize != 0) { this.totalPage += 1; } return

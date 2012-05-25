@@ -100,6 +100,14 @@ public class BaseRoleDaoImpl extends BaseDaoImpl  implements
 		}
 
 		@Override
+		public List<BaseRole> queryByUserId(int userId) {
+			String sql="select a.* from t_base_role a left join t_base_user_role b on a.id=b.role_id where b.user_id=?";
+			log.debug(String.format("\n%1$s\n", sql));
+			return jdbcTemplate.query(sql, new Object[]{userId},
+					new int []{Types.INTEGER}, rowMapper);
+		}
+
+		@Override
 		public List<BaseRole> query() {
 			return this.jdbcTemplate.query("select * from t_base_role", rowMapper);
 		}

@@ -16,7 +16,6 @@ import cn.com.carit.market.bean.BaseUser;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import cn.com.carit.market.service.permission.BaseRoleService;
 import cn.com.carit.market.service.permission.BaseUserService;
 @Controller
 @RequestMapping(value="admin/permission/user")
@@ -26,9 +25,6 @@ public class BaseUserController {
 	@Resource
 	private BaseUserService baseUserService;
 	
-	@Resource
-	private BaseRoleService baseRoleService;
-	
 	/**
 	 * 啥都不干，单纯跳转到页面
 	 * admin/permission/user/
@@ -37,7 +33,6 @@ public class BaseUserController {
 	@RequestMapping(method=RequestMethod.GET)
 	public String index(Model model){
 		model.addAttribute(new BaseUser());
-		model.addAttribute("allRoles", baseRoleService.query());
 		return "/admin/permission/user";
 	}
 	

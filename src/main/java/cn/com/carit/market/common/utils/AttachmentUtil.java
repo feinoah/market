@@ -65,18 +65,33 @@ public class AttachmentUtil {
 	}
 	
 	public static String getIconPath(String fileName){
+		int index=fileName.lastIndexOf(File.separator);
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
 		return (String)getValue("attachment.icons")+(File.separator+fileName);
 	}
 	
 	public static String getImagePath(String fileName){
+		int index=fileName.lastIndexOf(File.separator);
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
 		return (String)getValue("attachment.images")+(File.separator+fileName);
 	}
 	
 	public static String getApkPath(String fileName){
+		int index=fileName.lastIndexOf(File.separator);
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
 		return (String)getValue("attachment.apks")+(File.separator+fileName);
 	}
 	
-	public static String getPhotoPath(String fileName){
+	public static String getPhotoPath(String fileName){int index=fileName.lastIndexOf(File.separator);
+	if (index!=-1) {
+		fileName=fileName.substring(index);
+	}
 		return (String)getValue("attachment.photos")+(File.separator+fileName);
 	}
 	

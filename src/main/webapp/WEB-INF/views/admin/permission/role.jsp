@@ -20,7 +20,7 @@
 					}
 				}
 			});		
-			checkEditControl('${ctx}/back/permission/check?baseUri=admin/permission/role');
+			checkEditControl('admin/permission/role');
 			$('#edit_submit_r').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){

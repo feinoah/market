@@ -241,7 +241,7 @@ public class PortalController {
 	        	+System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getPhotoFile(fileName);
 					multipartFile.transferTo(file);
-					updateAccount.setPhoto(AttachmentUtil.getPhotoPath(fileName));
+					updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+fileName);
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());
@@ -429,12 +429,17 @@ public class PortalController {
 			//session超时
 			log.warn("session time out...");
 //			return -2;
-//			throw new Exception("session time out...");
+			throw new Exception("session time out...");
 		}
 		BufferedInputStream in=null;
 		BufferedOutputStream out=null;
 		Application app = applicationService.queryById(appId);
-		File file = new File(AttachmentUtil.getApkPath(app.getAppFilePath()));
+		String fileName=app.getAppFilePath();
+		int index=fileName.indexOf(File.separator);
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
+		File file = AttachmentUtil.getApkFile(fileName);
 		res.setContentType("application/x-msdownload");//oper save as 对话框
 		try {
 			res.setHeader("Content-Disposition",
@@ -480,6 +485,10 @@ public class PortalController {
 	public void getImage(@PathVariable String fileName, @PathVariable int type
 			, HttpServletResponse response) throws FileNotFoundException, IOException{
 		File image=null;
+		int index=fileName.indexOf(File.separator);
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
 		if (type==Constants.IMAGE_TYPE_ICON) { // 图标
 			image=AttachmentUtil.getIconFile(fileName);
 		} else if(type==Constants.IMAGE_TYPE_PHOTO) { // 用户头像
