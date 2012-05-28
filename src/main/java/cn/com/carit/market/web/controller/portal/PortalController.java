@@ -1,21 +1,12 @@
 package cn.com.carit.market.web.controller.portal;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.imageio.stream.FileImageInputStream;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -32,11 +23,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AccountInfo;
-import cn.com.carit.market.bean.app.AppCatalog;
 import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.app.AppDownloadLog;
-import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.portal.PortalAppCatalog;
+import cn.com.carit.market.bean.portal.PortalAppVersionFile;
+import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
@@ -53,6 +45,12 @@ import cn.com.carit.market.service.app.ApplicationService;
 @RequestMapping(value="portal")
 public class PortalController {
 	private final Logger log = Logger.getLogger(getClass());
+	
+	@Resource
+	private AccountInfoService accountInfoService;
+	
+	@Resource
+	private AppDownloadLogService appDownloadLogService;
 	@Resource
 	private AppCatalogService appCatalogService;
 	
@@ -60,16 +58,10 @@ public class PortalController {
 	private ApplicationService applicationService;
 	
 	@Resource
-	private AppVersionFileService appVersionFileService;
-	
-	@Resource
 	private AppCommentService appCommentService;
 	
 	@Resource
-	private AccountInfoService accountInfoService;
-	
-	@Resource
-	private AppDownloadLogService appDownloadLogService;
+	private AppVersionFileService appVersionFileService;
 	
 	/**
 	 * 注册帐号
@@ -297,15 +289,31 @@ public class PortalController {
 	
 	/**
 	 * 所有应用分类接口
-	 * portal/catalog/all
+	 * portal/catalog/all/{local}
 	 * @return json
 	 */
-	@RequestMapping(value="catalog/all", method=RequestMethod.GET)
+	@RequestMapping(value="catalog/all/{local}", method=RequestMethod.GET)
 	@ResponseBody
-	public List<AppCatalog> allCatalog(){
-		AppCatalog catalog=new AppCatalog();
-		catalog.setStatus((byte)Constants.STATUS_VALID);
-		return appCatalogService.queryByExemple(catalog);
+	public List<PortalAppCatalog> allCatalog(@PathVariable String local){
+		return appCatalogService.queryAll(local);
+	}
+	
+	/**
+	 * 按条件查询应用
+	 * portal/app/query
+	 * <br>例如：portal/app/query?page=1&rows=10&appName=?...
+	 * <table>
+	 * 	<tr><th>参数名称</th><th>描述</th><th>类型</th><th>是否必须</th></tr>
+	 * 	<tr><td>page</td><td>页码</td><td>int</td><td>F</td></tr>
+	 * 	<tr><td>rows</td><td>每页显示数</td><td>int</td><td>F</td></tr>
+	 * 	<tr><td>PortalApplication</td><td>PortalApplication相关属性参数</td><td>{@link PortalApplication}</td><td>F</td></tr>
+	 * </table>
+	 * @return json
+	 */
+	@RequestMapping(value="app/query", method=RequestMethod.GET)
+	@ResponseBody
+	public JsonPage queryApps(@ModelAttribute PortalApplication application, BindingResult result,DataGridModel dgm){
+		return applicationService.queryByExemple(application, dgm);
 	}
 	
 	/**
@@ -320,34 +328,17 @@ public class PortalController {
 		application.setStatus(Constants.STATUS_VALID);
 		return applicationService.queryByExemple(application);
 	}
-	/**
-	 * 按条件查询应用
-	 * portal/app/query
-	 * <br>例如：portal/app/query?page=1&rows=10&appName=?...
-	 * <table>
-	 * 	<tr><th>参数名称</th><th>描述</th><th>类型</th><th>是否必须</th></tr>
-	 * 	<tr><td>page</td><td>页码</td><td>int</td><td>F</td></tr>
-	 * 	<tr><td>rows</td><td>每页显示数</td><td>int</td><td>F</td></tr>
-	 * 	<tr><td>Application</td><td>Application相关属性参数</td><td>{@link Application}</td><td>F</td></tr>
-	 * </table>
-	 * @return json
-	 */
-	@RequestMapping(value="app/query", method=RequestMethod.GET)
-	@ResponseBody
-	public JsonPage queryApps(@ModelAttribute Application application, BindingResult result,DataGridModel dgm){
-		return applicationService.queryByExemple(application, dgm);
-	}
 	
 	/**
 	 * 查看App
-	 * portal/app/{appId}
+	 * portal/app/{appId}/{local}
 	 * @param appId
-	 * @return json {@link Application}
+	 * @return json {@link PortalApplication}
 	 */
-	@RequestMapping(value="app/{appId}", method=RequestMethod.GET)
+	@RequestMapping(value="app/{appId}/{local}", method=RequestMethod.GET)
 	@ResponseBody
-	public Application viewApp(@PathVariable int appId){
-		return applicationService.queryById(appId);
+	public PortalApplication viewApp(@PathVariable int appId, @PathVariable String local){
+		return applicationService.queryAppById(appId, local);
 	}
 	
 	/**
@@ -360,9 +351,8 @@ public class PortalController {
 	@RequestMapping(value="app/versions/{appId}", method=RequestMethod.GET)
 	@ResponseBody
 	public JsonPage queryAppVersions(@PathVariable int appId, DataGridModel dgm) {
-		AppVersionFile appVersionFile=new AppVersionFile();
+		PortalAppVersionFile appVersionFile=new PortalAppVersionFile();
 		appVersionFile.setAppId(appId);
-		appVersionFile.setStatus(Constants.STATUS_VALID);
 		return appVersionFileService.queryByExemple(appVersionFile, dgm);
 	}
 	
@@ -376,10 +366,7 @@ public class PortalController {
 	@RequestMapping(value="app/comments/{appId}", method=RequestMethod.GET)
 	@ResponseBody
 	public JsonPage queryAppComments(@PathVariable int appId, DataGridModel dgm) {
-		AppComment appComment=new AppComment();
-		appComment.setAppId(appId);
-		appComment.setStatus(Constants.STATUS_VALID);
-		return appCommentService.queryByExemple(appComment, dgm);
+		return appCommentService.queryComment(appId, dgm);
 	}
 	
 	/**
@@ -397,7 +384,7 @@ public class PortalController {
 	 * @param req
 	 * @return
 	 */
-	@RequestMapping(value="portal/app/comment/add", method=RequestMethod.GET)
+	@RequestMapping(value="portal/app/comment/add", method=RequestMethod.POST)
 	@ResponseBody
 	public int addAppComment(@ModelAttribute AppComment appComment
 			, BindingResult result, HttpServletRequest req){
@@ -418,94 +405,29 @@ public class PortalController {
 	 * 下载应用
 	 * portal/app/down/{appId}
 	 * @param appId
-	 * @param res
 	 * @param req
 	 * @throws Exception 
 	 */
 	@RequestMapping(value="app/down/{appId}", method=RequestMethod.GET)
-	public void appDown(@PathVariable int appId,HttpServletResponse res,HttpServletRequest req) throws Exception{
+	public String appDown(@PathVariable int appId,HttpServletRequest req) throws Exception{
 		AccountInfo account=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
 		if (account==null) {
 			//session超时
 			log.warn("session time out...");
 //			return -2;
-			throw new Exception("session time out...");
+//			throw new Exception("session time out...");
 		}
-		BufferedInputStream in=null;
-		BufferedOutputStream out=null;
 		Application app = applicationService.queryById(appId);
 		String fileName=app.getAppFilePath();
-		int index=fileName.indexOf(File.separator);
-		if (index!=-1) {
-			fileName=fileName.substring(index);
+		if (!StringUtils.hasText(fileName)) {
+			// 文件不存在
+//			throw new Exception();
 		}
-		File file = AttachmentUtil.getApkFile(fileName);
-		res.setContentType("application/x-msdownload");//oper save as 对话框
-		try {
-			res.setHeader("Content-Disposition",
-					"attachment;filename="+URLEncoder.encode(app.getAppName()+app.getVersion(), "UTF-8")+".apk");
-			in=new BufferedInputStream(new FileInputStream(file));
-			out=new BufferedOutputStream(new BufferedOutputStream(res.getOutputStream()));
-			byte[] buffer=new byte[1024*8];
-			int j=-1;
-			while((j=in.read(buffer))!=-1) {
-				out.write(buffer,0,j);
-			}
-			AppDownloadLog downlog=new AppDownloadLog();
-			downlog.setAccountId(account.getId());
-			downlog.setAppId(appId);
-			appDownloadLogService.saveOrUpdate(downlog);
-		} catch (UnsupportedEncodingException e) {
-			log.error("download error..."+e.getMessage());
-		} catch (IOException e) {
-			log.error(e.getMessage());
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-				if (out != null) {
-					out.close();
-				}
-			} catch (IOException e) {
-				log.error(e.getMessage());
-			}
-		}
+//		AppDownloadLog downlog=new AppDownloadLog();
+//		downlog.setAccountId(account.getId());
+//		downlog.setAppId(appId);
+//		appDownloadLogService.saveOrUpdate(downlog);
+		return "forward:/"+fileName;
 	}
 	
-	/**
-	 * 取图片
-	 * partal/image/{fileName}/{type}
-	 * @param path
-	 * @param type
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 */
-	@RequestMapping(value="image/{fileName}/{type}", method=RequestMethod.GET)
-	public void getImage(@PathVariable String fileName, @PathVariable int type
-			, HttpServletResponse response) throws FileNotFoundException, IOException{
-		File image=null;
-		int index=fileName.indexOf(File.separator);
-		if (index!=-1) {
-			fileName=fileName.substring(index);
-		}
-		if (type==Constants.IMAGE_TYPE_ICON) { // 图标
-			image=AttachmentUtil.getIconFile(fileName);
-		} else if(type==Constants.IMAGE_TYPE_PHOTO) { // 用户头像
-			image=AttachmentUtil.getPhotoFile(fileName);
-		} else {
-			image=AttachmentUtil.getImageFile(fileName);
-		}
-		response.setContentType("image/jpeg; charset=UTF-8");
-		FileImageInputStream is=new FileImageInputStream(image);
-		OutputStream out=response.getOutputStream();
-		byte[] buffer = new byte[1024];
-		int i=-1;
-		while ((i = is.read(buffer)) != -1) {
-			out.write(buffer, 0, i);
-		   }
-		out.flush();
-		out.close();
-		is.close();
-	}
 }

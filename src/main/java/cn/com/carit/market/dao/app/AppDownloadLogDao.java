@@ -1,9 +1,10 @@
 package cn.com.carit.market.dao.app;
 import java.util.List;
 
+import cn.com.carit.market.bean.app.AppDownloadLog;
+import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import  cn.com.carit.market.bean.app.AppDownloadLog;
 
 /**
  * AppDownloadLogDao
@@ -73,5 +74,14 @@ public interface AppDownloadLogDao {
 	 * @return
 	 */
 	int getCount(AppDownloadLog appDownloadLog);
+	
+	/**
+	 * 带分页的条件查询
+	 * @param appDownloadLog
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryByExemple(PortalAppDownloadLog appDownloadLog, DataGridModel dgm);
+	
 	
 }

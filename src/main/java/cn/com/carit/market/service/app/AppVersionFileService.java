@@ -4,6 +4,7 @@ import java.util.List;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import  cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 
 /**
  * AppVersionFileService
@@ -65,4 +66,19 @@ public interface AppVersionFileService {
 	 * @return
 	 */
 	int getCount(AppVersionFile appVersionFile);
+	
+	/**
+	 * 带分页的条件查询
+	 * @param appVersionFile
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryByExemple(PortalAppVersionFile appVersionFile, DataGridModel dgm);
+	
+	/**
+	 * 按Id查询
+	 * @param id
+	 * @return
+	 */
+	PortalAppVersionFile query(int id, String local);
 }

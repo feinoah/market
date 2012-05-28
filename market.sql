@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-05-25 18:08:38
+Date: 2012-05-28 18:17:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,7 +24,7 @@ CREATE TABLE `t_account_info` (
   `email` varchar(30) NOT NULL COMMENT '邮箱',
   `password` varchar(32) NOT NULL COMMENT '密码',
   `nick_name` varchar(50) DEFAULT NULL COMMENT '昵称',
-  `gender` tinyint(4) NOT NULL COMMENT '性别 0：保密；1：男；2：女',
+  `gender` tinyint(4) NOT NULL DEFAULT '0' COMMENT '性别 0：保密；1：男；2：女',
   `birthday` date DEFAULT NULL COMMENT '生日',
   `photo` varchar(200) DEFAULT NULL COMMENT '头像',
   `balance` double DEFAULT '0' COMMENT '余额',
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS `t_application`;
 CREATE TABLE `t_application` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app_name` varchar(50) NOT NULL COMMENT '应用名称',
-  `display_name` varchar(50) NOT NULL COMMENT '显示名称',
+  `en_name` varchar(50) NOT NULL COMMENT '显示名称',
   `version` varchar(10) DEFAULT NULL COMMENT '版本',
   `icon` varchar(100) NOT NULL COMMENT '图标',
   `catalog_id` int(11) NOT NULL COMMENT '应用类型',
@@ -67,18 +67,21 @@ CREATE TABLE `t_application` (
   `down_count` int(11) DEFAULT '0' COMMENT '下载次数',
   `app_level` int(11) DEFAULT NULL COMMENT '应用分级',
   `description` varchar(500) DEFAULT NULL COMMENT '描述',
+  `en_description` varchar(500) DEFAULT NULL,
+  `en_permission_desc` varchar(500) DEFAULT NULL,
   `permission_desc` varchar(500) DEFAULT NULL COMMENT '权限描述',
   `images` varchar(500) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_application
 -- ----------------------------
-INSERT INTO `t_application` VALUES ('6', '新浪微博', '新浪微博', 'v3', 'icons\\9441050539818.jpg', '4', '4M', 'apk\\app_6_20657332287969.apk', 'd', '2', '0', null, '3', 'test', 'test1', 'images\\1337914111343_1.jpg;', '1', '2012-05-21 09:39:17', '2012-05-25 14:26:16');
+INSERT INTO `t_application` VALUES ('6', '新浪微博', '新浪微博', 'v3', 'icons\\9441050539818.jpg', '4', '4M', 'apk\\app_6_20657332287969.apk', 'd', '2', '0', null, '3', 'test', 'ddddd', 'tgttaga', 'test1', 'images\\1337914111343_1.jpg;', '1', '2012-05-21 09:39:17', '2012-05-25 14:26:16');
+INSERT INTO `t_application` VALUES ('7', 'test', 'tete', null, 'icons\\33797189400423.jpg', '4', null, null, 'tt', '2', null, null, '2', '中文2', 'english2', 'english1', '中文1', 'images\\1338199705296_1.jpg;', '1', '2012-05-28 18:08:25', '2012-05-28 18:08:25');
 
 -- ----------------------------
 -- Table structure for `t_app_catalog`
@@ -87,7 +90,9 @@ DROP TABLE IF EXISTS `t_app_catalog`;
 CREATE TABLE `t_app_catalog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL COMMENT '名称',
+  `en_name` varchar(20) NOT NULL,
   `description` varchar(100) DEFAULT NULL COMMENT '描述',
+  `en_description` varchar(100) DEFAULT NULL,
   `display_index` int(11) NOT NULL COMMENT '显示顺序',
   `status` tinyint(4) NOT NULL COMMENT '状态：0 停用， 1 启用',
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35',
@@ -99,8 +104,8 @@ CREATE TABLE `t_app_catalog` (
 -- ----------------------------
 -- Records of t_app_catalog
 -- ----------------------------
-INSERT INTO `t_app_catalog` VALUES ('2', '车载', '车载应用 导航', '1', '1', '2012-05-20 12:25:46', '2012-05-20 13:54:36');
-INSERT INTO `t_app_catalog` VALUES ('4', '生活', '生活应用', '2', '1', '2012-05-20 14:20:16', '2012-05-20 14:20:16');
+INSERT INTO `t_app_catalog` VALUES ('2', '车载', 'car', '车载应用 导航', 'car navigater', '2', '1', '2012-05-20 12:25:46', '2012-05-20 13:54:36');
+INSERT INTO `t_app_catalog` VALUES ('4', '生活', '', '生活应用', null, '2', '1', '2012-05-20 14:20:16', '2012-05-20 14:20:16');
 
 -- ----------------------------
 -- Table structure for `t_app_comment`
@@ -154,6 +159,7 @@ CREATE TABLE `t_app_version_file` (
   `size` varchar(10) NOT NULL COMMENT '应用大小',
   `file_path` varchar(100) NOT NULL COMMENT '应用程序路径',
   `new_features` varchar(500) DEFAULT NULL COMMENT '新功能',
+  `en_new_features` varchar(500) DEFAULT NULL,
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
@@ -163,8 +169,8 @@ CREATE TABLE `t_app_version_file` (
 -- ----------------------------
 -- Records of t_app_version_file
 -- ----------------------------
-INSERT INTO `t_app_version_file` VALUES ('1', '6', 'v1', '60k', 'apk\\app_6_2805613821646.apk', '55555555', '1', '2012-05-22 09:24:41', '2012-05-25 09:28:51');
-INSERT INTO `t_app_version_file` VALUES ('2', '6', 'v3', '4M', 'apk\\app_6_20657332287969.apk', '测试', '1', '2012-05-25 14:26:16', '2012-05-25 14:26:16');
+INSERT INTO `t_app_version_file` VALUES ('1', '6', 'v1', '60k', 'apk\\app_6_2805613821646.apk', '55555555', null, '1', '2012-05-22 09:24:41', '2012-05-25 09:28:51');
+INSERT INTO `t_app_version_file` VALUES ('2', '6', 'v3', '4M', 'apk\\app_6_20657332287969.apk', '测试', null, '1', '2012-05-25 14:26:16', '2012-05-25 14:26:16');
 
 -- ----------------------------
 -- Table structure for `t_base_field`
@@ -386,7 +392,7 @@ CREATE TABLE `t_base_user` (
 -- ----------------------------
 -- Records of t_base_user
 -- ----------------------------
-INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-25 17:46:27', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-25 17:46:27', null, null);
+INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', 'test', null, '0', '2012-05-28 18:09:14', '2012-05-13 15:19:44', '1', null, '127.0.0.1', '2012-05-28 18:09:14', null, null);
 INSERT INTO `t_base_user` VALUES ('2', 'test2@test', '8cd7f598d2fbfd1ec76e5498054720f5', 'test2', null, '1', '2012-05-17 11:28:37', '2012-05-13 15:20:30', '1', null, null, null, null, '136');
 INSERT INTO `t_base_user` VALUES ('3', 'test@test', '7dc26a2c0c1d165dfc06340c26de432d', 'test', '', '2', '2012-05-18 13:12:02', '2012-05-18 13:11:30', '1', '', '127.0.0.1', '2012-05-18 13:12:02', '', '');
 
@@ -431,3 +437,51 @@ CREATE TABLE `t_user_comment` (
 -- ----------------------------
 -- Records of t_user_comment
 -- ----------------------------
+
+-- ----------------------------
+-- View structure for `v_application_cn`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_application_cn`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_cn` AS select `a`.`id` AS `id`,`a`.`app_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`name` AS `catalog_name`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`description` AS `description`,`a`.`permission_desc` AS `permission_desc`,`a`.`images` AS `images` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
+
+-- ----------------------------
+-- View structure for `v_application_en`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_application_en`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_en` AS select `a`.`id` AS `id`,`a`.`en_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`en_name` AS `catalog_name`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`en_description` AS `description`,`a`.`en_permission_desc` AS `permission_desc`,`a`.`images` AS `images` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
+
+-- ----------------------------
+-- View structure for `v_app_catalog_cn`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_catalog_cn`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_catalog_cn` AS select `t_app_catalog`.`id` AS `id`,`t_app_catalog`.`name` AS `name`,`t_app_catalog`.`description` AS `description` from `t_app_catalog` ;
+
+-- ----------------------------
+-- View structure for `v_app_catalog_en`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_catalog_en`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_catalog_en` AS select `t_app_catalog`.`id` AS `id`,`t_app_catalog`.`en_name` AS `name`,`t_app_catalog`.`en_description` AS `description` from `t_app_catalog` ;
+
+-- ----------------------------
+-- View structure for `v_app_download_log_cn`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_download_log_cn`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_download_log_cn` AS select `a`.`account_id` AS `account_id`,`a`.`app_id` AS `app_id`,`b`.`app_name` AS `app_name` from (`t_app_download_log` `a` left join `t_application` `b` on((`a`.`app_id` = `b`.`id`))) ;
+
+-- ----------------------------
+-- View structure for `v_app_download_log_en`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_download_log_en`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_download_log_en` AS select `a`.`account_id` AS `account_id`,`a`.`app_id` AS `app_id`,`b`.`en_name` AS `app_name` from (`t_app_download_log` `a` left join `t_application` `b` on((`a`.`app_id` = `b`.`id`))) ;
+
+-- ----------------------------
+-- View structure for `v_app_version_file_cn`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_version_file_cn`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_version_file_cn` AS select `t_app_version_file`.`id` AS `id`,`t_app_version_file`.`version` AS `version`,`t_app_version_file`.`size` AS `size`,`t_app_version_file`.`file_path` AS `file_path`,`t_app_version_file`.`new_features` AS `new_features` from `t_app_version_file` ;
+
+-- ----------------------------
+-- View structure for `v_app_version_file_en`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_app_version_file_en`;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_app_version_file_en` AS select `t_app_version_file`.`id` AS `id`,`t_app_version_file`.`version` AS `version`,`t_app_version_file`.`size` AS `size`,`t_app_version_file`.`file_path` AS `file_path`,`t_app_version_file`.`en_new_features` AS `new_features` from `t_app_version_file` ;

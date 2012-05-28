@@ -40,6 +40,8 @@ public class AppVersionFile  implements Serializable{
 	 * newFeatures
 	 */
 	private String newFeatures;
+	
+	private String enNewFeatures;
 	/**
 	 * status
 	 */
@@ -108,6 +110,12 @@ public class AppVersionFile  implements Serializable{
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getUpdateTime() {
 		return this.updateTime;
+	}
+	public String getEnNewFeatures() {
+		return enNewFeatures;
+	}
+	public void setEnNewFeatures(String enNewFeatures) {
+		this.enNewFeatures = enNewFeatures;
 	}
 
 }

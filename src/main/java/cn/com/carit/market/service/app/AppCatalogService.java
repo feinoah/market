@@ -4,6 +4,7 @@ import java.util.List;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import  cn.com.carit.market.bean.app.AppCatalog;
+import cn.com.carit.market.bean.portal.PortalAppCatalog;
 
 /**
  * AppCatalogService
@@ -58,4 +59,6 @@ public interface AppCatalogService {
 	 * @return
 	 */
 	int getCount(AppCatalog appCatalog);
+	
+	List<PortalAppCatalog> queryAll(String local);
 }

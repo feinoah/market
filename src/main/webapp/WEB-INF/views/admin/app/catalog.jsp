@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
@@ -17,9 +17,11 @@
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=name]').val(m.name);
-				$('#editForm input[name=displayIndex]').val(m.displayIndex);
-				$('#editForm input[name=status]').val(m.status);
+				$('#editForm input[name=enName]').val(m.enName);
+				$('#displayIndex_edit').numberspinner('setValue',m.displayIndex);
+				$('#status_edit').combobox('setValue',m.status);
 				$('#description').val(m.description);
+				$('#enDescription').val(m.enDescription);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -116,6 +118,7 @@
 				<thead>
 					<tr>
 						<th field="name" width="150" align="center">分类名称</th>
+						<th field="enName" width="150" align="center">英文名称</th>
 						<th field="description" width="200" align="center">描述</th>
 						<th field="displayIndex" width="60" align="center" >显示顺序</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
@@ -125,7 +128,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用分类" closed="true" style="width:400px;height:300px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑应用分类" closed="true" style="width:450px;height:300px;padding:5px;" modal="true">
 			<form:form modelAttribute="appCatalog" id="editForm" action="${ctx}/admin/app/catalog/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
@@ -133,11 +136,15 @@
 						<td><form:input path="name" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
-						<td><form:label for="displayIndex" path="displayIndex" cssClass="easyui-validatebox">顺序：</form:label></td>
-						<td><form:input path="displayIndex" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
+						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
+						<td><form:input path="enName" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
-						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
+						<td><form:label for="displayIndex" path="displayIndex" cssClass="easyui-validatebox">顺序：</form:label></td>
+						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
+					</tr>
+					<tr>
+						<td><form:label	for="status" id="status_edit" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
 							<form:select path="status" cssClass="easyui-combobox">
 								<form:option value="1">启用</form:option>
@@ -150,7 +157,14 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<form:textarea path="description" />
+							<div id="descTabs" class="easyui-tabs" style="width:400px;height:78px;">  
+								<div title="中文" style="padding:3px;">  
+									<form:textarea path="description" />
+								</div>  
+								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
+									<form:textarea path="enDescription" />
+								</div> 
+							</div> 
 						</td>
 					</tr>
 				</table>

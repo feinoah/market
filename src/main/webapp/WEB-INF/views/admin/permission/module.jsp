@@ -3,26 +3,25 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		var modules;
 		$(function(){
+			$.ajaxSettings.async = false;
 			// 查询所有模块 page=1起始页，rows=10000总记录树，默认是10的
-			$.getJSON('${ctx}/admin/permission/module/query?page=1&rows=10000&t='+(new Date().getTime()), function(data) {
-				modules=data.rows
+			$.getJSON('${ctx}/back/module/all?t='+(new Date().getTime()), function(data) {
+				modules=data
 			});
 			$('#parentId').combobox({  
-			    url:'${ctx}/back/module/all',
-			    method:'get',
+			    data:modules,
 			    valueField:'id',  
 			    textField:'moduleName'  
 			}); 
 			$('#parentId_edit').combobox({  
-			    url:'${ctx}/back/module/all',
-			    method:'get',
+				data:modules,
 			    valueField:'id',  
 			    textField:'moduleName'  
 			}); 
@@ -102,7 +101,7 @@
 		</script>
 		<style>
 		#editWin label {width: 115px;}
-		#editWin input {width: 180px;}
+		#editWin input {width: 150px;}
 		#editWin select {width: 185px;}
 		</style>
 	</head>

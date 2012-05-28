@@ -90,4 +90,12 @@ public class AppCommentServiceImpl implements AppCommentService{
 		}
 		return appCommentDao.getCount(appComment);
 	}
+	
+	@Override
+	public JsonPage queryComment(int appId, DataGridModel dgm) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appCommentDao.queryComment(appId, dgm);
+	}
 }

@@ -2,6 +2,7 @@ package cn.com.carit.market.dao.app;
 import java.util.List;
 
 import cn.com.carit.market.bean.app.AppCatalog;
+import cn.com.carit.market.bean.portal.PortalAppCatalog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 
@@ -27,7 +28,7 @@ public interface AppCatalogDao {
 	
 	/**
 	 * 更新
-	 * @param AppCatalog
+	 * @param PortalAppCatalog
 	 * @return
 	 */
 	int update(AppCatalog appCatalog);
@@ -66,5 +67,7 @@ public interface AppCatalogDao {
 	 * @return
 	 */
 	int getCount(AppCatalog appCatalog);
+	
+	List<PortalAppCatalog> queryAll(String local);
 	
 }

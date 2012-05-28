@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
@@ -11,54 +11,50 @@
 		var apps;
 		var users;
 		$(function(){
-			$('#appId').combobox({  
-			    url:'${ctx}/portal/app/all',
-			    method:'get',
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/portal/app/all', function(data) {
+				if(data){
+					apps=data;
+				}
+			});
+			$.getJSON('${ctx}/portal/account/all', function(data) {
+				if(data){
+					users=data;
+				}
+			});
+			$('#appId').combobox({
+				data:apps,
 			    valueField:'id',  
-			    textField:'displayName'  
+			    textField:'appName'  
 			}); 
-			$('#editForm input[name=appId]').combobox({  
-				url:'${ctx}/portal/app/all',
-			    method:'get',
+			$('#appId_edit').combobox({  
+				data:apps,
 			    valueField:'id',  
-			    textField:'displayName'  
+			    textField:'appName'   
 			});
 			$('#userId').combobox({  
-			    url:'${ctx}/portal/account/all',
-			    method:'get',
+			    data:users,
 			    valueField:'id',  
 			    textField:'nickName'  
 			}); 
 			$('#editForm input[name=userId]').combobox({  
-				url:'${ctx}/portal/account/all',
-			    method:'get',
+				data:users,
 			    valueField:'id',  
 			    textField:'nickName'  
 			});
 			checkEditControl('${ctx}/admin/app/comment');
-			$.getJSON('${ctx}/admin/app/application/query?page=1&rows=100000', function(data) {
-				if(data){
-					apps=data.rows;
-				}
-			});
-			$.getJSON('${ctx}/admin/app/account/query?page=1&rows=100000', function(data) {
-				if(data){
-					users=data.rows;
-				}
-			});
 			$('.datagrid-toolbar a:first').hide();//没有新增
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window('open');
-				$('#editForm input[name=appId]').val(m.appId);
-				$('#editForm input[name=appId]').attr('disabled',true);
-				$('#editForm input[name=userId]').val(m.userId);
-				$('#editForm input[name=userId]').attr('disabled',true);
-				$('#editForm input[name=grade]').val(m.grade);
-				$('#grade').numberspinner('setValue',m.grade);
-				$('#editForm input[name=status]').val(m.status);
+				$('#appId_edit').combobox('setValue',m.appId);
+				$('#appId_edit').attr('disabled',true);
+				$('#userId_edit').combobox('setValue',m.userId);
+				$('#userId_edit').attr('disabled',true);
+				$('#grade_edit').numberspinner('setValue',m.grade);
+				$('#status_edit').combobox('setValue',m.status);
 				$('#editForm textarea').val(m.comment);
 				$('#id').val(m.id);
 				$('#editWin').show();
@@ -108,7 +104,7 @@
 			var result='-';
 			$.each(apps, function(key,val) {
 				if(v==val.id){
-					result=val.displayName;
+					result=val.appName;
 					return false;
 				}
 			});
@@ -159,13 +155,13 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:input path="appId" cssClass="easyui-validatebox" />
+						<form:input path="appId" />
 					</td>
 					<td>
 						<form:label for="userId" path="userId">评论人：</form:label>
 					</td>
 					<td>
-						<form:input path="userId" cssClass="easyui-validatebox" />
+						<form:input path="userId" />
 					</td>
 				</tr>
 				<tr>
@@ -221,13 +217,13 @@
 						<form:label for="appId" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:input path="appId" cssClass="easyui-validatebox" />
+						<form:input path="appId" id="appId_edit"/>
 					</td>
 					<td>
 						<form:label for="userId" path="userId">评论人：</form:label>
 					</td>
 					<td>
-						<form:input path="userId" cssClass="easyui-validatebox" />
+						<form:input path="userId" id="userId_edit" />
 					</td>
 				</tr>
 				<tr>
@@ -235,13 +231,13 @@
 						<form:label for="grade" path="grade">等级：</form:label>
 					</td>
 					<td>
-						<form:input path="grade" cssClass="easyui-numberspinner" value="1" min="1" max="5"/>
+						<form:input path="grade" id="grade_edit" cssClass="easyui-numberspinner" value="1" min="1" max="5"/>
 					</td>
 					<td>
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" id="status_edit" cssClass="easyui-combobox">
 							<form:option value="">请选择</form:option>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>

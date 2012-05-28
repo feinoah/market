@@ -26,9 +26,9 @@ public class Application  implements Serializable{
 	 */
 	private String appName;
 	/**
-	 * displayName
+	 * enName
 	 */
-	private String displayName;
+	private String enName;
 	/**
 	 * version
 	 */
@@ -73,10 +73,12 @@ public class Application  implements Serializable{
 	 * description
 	 */
 	private String description;
+	private String enDescription;
 	/**
 	 * permissionDesc
 	 */
 	private String permissionDesc;
+	private String enPermissionDesc;
 	
 	/**
 	 * 截图路径，以“;”分隔
@@ -109,11 +111,12 @@ public class Application  implements Serializable{
 	public String getAppName() {
 		return this.appName;
 	}
-	public void setDisplayName(String value) {
-		this.displayName = value;
+	
+	public String getEnName() {
+		return enName;
 	}
-	public String getDisplayName() {
-		return this.displayName;
+	public void setEnName(String enName) {
+		this.enName = enName;
 	}
 	public void setVersion(String value) {
 		this.version = value;
@@ -220,4 +223,17 @@ public class Application  implements Serializable{
 		}
 		return null;
 	}
+	public String getEnDescription() {
+		return enDescription;
+	}
+	public void setEnDescription(String enDescription) {
+		this.enDescription = enDescription;
+	}
+	public String getEnPermissionDesc() {
+		return enPermissionDesc;
+	}
+	public void setEnPermissionDesc(String enPermissionDesc) {
+		this.enPermissionDesc = enPermissionDesc;
+	}
+	
 }

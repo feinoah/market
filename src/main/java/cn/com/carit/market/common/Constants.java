@@ -26,6 +26,9 @@ public class Constants {
 	
 	public static final String BASE_PATH_ICON="icons"+File.separator;
 	public static final String BASE_PATH_IMAGE="images"+File.separator;
-	public static final String BASE_PATH_APK="apk"+File.separator;
+	public static final String BASE_PATH_APK="apks"+File.separator;
 	public static final String BASE_PATH_PHOTOS="photos"+File.separator;
+	
+	public static final String LOCAL_EN="en";
+	public static final String LOCAL_CN="cn";
 }

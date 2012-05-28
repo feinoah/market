@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -104,5 +105,19 @@ public class ApplicationServiceImpl implements ApplicationService{
 			throw new NullPointerException("must given an exemple...");
 		}
 		return applicationDao.getCount(application);
+	}
+	
+	@Override
+	public JsonPage queryByExemple(PortalApplication application,
+			DataGridModel dgm) {
+		return applicationDao.queryByExemple(application, dgm);
+	}
+
+	@Override
+	public PortalApplication queryAppById(int id, String local) {
+		if (id<=0) {
+			throw new IllegalArgumentException("id must be bigger than 0...");
+		}
+		return applicationDao.query(id, local);
 	}
 }

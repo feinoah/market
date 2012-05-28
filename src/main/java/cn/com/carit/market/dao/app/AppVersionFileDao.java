@@ -2,6 +2,7 @@ package cn.com.carit.market.dao.app;
 import java.util.List;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 
@@ -34,7 +35,7 @@ public interface AppVersionFileDao {
 	
 	/**
 	 * 更新
-	 * @param AppVersionFile
+	 * @param PortalAppVersionFile
 	 * @return
 	 */
 	int update(AppVersionFile appVersionFile);
@@ -73,5 +74,20 @@ public interface AppVersionFileDao {
 	 * @return
 	 */
 	int getCount(AppVersionFile appVersionFile);
+	
+	/**
+	 * 带分页的条件查询
+	 * @param appVersionFile
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryByExemple(PortalAppVersionFile appVersionFile, DataGridModel dgm);
+	
+	/**
+	 * 按Id查询
+	 * @param id
+	 * @return
+	 */
+	PortalAppVersionFile query(int id, String local);
 	
 }

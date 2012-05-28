@@ -65,4 +65,12 @@ public interface AppCommentService {
 	 * @return
 	 */
 	int getCount(AppComment appComment);
+	
+	/**
+	 * 查询评论
+	 * @param appId
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryComment(int appId, DataGridModel dgm);
 }

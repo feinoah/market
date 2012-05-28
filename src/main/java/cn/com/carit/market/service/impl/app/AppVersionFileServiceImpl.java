@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
@@ -104,5 +105,17 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 			throw new NullPointerException("must given an exemple...");
 		}
 		return appVersionFileDao.getCount(appVersionFile);
+	}
+	public JsonPage queryByExemple(PortalAppVersionFile appVersionFile,
+			DataGridModel dgm) {
+		return appVersionFileDao.queryByExemple(appVersionFile, dgm);
+	}
+
+	@Override
+	public PortalAppVersionFile query(int id, String local) {
+		if (id<=0) {
+			throw new IllegalArgumentException("id must be bigger than 0...");
+		}
+		return appVersionFileDao.query(id, local);
 	}
 }

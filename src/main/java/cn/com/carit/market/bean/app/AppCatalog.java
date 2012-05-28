@@ -24,10 +24,14 @@ public class AppCatalog  implements Serializable{
 	 * name
 	 */
 	private String name;
+	
+	private String enName;
 	/**
 	 * description
 	 */
 	private String description;
+	
+	private String enDescription;
 	/**
 	 * displayIndex
 	 */
@@ -88,6 +92,18 @@ public class AppCatalog  implements Serializable{
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getUpdateTime() {
 		return this.updateTime;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+	public String getEnDescription() {
+		return enDescription;
+	}
+	public void setEnDescription(String enDescription) {
+		this.enDescription = enDescription;
 	}
 
 }

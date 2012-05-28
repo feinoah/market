@@ -3,24 +3,34 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
+		var catalogs;
 		$(function(){
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/portal/catalog/all/cn', function(data) {
+				if(data){
+					catalogs=data;
+				}
+			});
 			$('#catalogId').combobox({  
-			    url:'${ctx}/portal/catalog/all',
-			    method:'get',
+			   	data:catalogs,
 			    valueField:'id',  
 			    textField:'name'  
 			}); 
-			$('#editForm input[name=catalogId]').combobox({  
-			    url:'${ctx}/portal/catalog/all',
-			    method:'get',
+			$('#catalogId_edit').combobox({  
+				data:catalogs,
 			    valueField:'id',  
 			    textField:'name'  
 			}); 
+			$('#perTabs').tabs({onSelect:function(title){
+				$(this).tabs('getSelected').show()
+			}});
+			$('#descTabs').tabs({onSelect:function(title){
+				$(this).tabs('getSelected').show()
+			}});
 			// 初始化
 			$('#ttt').datagrid({
 				width:'100%',
@@ -107,8 +117,8 @@
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
-				$('#editForm input[name=displayName]').val(m.displayName);
-				$('#editForm input[name=version]').val(m.version);
+				$('#editForm input[name=enName]').val(m.enName);
+				//$('#editForm input[name=version]').val(m.version);
 				$('#catalogId_edit').combobox('setValue',m.catalogId);
 				$('#editForm input[name=platform]').val(m.platform);
 				$('#supportLanguages_edit').combobox('setValue',m.supportLanguages);
@@ -116,7 +126,9 @@
 				$('#editForm input[name=price]').val(m.price);
 				$('#status_edit').combobox('setValue',m.status);
 				$('#permissionDesc').val(m.permissionDesc);
+				$('#enPermissionDesc').val(m.enPermissionDesc);
 				$('#description').val(m.description);
+				$('#enDescription').val(m.enDescription);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -173,6 +185,16 @@
 			return v;
 		}
 		
+		function catalogFormatter(v){
+			var result='-';
+			$.each(catalogs, function(key,val) {
+				if(v==val.id){
+					result=val.name;
+					return false;
+				}
+			});
+			return result;
+		}
 		function searchVersion() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
@@ -208,10 +230,9 @@
 		</script>
 		<style>
 		#editWin label {width: 115px;}
-		#editWin input {width: 180px;}
-		#editWin select {width: 185px;}
-		#editWin textarea {width: 485px;height: 40px;}
-		#editVersionWin textarea {width: 425px;height: 100px;}
+		#editWin input {width: 150px;}
+		#editWin textarea {width: 525px;height: 40px;}
+		#editVersionWin textarea {width: 400px;height: 100px;}
 		</style>
 	</head>
 	<body>
@@ -222,16 +243,16 @@
 			<table>
 				<tr>
 					<td>
-						<form:label for="appName" path="appName">名称：</form:label>
+						<form:label for="appName" path="appName">应用名称：</form:label>
 					</td>
 					<td>
 						<form:input path="appName" cssClass="easyui-validatebox" />
 					</td>
 					<td>
-						<form:label for="displayName" path="displayName">显示名称：</form:label>
+						<form:label for="enName" path="enName">英文名称：</form:label>
 					</td>
 					<td>
-						<form:input path="displayName" cssClass="easyui-validatebox" />
+						<form:input path="enName" cssClass="easyui-validatebox" />
 					</td>
 				</tr>
 				<tr>
@@ -265,47 +286,45 @@
 			fitColumns="true" pageList="[ 5, 10]" sortName="downCount" sortOrder="desc">
 				<thead>
 					<tr>
-						<th field="appName" width="100" align="center">名称</th>
-						<th field="displayName" width="100" align="center">显示名称</th>
+						<th field="appName" width="100" align="center">应用名称</th>
+						<th field="enName" width="100" align="center">英文名称</th>
 						<th field="version" width="60" align="center">版本</th>
 						<th field="icon" width="60" align="center" hidden="true">图标路径</th>
-						<th field="catalogId" width="80" align="center" formmatter="catalogFormatter">分类</th>
+						<th field="catalogId" width="80" align="center" formatter="catalogFormatter">分类</th>
 						<th field="appFilePath" width="100" align="center"  hidden="true">应用文件路径</th>
 						<th field="platform" width="100" align="center">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
 						<th field="appLevel" width="80" align="center">应用分级</th>
 						<th field="description" width="80" align="center"  hidden="true">描述</th>
+						<th field="enDescription" width="80" align="center"  hidden="true">描述</th>
 						<th field="permissionDesc" width="80" hidden="true">权限描述</th>
+						<th field="enPermissionDesc" width="80" hidden="true">权限描述</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
 					</tr>
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用" closed="true" style="width:700px;height:480px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑应用" closed="true" style="width:740px;height:500px;padding:5px;" modal="true">
 			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
 						<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
 						<td><form:input path="appName" cssClass="easyui-validatebox"  required="true"/></td>
-						<td><form:label	for="displayName" path="displayName"  cssClass="mustInput">显示名称：</form:label></td>
-						<td><form:input path="displayName" cssClass="easyui-validatebox" required="true"/></td>
-				</tr>
-				<tr>
-						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
-						<td><form:input path="version" cssClass="easyui-validatebox"/></td>
+						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
+						<td><form:input path="enName" cssClass="easyui-validatebox" required="true"/></td>
+					</tr>
+					<tr>
 						<td><form:label	for="catalogId" path="catalogId">分类：</form:label></td>
-						<td>
-						<form:input path="catalogId" id="catalogId_edit" cssClass="easyui-validatebox"/>
-						</td>
-				</tr>
-				<tr>
-						<td><form:label	for="icon" path="icon">图标：</form:label></td>
-						<td><input type="file"  name="file"  id="file" cssClass="easyui-validatebox"/></td>
+						<td><form:input path="catalogId" id="catalogId_edit" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
 						<td><form:input path="platform" cssClass="easyui-validatebox"/></td>
-				</tr>
-				<tr>
+					</tr>
+					<tr>
+						<td><form:label	for="icon" path="icon">图标：</form:label></td>
+						<td><input type="file"  name="file"  id="file" cssClass="easyui-validatebox"/></td>
+					</tr>
+					<tr>
 						<td><form:label	for="supportLanguages" path="supportLanguages">支持语言：</form:label></td>
 						<td>
 							<form:select path="supportLanguages" id="supportLanguages_edit" cssClass="easyui-combobox">
@@ -328,26 +347,36 @@
 						</td>
 					</tr>
 					<tr>
-						<td><form:label for="permissionDesc" path="permissionDesc" cssClass="easyui-validatebox">权限描述：</form:label></td>
+						<td><form:label for="permissionDesc" path="permissionDesc" cssClass="easyui-validatebox">权限描述</form:label></td>
 						<td colspan="3">
-							<form:textarea path="permissionDesc" />
+							<div id="perTabs" class="easyui-tabs" style="width:540px;height:78px;">  
+								<div title="中文" style="padding:3px;">  
+									<form:textarea path="permissionDesc" />
+								</div>  
+								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
+									<form:textarea path="enPermissionDesc" />
+								</div> 
+							</div>  
 						</td>
 					</tr>
 					<tr>
 						<td><form:label for="description" path="description" cssClass="easyui-validatebox">描述：</form:label></td>
 						<td colspan="3">
-							<form:textarea path="description" />
+							<div id="descTabs" class="easyui-tabs" style="width:540px;height:78px;">  
+								<div title="中文" style="padding:3px;">  
+									<form:textarea path="description" />
+								</div>  
+								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
+									<form:textarea path="enDescription" />
+								</div> 
+							</div>  
 						</td>
 					</tr>
 					<tr>
-						<td><label>截图1：</label></td><td><input type="file" name="image" /></td>
-						<td><label>截图2：</label></td><td><input type="file" name="image" /></td>
+						<td rowspan="2"><label>截图</label></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td>
 					</tr>
 					<tr>
-						<td><label>截图3：</label></td><td><input type="file" name="image" /></td>
-						<td><label>截图4：</label></td><td><input type="file" name="image" /></td>
-					</tr>
-					<tr><td><label>截图5：</label></td><td><input type="file" name="image" /></td></tr>
+					<td><input type="file" name="image" /></td></td><td><input type="file" name="image" /></tr>
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">

@@ -74,4 +74,11 @@ public interface AppCommentDao {
 	 */
 	int getCount(AppComment appComment);
 	
+	/**
+	 * 查询评论
+	 * @param appId
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryComment(int appId, DataGridModel dgm);
 }

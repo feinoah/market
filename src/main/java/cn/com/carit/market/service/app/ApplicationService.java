@@ -2,6 +2,7 @@ package cn.com.carit.market.service.app;
 import java.util.List;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 
@@ -58,4 +59,14 @@ public interface ApplicationService {
 	 * @return
 	 */
 	int getCount(Application application);
+	
+	/**
+	 * 带分页的条件查询
+	 * @param application
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage queryByExemple(PortalApplication application, DataGridModel dgm);
+	
+	PortalApplication queryAppById(int id, String local);
 }

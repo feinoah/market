@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppCatalog;
+import cn.com.carit.market.bean.portal.PortalAppCatalog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppCatalogDao;
@@ -81,5 +82,9 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 			throw new NullPointerException("must given an exemple...");
 		}
 		return appCatalogDao.getCount(appCatalog);
+	}
+	@Override
+	public List<PortalAppCatalog> queryAll(String local) {
+		return appCatalogDao.queryAll(local);
 	}
 }

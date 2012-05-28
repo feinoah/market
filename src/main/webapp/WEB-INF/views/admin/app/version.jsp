@@ -3,7 +3,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
@@ -11,22 +10,25 @@
 		var apps;
 		$(function(){
 			checkEditControl('${ctx}/admin/app/version');
-			$.getJSON('${ctx}/admin/app/application/query?page=1&rows=100000', function(data) {
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/portal/app/all', function(data) {
 				if(data){
-					apps=data.rows;
+					apps=data;
 				}
 			});
 			$('#appId').combobox({  
-			    url:'${ctx}/portal/app/all',
-			    method:'get',
+			    //url:'${ctx}/portal/app/all',
+			    //method:'get',
+			    data:apps,
 			    valueField:'id',  
-			    textField:'displayName'  
+			    textField:'name'  
 			}); 
 			$('#editForm input[name=appId]').combobox({  
-				url:'${ctx}/portal/app/all',
-			    method:'get',
+				 //url:'${ctx}/portal/app/all',
+			    //method:'get',
+			    data:apps,
 			    valueField:'id',  
-			    textField:'displayName'  
+			    textField:'name'   
 			});
 		});
 		function edit() {
@@ -38,8 +40,9 @@
 				//$('#appId').combobox('setValue',m.appId);
 				$('#editForm input[name=version]').val(m.version);
 				$('#editForm input[name=size]').val(m.size);
-				$('#editForm input[name=status]').val(m.status);
+				$('#status_edit').combobox('setValue',m.status);
 				$('#newFeatures').val(m.newFeatures);
+				$('#enNewFeatures').val(m.enNewFeatures);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -88,7 +91,7 @@
 			var result='-';
 			$.each(apps, function(key,val) {
 				if(v==val.id){
-					result=val.displayName;
+					result=val.name;
 					return false;
 				}
 			});
@@ -186,7 +189,7 @@
 				<tr>
 					<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" id="status_edit" cssClass="easyui-combobox">
 							<form:option value="1">启用</form:option>
 							<form:option value="0">停用</form:option>
 						</form:select>
@@ -196,6 +199,12 @@
 					<td><form:label for="newFeatures" path="newFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
 					<td colspan="3">
 						<form:textarea path="newFeatures" />
+					</td>
+				</tr>
+				<tr>
+					<td><form:label for="enNewFeatures" path="enNewFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
+					<td colspan="3">
+						<form:textarea path="enNewFeatures" />
 					</td>
 				</tr>
 				</table>

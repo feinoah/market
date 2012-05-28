@@ -3,7 +3,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-		<base href="${ctx}"/>
+		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript">
@@ -12,28 +12,27 @@
 		$(function(){
 			// 初始化
 			$('#tt').datagrid({
-				width:'100%',
+				width:'100%'
 			});
-			$.getJSON('${ctx}/admin/app/application/query?page=1&rows=100000', function(data) {
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/portal/app/all', function(data) {
 				if(data){
-					apps=data.rows;
+					apps=data;
 				}
 			});
-			$.getJSON('${ctx}/admin/app/account/query?page=1&rows=100000', function(data) {
+			$.getJSON('${ctx}/portal/account/all', function(data) {
 				if(data){
-					users=data.rows;
+					users=data;
 				}
 			});
 			$('.datagrid-toolbar').hide();//没有编辑
-			$('#appId').combobox({  
-			    url:'${ctx}/portal/app/all',
-			    method:'get',
+			$('#appId').combobox({
+				data:apps,
 			    valueField:'id',  
-			    textField:'displayName'  
+			    textField:'appName'  
 			}); 
-			$('#accountId').combobox({  
-			    url:'${ctx}/portal/account/all',
-			    method:'get',
+			$('#accountId').combobox({
+				data:users,
 			    valueField:'id',  
 			    textField:'nickName'  
 			}); 
@@ -43,7 +42,7 @@
 			var result='-';
 			$.each(apps, function(key,val) {
 				if(v==val.id){
-					result=val.displayName;
+					result=val.appName;
 					return false;
 				}
 			});
