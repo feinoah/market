@@ -1,5 +1,6 @@
 package cn.com.carit.market.web.controller.app;
-import cn.com.carit.market.service.app.AccountInfoService;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.service.app.AccountInfoService;
 
 /**
  * AccountInfoController
@@ -129,5 +131,14 @@ public class AccountInfoController {
 	@ResponseBody
 	public int unlock(@PathVariable int id){
 		return accountInfoService.unLockAccount(id);
+	}
+	/**
+	 * 所有帐号
+	 * @return
+	 */
+	@RequestMapping(value="all")
+	@ResponseBody
+	public List<AccountInfo> queryAll(){
+		return accountInfoService.query();
 	}
 }

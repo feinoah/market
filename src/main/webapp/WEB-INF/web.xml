@@ -83,8 +83,7 @@
 	</context-param>
 
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>/html/index.html</welcome-file>
 	</welcome-file-list>
 	<!-- Error Page定义 -->
 	<error-page>

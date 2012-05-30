@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,11 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
+import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.AppVersionFileService;
+import cn.com.carit.market.service.app.ApplicationService;
 
 /**
  * AppVersionFileController
@@ -35,6 +38,9 @@ public class AppVersionFileController {
 	
 	@Resource
 	private AppVersionFileService appVersionFileService;
+	
+	@Resource
+	private ApplicationService applicationService;
 	
 	/**
 	 * 啥都不干，单纯跳转到页面
@@ -63,6 +69,15 @@ public class AppVersionFileController {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
+		if (appVersionFile.getAppId()==null||appVersionFile.getAppId().intValue()<=0) {
+			log.debug("appId must be bigger than 0 ...");
+			return -1;
+		}
+		if (!StringUtils.hasText(appVersionFile.getVersion())) {
+			log.debug("version must be not empty ...");
+			return -1;
+		}
+		Application application=applicationService.queryById(appVersionFile.getAppId());
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
@@ -71,12 +86,13 @@ public class AppVersionFileController {
 	        	// 获取文件的后缀 
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
-	        	// 随机文件名
-	        	String fileName =  "app_"+appVersionFile.getAppId()
-	        			+"_"+System.nanoTime() + suffix;// 构建文件名称
+	        	String fileName =  application.getEnName()+"_"+appVersionFile.getVersion()+"_"+System.nanoTime()+ suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
 	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+fileName);
+			} else {
+				log.debug("file must be not empty ...");
+				return -1;
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());

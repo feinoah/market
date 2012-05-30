@@ -10,16 +10,20 @@
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/admin/app/catalog');
+			$('#descTabs').tabs({onSelect:function(title){
+				$(this).tabs('getSelected').show()
+			}});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window('open');
 				// init data
-				$('#editForm input[name=name]').val(m.name);
-				$('#editForm input[name=enName]').val(m.enName);
+				$('#name_edit').val(m.name);
+				$('#enName_edit').val(m.enName);
 				$('#displayIndex_edit').numberspinner('setValue',m.displayIndex);
-				$('#status_edit').combobox('setValue',m.status);
+				//$('#status_edit').combobox('setValue',m.status);
+				$('#status_edit').val(m.status);			
 				$('#description').val(m.description);
 				$('#enDescription').val(m.enDescription);
 				$('#id').val(m.id);
@@ -69,9 +73,8 @@
 		</script>
 		<style>
 		#editWin label {width: 115px;}
-		#editWin input {width: 180px;}
-		#editWin select {width: 185px;}
-		#editWin textarea {width: 300px;height: 60px;}
+		#editWin input {width: 295px;}
+		#editWin textarea {width: 368px;height: 58px;}
 		</style>
 	</head>
 	<body>
@@ -119,7 +122,8 @@
 					<tr>
 						<th field="name" width="150" align="center">分类名称</th>
 						<th field="enName" width="150" align="center">英文名称</th>
-						<th field="description" width="200" align="center">描述</th>
+						<th field="description" width="200" align="center">中文描述</th>
+						<th field="enDescription" width="200" align="center">英文描述</th>
 						<th field="displayIndex" width="60" align="center" >显示顺序</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
 						<th field="createTime" width="100" align="center">创建时间</th>
@@ -128,27 +132,27 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用分类" closed="true" style="width:450px;height:300px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑应用分类" closed="true" style="width:480px;height:380px;padding:5px;" modal="true">
 			<form:form modelAttribute="appCatalog" id="editForm" action="${ctx}/admin/app/catalog/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
 						<td><form:label	for="name" path="name"  cssClass="mustInput">分类名称：</form:label></td>
-						<td><form:input path="name" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="name" id="name_edit" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
 						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-						<td><form:input path="enName" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
 						<td><form:label for="displayIndex" path="displayIndex" cssClass="easyui-validatebox">顺序：</form:label></td>
-						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
+						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"  cssStyle="width:295px;"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="status" id="status_edit" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:select path="status" cssClass="easyui-combobox">
-								<form:option value="1">启用</form:option>
-								<form:option value="0">停用</form:option>
+							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:295px;">>
+							<form:option value="1">启用</form:option>
+							<form:option value="0">停用</form:option>
 							</form:select>
 						</td>
 					</tr>
@@ -157,7 +161,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<div id="descTabs" class="easyui-tabs" style="width:400px;height:78px;">  
+							<div id="descTabs" class="easyui-tabs" style="width:380px;height:95px;">  
 								<div title="中文" style="padding:3px;">  
 									<form:textarea path="description" />
 								</div>  

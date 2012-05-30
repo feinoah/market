@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import cn.com.carit.market.common.jackjson.CustomDateSerializer;
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
@@ -42,6 +43,7 @@ public class AccountInfo  implements Serializable{
 	/**
 	 * birthday
 	 */
+	@DateTimeFormat
 	private Date birthday;
 	/**
 	 * photo

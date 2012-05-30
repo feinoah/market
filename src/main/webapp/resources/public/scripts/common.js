@@ -8,6 +8,7 @@ $(function (){
 			iconCls:'icon-add',
 			handler:function() {
 				$('#editWin').window('open');
+				$('#editForm').form('clear');
 				$('#editWin').show();
 			}
 		}, '-', {
@@ -42,7 +43,7 @@ $(function (){
 					$.messager.alert('成功', "编辑成功", 'info');
 		        	$('#editWin').window('close');
 		        	// clear form
-		        	$('#editForm').form('clear');
+		        	//$('#editForm').form('clear');
 		        	// update rows
 		        	$('#tt').datagrid('reload');
 				}else{
@@ -52,13 +53,6 @@ $(function (){
 		}).submit();
 	});
 	$('#edit_reset').bind('click',function(){ $('#editForm').form('clear');});
-	
-	$('#editWin').window({
-		onClose:function(){
-			$('#editForm input[type=text]').val('');
-			$('#editForm input[type=textarea]').val('');
-		}
-	});
 });
 
 function getParamURL(form){

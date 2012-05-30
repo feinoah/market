@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppComment;
-import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
@@ -43,7 +42,7 @@ import cn.com.carit.market.service.app.ApplicationService;
 
 @Controller
 @RequestMapping(value="portal")
-public class PortalController {
+public class PortalController{
 	private final Logger log = Logger.getLogger(getClass());
 	
 	@Resource
@@ -64,14 +63,14 @@ public class PortalController {
 	private AppVersionFileService appVersionFileService;
 	
 	/**
-	 * 注册帐号
+	 * 注册帐号<br>
 	 * portal/register
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-1</td><td>错误</td><</tr>
-	 * 	<tr><td>0</td><td>参数异常</td><</tr>
-	 * 	<tr><td>1</td><td>成功</td><</tr>
-	 * 	<tr><td>其它</td><td>后台异常</td><</tr>
+	 * 	<tr><td>-1</td><td>错误</td></tr>
+	 * 	<tr><td>0</td><td>参数异常</td></tr>
+	 * 	<tr><td>1</td><td>成功</td></tr>
+	 * 	<tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
 	 * @param accountInfo
 	 * @param result
@@ -98,12 +97,12 @@ public class PortalController {
 	 * 登录 portal/login
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-3</td><td>密码错误次数太多，临时限制登录</td><</tr>
-	 * 	<tr><td>-2</td><td>账号被锁定</td><</tr>
-	 * 	<tr><td>-1</td><td>账号不存在</td><</tr>
-	 * 	<tr><td>0</td><td>密码错误</td><</tr>
-	 * 	<tr><td>1</td><td>登录成功</td><</tr>
-	 * 	<tr><td>其它</td><td>后台异常</td><</tr>
+	 * 	<tr><td>-3</td><td>密码错误次数太多，临时限制登录</td></tr>
+	 * 	<tr><td>-2</td><td>账号被锁定</td></tr>
+	 * 	<tr><td>-1</td><td>账号不存在</td></tr>
+	 * 	<tr><td>0</td><td>密码错误</td></tr>
+	 * 	<tr><td>1</td><td>登录成功</td></tr>
+	 * 	<tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
 	 * @param email
 	 * @param password
@@ -112,6 +111,7 @@ public class PortalController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="login", method=RequestMethod.POST)
+	@ResponseBody
 	public int login(@RequestParam("email") String email
 			, @RequestParam("password") String password
 			, HttpServletRequest req) throws Exception{
@@ -154,15 +154,15 @@ public class PortalController {
 	}
 	
 	/**
-	 * 修改密码；请求参数 oldPassword、newPassword
+	 * 修改密码；请求参数 oldPassword、newPassword<br>
 	 * portal/account/changepwd
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-2</td><td>session超时</td><</tr>
-	 * 	<tr><td>-1</td><td>参数错误（密码、新密码不能为空）</td><</tr>
-	 * 	<tr><td>0</td><td>密码错误</td><</tr>
-	 * 	<tr><td>1</td><td>成功</td><</tr>
-	 * 	<tr><td>其它</td><td>后台异常</td><</tr>
+	 * 	<tr><td>-2</td><td>session超时</td></tr>
+	 * 	<tr><td>-1</td><td>参数错误（密码、新密码不能为空）</td></tr>
+	 * 	<tr><td>0</td><td>密码错误</td></tr>
+	 * 	<tr><td>1</td><td>成功</td></tr>
+	 * 	<tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
 	 * @param oldPassword
 	 * @param newPassword
@@ -196,14 +196,14 @@ public class PortalController {
 	}
 	
 	/**
-	 * 修改头像；请求参数 file
+	 * 修改头像；请求参数 file<br>
 	 * portal/account/changephoto
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-2</td><td>session超时</td><</tr>
-	 * 	<tr><td>-1</td><td>文件上传失败</td><</tr>
-	 * 	<tr><td>1</td><td>成功</td><</tr>
-	 * 	<tr><td>其它</td><td>后台异常</td><</tr>
+	 * 	<tr><td>-2</td><td>session超时</td></tr>
+	 * 	<tr><td>-1</td><td>文件上传失败</td></tr>
+	 * 	<tr><td>1</td><td>成功</td></tr>
+	 * 	<tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
 	 * @param request
 	 * @return
@@ -247,7 +247,7 @@ public class PortalController {
 	}
 	
 	/**
-	 * 修改资料
+	 * 修改资料<br>
 	 * portal/account/modify
 	 * @param accountInfo
 	 * @param result
@@ -275,33 +275,20 @@ public class PortalController {
 	}
 	
 	/**
-	 * 所有用户
-	 * portal/account/all
-	 * @return
-	 */
-	@RequestMapping(value="account/all", method=RequestMethod.GET)
-	@ResponseBody
-	public List<AccountInfo> allAccount(){
-		AccountInfo account=new AccountInfo();
-		account.setStatus((byte)Constants.STATUS_VALID);
-		return accountInfoService.queryByExemple(account);
-	}
-	
-	/**
-	 * 所有应用分类接口
-	 * portal/catalog/all/{local}
+	 * 所有应用分类接口<br>
+	 * portal/catalog/all?local=en|cn
 	 * @return json
 	 */
-	@RequestMapping(value="catalog/all/{local}", method=RequestMethod.GET)
+	@RequestMapping(value="catalog/all", method=RequestMethod.GET)
 	@ResponseBody
-	public List<PortalAppCatalog> allCatalog(@PathVariable String local){
+	public List<PortalAppCatalog> allCatalog(@RequestParam String local){
 		return appCatalogService.queryAll(local);
 	}
 	
 	/**
-	 * 按条件查询应用
+	 * 按条件查询应用<br>
 	 * portal/app/query
-	 * <br>例如：portal/app/query?page=1&rows=10&appName=?...
+	 * <br>例如：portal/app/query?local=cn&page=1&rows=10&appName=?...<br>
 	 * <table>
 	 * 	<tr><th>参数名称</th><th>描述</th><th>类型</th><th>是否必须</th></tr>
 	 * 	<tr><td>page</td><td>页码</td><td>int</td><td>F</td></tr>
@@ -317,47 +304,35 @@ public class PortalController {
 	}
 	
 	/**
-	 * 所有应用
-	 * portal/app/all
-	 * @return
-	 */
-	@RequestMapping(value="app/all", method=RequestMethod.GET)
-	@ResponseBody
-	public List<Application> allApps(){
-		Application application=new Application();
-		application.setStatus(Constants.STATUS_VALID);
-		return applicationService.queryByExemple(application);
-	}
-	
-	/**
-	 * 查看App
-	 * portal/app/{appId}/{local}
+	 * 查看App<br>
+	 * portal/app/{appId}?local=en|cn
 	 * @param appId
 	 * @return json {@link PortalApplication}
 	 */
-	@RequestMapping(value="app/{appId}/{local}", method=RequestMethod.GET)
+	@RequestMapping(value="app/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public PortalApplication viewApp(@PathVariable int appId, @PathVariable String local){
+	public PortalApplication viewApp(@PathVariable int appId, @RequestParam String local){
 		return applicationService.queryAppById(appId, local);
 	}
 	
 	/**
-	 * 获取应用的历史版本
-	 * portal/app/versions/{appId}
+	 * 获取应用的历史版本<br>
+	 * portal/app/versions/{appId}?local=en|cn
 	 * @param appId
 	 * @param dgm
 	 * @return
 	 */
 	@RequestMapping(value="app/versions/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage queryAppVersions(@PathVariable int appId, DataGridModel dgm) {
+	public JsonPage queryAppVersions(@PathVariable int appId,  @RequestParam String local, DataGridModel dgm) {
 		PortalAppVersionFile appVersionFile=new PortalAppVersionFile();
 		appVersionFile.setAppId(appId);
+		appVersionFile.setLocal(local);
 		return appVersionFileService.queryByExemple(appVersionFile, dgm);
 	}
 	
 	/**
-	 * 获取应用评论
+	 * 获取应用评论<br>
 	 * portal/app/comments/{appId}
 	 * @param appId
 	 * @param dgm
@@ -370,14 +345,14 @@ public class PortalController {
 	}
 	
 	/**
-	 * 增加评论
+	 * 增加评论<br>
 	 * portal/app/comment/add
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-1</td><td>错误</td><</tr>
-	 * 	<tr><td>0</td><td>没有登录</td><</tr>
-	 * 	<tr><td>1</td><td>成功</td><</tr>
-	 * <tr><td>其它</td><td>后台异常</td><</tr>
+	 * 	<tr><td>-1</td><td>错误</td></tr>
+	 * 	<tr><td>0</td><td>没有登录</td></tr>
+	 * 	<tr><td>1</td><td>成功</td></tr>
+	 * <tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
 	 * @param appComment
 	 * @param result
@@ -402,7 +377,7 @@ public class PortalController {
 	}
 	
 	/**
-	 * 下载应用
+	 * 下载应用<br>
 	 * portal/app/down/{appId}
 	 * @param appId
 	 * @param req
@@ -423,11 +398,37 @@ public class PortalController {
 			// 文件不存在
 //			throw new Exception();
 		}
+//		String uri=req.getProtocol()+req.getRemoteHost()+req.getRemotePort()+"/"+fileName;
 //		AppDownloadLog downlog=new AppDownloadLog();
 //		downlog.setAccountId(account.getId());
 //		downlog.setAppId(appId);
 //		appDownloadLogService.saveOrUpdate(downlog);
-		return "forward:/"+fileName;
+		return "redirect:/"+fileName;
 	}
 	
+	/**
+	 * portal/app/hot/free/{limit}?local=en|cn<br>
+	 * 查询热门免费应用
+	 * @param local 区域
+	 * @param limit 最大返回记录数
+	 * @return
+	 */
+	@RequestMapping(value="app/hot/free/{limit}", method=RequestMethod.GET)
+	@ResponseBody
+	public List<PortalApplication> queryHotFree(@PathVariable int limit, @RequestParam String local){
+		return applicationService.queryHotFree(local, limit);
+	}
+	
+	/**
+	 * portal/app/hot/free/new/{limit}?local=en|cn<br>
+	 * 查询热门免费应用
+	 * @param local 区域
+	 * @param limit 最大返回记录数
+	 * @return
+	 */
+	@RequestMapping(value="app/hot/free/new/{limit}", method=RequestMethod.GET)
+	@ResponseBody
+	public List<PortalApplication> queryHotNewFree(@PathVariable int limit, @RequestParam String local){
+		return applicationService.queryHotNewFree(local, limit);
+	}
 }

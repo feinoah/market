@@ -10,7 +10,7 @@
 		var catalogs;
 		$(function(){
 			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/portal/catalog/all/cn', function(data) {
+			$.getJSON('${ctx}/portal/catalog/all?local=cn', function(data) {
 				if(data){
 					catalogs=data;
 				}
@@ -40,6 +40,7 @@
 					iconCls:'icon-add',
 					handler:function() {
 						$('#editWin').window('open');
+						$('#editForm').form('clear');
 						$('#editWin').show();
 					}
 				}, '-', {
@@ -82,7 +83,6 @@
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editWin').window('close');
 				        	// clear form
-				        	$('#editForm').form('clear');
 				        	// update rows
 				        	$('#ttt').datagrid('reload');
 						}else{
@@ -100,7 +100,6 @@
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editVersionWin').window('close');
 				        	// clear form
-				        	$('#editVersionWin').form('clear');
 				        	// update rows
 				        	$('#ttt').datagrid('reload');
 						}else{

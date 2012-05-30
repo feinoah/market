@@ -10,6 +10,8 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import cn.com.carit.market.common.springmvc.DateConvertEditor;
+import cn.com.carit.market.common.springmvc.IntEditor;
+import cn.com.carit.market.common.springmvc.LongEditor;
 
 /**
  * 自定义类型绑定器
@@ -27,6 +29,8 @@ public class BindingInitializer implements WebBindingInitializer {
 		binder.registerCustomEditor(Double.class,  new CustomNumberEditor(Double.class, null, true));
 		binder.registerCustomEditor(Byte.class, new CustomNumberEditor(Byte.class, null, true));
 		binder.registerCustomEditor(Float.class, new CustomNumberEditor(Float.class, null, true));
+		binder.registerCustomEditor(int.class,new IntEditor());
+		binder.registerCustomEditor(long.class, new LongEditor());
 		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		binder.registerCustomEditor(Date.class,new DateConvertEditor());
 	}

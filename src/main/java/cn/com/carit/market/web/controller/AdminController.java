@@ -32,7 +32,7 @@ import cn.com.carit.market.service.permission.BaseUserService;
  * 2012-5-13
  */
 @Controller
-public class AdminController {
+public class AdminController{
 	
 	private final Logger log = Logger.getLogger(getClass());
 	

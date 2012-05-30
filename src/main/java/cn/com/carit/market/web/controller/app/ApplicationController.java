@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,17 +66,27 @@ public class ApplicationController {
 			log.debug(result.getAllErrors().toString());
 			return -1;
 		}
+		
+		if (!StringUtils.hasText(application.getAppName())) {
+			log.debug("appName must be not empty ...");
+			return -1;
+		}
+		if (!StringUtils.hasText(application.getEnName())) {
+			log.debug("enName must be not empty ...");
+			return -1;
+		}
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
         StringBuilder images=new StringBuilder();
+        long radom=System.nanoTime();
         try {
 	        if (multipartFile!=null&&multipartFile.getOriginalFilename().length()>0) {
 	        	// 获取文件的后缀 
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	String fileName =  System.nanoTime() + suffix;// 构建文件名称
+	        	String fileName =  application.getEnName()+"_"+radom+ suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
 	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
@@ -83,13 +94,12 @@ public class ApplicationController {
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
 	        int i=0;
-	        long random=System.currentTimeMillis();
 	        for (MultipartFile imageFile : imageFiles) {
 	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
 	        		String filename = imageFile.getOriginalFilename();  
 	        		String extName = filename.substring(filename.lastIndexOf(".")).toLowerCase();  
-	        		String lastFileName = random+"_"+(i+1)+extName;
-	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getIconFile(lastFileName)); 
+	        		String lastFileName = application.getEnName()+"_"+radom+"_"+(i+1)+extName;
+	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(lastFileName)); 
 	        		if (i<4) {
 	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");
 	        		} else {
@@ -151,5 +161,18 @@ public class ApplicationController {
 	@ResponseBody
 	public JsonPage query(@ModelAttribute Application application, BindingResult result,DataGridModel dgm){
 		return applicationService.queryByExemple(application, dgm);
+	}
+	
+	/**
+	 * 所有应用
+	 * admin/app/application/all
+	 * @return
+	 */
+	@RequestMapping(value="/all", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Application> allApps(){
+		Application application=new Application();
+		application.setStatus(Constants.STATUS_VALID);
+		return applicationService.queryByExemple(application);
 	}
 }

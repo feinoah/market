@@ -114,10 +114,9 @@ public class MD5Util {
 		return bufferToHex(messagedigest.digest());
 	}
 
-	/** */
 	/**
 	 * main方法用于测试
-	 */
+	 *//*
 	public static void main(String[] args) {
 		// 字符'a'的MD5码是0cc175b9c0f1b6a831c399e269772661,如果是，则成功。
 		try {
@@ -129,9 +128,8 @@ public class MD5Util {
 			for (String s: str.split(";")) {
 				System.out.println(s);
 			}
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 }

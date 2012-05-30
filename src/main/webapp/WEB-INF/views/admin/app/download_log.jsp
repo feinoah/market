@@ -7,20 +7,20 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript">
-		var apps;
-		var users;
+		var apps=[];
+		var users=[];
 		$(function(){
 			// 初始化
 			$('#tt').datagrid({
 				width:'100%'
 			});
 			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/portal/app/all', function(data) {
+			$.getJSON('${ctx}/admin/app/application/all', function(data) {
 				if(data){
 					apps=data;
 				}
 			});
-			$.getJSON('${ctx}/portal/account/all', function(data) {
+			$.getJSON('${ctx}/admin/app/account/all', function(data) {
 				if(data){
 					users=data;
 				}

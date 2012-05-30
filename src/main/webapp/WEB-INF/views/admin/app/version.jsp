@@ -7,29 +7,28 @@
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
-		var apps;
+		var apps=[];
 		$(function(){
 			checkEditControl('${ctx}/admin/app/version');
 			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/portal/app/all', function(data) {
+			$.getJSON('${ctx}/admin/app/application/all', function(data) {
 				if(data){
 					apps=data;
 				}
 			});
 			$('#appId').combobox({  
-			    //url:'${ctx}/portal/app/all',
-			    //method:'get',
 			    data:apps,
 			    valueField:'id',  
-			    textField:'name'  
+			    textField:'appName'  
 			}); 
-			$('#editForm input[name=appId]').combobox({  
-				 //url:'${ctx}/portal/app/all',
-			    //method:'get',
+			$('#appId_edit').combobox({  
 			    data:apps,
 			    valueField:'id',  
-			    textField:'name'   
+			    textField:'appName'   
 			});
+			$('#descTabs').tabs({onSelect:function(title){
+				$(this).tabs('getSelected').show()
+			}});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -37,7 +36,7 @@
 				$('#editWin').window('open');
 				// init data
 				//$('#editForm input[id=appId]').attr('disabled',true);
-				//$('#appId').combobox('setValue',m.appId);
+				$('#appId_edit').combobox('setValue',m.appId);
 				$('#editForm input[name=version]').val(m.version);
 				$('#editForm input[name=size]').val(m.size);
 				$('#status_edit').combobox('setValue',m.status);
@@ -91,7 +90,7 @@
 			var result='-';
 			$.each(apps, function(key,val) {
 				if(v==val.id){
-					result=val.name;
+					result=val.appName;
 					return false;
 				}
 			});
@@ -102,7 +101,7 @@
 		#editWin label {width: 115px;}
 		#editWin input {width: 180px;}
 		#editWin select {width: 185px;}
-		#editWin textarea {width: 450px;height: 80px;}
+		#editWin textarea {width: 460px;height: 80px;}
 		</style>
 	</head>
 	<body>
@@ -167,13 +166,13 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用版本" closed="true" style="width:650px;height:300px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="编辑应用版本" closed="true" style="width:650px;height:350px;padding:5px;" modal="true">
 			<form:form modelAttribute="appVersionFile" id="editForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
 						<td><form:label	for="appId" path="appId"  cssClass="mustInput">应用名称：</form:label></td>
 						<td>
-						<form:input path="appId" cssClass="easyui-validatebox" />
+						<form:input path="appId" id="appId_edit" cssClass="easyui-validatebox" />
 						</td>
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version" required="true" cssClass="easyui-validatebox"/></td>
@@ -198,13 +197,14 @@
 				<tr>
 					<td><form:label for="newFeatures" path="newFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
 					<td colspan="3">
-						<form:textarea path="newFeatures" />
-					</td>
-				</tr>
-				<tr>
-					<td><form:label for="enNewFeatures" path="enNewFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
-					<td colspan="3">
-						<form:textarea path="enNewFeatures" />
+						<div id="descTabs" class="easyui-tabs" style="width:470px;height:120px;">  
+							<div title="中文" style="padding:3px;">  
+								<form:textarea path="newFeatures" />
+							</div>  
+							<div title="英文" style="overflow:auto;padding:3px;display:none;">  
+								<form:textarea path="enNewFeatures" />
+							</div> 
+						</div>  
 					</td>
 				</tr>
 				</table>

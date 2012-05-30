@@ -19,10 +19,21 @@
 				textField:'roleName'
 			});
 			checkEditControl('${ctx}/admin/permission/user');
+			$('#editWin').window({onClose:function(){
+				$('#password').attr('disabled',false).attr('required',true);
+				$('#email_edit').attr('disabled',false);
+				$('#passwordLabel').addClass('mustInput');
+				$('#emailLabel').addClass('mustInput');
+				$('#nickNameLabel').addClass('mustInput');
+			}})
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#passwordLabel').removeClass('mustInput');
+				$('#password').attr('disabled',true);
+				$('#emailLabel').removeClass('mustInput');
+				$('#nickNameLabel').removeClass('mustInput');
 				$('#editWin').window('open');
 				// init data
 				var r=[];
@@ -32,8 +43,8 @@
 						r[i]=d.id;
 					});
 				});
+				$('#email_edit').val(m.email).attr('disabled',true);
 				$('#roles').combobox('setValues',r);
-				$('#editForm input[name=email]').val(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
 				$('#editForm input[name=officePhone]').val(m.officePhone);
@@ -41,7 +52,6 @@
 				$('#status_edit').combobox('setValue',m.status);
 				$('#gender_edit').combobox('setValue',m.gender);
 				$('#remark').val(m.remark);
-				$('#password').attr('disabled',true);//密码不能在这里修改
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -183,16 +193,16 @@
 			<form:form modelAttribute="baseUser" id="editForm" action="${ctx}/admin/permission/user/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
-						<td><form:label	for="email" path="email" cssClass="mustInput">邮箱：</form:label></td>
-						<td><form:input path="email" cssClass="easyui-validatebox" required="true" validType="email"/></td>
-						<td><form:label	for="nickName" path="nickName"  cssClass="mustInput">昵称：</form:label></td>
+						<td><form:label	for="email" path="email" id="emailLabel" cssClass="mustInput">邮箱：</form:label></td>
+						<td><form:input path="email" id="email_edit" cssClass="easyui-validatebox" required="true" validType="email"/></td>
+						<td><form:label	for="nickName" path="nickName" id="nickNameLabel" cssClass="mustInput">昵称：</form:label></td>
 						<td><form:input path="nickName" required="true" cssClass="easyui-validatebox"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="realName" path="realName">真实姓名：</form:label></td>
 						<td><form:input path="realName" cssClass="easyui-validatebox"/></td>
-						<td><form:label	for="password" path="password"  cssClass="mustInput">密码：</form:label></td>
-						<td><form:password path="password" cssClass="easyui-validatebox" required="true"  validType="safepass"/></td>
+						<td><form:label	for="password" path="password" id="passwordLabel" cssClass="mustInput">密码：</form:label></td>
+						<td><form:password path="password" cssClass="easyui-validatebox" validType="safepass"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="mobile" path="mobile">手机号码：</form:label></td>

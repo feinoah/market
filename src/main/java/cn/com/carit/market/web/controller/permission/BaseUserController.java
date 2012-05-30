@@ -19,7 +19,7 @@ import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.permission.BaseUserService;
 @Controller
 @RequestMapping(value="admin/permission/user")
-public class BaseUserController {
+public class BaseUserController{
 	private final Logger log = Logger.getLogger(getClass());
 	
 	@Resource

@@ -33,7 +33,7 @@
 
 	<body class="easyui-layout">
 		<div region="north" border="false" style="height:60px;background:#B3DFDA;">
-			<h2>欢迎使用</h2>
+			<h2>您好！${adminUser.nickName}</h2>
 		</div>
 		<div region="west" split="true" title="导航菜单" style="width: 180px;overflow:hidden;" icon="icon-redo">
 	        <div id="menu" class="easyui-accordion" fit="true" border="false">

@@ -120,4 +120,21 @@ public class ApplicationServiceImpl implements ApplicationService{
 		}
 		return applicationDao.query(id, local);
 	}
+
+	@Override
+	public List<PortalApplication> queryHotFree(String local, int limit) {
+		if (limit<=0) {
+			throw new IllegalArgumentException("limit must be bigger than 0...");
+		}
+		return applicationDao.queryHotFree(local, limit);
+	}
+
+	@Override
+	public List<PortalApplication> queryHotNewFree(String local, int limit) {
+		if (limit<=0) {
+			throw new IllegalArgumentException("limit must be bigger than 0...");
+		}
+		return applicationDao.queryHotNewFree(local, limit);
+	}
+	
 }

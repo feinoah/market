@@ -465,12 +465,35 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 	}
 	
 	public PortalApplication query(int id, String local){
-		String viewName="v_app_catalog_cn";
+		String viewName="v_application_cn";
 		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
-			viewName="v_app_catalog_en";
+			viewName="v_application_en";
 		}
 		String sql = "select * from "+viewName+" where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql, id, portalRowMapper);
 	}
+
+	@Override
+	public List<PortalApplication> queryHotFree(String local, int limit) {
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		String sql="select * from "+viewName+" where price=0 order by down_count desc limit ?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{limit}, portalRowMapper);
+	}
+
+	@Override
+	public List<PortalApplication> queryHotNewFree(String local, int limit) {
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		String sql="select * from "+viewName+" where price=0 order by down_count,update_time desc limit ?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{limit}, portalRowMapper);
+	}
+	
 }

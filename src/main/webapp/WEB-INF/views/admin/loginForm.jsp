@@ -43,7 +43,7 @@
 						<label for="email" path="email">邮箱：</label>
 					</td>
 					<td>
-						<input type="text" name="email" value="admin@admin.com" class="easyui-validatebox" required="true" validType="email"/>
+						<input type="text" name="email" class="easyui-validatebox" required="true" validType="email"/>
 					</td>
 				</tr>
 				<tr>
@@ -51,7 +51,7 @@
 						<label  for="password" path="password">密码：</label>
 					</td>
 					<td>
-						<input type="password" name="password" value="123456" class="easyui-validatebox"  required="true" validType="length[6,20]"/>
+						<input type="password" name="password" class="easyui-validatebox"  required="true" validType="length[6,20]"/>
 					</td>
 				</tr>
 			</table>

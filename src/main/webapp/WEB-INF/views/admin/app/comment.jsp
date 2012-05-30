@@ -8,16 +8,16 @@
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
-		var apps;
-		var users;
+		var apps=[];
+		var users=[];
 		$(function(){
 			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/portal/app/all', function(data) {
+			$.getJSON('${ctx}/admin/app/application/all', function(data) {
 				if(data){
 					apps=data;
 				}
 			});
-			$.getJSON('${ctx}/portal/account/all', function(data) {
+			$.getJSON('${ctx}/admin/app/account/all', function(data) {
 				if(data){
 					users=data;
 				}

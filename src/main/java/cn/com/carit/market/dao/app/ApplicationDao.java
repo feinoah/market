@@ -78,4 +78,20 @@ public interface ApplicationDao {
 	
 	PortalApplication query(int id, String local);
 	
+	/**
+	 * 查询热门免费应用
+	 * @param local
+	 * @param limit
+	 * @return
+	 */
+	List<PortalApplication> queryHotFree(String local, int limit);
+	
+	/**
+	 * 查询热门免费新品
+	 * @param local
+	 * @param limit
+	 * @return
+	 */
+	List<PortalApplication> queryHotNewFree(String local, int limit);
+	
 }
