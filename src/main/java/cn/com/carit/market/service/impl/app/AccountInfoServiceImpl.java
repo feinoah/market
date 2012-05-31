@@ -87,19 +87,11 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(AccountInfo accountInfo, DataGridModel dgm) {
+	public JsonPage<AccountInfo> queryByExemple(AccountInfo accountInfo, DataGridModel dgm) {
 		if (accountInfo==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return accountInfoDao.queryByExemple(accountInfo, dgm);
-	}
-
-	@Override
-	public int getCount(AccountInfo accountInfo) {
-		if (accountInfo==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return accountInfoDao.getCount(accountInfo);
 	}
 
 	@Override

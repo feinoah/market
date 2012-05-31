@@ -1,6 +1,5 @@
 package cn.com.carit.market.common;
 
-import java.io.File;
 
 
 public class Constants {
@@ -24,10 +23,10 @@ public class Constants {
 	/**用户头像*/
 	public static final int IMAGE_TYPE_PHOTO=2;
 	
-	public static final String BASE_PATH_ICON="icons"+File.separator;
-	public static final String BASE_PATH_IMAGE="images"+File.separator;
-	public static final String BASE_PATH_APK="apks"+File.separator;
-	public static final String BASE_PATH_PHOTOS="photos"+File.separator;
+	public static final String BASE_PATH_ICON="icons/";
+	public static final String BASE_PATH_IMAGE="images/";
+	public static final String BASE_PATH_APK="apks/";
+	public static final String BASE_PATH_PHOTOS="photos/";
 	
 	public static final String LOCAL_EN="en";
 	public static final String LOCAL_CN="cn";

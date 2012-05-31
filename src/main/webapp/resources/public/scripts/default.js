@@ -32,6 +32,6 @@ function addTab(subtitle, url) {
 }
 
 function createFrame(url) {
-    var s = '<iframe name="mainFrame" scrolling="auto" src="' + url + '" style="width:100%;height:100%;border:0;overflow-x:hidden"></iframe>';
+    var s = '<iframe name="mainFrame" scrolling="no" src="' + url + '" style="width:100%;height:100%;border:0;overflow-x:hidden"></iframe>';
     return s;
 }

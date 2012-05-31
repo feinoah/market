@@ -1,6 +1,4 @@
 package cn.com.carit.market.web.controller.app;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -9,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,12 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
-import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.service.app.ApplicationService;
@@ -60,8 +54,7 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value="save", method=RequestMethod.POST)
 	@ResponseBody
-	public int save(@ModelAttribute Application application, BindingResult result
-			, HttpServletRequest request) {
+	public int save(@ModelAttribute Application application, BindingResult result, HttpServletRequest request) {
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
 			return -1;
@@ -75,47 +68,10 @@ public class ApplicationController {
 			log.debug("enName must be not empty ...");
 			return -1;
 		}
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
-		//页面控件的文件流
-        MultipartFile multipartFile = multipartRequest.getFile("file");
-        StringBuilder images=new StringBuilder();
-        long radom=System.nanoTime();
-        try {
-	        if (multipartFile!=null&&multipartFile.getOriginalFilename().length()>0) {
-	        	// 获取文件的后缀 
-	        	String suffix = multipartFile.getOriginalFilename().substring(
-	        			multipartFile.getOriginalFilename().lastIndexOf("."));
-	        	// 随机文件名
-	        	String fileName =  application.getEnName()+"_"+radom+ suffix;// 构建文件名称
-	        	File file = AttachmentUtil.getIconFile(fileName);
-        		multipartFile.transferTo(file);
-	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
-			}
-			//页面控件的文件流
-	        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
-	        int i=0;
-	        for (MultipartFile imageFile : imageFiles) {
-	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
-	        		String filename = imageFile.getOriginalFilename();  
-	        		String extName = filename.substring(filename.lastIndexOf(".")).toLowerCase();  
-	        		String lastFileName = application.getEnName()+"_"+radom+"_"+(i+1)+extName;
-	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(lastFileName)); 
-	        		if (i<4) {
-	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");
-	        		} else {
-	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName);
-	        		}
-				}
-        		i++;
-			}
-        } catch (IllegalStateException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	return -1;
-        } catch (IOException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	return -1;
-        }
-        application.setImages(images.toString());
+		if(!StringUtils.hasText(application.getAppFilePath())){
+			log.debug("apkFile must be not empty ...");
+			return -1;
+		}
 		applicationService.saveOrUpdate(application);
 		return 1;
 	}
@@ -159,7 +115,7 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute Application application, BindingResult result,DataGridModel dgm){
+	public JsonPage<Application> query(@ModelAttribute Application application, BindingResult result,DataGridModel dgm){
 		return applicationService.queryByExemple(application, dgm);
 	}
 	

@@ -62,14 +62,7 @@ public interface BaseRoleDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseRole role, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param role
-	 * @return
-	 */
-	int getCount(BaseRole role);
+	JsonPage<BaseRole> queryByExemple(BaseRole role, DataGridModel dgm);
 	
 	/**
 	 * 按角色查看模块

@@ -9,7 +9,7 @@ import cn.com.carit.market.common.Constants;
 
 @JsonAutoDetect
 @JsonIgnoreProperties(value = { "currentPage", "pageSize", "startRow", "endRow"})
-public class JsonPage {
+public class JsonPage<T> {
 
 	// total row
 	/** 当前页 */
@@ -30,7 +30,7 @@ public class JsonPage {
 	// private Object queryObject;
 
 	/** 要显示的数据集 */
-	private List<?> rows;
+	private List<T> rows;
 
 	public JsonPage() {
 	}
@@ -80,15 +80,11 @@ public class JsonPage {
 		this.total = total;
 	}
 
-	public int getEndRow() {
-		return this.startRow + this.pageSize;
-	}
-
 	public int getStartRow() {
 		if (this.currentPage > 1) {
-			this.startRow = (this.currentPage - 1) * this.pageSize;
+			this.startRow = (this.currentPage - 1) * this.pageSize+1;
 		} else {
-			this.startRow = 0;
+			this.startRow = 1;
 		}
 		return startRow;
 	}
@@ -104,11 +100,11 @@ public class JsonPage {
 	 * queryObject; }
 	 */
 
-	public List<?> getRows() {
+	public List<T> getRows() {
 		return rows;
 	}
 
-	public void setRows(List<?> rows) {
+	public void setRows(List<T> rows) {
 		this.rows = rows;
 	}
 	
@@ -131,7 +127,6 @@ public class JsonPage {
 	public String toString() {
 		return "JsonPage [currentPage=" + currentPage + ", pageSize="
 				+ pageSize + ", totalRow=" + total + ", startRow="
-				+ startRow + ", rows=" + rows + "]";
+				+ getStartRow() + ", rows=" + rows + "]";
 	}
-	
 }

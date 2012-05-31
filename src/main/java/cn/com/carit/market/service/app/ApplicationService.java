@@ -16,7 +16,7 @@ public interface ApplicationService {
 	 * @param application
 	 * @return
 	 */
-	void saveOrUpdate(Application application);
+	int saveOrUpdate(Application application);
 	
 	/**
 	 * 删除
@@ -51,14 +51,7 @@ public interface ApplicationService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(Application application, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param application
-	 * @return
-	 */
-	int getCount(Application application);
+	JsonPage<Application> queryByExemple(Application application, DataGridModel dgm);
 	
 	/**
 	 * 带分页的条件查询
@@ -66,7 +59,7 @@ public interface ApplicationService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(PortalApplication application, DataGridModel dgm);
+	JsonPage<PortalApplication> queryByExemple(PortalApplication application, DataGridModel dgm);
 	
 	PortalApplication queryAppById(int id, String local);
 	

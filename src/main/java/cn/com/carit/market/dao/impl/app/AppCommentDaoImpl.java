@@ -142,19 +142,25 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 				"select * from t_app_comment where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appComment);
+		sql.append(buildWhere(args, argTypes, appComment));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppComment appComment, DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+	public JsonPage<AppComment> queryByExemple(AppComment appComment, DataGridModel dgm) {
+		JsonPage<AppComment> jsonPage = new JsonPage<AppComment>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_app_comment where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appComment);
+		String whereSql=buildWhere(args, argTypes, appComment);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_app_comment where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -164,30 +170,17 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(appComment);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(AppComment appComment) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_app_comment where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appComment);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AppComment appComment) {
+		StringBuilder sql=new StringBuilder();
 		if (appComment.getAppId() != null) {
 			sql.append(" and app_id=?");
 			args.add(appComment.getAppId());
@@ -223,6 +216,7 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			args.add(appComment.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 	
 	private final RowMapper<PortalAppComment> portalRowMapper = new RowMapper<PortalAppComment>() {
@@ -237,11 +231,11 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	};
 
 	@Override
-	public JsonPage queryComment(int appId, DataGridModel dgm) {
+	public JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm) {
 		StringBuilder sql = new StringBuilder(
 				"select grade, comment from t_app_comment where status=? and app_id=?");
 		String countSql = "select count(1) from t_app_comment where status=? and app_id=?";
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<PortalAppComment> jsonPage = new JsonPage<PortalAppComment>(dgm.getPage(), dgm.getRows());
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		args.add(Constants.STATUS_VALID);
@@ -259,14 +253,14 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		int totalRow = queryForInt(countSql, args, argTypes);
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		// 更新
 		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));
-		return null;
+		return jsonPage;
 	}
 
 }

@@ -53,14 +53,7 @@ public interface BaseUserService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseUser baseUser, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param baseUser
-	 * @return
-	 */
-	int getCount(BaseUser baseUser);
+	JsonPage<BaseUser> queryByExemple(BaseUser baseUser, DataGridModel dgm);
 	
 	/**
 	 * 用户登录

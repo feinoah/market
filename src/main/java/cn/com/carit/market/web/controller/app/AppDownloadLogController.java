@@ -97,7 +97,7 @@ public class AppDownloadLogController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute AppDownloadLog appDownloadLog, BindingResult result,DataGridModel dgm){
+	public JsonPage<AppDownloadLog> query(@ModelAttribute AppDownloadLog appDownloadLog, BindingResult result,DataGridModel dgm){
 		return appDownloadLogService.queryByExemple(appDownloadLog, dgm);
 	}
 }

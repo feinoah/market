@@ -117,18 +117,24 @@ public class BaseRoleDaoImpl extends BaseDaoImpl  implements
 			StringBuilder sql=new StringBuilder("select * from t_base_role where 1=1");
 			List<Object> args=new ArrayList<Object>();
 			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseRole);
+			sql.append(buildWhere(args, argTypes, baseRole));
 			log.debug(String.format("\n%1$s\n", sql));
 			return query(sql.toString(), args, argTypes, rowMapper);
 		}
 
 		@Override
-		public JsonPage queryByExemple(BaseRole baseRole, DataGridModel dgm) {
-			JsonPage jsonPage=new JsonPage(dgm.getPage(), dgm.getRows());
+		public JsonPage<BaseRole> queryByExemple(BaseRole baseRole, DataGridModel dgm) {
+			JsonPage<BaseRole> jsonPage=new JsonPage<BaseRole>(dgm.getPage(), dgm.getRows());
 			StringBuilder sql=new StringBuilder("select * from t_base_role where 1=1");
 			List<Object> args=new ArrayList<Object>();
 			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseRole);
+			String whereSql=buildWhere(args, argTypes, baseRole);
+			sql.append(whereSql);
+			String countSql="select count(1) from t_base_role where 1=1"+whereSql;
+			log.debug(String.format("\n%1$s\n", countSql));
+			int totalRow=queryForInt(countSql, args, argTypes);
+			// 更新
+			jsonPage.setTotal(totalRow);
 			// 排序
 			if (StringUtils.hasText(dgm.getOrder()) && StringUtils.hasText(dgm.getSort())) {
 				sql.append(" order by ").append(StringUtil.splitFieldWords(
@@ -136,29 +142,17 @@ public class BaseRoleDaoImpl extends BaseDaoImpl  implements
 			}
 			sql.append(" limit ?, ?");
 			args.add(jsonPage.getStartRow());
-			args.add(jsonPage.getEndRow());
+			args.add(jsonPage.getPageSize());
 			argTypes.add(Types.INTEGER);
 			argTypes.add(Types.INTEGER);
-			int totalRow=getCount(baseRole);
-			// 更新
-			jsonPage.setTotal(totalRow);
 			log.debug(String.format("\n%1$s\n", sql));
 			jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 			return jsonPage;
 		}
 
-		@Override
-		public int getCount(BaseRole baseRole) {
-			StringBuilder sql=new StringBuilder("select count(1) from t_base_role where 1=1");
-			List<Object> args=new ArrayList<Object>();
-			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseRole);
-			log.debug(String.format("\n%1$s\n", sql));
-			return queryForInt(sql.toString(), args, argTypes);
-		}
-		
-		private void buildWhere(StringBuilder sql, List<Object> args, 
+		private String buildWhere(List<Object> args, 
 				List<Integer> argTypes, BaseRole baseRole){
+			StringBuilder sql=new StringBuilder();
 			if (StringUtils.hasText(baseRole.getRoleName())) {
 				sql.append(" and role_name like CONCAT('%',?,'%')");
 				args.add(baseRole.getRoleName());
@@ -169,6 +163,7 @@ public class BaseRoleDaoImpl extends BaseDaoImpl  implements
 				args.add(baseRole.getRoleDesc());
 				argTypes.add(Types.VARCHAR);
 			}
+			return sql.toString();
 		}
 		@Override
 		public List<BaseModule> queryModulesByRoleId(int roleId) {

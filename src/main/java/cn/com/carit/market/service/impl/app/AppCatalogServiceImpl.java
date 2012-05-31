@@ -69,20 +69,13 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppCatalog appCatalog, DataGridModel dgm) {
+	public JsonPage<AppCatalog> queryByExemple(AppCatalog appCatalog, DataGridModel dgm) {
 		if (appCatalog==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return appCatalogDao.queryByExemple(appCatalog, dgm);
 	}
 
-	@Override
-	public int getCount(AppCatalog appCatalog) {
-		if (appCatalog==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return appCatalogDao.getCount(appCatalog);
-	}
 	@Override
 	public List<PortalAppCatalog> queryAll(String local) {
 		return appCatalogDao.queryAll(local);

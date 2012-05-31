@@ -39,8 +39,8 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	public int delete(int id) {
-		if (id<=1) {//顶级模块不能删除
-			throw new IllegalArgumentException("id must be bigger than 0...");
+		if (id<=BaseModule.MAX_SYSTEM_MODULE_ID) {//权限管理模块不能删除
+			throw new IllegalArgumentException("id must be bigger than "+BaseModule.MAX_SYSTEM_MODULE_ID);
 		}
 		// 删除角色模块
 		baseRoleModuleDao.deleteByModuleId(id);
@@ -70,19 +70,11 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(BaseModule baseModule, DataGridModel dgm) {
+	public JsonPage<BaseModule> queryByExemple(BaseModule baseModule, DataGridModel dgm) {
 		if (baseModule==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return baseModuleDao.queryByExemple(baseModule, dgm);
-	}
-
-	@Override
-	public int getCount(BaseModule baseModule) {
-		if (baseModule==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return baseModuleDao.getCount(baseModule);
 	}
 
 	@Override

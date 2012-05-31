@@ -15,6 +15,8 @@ import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 public class BaseModule implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
+	public static final int MAX_SYSTEM_MODULE_ID=15;
+	
 	/**
 	 * 模块ID
 	 */

@@ -62,14 +62,7 @@ public interface BaseUserDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseUser user, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param user
-	 * @return
-	 */
-	int getCount(BaseUser user);
+	JsonPage<BaseUser> queryByExemple(BaseUser user, DataGridModel dgm);
 	
 	/**
 	 * 按用户查看角色

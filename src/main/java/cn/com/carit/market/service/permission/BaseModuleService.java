@@ -45,14 +45,7 @@ public interface BaseModuleService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseModule baseModule, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param baseModule
-	 * @return
-	 */
-	int getCount(BaseModule baseModule);
+	JsonPage<BaseModule> queryByExemple(BaseModule baseModule, DataGridModel dgm);
 	
 	/**
 	 * 按用户ID查询菜单

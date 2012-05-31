@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.utils.AttachmentUtil;
@@ -34,12 +35,13 @@ public class ApplicationServiceImpl implements ApplicationService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public void saveOrUpdate(Application application)  {
+	public int saveOrUpdate(Application application)  {
 		if (application == null) {
 			throw new NullPointerException("application object is null...");
 		}
-		if (application.getId() == 0) {
-			applicationDao.add(application);
+		int id=application.getId();
+		if (id == 0) {
+			id=applicationDao.add(application);
 		} else {
 			Application old=applicationDao.queryById(application.getId());
 			if (StringUtils.hasText(application.getIcon())) {
@@ -55,6 +57,15 @@ public class ApplicationServiceImpl implements ApplicationService{
 			}
 			applicationDao.update(application);
 		}
+		// 保存版本信息
+		AppVersionFile version=application.getAppVersionFile();
+		if (StringUtils.hasText(application.getAppFilePath())) {
+			version.setAppId(id);
+			version.setVersion(application.getVersion());
+			version.setFilePath(application.getAppFilePath());
+			appVersionFileDao.add(version);
+		}
+		return id;
 	}
 
 	@Override
@@ -92,7 +103,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(Application application, DataGridModel dgm) {
+	public JsonPage<Application> queryByExemple(Application application, DataGridModel dgm) {
 		if (application==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
@@ -100,15 +111,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	}
 
 	@Override
-	public int getCount(Application application) {
-		if (application==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return applicationDao.getCount(application);
-	}
-	
-	@Override
-	public JsonPage queryByExemple(PortalApplication application,
+	public JsonPage<PortalApplication> queryByExemple(PortalApplication application,
 			DataGridModel dgm) {
 		return applicationDao.queryByExemple(application, dgm);
 	}

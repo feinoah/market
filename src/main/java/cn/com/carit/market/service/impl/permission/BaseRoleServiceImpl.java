@@ -109,18 +109,11 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(BaseRole baseRole, DataGridModel dgm) {
+	public JsonPage<BaseRole> queryByExemple(BaseRole baseRole, DataGridModel dgm) {
 		if (baseRole==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return baseRoleDao.queryByExemple(baseRole, dgm);
 	}
 
-	@Override
-	public int getCount(BaseRole baseRole) {
-		if (baseRole==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return baseRoleDao.getCount(baseRole);
-	}
 }

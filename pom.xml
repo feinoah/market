@@ -99,10 +99,16 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-
+		<!-- 
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
+			<version>2.2</version>
+		</dependency>
+		 -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
 			<version>2.2</version>
 		</dependency>
 		<!-- spring end -->
@@ -150,9 +156,9 @@
 			<version>1.0.0.GA</version>
 		</dependency>
 		<dependency>
-			<groupId>proxool</groupId>
-			<artifactId>proxool</artifactId>
-			<version>0.9.1</version>
+		    <groupId>c3p0</groupId>
+		    <artifactId>c3p0</artifactId>
+		    <version>0.9.1.2</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

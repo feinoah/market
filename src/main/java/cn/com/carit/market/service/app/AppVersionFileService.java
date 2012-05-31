@@ -58,14 +58,7 @@ public interface AppVersionFileService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AppVersionFile appVersionFile, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param appVersionFile
-	 * @return
-	 */
-	int getCount(AppVersionFile appVersionFile);
+	JsonPage<AppVersionFile> queryByExemple(AppVersionFile appVersionFile, DataGridModel dgm);
 	
 	/**
 	 * 带分页的条件查询
@@ -73,7 +66,7 @@ public interface AppVersionFileService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(PortalAppVersionFile appVersionFile, DataGridModel dgm);
+	JsonPage<PortalAppVersionFile> queryByExemple(PortalAppVersionFile appVersionFile, DataGridModel dgm);
 	
 	/**
 	 * 按Id查询

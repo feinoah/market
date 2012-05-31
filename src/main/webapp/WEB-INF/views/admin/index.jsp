@@ -64,7 +64,7 @@
 	    <!-- 
 		<div region="east" split="true" title="East" style="width:180px;padding:10px;">east region</div>
 	     -->
-		<div region="center" id="mainPanle" style="background: #eee;overflow:auto;">
+		<div region="center" id="mainPanle" style="background: #eee;overflow:hidden;">
 	        <div id="tabs" class="easyui-tabs" fit="true" border="false">
 	            <div title="主页" style="padding: 20px;" id="home">
 	                <h1>Welcome...</h1>

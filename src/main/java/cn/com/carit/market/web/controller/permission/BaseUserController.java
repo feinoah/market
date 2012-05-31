@@ -100,7 +100,7 @@ public class BaseUserController{
 	
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute BaseUser baseUser, BindingResult result, DataGridModel dgm){
+	public JsonPage<BaseUser> query(@ModelAttribute BaseUser baseUser, BindingResult result, DataGridModel dgm){
 		return baseUserService.queryByExemple(baseUser, dgm);
 	}
 }

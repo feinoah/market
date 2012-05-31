@@ -93,7 +93,7 @@ public class BaseRoleController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute BaseRole baseRole, BindingResult result,DataGridModel dgm){
+	public JsonPage<BaseRole> query(@ModelAttribute BaseRole baseRole, BindingResult result,DataGridModel dgm){
 		return baseRoleService.queryByExemple(baseRole, dgm);
 	}
 }

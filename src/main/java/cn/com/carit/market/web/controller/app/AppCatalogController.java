@@ -97,7 +97,7 @@ public class AppCatalogController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute AppCatalog appCatalog, BindingResult result,DataGridModel dgm){
+	public JsonPage<AppCatalog> query(@ModelAttribute AppCatalog appCatalog, BindingResult result,DataGridModel dgm){
 		return appCatalogService.queryByExemple(appCatalog, dgm);
 	}
 }

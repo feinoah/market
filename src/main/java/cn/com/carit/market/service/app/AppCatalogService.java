@@ -51,14 +51,7 @@ public interface AppCatalogService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AppCatalog appCatalog, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param appCatalog
-	 * @return
-	 */
-	int getCount(AppCatalog appCatalog);
+	JsonPage<AppCatalog> queryByExemple(AppCatalog appCatalog, DataGridModel dgm);
 	
 	List<PortalAppCatalog> queryAll(String local);
 }

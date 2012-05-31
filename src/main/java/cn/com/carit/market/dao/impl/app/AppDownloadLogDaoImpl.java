@@ -122,20 +122,26 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 				"select * from t_app_download_log where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appDownloadLog);
+		sql.append(buildWhere(args, argTypes, appDownloadLog));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppDownloadLog appDownloadLog,
+	public JsonPage<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog,
 			DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<AppDownloadLog> jsonPage = new JsonPage<AppDownloadLog>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_app_download_log where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appDownloadLog);
+		String whereSql=buildWhere(args, argTypes, appDownloadLog);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_app_download_log where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -145,30 +151,17 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(appDownloadLog);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(AppDownloadLog appDownloadLog) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_app_download_log where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appDownloadLog);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AppDownloadLog appDownloadLog) {
+		StringBuilder sql=new StringBuilder();
 		if (appDownloadLog.getAccountId() != null) {
 			sql.append(" and account_id=?");
 			args.add(appDownloadLog.getAccountId());
@@ -184,12 +177,13 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			args.add(appDownloadLog.getDownloadTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 
 	@Override
-	public JsonPage queryByExemple(PortalAppDownloadLog appDownloadLog,
+	public JsonPage<PortalAppDownloadLog> queryByExemple(PortalAppDownloadLog appDownloadLog,
 			DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<PortalAppDownloadLog> jsonPage = new JsonPage<PortalAppDownloadLog>(dgm.getPage(), dgm.getRows());
 		String viewName="v_app_download_log_cn";
 		if (Constants.LOCAL_EN.equalsIgnoreCase(appDownloadLog.getLocal())) {
 			viewName="v_app_download_log_en";
@@ -229,7 +223,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		jsonPage.setTotal(totalRow);
@@ -247,6 +241,5 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		}));
 		return jsonPage;
 	}
-	
 	
 }

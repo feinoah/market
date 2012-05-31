@@ -77,18 +77,11 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm) {
+	public JsonPage<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm) {
 		if (appDownloadLog==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return appDownloadLogDao.queryByExemple(appDownloadLog, dgm);
 	}
 
-	@Override
-	public int getCount(AppDownloadLog appDownloadLog) {
-		if (appDownloadLog==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return appDownloadLogDao.getCount(appDownloadLog);
-	}
 }

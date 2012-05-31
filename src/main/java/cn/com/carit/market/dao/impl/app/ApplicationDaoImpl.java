@@ -1,12 +1,18 @@
 package cn.com.carit.market.dao.impl.app;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -88,7 +94,36 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				+ ", images" + ", status" + ", create_time" + ", update_time"
 				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.update(sql, 
+		KeyHolder gkHolder = new GeneratedKeyHolder();
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			@Override
+			public PreparedStatement createPreparedStatement(Connection con)
+					throws SQLException {
+				PreparedStatement ps = con.prepareStatement(sql,
+						Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, application.getAppName());
+				ps.setString(2, application.getEnName());
+				ps.setString(3, application.getVersion());
+				ps.setString(4, application.getIcon());
+				ps.setInt(5, application.getCatalogId());
+				ps.setString(6, application.getSize()); 
+				ps.setString(7, application.getAppFilePath());
+				ps.setString(8, application.getPlatform());
+				ps.setInt(9, application.getSupportLanguages());
+				ps.setDouble(10, application.getPrice()); 
+				ps.setInt(11, application.getDownCount());
+				ps.setInt(12, application.getAppLevel()); 
+				ps.setString(13, application.getDescription());
+				ps.setString(14, application.getPermissionDesc());
+				ps.setString(15, application.getEnDescription());
+				ps.setString(16, application.getEnPermissionDesc()); 
+				ps.setString(17, application.getImages());
+				ps.setInt(18, application.getStatus());
+				return ps;
+			}
+		});
+		return gkHolder.getKey().intValue();
+		/*return jdbcTemplate.update(sql, 
 				application.getAppName(),
 				application.getEnName(), 
 				application.getVersion(),
@@ -106,7 +141,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				application.getEnDescription(),
 				application.getEnPermissionDesc(), 
 				application.getImages(),
-				application.getStatus());
+				application.getStatus());*/
 	}
 
 	@Override
@@ -218,19 +253,25 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				"select * from t_application where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, application);
+		sql.append(buildWhere(args, argTypes, application));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(Application application, DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+	public JsonPage<Application> queryByExemple(Application application, DataGridModel dgm) {
+		JsonPage<Application> jsonPage = new JsonPage<Application>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_application where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, application);
+		String whereSql=buildWhere(args, argTypes, application);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_application where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -240,30 +281,17 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(application);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(Application application) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_application where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, application);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, Application application) {
+		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(application.getAppName())) {
 			sql.append(" and app_name like CONCAT('%',?,'%')");
 			args.add(application.getAppName());
@@ -349,16 +377,17 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			args.add(application.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 
 	@Override
-	public JsonPage queryByExemple(PortalApplication application,
+	public JsonPage<PortalApplication> queryByExemple(PortalApplication application,
 			DataGridModel dgm) {
 		String viewName="v_application_cn";
 		if (Constants.LOCAL_EN.equalsIgnoreCase(application.getLocal())) {
 			viewName="v_application_en";
 		}
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<PortalApplication> jsonPage = new JsonPage<PortalApplication>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder("select * from ").append(
 				viewName).append(" where 1=1");
 		StringBuilder countSql=new StringBuilder("select count(1) from ").append(
@@ -454,7 +483,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		// 更新

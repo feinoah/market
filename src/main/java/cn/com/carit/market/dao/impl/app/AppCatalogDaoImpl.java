@@ -136,19 +136,25 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 				"select * from t_app_catalog where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appCatalog);
+		sql.append(buildWhere(args, argTypes, appCatalog));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppCatalog appCatalog, DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+	public JsonPage<AppCatalog> queryByExemple(AppCatalog appCatalog, DataGridModel dgm) {
+		JsonPage<AppCatalog> jsonPage = new JsonPage<AppCatalog>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_app_catalog where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appCatalog);
+		String whereSql=buildWhere(args, argTypes, appCatalog);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_app_catalog where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -158,30 +164,17 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(appCatalog);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(AppCatalog appCatalog) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_app_catalog where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appCatalog);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AppCatalog appCatalog) {
+		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(appCatalog.getName())) {
 			sql.append(" and name like CONCAT('%',?,'%')");
 			args.add(appCatalog.getName());
@@ -212,6 +205,7 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 			args.add(appCatalog.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 
 	private final RowMapper<PortalAppCatalog> portalRowMapper = new RowMapper<PortalAppCatalog>() {

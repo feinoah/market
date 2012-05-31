@@ -150,20 +150,26 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 				"select * from t_app_version_file where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appVersionFile);
+		sql.append(buildWhere(args, argTypes, appVersionFile));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppVersionFile appVersionFile,
+	public JsonPage<AppVersionFile> queryByExemple(AppVersionFile appVersionFile,
 			DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<AppVersionFile> jsonPage = new JsonPage<AppVersionFile>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_app_version_file where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appVersionFile);
+		String whereSql=buildWhere(args, argTypes, appVersionFile);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_app_version_file where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -173,30 +179,17 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(appVersionFile);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(AppVersionFile appVersionFile) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_app_version_file where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, appVersionFile);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AppVersionFile appVersionFile) {
+		StringBuilder sql=new StringBuilder();
 		if (appVersionFile.getAppId() != null) {
 			sql.append(" and app_id=?");
 			args.add(appVersionFile.getAppId());
@@ -237,6 +230,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			args.add(appVersionFile.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 
 	private final RowMapper<PortalAppVersionFile> portalRowMapper = new RowMapper<PortalAppVersionFile>() {
@@ -255,9 +249,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	};
 
 	@Override
-	public JsonPage queryByExemple(PortalAppVersionFile appVersionFile,
+	public JsonPage<PortalAppVersionFile> queryByExemple(PortalAppVersionFile appVersionFile,
 			DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+		JsonPage<PortalAppVersionFile> jsonPage = new JsonPage<PortalAppVersionFile>(dgm.getPage(), dgm.getRows());
 		String viewName="v_app_version_file_cn";
 		if (Constants.LOCAL_EN.equalsIgnoreCase(appVersionFile.getLocal())) {
 			viewName="v_app_version_file_en";
@@ -309,7 +303,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		sql.append(" limit ?, ?");
 		log.debug(String.format("\n%1$s\n", sql));
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));

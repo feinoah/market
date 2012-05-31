@@ -144,7 +144,7 @@ public class AppVersionFileController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute AppVersionFile appVersionFile, BindingResult result,DataGridModel dgm){
+	public JsonPage<AppVersionFile> query(@ModelAttribute AppVersionFile appVersionFile, BindingResult result,DataGridModel dgm){
 		return appVersionFileService.queryByExemple(appVersionFile, dgm);
 	}
 }

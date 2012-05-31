@@ -51,13 +51,6 @@ public interface BaseRoleService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseRole baseRole, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param baseRole
-	 * @return
-	 */
-	int getCount(BaseRole baseRole);
+	JsonPage<BaseRole> queryByExemple(BaseRole baseRole, DataGridModel dgm);
 	
 }

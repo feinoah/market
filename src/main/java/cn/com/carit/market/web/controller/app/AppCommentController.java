@@ -97,7 +97,7 @@ public class AppCommentController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute AppComment appComment, BindingResult result,DataGridModel dgm){
+	public JsonPage<AppComment> query(@ModelAttribute AppComment appComment, BindingResult result,DataGridModel dgm){
 		return appCommentService.queryByExemple(appComment, dgm);
 	}
 }

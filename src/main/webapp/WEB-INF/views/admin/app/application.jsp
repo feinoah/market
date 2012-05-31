@@ -25,12 +25,11 @@
 			    valueField:'id',  
 			    textField:'name'  
 			}); 
-			$('#perTabs').tabs({onSelect:function(title){
-				$(this).tabs('getSelected').show()
-			}});
-			$('#descTabs').tabs({onSelect:function(title){
-				$(this).tabs('getSelected').show()
-			}});
+			$('.easyui-tabs').each(function(){
+				$(this).tabs({onSelect:function(title){
+					$(this).tabs('getSelected').show()
+				}});
+			});
 			// 初始化
 			$('#ttt').datagrid({
 				width:'100%',
@@ -76,6 +75,9 @@
 			// edit form
 			$('#edit_submit_app').bind('click',function(){
 				$('#editForm').form({
+					onSubmit:function(){  
+				        return $(this).form('validate');  
+				    }, 
 			    	success:function(data){
 			    		if(data==-1){
 							$.messager.alert('错误', "编辑失败", 'error');
@@ -230,7 +232,7 @@
 		<style>
 		#editWin label {width: 115px;}
 		#editWin input {width: 150px;}
-		#editWin textarea {width: 525px;height: 40px;}
+		.easyui-tabs textarea{width: 572px;height: 82px;}
 		#editVersionWin textarea {width: 400px;height: 100px;}
 		</style>
 	</head>
@@ -265,7 +267,7 @@
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" cssClass="easyui-combobox" editable='false'>
 							<form:option value="">请选择</form:option>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>
@@ -304,87 +306,112 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用" closed="true" style="width:740px;height:500px;padding:5px;" modal="true">
-			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
-				<table>
-					<tr>
-						<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
-						<td><form:input path="appName" cssClass="easyui-validatebox"  required="true"/></td>
-						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-						<td><form:input path="enName" cssClass="easyui-validatebox" required="true"/></td>
-					</tr>
-					<tr>
-						<td><form:label	for="catalogId" path="catalogId">分类：</form:label></td>
-						<td><form:input path="catalogId" id="catalogId_edit" cssClass="easyui-validatebox"/></td>
-						<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
-						<td><form:input path="platform" cssClass="easyui-validatebox"/></td>
-					</tr>
-					<tr>
-						<td><form:label	for="icon" path="icon">图标：</form:label></td>
-						<td><input type="file"  name="file"  id="file" cssClass="easyui-validatebox"/></td>
-					</tr>
-					<tr>
-						<td><form:label	for="supportLanguages" path="supportLanguages">支持语言：</form:label></td>
-						<td>
-							<form:select path="supportLanguages" id="supportLanguages_edit" cssClass="easyui-combobox">
-							<form:option value="0">中文</form:option>
-							<form:option value="1">英文</form:option>
-							<form:option value="2">中英双语</form:option>
-						</form:select></td>
-						<td><form:label	for="appLevel" path="appLevel">应用分级：</form:label></td>
-						<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-numberspinner" value="1"  min="1" max="10" required="true"/></td>
-					</tr>
-					<tr>
-						<td><form:label	for="price" path="price">价格：</form:label></td>
-						<td><form:input path="price" cssClass="easyui-validatebox"/></td>
-						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
-						<td>
-							<form:select path="status" id="status_edit" cssClass="easyui-combobox">
-								<form:option value="1">启用</form:option>
-								<form:option value="0">停用</form:option>
-							</form:select>
-						</td>
-					</tr>
-					<tr>
-						<td><form:label for="permissionDesc" path="permissionDesc" cssClass="easyui-validatebox">权限描述</form:label></td>
-						<td colspan="3">
-							<div id="perTabs" class="easyui-tabs" style="width:540px;height:78px;">  
-								<div title="中文" style="padding:3px;">  
-									<form:textarea path="permissionDesc" />
-								</div>  
-								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-									<form:textarea path="enPermissionDesc" />
-								</div> 
+		<div id="editWin" class="easyui-window" title="编辑应用" iconCls="icon-save" closed="true" style="width:650px;height:468px;padding:5px;" modal="true">
+			<div id="appTabs" class="easyui-tabs" style="width:625px;height:410px;">  
+				<div title="基本信息" style="padding:3px;">  
+				<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;">
+					<table>
+						<tr>
+							<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
+							<td><form:input path="appName" cssClass="easyui-validatebox" required="true" validType="CH"/></td>
+							<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
+							<td><form:input path="enName" cssClass="easyui-validatebox" required="true"/></td>
+						</tr>
+						<tr>
+							<td><label	for="appVersionFile.size" class="mustInput">文件大小：</label></td>
+							<td><input type="text" name="appVersionFile.size" id="size" class="easyui-validatebox" required="true"/></td>
+							<td><label	for="appVersionFile.version" class="mustInput">版本：</label></td>
+							<td><input type="text" name="appVersionFile.version" id="version" required="true" class="easyui-validatebox"/></td>
+						</tr>
+						<tr>
+							<td><form:label	for="catalogId" path="catalogId" cssClass="mustInput">分类：</form:label></td>
+							<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-validatebox" editable='false'/></td>
+							<td><form:label	for="status" path="status" cssClass="easyui-validatebox mustInput">状态：</form:label></td>
+							<td>
+								<form:select path="status" id="status_edit" required="true" cssClass="easyui-combobox" editable='false'>
+									<form:option value="1">启用</form:option>
+									<form:option value="0">停用</form:option>
+								</form:select>
+							</td>
+						</tr>
+						<tr>
+							<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
+							<td>
+								<form:select path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-combobox" editable='false'>
+								<form:option value="0">中文</form:option>
+								<form:option value="1">英文</form:option>
+								<form:option value="2">中英双语</form:option>
+							</form:select></td>
+							<td><form:label	for="appLevel" path="appLevel">应用分级：</form:label></td>
+							<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-numberspinner" value="1"  min="1" max="10" required="true" validType="number" editable='false'/></td>
+						</tr>
+						<tr>
+							<td><form:label	for="price" path="price">价格：</form:label></td>
+							<td><form:input path="price" cssClass="easyui-validatebox" validType="number" /></td>
+							<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
+							<td><form:input path="platform" cssClass="easyui-validatebox"/></td>
+						</tr>
+					</table>
+					<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">
+						<div id="desc_tabs" title="应用描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
+							<div title="中文" style="overflow:hidden;padding:3px;">  
+								<form:textarea path="description"/>
 							</div>  
-						</td>
-					</tr>
-					<tr>
-						<td><form:label for="description" path="description" cssClass="easyui-validatebox">描述：</form:label></td>
-						<td colspan="3">
-							<div id="descTabs" class="easyui-tabs" style="width:540px;height:78px;">  
-								<div title="中文" style="padding:3px;">  
-									<form:textarea path="description" />
-								</div>  
-								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-									<form:textarea path="enDescription" />
-								</div> 
+							<div title="英文" style="overflow:hidden;padding:3px;">  
+								<form:textarea path="enDescription"/>
+							</div> 
+						</div>
+					 	<div id="permission_tabs" title="权限描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
+							<div title="中文" style="overflow:hidden;padding:3px;"> 
+								<form:textarea path="permissionDesc"/>
 							</div>  
-						</td>
+							<div title="英文" style="overflow:hidden;padding:3px;">  
+								<form:textarea path="enPermissionDesc"/>
+							</div> 
+						</div>
+						<div id="features_tabs" title="特性描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
+							<div title="中文" style="overflow:hidden;padding:3px;"> 
+								<form:textarea path="appVersionFile.newFeatures"/>
+							</div>  
+							<div title="英文" style="overflow:hidden;padding:3px;">  
+								<form:textarea path="appVersionFile.enNewFeatures"/>
+							</div> 
+						</div>
+					</div> 
+					<form:hidden path="id"/>
+					<div style="text-align: center; padding: 5px;">
+						<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
+							iconCls="icon-save">保 存</a>
+						<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
+							iconCls="icon-undo">重 置</a>
+					</div>
+				</form:form>
+				</div> 
+				<div title="附件" style="overflow:auto;padding:3px;display:none;"> 
+				<form  id="uploadForm" action="${ctx}/app/attachment/upload" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
+					<table>
+						<tr>
+							<td><label class="mustInput">应用文件：</label></td>
+							<td><input type="file"  name="apk" id="apk" value="浏览" class="easyui-validatebox"/></td>
 					</tr>
 					<tr>
-						<td rowspan="2"><label>截图</label></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td>
+						<td><label>图标：</label></td>
+						<td><input type="file"  name="icon" id="icon" value="浏览" cssClass="easyui-validatebox"/></td>
 					</tr>
 					<tr>
-					<td><input type="file" name="image" /></td></td><td><input type="file" name="image" /></tr>
-				</table>
-				<form:hidden path="id"/>
-				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
-						iconCls="icon-save">保 存</a>
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
-						iconCls="icon-undo">重 置</a>
+						<td rowspan="2"><label>截图</label></td><td><input type="file" name="image" value="浏览" /></td><td><input type="file" name="image" value="浏览" /></td><td><input type="file" name="image" value="浏览" /></td>
+					</tr>
+					<tr><td><input type="file" name="image" value="浏览" /></td></td><td><input type="file" name="image" value="浏览" /></tr>
+					</table>
+					<div style="text-align: center; padding: 5px;">
+						<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_submit"
+							iconCls="icon-save">保 存</a>
+						<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_reset"
+							iconCls="icon-undo">重 置</a>
+					</div>
 				</div>
-			</form:form>
+				</form>
+			</div> 
 		</div>
 		
 		<div id="editVersionWin" class="easyui-window" title="编辑应用版本" closed="true" style="width:575px;height:300px;padding:5px;" modal="true">

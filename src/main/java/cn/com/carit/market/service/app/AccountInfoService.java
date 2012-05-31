@@ -52,14 +52,7 @@ public interface AccountInfoService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AccountInfo accountInfo, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param accountInfo
-	 * @return
-	 */
-	int getCount(AccountInfo accountInfo);
+	JsonPage<AccountInfo> queryByExemple(AccountInfo accountInfo, DataGridModel dgm);
 	
 	/**
 	 * 登录

@@ -113,19 +113,11 @@ public class BaseUserServiceImpl implements BaseUserService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(BaseUser baseUser, DataGridModel dgm) {
+	public JsonPage<BaseUser> queryByExemple(BaseUser baseUser, DataGridModel dgm) {
 		if (baseUser==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return baseUserDao.queryByExemple(baseUser, dgm);
-	}
-
-	@Override
-	public int getCount(BaseUser baseUser) {
-		if (baseUser==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return baseUserDao.getCount(baseUser);
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)

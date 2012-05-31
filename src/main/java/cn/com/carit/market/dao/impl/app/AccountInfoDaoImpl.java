@@ -208,19 +208,25 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 				"select * from t_account_info where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, accountInfo);
+		sql.append(buildWhere(args, argTypes, accountInfo));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
 	@Override
-	public JsonPage queryByExemple(AccountInfo accountInfo, DataGridModel dgm) {
-		JsonPage jsonPage = new JsonPage(dgm.getPage(), dgm.getRows());
+	public JsonPage<AccountInfo> queryByExemple(AccountInfo accountInfo, DataGridModel dgm) {
+		JsonPage<AccountInfo> jsonPage = new JsonPage<AccountInfo>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
 				"select * from t_account_info where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, accountInfo);
+		String whereSql=buildWhere(args, argTypes, accountInfo);
+		sql.append(whereSql);
+		String countSql="select count(1) from t_account_info where 1=1"+whereSql;
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow = queryForInt(countSql, args, argTypes);
+		// 更新
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
 				&& StringUtils.hasText(dgm.getSort())) {
@@ -230,30 +236,17 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow = getCount(accountInfo);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(AccountInfo accountInfo) {
-		StringBuilder sql = new StringBuilder(
-				"select count(1) from t_account_info where 1=1");
-		List<Object> args = new ArrayList<Object>();
-		List<Integer> argTypes = new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, accountInfo);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-
-	private void buildWhere(StringBuilder sql, List<Object> args,
+	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AccountInfo accountInfo) {
+		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(accountInfo.getEmail())) {
 			sql.append(" and email like CONCAT('%',?,'%')");
 			args.add(accountInfo.getEmail());
@@ -339,6 +332,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			args.add(accountInfo.getCreateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
+		return sql.toString();
 	}
 
 	@Override

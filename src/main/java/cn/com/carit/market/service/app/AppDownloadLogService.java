@@ -57,12 +57,6 @@ public interface AppDownloadLogService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm);
+	JsonPage<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm);
 	
-	/**
-	 * 按样例获取总数
-	 * @param appDownloadLog
-	 * @return
-	 */
-	int getCount(AppDownloadLog appDownloadLog);
 }

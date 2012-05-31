@@ -106,7 +106,7 @@ public class AccountInfoController {
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute AccountInfo accountInfo, BindingResult result,DataGridModel dgm){
+	public JsonPage<AccountInfo> query(@ModelAttribute AccountInfo accountInfo, BindingResult result,DataGridModel dgm){
 		return accountInfoService.queryByExemple(accountInfo, dgm);
 	}
 	

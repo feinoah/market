@@ -142,7 +142,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 
 		@Override
 		public List<BaseModule> query() {
-			return this.jdbcTemplate.query("select * from t_base_module", rowMapper);
+			String sql="select * from t_base_module";
+			log.debug(String.format("\n%1$s\n", sql));
+			return this.jdbcTemplate.query(sql, rowMapper);
 		}
 
 		@Override
@@ -150,18 +152,26 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 			StringBuilder sql=new StringBuilder("select * from t_base_module where 1=1");
 			List<Object> args=new ArrayList<Object>();
 			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseModule);
+			sql.append(buildWhere(args, argTypes, baseModule));
 			log.debug(String.format("\n%1$s\n", sql));
 			return query(sql.toString(), args, argTypes, rowMapper);
 		}
 
 		@Override
-		public JsonPage queryByExemple(BaseModule baseModule, DataGridModel dgm) {
-			JsonPage jsonPage=new JsonPage(dgm.getPage(), dgm.getRows());
-			StringBuilder sql=new StringBuilder("select * from t_base_module where 1=1");
+		public JsonPage<BaseModule> queryByExemple(BaseModule baseModule, DataGridModel dgm) {
+			JsonPage<BaseModule> jsonPage=new JsonPage<BaseModule>(dgm.getPage(), dgm.getRows());
+			StringBuilder sql=new StringBuilder("select * from t_base_module where id>?");
 			List<Object> args=new ArrayList<Object>();
 			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseModule);
+			args.add(BaseModule.MAX_SYSTEM_MODULE_ID);//最大的权限管理模块Id
+			argTypes.add(Types.INTEGER);
+			String whereSql=buildWhere(args, argTypes, baseModule);
+			sql.append(whereSql);
+			String countSql="select count(1) from t_base_module where id>? "+whereSql;
+			log.debug(String.format("\n%1$s\n", countSql));
+			int totalRow=queryForInt(countSql, args, argTypes);
+			// 更新
+			jsonPage.setTotal(totalRow);
 			// 排序
 			if (StringUtils.hasText(dgm.getOrder()) && StringUtils.hasText(dgm.getSort())) {
 				sql.append(" order by ").append(StringUtil.splitFieldWords(
@@ -169,29 +179,17 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 			}
 			sql.append(" limit ?, ?");
 			args.add(jsonPage.getStartRow());
-			args.add(jsonPage.getEndRow());
+			args.add(jsonPage.getPageSize());
 			argTypes.add(Types.INTEGER);
 			argTypes.add(Types.INTEGER);
-			int totalRow=getCount(baseModule);
-			// 更新
-			jsonPage.setTotal(totalRow);
 			log.debug(String.format("\n%1$s\n", sql));
 			jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 			return jsonPage;
 		}
-
-		@Override
-		public int getCount(BaseModule baseModule) {
-			StringBuilder sql=new StringBuilder("select count(1) from t_base_module where 1=1");
-			List<Object> args=new ArrayList<Object>();
-			List<Integer> argTypes=new ArrayList<Integer>();
-			buildWhere(sql, args, argTypes, baseModule);
-			log.debug(String.format("\n%1$s\n", sql));
-			return queryForInt(sql.toString(), args, argTypes);
-		}
 		
-		private void buildWhere(StringBuilder sql, List<Object> args, 
+		private String buildWhere(List<Object> args, 
 				List<Integer> argTypes, BaseModule baseModule){
+			StringBuilder sql=new StringBuilder();
 			if (StringUtils.hasText(baseModule.getModuleName())) {
 				sql.append(" and module_name like CONCAT('%',?,'%')");
 				args.add(baseModule.getModuleName());
@@ -237,6 +235,7 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 				args.add(baseModule.getInformation());
 				argTypes.add(Types.VARCHAR);
 			}
+			return sql.toString();
 		}
 
 		@Override

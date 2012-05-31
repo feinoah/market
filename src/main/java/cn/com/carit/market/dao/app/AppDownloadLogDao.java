@@ -66,14 +66,7 @@ public interface AppDownloadLogDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param appDownloadLog
-	 * @return
-	 */
-	int getCount(AppDownloadLog appDownloadLog);
+	JsonPage<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm);
 	
 	/**
 	 * 带分页的条件查询
@@ -81,7 +74,7 @@ public interface AppDownloadLogDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(PortalAppDownloadLog appDownloadLog, DataGridModel dgm);
+	JsonPage<PortalAppDownloadLog> queryByExemple(PortalAppDownloadLog appDownloadLog, DataGridModel dgm);
 	
 	
 }

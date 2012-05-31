@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.portal.PortalAppComment;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppCommentDao;
@@ -76,7 +77,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppComment appComment, DataGridModel dgm) {
+	public JsonPage<AppComment> queryByExemple(AppComment appComment, DataGridModel dgm) {
 		if (appComment==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
@@ -84,15 +85,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 	}
 
 	@Override
-	public int getCount(AppComment appComment) {
-		if (appComment==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return appCommentDao.getCount(appComment);
-	}
-	
-	@Override
-	public JsonPage queryComment(int appId, DataGridModel dgm) {
+	public JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm) {
 		if (appId<=0) {
 			throw new IllegalArgumentException("appId must be bigger than 0...");
 		}

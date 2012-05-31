@@ -1,9 +1,10 @@
 package cn.com.carit.market.service.app;
 import java.util.List;
 
+import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.portal.PortalAppComment;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import  cn.com.carit.market.bean.app.AppComment;
 
 /**
  * AppCommentService
@@ -57,14 +58,7 @@ public interface AppCommentService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(AppComment appComment, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param appComment
-	 * @return
-	 */
-	int getCount(AppComment appComment);
+	JsonPage<AppComment> queryByExemple(AppComment appComment, DataGridModel dgm);
 	
 	/**
 	 * 查询评论
@@ -72,5 +66,5 @@ public interface AppCommentService {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryComment(int appId, DataGridModel dgm);
+	JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm);
 }

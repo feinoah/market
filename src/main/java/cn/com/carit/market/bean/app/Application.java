@@ -98,6 +98,12 @@ public class Application  implements Serializable{
 	 */
 	private Date updateTime;
 	
+	/**
+	 * 版本文件
+	 */
+	@JsonIgnore
+	private AppVersionFile appVersionFile;
+	
 
 	public void setId(int value) {
 		this.id = value;
@@ -234,6 +240,12 @@ public class Application  implements Serializable{
 	}
 	public void setEnPermissionDesc(String enPermissionDesc) {
 		this.enPermissionDesc = enPermissionDesc;
+	}
+	public AppVersionFile getAppVersionFile() {
+		return appVersionFile;
+	}
+	public void setAppVersionFile(AppVersionFile appVersionFile) {
+		this.appVersionFile = appVersionFile;
 	}
 	
 }

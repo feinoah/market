@@ -54,14 +54,7 @@ public interface BaseModuleDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseModule module, DataGridModel dgm);
-	
-	/**
-	 * 按样例获取总数
-	 * @param module
-	 * @return
-	 */
-	int getCount(BaseModule module);
+	JsonPage<BaseModule> queryByExemple(BaseModule module, DataGridModel dgm);
 	
 	/**
 	 * 按用户ID查询菜单

@@ -1,5 +1,6 @@
 package cn.com.carit.market.web.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,15 +8,19 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.BaseModule;
 import cn.com.carit.market.bean.BaseRole;
@@ -23,6 +28,8 @@ import cn.com.carit.market.bean.BaseUser;
 import cn.com.carit.market.bean.Tree;
 import cn.com.carit.market.bean.TreeMenu;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
+import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.permission.BaseModuleService;
 import cn.com.carit.market.service.permission.BaseRoleService;
 import cn.com.carit.market.service.permission.BaseUserService;
@@ -310,5 +317,100 @@ public class AdminController{
 			}
 		}
 		return result;
+	}
+	/**
+	 * app/attachment/upload?sign=[MD5(MD5(email)+time)]&email=&time=&appName=
+	 * <br>
+	 * 参数说明
+	 * <table>
+	 * 	<tr><th>名称</th>描述</th><th>是否必须</th></tr>
+	 * 	<tr><td>email</td>当前登录后台账号</td><td>T</td></tr>
+	 * 	<tr><td>time</td>当前时间截</td><td>T</td></tr>
+	 * 	<tr><td>sign</td>签名，规则为：MD5(MD5(email)+time)</td><td>T</td></tr>
+	 * 	<tr><td>appName</td>应用名称</td><td>F</td></tr>
+	 * </table>
+	 * 上传应用附件
+	 * @param sign
+	 * @param email
+	 * @param time
+	 * @param appName
+	 * @param request
+	 * @param response
+	 * @return
+	 * <table>
+	 * 	<tr><th>名称</th>描述</th>></tr>
+	 * 	<tr><td>sign</td>有该属性返回证明签名错误</td></tr>
+	 * 	<tr><td>apk</td>该值为-1时表示缺少比赛必须的应用文件，其它值为上传成功后应用文件对应的路径</td><</tr>
+	 * 	<tr><td>icon</td>icon上传成功后的路径</td></tr>
+	 * 	<tr><td>image</td>图片文件上传成功后的路径，多个文件用；分隔</td></tr>
+	 * </table>
+	 * @throws Exception
+	 */
+	@RequestMapping(value="app/attachment/upload", method=RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> upload(@RequestParam String sign
+			, @RequestParam String email, @RequestParam long time,@RequestParam String appName,
+			HttpServletRequest request, HttpServletResponse response) throws Exception{
+		BaseUser user=(BaseUser) request.getSession().getAttribute(
+				Constants.ADMIN_USER);
+		if (user==null) { // 没有登录
+			log.info("not login...");
+			//转到登录页面
+			request.getRequestDispatcher("/back/loginForm").forward(request, response);
+		}
+		Map<String, String> result=new HashMap<String, String>();
+		String md5Sign=MD5Util.md5Hex(MD5Util.md5Hex(email)+time);
+		if (!md5Sign.equalsIgnoreCase(sign)) {
+			result.put("sign", "-1");
+			return result;
+		}
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+		MultipartFile apkMultipartFile = multipartRequest.getFile("icon");
+		if(apkMultipartFile==null||apkMultipartFile.getOriginalFilename().length()<=0){
+			log.debug("apkFile must be not empty ...");
+			result.put("apk", "-1");
+			return result;
+		}
+		StringBuilder images=new StringBuilder();
+    	long radom=System.nanoTime();
+    	String suffix = apkMultipartFile.getOriginalFilename().substring(
+    			apkMultipartFile.getOriginalFilename().lastIndexOf("."));
+    	// 随机文件名
+    	String fileName =  appName+"_"+radom+ suffix;// 构建文件名称
+    	File apkFile=AttachmentUtil.getApkFile(fileName);
+    	apkMultipartFile.transferTo(apkFile);
+    	result.put("apk", Constants.BASE_PATH_APK+fileName);
+    	//页面控件的文件流
+    	MultipartFile multipartFile = multipartRequest.getFile("icon");
+    	
+        if (multipartFile!=null&&multipartFile.getOriginalFilename().length()>0) {
+        	// 获取文件的后缀 
+        	suffix = multipartFile.getOriginalFilename().substring(
+        			multipartFile.getOriginalFilename().lastIndexOf("."));
+        	// 随机文件名
+        	fileName =  appName+"_"+radom+ suffix;// 构建文件名称
+        	File file = AttachmentUtil.getIconFile(fileName);
+    		multipartFile.transferTo(file);
+        	result.put("icon", Constants.BASE_PATH_ICON+fileName);
+		}
+		//页面控件的文件流
+        List<MultipartFile> imageFiles = multipartRequest.getFiles("image");
+        int i=0;
+        for (MultipartFile imageFile : imageFiles) {
+        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
+        		fileName = imageFile.getOriginalFilename();  
+        		String extName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();  
+        		String lastFileName = appName+"_"+radom+"_"+(i+1)+extName;
+        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(lastFileName)); 
+        		if (i<4) {
+        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");
+        		} else {
+        			images.append(Constants.BASE_PATH_IMAGE+lastFileName);
+        		}
+			}
+    		i++;
+		}
+        result.put("image", images.toString());
+        return result;
 	}
 }

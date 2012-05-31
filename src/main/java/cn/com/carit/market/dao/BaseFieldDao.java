@@ -54,7 +54,7 @@ public interface BaseFieldDao {
 	 * @param dgm
 	 * @return
 	 */
-	JsonPage queryByExemple(BaseField field, DataGridModel dgm);
+	JsonPage<BaseField> queryByExemple(BaseField field, DataGridModel dgm);
 	
 	/**
 	 * 按样例获取总数

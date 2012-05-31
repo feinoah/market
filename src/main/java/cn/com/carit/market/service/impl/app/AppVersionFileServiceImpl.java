@@ -92,21 +92,14 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 	}
 
 	@Override
-	public JsonPage queryByExemple(AppVersionFile appVersionFile, DataGridModel dgm) {
+	public JsonPage<AppVersionFile> queryByExemple(AppVersionFile appVersionFile, DataGridModel dgm) {
 		if (appVersionFile==null) {
 			throw new NullPointerException("must given an exemple...");
 		}
 		return appVersionFileDao.queryByExemple(appVersionFile, dgm);
 	}
 
-	@Override
-	public int getCount(AppVersionFile appVersionFile) {
-		if (appVersionFile==null) {
-			throw new NullPointerException("must given an exemple...");
-		}
-		return appVersionFileDao.getCount(appVersionFile);
-	}
-	public JsonPage queryByExemple(PortalAppVersionFile appVersionFile,
+	public JsonPage<PortalAppVersionFile> queryByExemple(PortalAppVersionFile appVersionFile,
 			DataGridModel dgm) {
 		return appVersionFileDao.queryByExemple(appVersionFile, dgm);
 	}

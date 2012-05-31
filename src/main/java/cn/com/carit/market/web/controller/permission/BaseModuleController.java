@@ -91,7 +91,7 @@ private final Logger log = Logger.getLogger(getClass());
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage query(@ModelAttribute BaseModule baseModule, BindingResult result, DataGridModel dgm){
+	public JsonPage<BaseModule> query(@ModelAttribute BaseModule baseModule, BindingResult result, DataGridModel dgm){
 		return baseModuleService.queryByExemple(baseModule, dgm);
 	}
 	

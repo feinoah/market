@@ -113,8 +113,8 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	}
 
 	@Override
-	public JsonPage queryByExemple(BaseField field, DataGridModel dgm) {
-		JsonPage jsonPage=new JsonPage(dgm.getPage(), dgm.getRows());
+	public JsonPage<BaseField> queryByExemple(BaseField field, DataGridModel dgm) {
+		JsonPage<BaseField> jsonPage=new JsonPage<BaseField>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql=new StringBuilder("select * from t_base_field where 1=1");
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
@@ -127,7 +127,7 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
-		args.add(jsonPage.getEndRow());
+		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		int totalRow=getCount(field);

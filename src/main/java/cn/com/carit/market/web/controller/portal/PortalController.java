@@ -26,6 +26,7 @@ import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
+import cn.com.carit.market.bean.portal.PortalAppComment;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.Constants;
@@ -299,7 +300,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/query", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage queryApps(@ModelAttribute PortalApplication application, BindingResult result,DataGridModel dgm){
+	public JsonPage<PortalApplication> queryApps(@ModelAttribute PortalApplication application, BindingResult result,DataGridModel dgm){
 		return applicationService.queryByExemple(application, dgm);
 	}
 	
@@ -324,7 +325,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/versions/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage queryAppVersions(@PathVariable int appId,  @RequestParam String local, DataGridModel dgm) {
+	public JsonPage<PortalAppVersionFile> queryAppVersions(@PathVariable int appId,  @RequestParam String local, DataGridModel dgm) {
 		PortalAppVersionFile appVersionFile=new PortalAppVersionFile();
 		appVersionFile.setAppId(appId);
 		appVersionFile.setLocal(local);
@@ -340,7 +341,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/comments/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage queryAppComments(@PathVariable int appId, DataGridModel dgm) {
+	public JsonPage<PortalAppComment> queryAppComments(@PathVariable int appId, DataGridModel dgm) {
 		return appCommentService.queryComment(appId, dgm);
 	}
 	
@@ -431,4 +432,5 @@ public class PortalController{
 	public List<PortalApplication> queryHotNewFree(@PathVariable int limit, @RequestParam String local){
 		return applicationService.queryHotNewFree(local, limit);
 	}
+	
 }
