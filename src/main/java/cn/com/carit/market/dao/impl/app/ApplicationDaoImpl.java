@@ -233,6 +233,13 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
+	
+	@Override
+	public int updateById(int id) {
+		String updateSql="update t_application a set app_file_path=(select file_path from t_app_version_file where id =(select max(id) from t_app_version_file where app_id=?)) where id=?";
+		log.debug(String.format("\n%1$s\n", updateSql));
+		return jdbcTemplate.update(updateSql, id, id);
+	}
 
 	@Override
 	public Application queryById(int id) {

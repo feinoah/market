@@ -58,16 +58,11 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
-		return appVersionFileDao.delete(id);
-	}
-
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	@Override
-	public int deleteByAppId(int appId) {
-		if (appId<=0) {
-			throw new IllegalArgumentException("appId must be bigger than 0...");
+		int row = appVersionFileDao.delete(id);
+		if(row>0){
+			applicationDao.updateById(id);
 		}
-		return appVersionFileDao.deleteByAppId(appId);
+		return row;
 	}
 
 	@Override

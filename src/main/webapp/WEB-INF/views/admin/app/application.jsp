@@ -6,8 +6,11 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/md5.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/jquery.form.js" ></script>
 		<script type="text/javascript">
 		var catalogs;
+		var tag=0;
 		$(function(){
 			$.ajaxSettings.async = false;
 			$.getJSON('${ctx}/portal/catalog/all?local=cn', function(data) {
@@ -93,6 +96,47 @@
 				    }
 				}).submit();
 			});
+			
+			$('#upload_submit').click(function(){
+				var sign=hex_md5('${adminUser.email}');
+				var time=new Date().getTime();
+				var _url='${ctx}/app/attachment/upload?email=${adminUser.email}&time='+time+'&sign='+hex_md5(sign+time);
+				var bar = $('.bar');
+				var percent = $('.percent');
+				$('#uploadForm').attr('action',_url);
+				$('#uploadForm').ajaxForm({
+					dataType:  'json', 
+				    beforeSend: function() {
+				        status.empty();
+				        var percentVal = '0%';
+				        bar.width(percentVal)
+				        percent.html(percentVal);
+				    },
+				    uploadProgress: function(event, position, total, percentComplete) {
+				        var percentVal = percentComplete + '%';
+				        bar.width(percentVal)
+				        percent.html(percentVal);
+				    },
+					complete: function(xhr) {
+						if(data.length==0){
+							$.messager.alert('错误', "后台系统异常", 'error');
+							return;
+						}
+						if(data.sign){
+							$.messager.alert('错误', "签名错误", 'error');
+							return;
+						}
+						if(data.apk==1){
+							$.messager.alert('错误', "必须上传应用文件", 'error');
+							return;
+						}
+						$('#appFilePath').attr(data.apk);
+						$('#icon').attr(data.icon);
+						$('#images').attr(data.image);
+						tag=1;
+					}
+				}); 
+			});
 			$('#edit_submit_version').bind('click',function(){
 				$('#editVersionForm').form({
 					success:function(data){
@@ -115,6 +159,7 @@
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
+				tag=1;
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
@@ -234,6 +279,9 @@
 		#editWin input {width: 150px;}
 		.easyui-tabs textarea{width: 572px;height: 82px;}
 		#editVersionWin textarea {width: 400px;height: 100px;}
+		.progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
+		.bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
+		.percent { position:absolute; display:inline-block; top:3px; left:48%; }
 		</style>
 	</head>
 	<body>
@@ -379,6 +427,9 @@
 						</div>
 					</div> 
 					<form:hidden path="id"/>
+					<form:hidden path="icon" />
+					<form:hidden path="images" />
+					<form:hidden path="appFilePath" />
 					<div style="text-align: center; padding: 5px;">
 						<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
 							iconCls="icon-save">保 存</a>
@@ -388,29 +439,33 @@
 				</form:form>
 				</div> 
 				<div title="附件" style="overflow:auto;padding:3px;display:none;"> 
-				<form  id="uploadForm" action="${ctx}/app/attachment/upload" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
+				<form  id="uploadForm" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 					<table>
 						<tr>
 							<td><label class="mustInput">应用文件：</label></td>
-							<td><input type="file"  name="apk" id="apk" value="浏览" class="easyui-validatebox"/></td>
+							<td><input type="file"  name="apk" id="apk" class="easyui-validatebox"/></td>
 					</tr>
 					<tr>
 						<td><label>图标：</label></td>
-						<td><input type="file"  name="icon" id="icon" value="浏览" cssClass="easyui-validatebox"/></td>
+						<td><input type="file"  name="icon" id="icon" cssClass="easyui-validatebox"/></td>
 					</tr>
 					<tr>
-						<td rowspan="2"><label>截图</label></td><td><input type="file" name="image" value="浏览" /></td><td><input type="file" name="image" value="浏览" /></td><td><input type="file" name="image" value="浏览" /></td>
+						<td rowspan="2"><label>截图</label></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td><td><input type="file" name="image" /></td>
 					</tr>
-					<tr><td><input type="file" name="image" value="浏览" /></td></td><td><input type="file" name="image" value="浏览" /></tr>
+					<tr><td><input type="file" name="image" /></td></td><td><input type="file" name="image" /></tr>
 					</table>
 					<div style="text-align: center; padding: 5px;">
 						<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_submit"
-							iconCls="icon-save">保 存</a>
+							iconCls="icon-save">上 传</a>
 						<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_reset"
 							iconCls="icon-undo">重 置</a>
 					</div>
 				</div>
 				</form>
+				<div class="progress">
+		        <div class="bar"></div >
+		        <div class="percent">0%</div >
+		    </div>
 			</div> 
 		</div>
 		

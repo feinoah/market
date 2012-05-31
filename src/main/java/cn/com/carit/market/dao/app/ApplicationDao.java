@@ -33,6 +33,7 @@ public interface ApplicationDao {
 	 */
 	int update(Application application);
 	
+	int updateById(int id);
 	/**
 	 * 按Id查询
 	 * @param id

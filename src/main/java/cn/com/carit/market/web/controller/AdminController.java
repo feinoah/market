@@ -340,7 +340,7 @@ public class AdminController{
 	 * <table>
 	 * 	<tr><th>名称</th>描述</th>></tr>
 	 * 	<tr><td>sign</td>有该属性返回证明签名错误</td></tr>
-	 * 	<tr><td>apk</td>该值为-1时表示缺少比赛必须的应用文件，其它值为上传成功后应用文件对应的路径</td><</tr>
+	 * 	<tr><td>apk</td>该值为1时表示缺少比赛必须的应用文件，其它值为上传成功后应用文件对应的路径</td><</tr>
 	 * 	<tr><td>icon</td>icon上传成功后的路径</td></tr>
 	 * 	<tr><td>image</td>图片文件上传成功后的路径，多个文件用；分隔</td></tr>
 	 * </table>
@@ -354,21 +354,23 @@ public class AdminController{
 		BaseUser user=(BaseUser) request.getSession().getAttribute(
 				Constants.ADMIN_USER);
 		if (user==null) { // 没有登录
-			log.info("not login...");
+			log.error("not login...");
 			//转到登录页面
 			request.getRequestDispatcher("/back/loginForm").forward(request, response);
 		}
 		Map<String, String> result=new HashMap<String, String>();
 		String md5Sign=MD5Util.md5Hex(MD5Util.md5Hex(email)+time);
 		if (!md5Sign.equalsIgnoreCase(sign)) {
-			result.put("sign", "-1");
+			log.error(sign+" is not equals with "+md5Sign);
+			result.put("sign", "1");
 			return result;
 		}
 		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
 		MultipartFile apkMultipartFile = multipartRequest.getFile("icon");
+		log.debug("----------------------"+multipartRequest);
 		if(apkMultipartFile==null||apkMultipartFile.getOriginalFilename().length()<=0){
 			log.debug("apkFile must be not empty ...");
-			result.put("apk", "-1");
+			result.put("apk", "1");
 			return result;
 		}
 		StringBuilder images=new StringBuilder();
