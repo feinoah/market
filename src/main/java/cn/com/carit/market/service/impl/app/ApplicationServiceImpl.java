@@ -74,6 +74,15 @@ public class ApplicationServiceImpl implements ApplicationService{
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
+		Application application=applicationDao.queryById(id);
+		if (application!=null) {//删除文件
+			AttachmentUtil.deleteIcon(application.getIcon());
+			AttachmentUtil.deleteImages(application.getImageList());
+			List<AppVersionFile> versionList=appVersionFileDao.queryByAppId(id);
+			for (AppVersionFile appVersionFile : versionList) {
+				AttachmentUtil.deleteApk(appVersionFile.getFilePath());
+			}
+		}
 		// 删除评论
 		appCommentDao.deleteByAppId(id);
 		// 删除版本文件

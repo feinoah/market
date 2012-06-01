@@ -58,7 +58,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	};
 
 	@Override
-	public int add(final AccountInfo accountInfo) {
+	public AccountInfo add(final AccountInfo accountInfo) {
 		final String sql = "insert into t_account_info (" + "	email"
 				+ ", password" + ", nick_name" + ", gender" + ", birthday"
 				+ ", photo" + ", balance" + ", real_name" + ", id_card"
@@ -93,7 +93,8 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 				return ps;
 			}
 		}, gkHolder);
-		return gkHolder.getKey().intValue();
+		accountInfo.setId(gkHolder.getKey().intValue());
+		return accountInfo;
 	}
 
 	@Override
@@ -353,6 +354,13 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		String sql="update t_account_info set update_time=now(), status=(status&~?) where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.update(sql, Constants.STATUS_LOCKED, id);
+	}
+
+	@Override
+	public int checkAccount(String email) {
+		String sql="select 1 from t_account_info where email=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.queryForInt(sql, email);
 	}
 	
 }

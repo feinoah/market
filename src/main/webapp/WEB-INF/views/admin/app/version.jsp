@@ -29,6 +29,7 @@
 			$('#descTabs').tabs({onSelect:function(title){
 				$(this).tabs('getSelected').show()
 			}});
+			$('.datagrid-toolbar a:first').hide();//没有新增
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -112,10 +113,10 @@
 			<table>
 				<tr>
 					<td>
-						<form:label for="appId" path="appId">应用名称：</form:label>
+						<form:label for="app_name" path="appId">应用名称：</form:label>
 					</td>
 					<td>
-						<form:input path="appId" cssClass="easyui-validatebox" />
+						<form:input path="app_name" cssClass="easyui-validatebox" />
 					</td>
 					<td>
 						<form:label for="version" path="version">版本：</form:label>

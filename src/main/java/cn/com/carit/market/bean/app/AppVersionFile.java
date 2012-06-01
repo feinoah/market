@@ -24,6 +24,10 @@ public class AppVersionFile  implements Serializable{
 	 * appId
 	 */
 	private Integer appId;
+	
+	private String appName;
+	
+	private String enName;
 	/**
 	 * version
 	 */
@@ -116,6 +120,18 @@ public class AppVersionFile  implements Serializable{
 	}
 	public void setEnNewFeatures(String enNewFeatures) {
 		this.enNewFeatures = enNewFeatures;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
 	}
 
 }

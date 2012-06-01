@@ -35,7 +35,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public void saveOrUpdate(AccountInfo accountInfo) throws Exception {
+	public AccountInfo saveOrUpdate(AccountInfo accountInfo) throws Exception {
 		if (accountInfo==null) {
 			throw new NullPointerException("accountInfo object is null...");
 		}
@@ -54,6 +54,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			}
 			accountInfoDao.update(accountInfo);
 		}
+		return accountInfo;
 	}
 
 	@Override
@@ -162,6 +163,12 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return accountInfoDao.unLockAccount(id);
+	}
+
+	@Override
+	public int checkAccount(String email) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }

@@ -24,7 +24,8 @@
 					text :'解封',
 					iconCls:'icon-ok',
 					handler:unlock
-				} ]
+				} ],
+				onDblClickRow:edit
 			});
 			$("#submit").bind("click", function(){
 				//先取得 datagrid 的查询参数 
@@ -56,7 +57,11 @@
 				    }
 				}).submit();
 			});
-			$('#edit_reset').bind('click',function(){ $('#editForm').form('clear');});
+			$('#edit_reset').bind('click',function(){ 
+				var id=$('#editForm input[name=id]').val();
+				$('#editForm').form('clear');
+				$('#editForm input[name=id]').val(id);
+			});
 			
 			$('#editWin').window({
 				onClose:function(){

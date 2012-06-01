@@ -89,18 +89,17 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		final String sql = "insert into t_application (app_name"
 				+ ", en_name, version, icon, catalog_id"
 				+ ", size, app_file_path, platform"
-				+ ", support_languages, price" + ", down_count"
+				+ ", support_languages, price"
 				+ ", app_level, description , permission_desc, en_description , en_permission_desc"
 				+ ", images" + ", status" + ", create_time" + ", update_time"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
 		log.debug(String.format("\n%1$s\n", sql));
-		KeyHolder gkHolder = new GeneratedKeyHolder();
+		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
 			public PreparedStatement createPreparedStatement(Connection con)
 					throws SQLException {
-				PreparedStatement ps = con.prepareStatement(sql,
-						Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setString(1, application.getAppName());
 				ps.setString(2, application.getEnName());
 				ps.setString(3, application.getVersion());
@@ -110,18 +109,17 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(7, application.getAppFilePath());
 				ps.setString(8, application.getPlatform());
 				ps.setInt(9, application.getSupportLanguages());
-				ps.setDouble(10, application.getPrice()); 
-				ps.setInt(11, application.getDownCount());
-				ps.setInt(12, application.getAppLevel()); 
-				ps.setString(13, application.getDescription());
-				ps.setString(14, application.getPermissionDesc());
-				ps.setString(15, application.getEnDescription());
-				ps.setString(16, application.getEnPermissionDesc()); 
-				ps.setString(17, application.getImages());
-				ps.setInt(18, application.getStatus());
+				ps.setDouble(10, application.getPrice()==null?0:application.getPrice()); 
+				ps.setInt(11, application.getAppLevel()); 
+				ps.setString(12, application.getDescription());
+				ps.setString(13, application.getPermissionDesc());
+				ps.setString(14, application.getEnDescription());
+				ps.setString(15, application.getEnPermissionDesc()); 
+				ps.setString(16, application.getImages());
+				ps.setInt(17, application.getStatus());
 				return ps;
 			}
-		});
+		}, gkHolder);
 		return gkHolder.getKey().intValue();
 		/*return jdbcTemplate.update(sql, 
 				application.getAppName(),
@@ -291,7 +289,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		log.debug(String.format("\n%1$s\n", sql+", "+jsonPage.getStartRow())+", "+jsonPage.getPageSize());
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}

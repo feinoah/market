@@ -84,7 +84,7 @@ public class JsonPage<T> {
 		if (this.currentPage > 1) {
 			this.startRow = (this.currentPage - 1) * this.pageSize+1;
 		} else {
-			this.startRow = 1;
+			this.startRow = 0;
 		}
 		return startRow;
 	}

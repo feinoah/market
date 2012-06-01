@@ -48,7 +48,6 @@
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editWin').window('close');
 				        	// clear form
-				        	$('#editForm').form('clear');
 				        	// update rows
 				        	$('#tt').datagrid('reload');
 						}else{

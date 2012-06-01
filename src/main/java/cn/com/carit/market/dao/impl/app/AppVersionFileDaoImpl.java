@@ -133,21 +133,30 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public AppVersionFile queryById(int id) {
-		String sql = "select * from t_app_version_file where id=?";
+		String sql = "select * from t_app_version_file a left join t_application b on a.app_id=b.id where a.id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql, id, rowMapper);
 	}
 
+	
+	@Override
+	public List<AppVersionFile> queryByAppId(int appId) {
+		String sql="select * from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{appId}, rowMapper);
+	}
+
 	@Override
 	public List<AppVersionFile> query() {
-		return this.jdbcTemplate.query("select * from t_app_version_file",
-				rowMapper);
+		String sql="select * from t_app_version_file a left join t_application b on a.app_id=b.id";
+		log.debug(String.format("\n%1$s\n", sql));
+		return this.jdbcTemplate.query(sql,rowMapper);
 	}
 
 	@Override
 	public List<AppVersionFile> queryByExemple(AppVersionFile appVersionFile) {
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_version_file where 1=1");
+				"select * from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appVersionFile));
@@ -160,12 +169,12 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			DataGridModel dgm) {
 		JsonPage<AppVersionFile> jsonPage = new JsonPage<AppVersionFile>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_version_file where 1=1");
+				"select * from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		String whereSql=buildWhere(args, argTypes, appVersionFile);
 		sql.append(whereSql);
-		String countSql="select count(1) from t_app_version_file where 1=1"+whereSql;
+		String countSql="select count(1) from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1"+whereSql;
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql, args, argTypes);
 		// 更新
@@ -191,42 +200,50 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			List<Integer> argTypes, AppVersionFile appVersionFile) {
 		StringBuilder sql=new StringBuilder();
 		if (appVersionFile.getAppId() != null) {
-			sql.append(" and app_id=?");
+			sql.append(" and a.app_id=?");
 			args.add(appVersionFile.getAppId());
 			argTypes.add(4);// java.sql.Types type
 		}
 		if (StringUtils.hasText(appVersionFile.getVersion())) {
-			sql.append(" and version like CONCAT('%',?,'%')");
+			sql.append(" and a.version like CONCAT('%',?,'%')");
 			args.add(appVersionFile.getVersion());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(appVersionFile.getSize())) {
-			sql.append(" and size like CONCAT('%',?,'%')");
+			sql.append(" and a.size like CONCAT('%',?,'%')");
 			args.add(appVersionFile.getSize());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(appVersionFile.getFilePath())) {
-			sql.append(" and file_path like CONCAT('%',?,'%')");
+			sql.append(" and a.file_path like CONCAT('%',?,'%')");
 			args.add(appVersionFile.getFilePath());
 			argTypes.add(12);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appVersionFile.getAppName())){
+			sql.append(" and b.app_name like CONCAT('%',?,'%') or b.en_name like CONCAT('%',?,'%')");
+			args.add(appVersionFile.getNewFeatures());
+			argTypes.add(12);// java.sql.Types type
+			
+			args.add(appVersionFile.getNewFeatures());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (StringUtils.hasText(appVersionFile.getNewFeatures())) {
-			sql.append(" and new_features like CONCAT('%',?,'%')");
+			sql.append(" and a.new_features like CONCAT('%',?,'%')");
 			args.add(appVersionFile.getNewFeatures());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (appVersionFile.getStatus() != null) {
-			sql.append(" and status=?");
+			sql.append(" and a.status=?");
 			args.add(appVersionFile.getStatus());
 			argTypes.add(4);// java.sql.Types type
 		}
 		if (appVersionFile.getCreateTime() != null) {
-			sql.append(" and create_time=?");
+			sql.append(" and a.create_time=?");
 			args.add(appVersionFile.getCreateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
 		if (appVersionFile.getUpdateTime() != null) {
-			sql.append(" and update_time=?");
+			sql.append(" and a.update_time=?");
 			args.add(appVersionFile.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}

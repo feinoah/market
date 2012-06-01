@@ -108,6 +108,12 @@ public class AttachmentUtil {
 		return deleteFile(getImagePath(fileName));
 	}
 	
+	public static void deleteImages(String [] nameList){
+		for (String fileName : nameList) {
+			deleteImage(fileName);
+		}
+	}
+	
 	public static boolean deletePhoto(String fileName){
 		return deleteFile(getPhotoPath(fileName));
 	}

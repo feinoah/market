@@ -2,6 +2,7 @@ package cn.com.carit.market.web.controller.portal;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,32 +67,48 @@ public class PortalController{
 	/**
 	 * 注册帐号<br>
 	 * portal/register
-	 * <table>
-	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-1</td><td>错误</td></tr>
-	 * 	<tr><td>0</td><td>参数异常</td></tr>
-	 * 	<tr><td>1</td><td>成功</td></tr>
-	 * 	<tr><td>其它</td><td>后台异常</td></tr>
-	 * </table>
 	 * @param accountInfo
 	 * @param result
-	 * @return
+	 * @return Map<String, Integer>
+	 * <table>
+	 * 	<tr><th>属性</th><th>描述</th></tr>
+	 * 	<tr><td>answerCode</td><td>-2：错误；-1：账号为空；0：密码为空；1：注册成功</td></tr>
+	 * 	<tr><td>accountId</td><td>帐号对象</td></tr>
+	 * </table>
 	 * @throws Exception 
 	 */
 	@RequestMapping(value="register", method=RequestMethod.POST)
 	@ResponseBody
-	public int register(@ModelAttribute AccountInfo accountInfo,BindingResult result) throws Exception{
+	public Map<String, Integer> register(@ModelAttribute AccountInfo accountInfo
+			,BindingResult result, HttpServletRequest req) throws Exception{
+		Map<String, Integer> map=new HashMap<String, Integer>();
 		if (result.hasErrors()) {
-			return -1;
+			map.put(Constants.ANSWER_CODE, -1);
+			return map;
 		}
 		if (!StringUtils.hasText(accountInfo.getEmail())) {
-			return 0;
+			map.put(Constants.ANSWER_CODE, -1);
+			return map;
 		}
 		if (!StringUtils.hasText(accountInfo.getPassword())) {
-			return 0;
+			map.put(Constants.ANSWER_CODE, -1);
+			return map;
 		}
 		accountInfoService.saveOrUpdate(accountInfo);
-		return 1;
+		map.put(Constants.ANSWER_CODE, 1);
+		map.put("accountId", accountInfo.getId());
+		req.getSession().setAttribute(Constants.PORTAL_USER, accountInfo);
+		return map;
+	}
+	/**
+	 * portal/check/account/{email}<br>
+	 * 检测帐号是否已经注册，返回1表示该邮箱已经被注册，0表示未注册
+	 * @param email
+	 * @return
+	 */
+	@RequestMapping(value="check/account/{email}", method=RequestMethod.GET)
+	public @ResponseBody int checkAccount(@PathVariable String email){
+		return accountInfoService.checkAccount(email);
 	}
 	
 	/**

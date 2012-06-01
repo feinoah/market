@@ -48,6 +48,13 @@ public interface AppVersionFileDao {
 	AppVersionFile queryById(int id);
 	
 	/**
+	 * 按应用Id查询
+	 * @param appId
+	 * @return
+	 */
+	List<AppVersionFile> queryByAppId(int appId);
+	
+	/**
 	 * 查询
 	 * @return
 	 */

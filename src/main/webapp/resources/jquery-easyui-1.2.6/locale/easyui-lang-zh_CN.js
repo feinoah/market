@@ -23,6 +23,9 @@ if ($.fn.validatebox){
 if ($.fn.numberbox){
 	$.fn.numberbox.defaults.missingMessage = '该输入项为必输项';
 }
+if ($.fn.numberspinner){
+	$.fn.numberspinner.defaults.missingMessage = '该输入项为必输项';
+}
 if ($.fn.combobox){
 	$.fn.combobox.defaults.missingMessage = '该输入项为必输项';
 }

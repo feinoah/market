@@ -16,7 +16,7 @@ public interface AccountInfoDao {
 	 * @param AccountInfo
 	 * @return
 	 */
-	int add(final AccountInfo AccountInfo);
+	AccountInfo add(final AccountInfo AccountInfo);
 	
 	/**
 	 * 删除
@@ -88,5 +88,12 @@ public interface AccountInfoDao {
 	 * @return
 	 */
 	int unLockAccount(int id);
+	
+	/**
+	 * 检查帐号
+	 * @param email
+	 * @return
+	 */
+	int checkAccount(String email);
 	
 }

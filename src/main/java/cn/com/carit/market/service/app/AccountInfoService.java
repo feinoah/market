@@ -17,7 +17,7 @@ public interface AccountInfoService {
 	 * @param accountInfo
 	 * @return
 	 */
-	void saveOrUpdate(AccountInfo accountInfo) throws Exception;
+	AccountInfo saveOrUpdate(AccountInfo accountInfo) throws Exception;
 	
 	/**
 	 * 删除
@@ -94,4 +94,11 @@ public interface AccountInfoService {
 	 * @return
 	 */
 	int unLockAccount(int id);
+	
+	/**
+	 * 检查帐号
+	 * @param email
+	 * @return
+	 */
+	int checkAccount(String email);
 }
