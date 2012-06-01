@@ -8,40 +8,7 @@
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
-		var apps=[];
-		var users=[];
 		$(function(){
-			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/admin/app/application/all', function(data) {
-				if(data){
-					apps=data;
-				}
-			});
-			$.getJSON('${ctx}/admin/app/account/all', function(data) {
-				if(data){
-					users=data;
-				}
-			});
-			$('#appId').combobox({
-				data:apps,
-			    valueField:'id',  
-			    textField:'appName'  
-			}); 
-			$('#appId_edit').combobox({  
-				data:apps,
-			    valueField:'id',  
-			    textField:'appName'   
-			});
-			$('#userId').combobox({  
-			    data:users,
-			    valueField:'id',  
-			    textField:'nickName'  
-			}); 
-			$('#editForm input[name=userId]').combobox({  
-				data:users,
-			    valueField:'id',  
-			    textField:'nickName'  
-			});
 			checkEditControl('${ctx}/admin/app/comment');
 			$('.datagrid-toolbar a:first').hide();//没有新增
 		});
@@ -49,10 +16,11 @@
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window('open');
-				$('#appId_edit').combobox('setValue',m.appId);
-				$('#appId_edit').attr('disabled',true);
-				$('#userId_edit').combobox('setValue',m.userId);
-				$('#userId_edit').attr('disabled',true);
+				$('#appName_edit').val(m.appName);
+				$('#enName_edit').val(m.enName);
+				$('#userName_edit').val(m.userName);
+				$('#appId_edit').val(m.appId);
+				$('#userId_edit').val(m.userId);
 				$('#grade_edit').numberspinner('setValue',m.grade);
 				$('#status_edit').combobox('setValue',m.status);
 				$('#editForm textarea').val(m.comment);
@@ -100,29 +68,6 @@
 			}
 		}
 		
-		function appFormatter(v){
-			var result='-';
-			$.each(apps, function(key,val) {
-				if(v==val.id){
-					result=val.appName;
-					return false;
-				}
-			});
-			return result;
-		}
-		function usrFormatter(v){
-			var result='-';
-			$.each(users, function(key,val) {
-				if(v==val.id){
-					result=val.email;
-					if(val.nickName){
-						result=val.nickName;
-					}
-					return false;//跳出
-				}
-			});
-			return result;
-		}
 		function gradeFormatter(v){
 			var result='';
 			for(var i=1;i<=v;i++){
@@ -151,40 +96,26 @@
 			method="get" id="searchForm">
 			<table>
 				<tr>
-					<td>
-						<form:label for="appId" path="appId">应用名称：</form:label>
-					</td>
-					<td>
-						<form:input path="appId" />
-					</td>
-					<td>
-						<form:label for="userId" path="userId">评论人：</form:label>
-					</td>
-					<td>
-						<form:input path="userId" />
-					</td>
+					<td><form:label for="appName" path="appName">应用名称：</form:label></td>
+					<td><form:input path="appName" /></td>
+					<td><form:label for="enName" path="enName">英文名称：</form:label></td>
+					<td><form:input path="enName" /></td>
+					<td><form:label for="userName" path="userName">评论人：</form:label></td>
+					<td><form:input path="userName" /></td>
 				</tr>
 				<tr>
+					<td><form:label for="grade" path="grade">等级：</form:label></td>
+					<td><form:input path="grade" cssClass="easyui-numberspinner"  min="1" max="5"/></td>
+					<td><form:label for="status" path="status">状态：</form:label></td>
 					<td>
-						<form:label for="grade" path="grade">等级：</form:label>
-					</td>
-					<td>
-						<form:input path="grade" cssClass="easyui-numberspinner" value="1" min="1" max="5"/>
-					</td>
-					<td>
-						<form:label for="status" path="status">状态：</form:label>
-					</td>
-					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" cssClass="easyui-combobox" editable='false'>
 							<form:option value="">请选择</form:option>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>
 						</form:select>
 					</td>
-				</tr>
-				<tr>
 					<td><form:label for="comment" path="comment">内容：</form:label></td>
-					<td><form:input path="comment" cssClass="easyui-validatebox"/></td>
+					<td><form:input path="comment" /></td>
 				</tr>
 			</table>
 		</form:form>
@@ -199,12 +130,15 @@
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>
 					<tr>
-						<th field="appId" width="100" align="center" formatter="appFormatter">应用名称</th>
-						<th field="userId" width="100" align="center" formatter="usrFormatter">评论人</th>
+						<th field="appName" width="100" align="center" >应用名称</th>
+						<th field="enName" width="100" align="center" >英文名称</th>
+						<th field="userName" width="100" align="center" >评论人</th>
 						<th field="grade" width="60" align="center" formatter="gradeFormatter">等级</th>
 						<th field="comment" width="200" align="center">内容</th>
 						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
 						<th field="updateTime" width="80" align="center">更新时间</th>
+						<th field="appId" width="100" align="center" hidden="true"/>
+						<th field="userId" width="100" align="center" hidden="true"/>
 					</tr>
 				</thead>
 			</table>
@@ -213,45 +147,34 @@
 			<form:form modelAttribute="appComment" id="editForm" action="${ctx}/admin/app/comment/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
-					<td>
-						<form:label for="appId" path="appId">应用名称：</form:label>
-					</td>
-					<td>
-						<form:input path="appId" id="appId_edit"/>
-					</td>
-					<td>
-						<form:label for="userId" path="userId">评论人：</form:label>
-					</td>
-					<td>
-						<form:input path="userId" id="userId_edit" />
-					</td>
+					<td><form:label for="appName" path="appName">应用名称：</form:label></td>
+					<td><form:input path="appName" id="appName_edit" disabled="true"/></td>
+					<td><form:label for="enName" path="enName">英文名称：</form:label></td>
+					<td><form:input path="enName" id="enName_edit" disabled="true"/></td>
 				</tr>
 				<tr>
+					<td><form:label for="userName" path="userName">评论人：</form:label></td>
+					<td><form:input path="userName" id="userName_edit" disabled="true"/></td>
+					<td><form:label for="grade" path="grade" cssClass="mustInput">等级：</form:label></td>
+					<td><form:input path="grade" id="grade_edit" cssClass="easyui-numberspinner"  min="1" max="5" required="true"/></td>
+				</tr>
+				<tr>
+					<td><form:label for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:label for="grade" path="grade">等级：</form:label>
-					</td>
-					<td>
-						<form:input path="grade" id="grade_edit" cssClass="easyui-numberspinner" value="1" min="1" max="5"/>
-					</td>
-					<td>
-						<form:label for="status" path="status">状态：</form:label>
-					</td>
-					<td>
-						<form:select path="status" id="status_edit" cssClass="easyui-combobox">
-							<form:option value="">请选择</form:option>
+						<form:select path="status" id="status_edit" cssClass="easyui-combobox" required="true" editable='false'>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>
 						</form:select>
 					</td>
 				</tr>
 				<tr>
-					<td><form:label for="comment" path="comment" cssClass="easyui-validatebox">内容：</form:label></td>
-					<td colspan="3">
-						<form:textarea path="comment" />
-					</td>
+					<td><form:label for="comment" path="comment" cssClass="mustInput">内容：</form:label></td>
+					<td colspan="3"><form:textarea path="comment"  required="true" validType="maxLength[250]"/></td>
 				</tr>
 				</table>
 				<form:hidden path="id"/>
+				<form:hidden path="appId" id="appId_edit"/>
+				<form:hidden path="userId" id="userId_edit"/>
 				<div style="text-align: center; padding: 5px;">
 					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit"
 						iconCls="icon-save">保 存</a>

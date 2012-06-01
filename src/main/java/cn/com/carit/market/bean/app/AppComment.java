@@ -24,10 +24,16 @@ public class AppComment  implements Serializable{
 	 * appId
 	 */
 	private Integer appId;
+	
+	private String appName;
+	
+	private String enName;
 	/**
 	 * userId
 	 */
 	private Integer userId;
+	
+	private String userName;
 	/**
 	 * grade
 	 */
@@ -98,6 +104,24 @@ public class AppComment  implements Serializable{
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getUpdateTime() {
 		return this.updateTime;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 }

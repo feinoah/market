@@ -21,7 +21,7 @@ import cn.com.carit.market.service.app.AppDownloadLogService;
  * Auto generated Code
  */
 @Controller
-@RequestMapping(value="admin/app/downloadLog")
+@RequestMapping(value="admin/app/download")
 public class AppDownloadLogController {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -30,7 +30,7 @@ public class AppDownloadLogController {
 
 	/**
 	 * 啥都不干，单纯跳转到页面
-	 * admin/app/downloadLog
+	 * admin/app/download
 	 * @return
 	 */
 	@RequestMapping(method=RequestMethod.GET)
@@ -41,7 +41,7 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 增加/更新
-	 * admin/app/downloadLog/save
+	 * admin/app/download/save
 	 * @param user
 	 * @param result
 	 * @return
@@ -60,7 +60,7 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 查看
-	 * admin/app/downloadLog/view/{id}
+	 * admin/app/download/view/{id}
 	 * @param id
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 删除
-	 * admin/app/downloadLog/delete/{id}
+	 * admin/app/download/delete/{id}
 	 * @param id
 	 * @return
 	 */
@@ -92,7 +92,7 @@ public class AppDownloadLogController {
 	
 	/**
 	 * 查询
-	 * admin/app/downloadLog/query
+	 * admin/app/download/query
 	 * @return json
 	 */
 	@RequestMapping(value="query", method=RequestMethod.GET)

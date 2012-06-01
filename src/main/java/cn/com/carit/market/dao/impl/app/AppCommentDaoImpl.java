@@ -43,6 +43,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			appComment.setStatus(rs.getInt("status"));
 			appComment.setCreateTime(rs.getTimestamp("create_time"));
 			appComment.setUpdateTime(rs.getTimestamp("update_time"));
+			appComment.setAppName(rs.getString("app_name"));
+			appComment.setEnName(rs.getString("en_name"));
+			appComment.setUserName(rs.getString("nick_name"));
 			return appComment;
 		}
 	};
@@ -125,21 +128,21 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 
 	@Override
 	public AppComment queryById(int id) {
-		String sql = "select * from t_app_comment where id=?";
+		String sql = "select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<AppComment> query() {
-		return this.jdbcTemplate
-				.query("select * from t_app_comment", rowMapper);
+		String sql="select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id";
+		log.debug(String.format("\n%1$s\n", sql));
+		return this.jdbcTemplate.query(sql, rowMapper);
 	}
 
 	@Override
 	public List<AppComment> queryByExemple(AppComment appComment) {
-		StringBuilder sql = new StringBuilder(
-				"select * from t_app_comment where 1=1");
+		StringBuilder sql = new StringBuilder("select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appComment));
@@ -150,13 +153,12 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	@Override
 	public JsonPage<AppComment> queryByExemple(AppComment appComment, DataGridModel dgm) {
 		JsonPage<AppComment> jsonPage = new JsonPage<AppComment>(dgm.getPage(), dgm.getRows());
-		StringBuilder sql = new StringBuilder(
-				"select * from t_app_comment where 1=1");
+		StringBuilder sql = new StringBuilder("select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		String whereSql=buildWhere(args, argTypes, appComment);
 		sql.append(whereSql);
-		String countSql="select count(1) from t_app_comment where 1=1"+whereSql;
+		String countSql="select count(1) from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id where 1=1"+whereSql;
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql, args, argTypes);
 		// 更新
@@ -182,37 +184,52 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			List<Integer> argTypes, AppComment appComment) {
 		StringBuilder sql=new StringBuilder();
 		if (appComment.getAppId() != null) {
-			sql.append(" and app_id=?");
+			sql.append(" and a.app_id=?");
 			args.add(appComment.getAppId());
 			argTypes.add(4);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appComment.getAppName())){
+			sql.append(" and b.app_name like CONCAT('%',?,'%')");
+			args.add(appComment.getAppName());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if(StringUtils.hasText(appComment.getEnName())){
+			sql.append(" and  b.en_name like CONCAT('%',?,'%')");
+			args.add(appComment.getEnName());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (appComment.getUserId() != null) {
-			sql.append(" and user_id=?");
+			sql.append(" and a.user_id=?");
 			args.add(appComment.getUserId());
 			argTypes.add(4);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appComment.getUserName())){
+			sql.append(" and  c.nick_name like CONCAT('%',?,'%')");
+			args.add(appComment.getUserName());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (appComment.getGrade() != null) {
-			sql.append(" and grade=?");
+			sql.append(" and a.grade=?");
 			args.add(appComment.getGrade());
 			argTypes.add(4);// java.sql.Types type
 		}
 		if (StringUtils.hasText(appComment.getComment())) {
-			sql.append(" and comment like CONCAT('%',?,'%')");
+			sql.append(" and a.comment like CONCAT('%',?,'%')");
 			args.add(appComment.getComment());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (appComment.getStatus() != null) {
-			sql.append(" and status=?");
+			sql.append(" and a.status=?");
 			args.add(appComment.getStatus());
 			argTypes.add(4);// java.sql.Types type
 		}
 		if (appComment.getCreateTime() != null) {
-			sql.append(" and create_time=?");
+			sql.append(" and a.create_time=?");
 			args.add(appComment.getCreateTime());
 			argTypes.add(93);// java.sql.Types type
 		}
 		if (appComment.getUpdateTime() != null) {
-			sql.append(" and update_time=?");
+			sql.append(" and a.update_time=?");
 			args.add(appComment.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
 		}

@@ -386,7 +386,7 @@
 									<form:option value="2">中英双语</form:option>
 								</form:select></td>
 								<td><form:label	for="appLevel" path="appLevel" cssClass="mustInput">应用分级：</form:label></td>
-								<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-validatebox easyui-numberspinner" min="1" max="10" required="true" validType="number" editable='false'/></td>
+								<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-validatebox easyui-numberspinner" min="1" max="10" required="true" validType="number"/></td>
 							</tr>
 							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>

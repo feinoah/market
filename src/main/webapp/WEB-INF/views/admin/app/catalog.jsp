@@ -88,19 +88,19 @@
 						<form:label for="name" path="name">邮箱：</form:label>
 					</td>
 					<td>
-						<form:input path="name" cssClass="easyui-validatebox" />
+						<form:input path="name"/>
 					</td>
 					<td>
 						<form:label for="displayIndex" path="displayIndex">显示顺序：</form:label>
 					</td>
 					<td>
-						<form:input path="displayIndex" cssClass="easyui-validatebox" />
+						<form:input path="displayIndex"  cssClass="easyui-numberspinner"  min="1" max="1000" />
 					</td>
 					<td>
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" cssClass="easyui-combobox" editable='false'>
 							<form:option value="">请选择</form:option>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>
@@ -144,13 +144,13 @@
 						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
-						<td><form:label for="displayIndex" path="displayIndex" cssClass="easyui-validatebox">顺序：</form:label></td>
-						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"  cssStyle="width:295px;"/></td>
+						<td><form:label for="displayIndex" path="displayIndex" cssClass="mustInput">顺序：</form:label></td>
+						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  min="1" max="1000" required="true" validType="number"  cssStyle="width:295px;"/></td>
 					</tr>
 					<tr>
-						<td><form:label	for="status" id="status_edit" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
+						<td><form:label	for="status" id="status_edit" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
-							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:295px;">>
+							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:295px;" editable='false'>
 							<form:option value="1">启用</form:option>
 							<form:option value="0">停用</form:option>
 							</form:select>
@@ -163,10 +163,10 @@
 						<td colspan="2">
 							<div id="descTabs" class="easyui-tabs" style="width:380px;height:95px;">  
 								<div title="中文" style="padding:3px;">  
-									<form:textarea path="description" />
+									<form:textarea path="description"  validType="maxLength[250]"/>
 								</div>  
 								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-									<form:textarea path="enDescription" />
+									<form:textarea path="enDescription"  validType="maxLength[250]"/>
 								</div> 
 							</div> 
 						</td>

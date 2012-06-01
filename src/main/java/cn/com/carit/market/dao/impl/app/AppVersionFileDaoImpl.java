@@ -47,6 +47,8 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			appVersionFile.setStatus(rs.getInt("status"));
 			appVersionFile.setCreateTime(rs.getTimestamp("create_time"));
 			appVersionFile.setUpdateTime(rs.getTimestamp("update_time"));
+			appVersionFile.setAppName(rs.getString("app_name"));
+			appVersionFile.setEnName(rs.getString("en_name"));
 			return appVersionFile;
 		}
 	};
@@ -133,7 +135,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public AppVersionFile queryById(int id) {
-		String sql = "select * from t_app_version_file a left join t_application b on a.app_id=b.id where a.id=?";
+		String sql = "select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql, id, rowMapper);
 	}
@@ -141,14 +143,14 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	
 	@Override
 	public List<AppVersionFile> queryByAppId(int appId) {
-		String sql="select * from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=?";
+		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.query(sql, new Object[]{appId}, rowMapper);
 	}
 
 	@Override
 	public List<AppVersionFile> query() {
-		String sql="select * from t_app_version_file a left join t_application b on a.app_id=b.id";
+		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id";
 		log.debug(String.format("\n%1$s\n", sql));
 		return this.jdbcTemplate.query(sql,rowMapper);
 	}
@@ -156,7 +158,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	@Override
 	public List<AppVersionFile> queryByExemple(AppVersionFile appVersionFile) {
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
+				"select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appVersionFile));
@@ -169,7 +171,7 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			DataGridModel dgm) {
 		JsonPage<AppVersionFile> jsonPage = new JsonPage<AppVersionFile>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
+				"select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		String whereSql=buildWhere(args, argTypes, appVersionFile);
@@ -220,13 +222,16 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			argTypes.add(12);// java.sql.Types type
 		}
 		if(StringUtils.hasText(appVersionFile.getAppName())){
-			sql.append(" and b.app_name like CONCAT('%',?,'%') or b.en_name like CONCAT('%',?,'%')");
-			args.add(appVersionFile.getNewFeatures());
-			argTypes.add(12);// java.sql.Types type
-			
-			args.add(appVersionFile.getNewFeatures());
+			sql.append(" and b.app_name like CONCAT('%',?,'%')");
+			args.add(appVersionFile.getAppName());
 			argTypes.add(12);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appVersionFile.getEnName())){
+			sql.append(" and  b.en_name like CONCAT('%',?,'%')");
+			args.add(appVersionFile.getEnName());
+			argTypes.add(12);// java.sql.Types type
+		}
+		
 		if (StringUtils.hasText(appVersionFile.getNewFeatures())) {
 			sql.append(" and a.new_features like CONCAT('%',?,'%')");
 			args.add(appVersionFile.getNewFeatures());

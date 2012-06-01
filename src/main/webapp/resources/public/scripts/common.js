@@ -53,9 +53,7 @@ $(function (){
 		}).submit();
 	});
 	$('#edit_reset').bind('click',function(){
-		var id=$('#editForm input[name=id]').val();
 		$('#editForm').form('clear');
-		$('#editForm input[name=id]').val(id);
 	});
 });
 

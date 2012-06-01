@@ -41,6 +41,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			appDownloadLog.setAccountId(rs.getInt("account_id"));
 			appDownloadLog.setAppId(rs.getInt("app_id"));
 			appDownloadLog.setDownloadTime(rs.getTimestamp("download_time"));
+			appDownloadLog.setAppName(rs.getString("app_name"));
+			appDownloadLog.setEnName(rs.getString("en_name"));
+			appDownloadLog.setUserName(rs.getString("nick_name"));
 			return appDownloadLog;
 		}
 	};
@@ -112,14 +115,15 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public List<AppDownloadLog> query() {
-		return this.jdbcTemplate.query("select * from t_app_download_log",
-				rowMapper);
+		String sql="select a.*,b.app_name, b.en_name, c.nick_name from t_app_download_log a left join t_application b on a.app_id=b.id left join t_account_info c on a.account_id=c.id";
+		log.debug(String.format("\n%1$s\n", sql));
+		return this.jdbcTemplate.query(sql,rowMapper);
 	}
 
 	@Override
 	public List<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog) {
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_download_log where 1=1");
+				"select a.*,b.app_name, b.en_name, c.nick_name from t_app_download_log a left join t_application b on a.app_id=b.id left join t_account_info c on a.account_id=c.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appDownloadLog));
@@ -132,12 +136,12 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			DataGridModel dgm) {
 		JsonPage<AppDownloadLog> jsonPage = new JsonPage<AppDownloadLog>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql = new StringBuilder(
-				"select * from t_app_download_log where 1=1");
+				"select a.*,b.app_name, b.en_name, c.nick_name from t_app_download_log a left join t_application b on a.app_id=b.id left join t_account_info c on a.account_id=c.id where 1=1");
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		String whereSql=buildWhere(args, argTypes, appDownloadLog);
 		sql.append(whereSql);
-		String countSql="select count(1) from t_app_download_log where 1=1"+whereSql;
+		String countSql="select count(1) from t_app_download_log a left join t_application b on a.app_id=b.id left join t_account_info c on a.account_id=c.id where 1=1"+whereSql;
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql, args, argTypes);
 		// 更新
@@ -163,17 +167,32 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			List<Integer> argTypes, AppDownloadLog appDownloadLog) {
 		StringBuilder sql=new StringBuilder();
 		if (appDownloadLog.getAccountId() != null) {
-			sql.append(" and account_id=?");
+			sql.append(" and a.account_id=?");
 			args.add(appDownloadLog.getAccountId());
 			argTypes.add(4);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appDownloadLog.getUserName())){
+			sql.append(" and  c.nick_name like CONCAT('%',?,'%')");
+			args.add(appDownloadLog.getUserName());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (appDownloadLog.getAppId() != null) {
-			sql.append(" and app_id=?");
+			sql.append(" and a.app_id=?");
 			args.add(appDownloadLog.getAppId());
 			argTypes.add(4);// java.sql.Types type
 		}
+		if(StringUtils.hasText(appDownloadLog.getAppName())){
+			sql.append(" and b.app_name like CONCAT('%',?,'%')");
+			args.add(appDownloadLog.getAppName());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if(StringUtils.hasText(appDownloadLog.getEnName())){
+			sql.append(" and  b.en_name like CONCAT('%',?,'%')");
+			args.add(appDownloadLog.getEnName());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (appDownloadLog.getDownloadTime() != null) {
-			sql.append(" and download_time=?");
+			sql.append(" and a.download_time=?");
 			args.add(appDownloadLog.getDownloadTime());
 			argTypes.add(93);// java.sql.Types type
 		}

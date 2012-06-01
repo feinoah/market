@@ -58,9 +58,7 @@
 				}).submit();
 			});
 			$('#edit_reset').bind('click',function(){ 
-				var id=$('#editForm input[name=id]').val();
 				$('#editForm').form('clear');
-				$('#editForm input[name=id]').val(id);
 			});
 			
 			$('#editWin').window({
@@ -236,19 +234,19 @@
 						<form:label for="email" path="email">邮箱：</form:label>
 					</td>
 					<td>
-						<form:input path="email" cssClass="easyui-validatebox" />
+						<form:input path="email" />
 					</td>
 					<td>
 						<form:label for="nickName" path="nickName">昵称：</form:label>
 					</td>
 					<td>
-						<form:input path="nickName" cssClass="easyui-validatebox" />
+						<form:input path="nickName" />
 					</td>
 					<td>
 						<form:label for="realName" path="realName">真实姓名：</form:label>
 					</td>
 					<td>
-						<form:input path="realName" cssClass="easyui-validatebox" />
+						<form:input path="realName" />
 					</td>
 				</tr>
 				<tr>
@@ -256,7 +254,7 @@
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
+						<form:select path="status" cssClass="easyui-combobox" editable='false'>
 							<form:option value="">请选择</form:option>
 							<form:option value="0">停用</form:option>
 							<form:option value="1">启用</form:option>
@@ -266,7 +264,7 @@
 						<form:label for="gender" path="gender">性别：</form:label>
 					</td>
 					<td>
-						<form:select path="gender" cssClass="easyui-combobox">
+						<form:select path="gender" cssClass="easyui-combobox" editable='false'>
 							<form:option value="">请选择</form:option>
 							<form:option value="0">女</form:option>
 							<form:option value="1">男</form:option>
@@ -277,7 +275,7 @@
 						<form:label for="mobile" path="mobile">手机号码：</form:label>
 					</td>
 					<td>
-						<form:input path="gender" cssClass="easyui-combobox"/>
+						<form:input path="gender"/>
 					</td>
 				</tr>
 			</table>
@@ -331,7 +329,7 @@
 						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:select path="status" cssClass="easyui-combobox">
+							<form:select path="status" cssClass="easyui-combobox" editable='false'>
 								<form:option value="1">启用</form:option>
 								<form:option value="0">停用</form:option>
 							</form:select>
@@ -340,7 +338,7 @@
 					<tr>
 						<td><form:label	for="gender" path="gender" cssClass="easyui-validatebox">性别：</form:label></td>
 						<td>
-							<form:select path="gender" cssClass="easyui-combobox">
+							<form:select path="gender" cssClass="easyui-combobox" editable='false'>
 							<form:option value="2">保密</form:option>
 							<form:option value="0">女</form:option>
 							<form:option value="1">男</form:option>

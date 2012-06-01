@@ -24,10 +24,17 @@ public class AppDownloadLog  implements Serializable{
 	 * accountId
 	 */
 	private Integer accountId;
+	
+	private String userName;
 	/**
 	 * appId
 	 */
 	private Integer appId;
+
+	private String appName;
+	
+	private String enName;
+	
 	/**
 	 * downloadTime
 	 */
@@ -57,6 +64,24 @@ public class AppDownloadLog  implements Serializable{
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getDownloadTime() {
 		return this.downloadTime;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getAppName() {
+		return appName;
+	}
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+	public String getEnName() {
+		return enName;
+	}
+	public void setEnName(String enName) {
+		this.enName = enName;
 	}
 
 }
