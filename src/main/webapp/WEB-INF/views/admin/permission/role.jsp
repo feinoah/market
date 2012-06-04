@@ -19,7 +19,7 @@
 					}
 				}
 			});		
-			checkEditControl('admin/permission/role');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/role');
 			$('#edit_submit_r').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){
@@ -56,8 +56,12 @@
 				    }
 				}).submit();
 			});
+			$('#editWin').window({onClose:function(){
+				$('#tree').tree('uncheck',$('#tree').tree('find',1));
+			}});
 		});
 		function edit() {
+			$('#editWin').window({title:'修改'+winTitle});
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window('open');
@@ -161,7 +165,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑角色" closed="true" style="width:500px;height:500px;padding:5px;" maximizable="true" modal="true">
+		<div id="editWin" class="easyui-window" title="角色" closed="true" style="width:500px;height:500px;padding:5px;" maximizable="true" modal="true">
 			<form:form modelAttribute="baseRole" id="editForm" action="${ctx}/admin/permission/role/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>

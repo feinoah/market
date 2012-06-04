@@ -1,4 +1,6 @@
+var winTitle;
 $(function (){
+	winTitle=$('#editWin').window('options').title;
 	// 初始化
 	$('#tt').datagrid({
 		width:'100%',
@@ -7,6 +9,7 @@ $(function (){
 			text:'新增',
 			iconCls:'icon-add',
 			handler:function() {
+				$('#editWin').window({title:'新增'+winTitle});
 				$('#editWin').window('open');
 				$('#editWin').show();
 			}
@@ -36,6 +39,15 @@ $(function (){
 	// edit form
 	$('#edit_submit').bind('click',function(){
 		$('#editForm').form({
+			onSubmit:function(){
+				$('#editForm textarea').each(function(){
+					if($.trim($(this).val()).length>$(this).attr('maxLen')){
+						$.messager.alert('提示', '描述超长，最多输入'+$(this).attr('maxLen')+'个字符', 'info');
+						return false;
+					}
+				});
+				return $(this).form('validate');
+			},
 	    	success:function(data){
 	    		if(data==-1){
 					$.messager.alert('错误', "编辑失败", 'error');
@@ -150,7 +162,7 @@ function statusFormatter(v){
  */
 function genderFormatter(v){
 	if(v==1){return '男'}
-	if(v==1){return '女'}
+	if(v==0){return '女'}
 	return '保密';
 }
 
@@ -167,5 +179,18 @@ function checkEditControl(url){
 				$(this).hide();
 			}
 		});
+	});
+}
+
+function checkExisted(item,url){
+	item.change(function(){
+		if(item.val()!=''){
+			$.getJSON(url+item.val(), function(data) {
+				if(data>0){
+					$.messager.alert('提示','该名字已经存在!','info');
+					return false;
+				}
+			});
+		}
 	});
 }

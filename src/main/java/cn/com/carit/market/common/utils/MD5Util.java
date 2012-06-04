@@ -123,11 +123,6 @@ public class MD5Util {
 			System.out.println(MD5Util.md5Hex("a"));
 			System.out.println(MD5Util.getMD5String("a"));
 			System.out.println(md5Hex("12342@1234.com"+md5Hex("@12345")+DISTURBSTR));
-			System.out.println(System.nanoTime());
-			String str="agaga;ldkgdg;dfdfd;";
-			for (String s: str.split(";")) {
-				System.out.println(s);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

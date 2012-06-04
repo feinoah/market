@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AppCatalog;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
@@ -80,4 +81,13 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 	public List<PortalAppCatalog> queryAll(String local) {
 		return appCatalogDao.queryAll(local);
 	}
+
+	@Override
+	public int checkCatalog(String name, String local) {
+		if (StringUtils.hasText(name)) {
+			return appCatalogDao.checkCatalog(name, local);
+		}
+		return 0;
+	}
+	
 }

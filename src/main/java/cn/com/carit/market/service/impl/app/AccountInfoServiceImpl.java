@@ -167,7 +167,9 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 
 	@Override
 	public int checkAccount(String email) {
-		// TODO Auto-generated method stub
+		if(StringUtils.hasText(email)){
+			return accountInfoDao.checkAccount(email);
+		}
 		return 0;
 	}
 	

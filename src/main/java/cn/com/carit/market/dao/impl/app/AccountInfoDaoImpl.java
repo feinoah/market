@@ -77,14 +77,14 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 				ps.setString(1, accountInfo.getEmail());
 				ps.setString(2, accountInfo.getPassword());
 				ps.setString(3, accountInfo.getNickName());
-				ps.setByte(4, accountInfo.getGender());
+				ps.setByte(4, accountInfo.getGender()!=null?accountInfo.getGender():2);
 				if (accountInfo.getBirthday() != null) {
 					ps.setDate(5, new Date(accountInfo.getBirthday().getTime()));
 				} else {
 					ps.setDate(5, null);
 				}
 				ps.setString(6, accountInfo.getPhoto());
-				ps.setDouble(7, accountInfo.getBalance());
+				ps.setDouble(7, accountInfo.getBalance()!=null?accountInfo.getBalance():0);
 				ps.setString(8, accountInfo.getRealName());
 				ps.setString(9, accountInfo.getIdCard());
 				ps.setString(10, accountInfo.getOfficePhone());
@@ -360,7 +360,13 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	public int checkAccount(String email) {
 		String sql="select 1 from t_account_info where email=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.queryForInt(sql, email);
+		int result=0;
+		try {
+			result=jdbcTemplate.queryForInt(sql, email);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+		return result;
 	}
 	
 }

@@ -25,11 +25,12 @@
 			    valueField:'id',  
 			    textField:'moduleName'  
 			}); 
-			checkEditControl('${ctx}/admin/permission/module');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/module');
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=moduleName]').val(m.moduleName);
@@ -175,7 +176,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑模块" closed="true" style="width:580px;height:380px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="模块" closed="true" style="width:580px;height:380px;padding:5px;" modal="true">
 			<form:form modelAttribute="baseModule" id="editForm" action="${ctx}/admin/permission/module/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
@@ -215,7 +216,7 @@
 						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  value="1"  min="1" max="1000" required="true" validType="number"/></td>
 					</tr>
 					<tr><td><form:label for="information" path="information" cssClass="easyui-validatebox">描述：</form:label></td></tr>
-					<tr><td colspan="4"><form:textarea path="information" cssStyle="width:480px;height:100px;" /></td></tr>
+					<tr><td colspan="4"><form:textarea path="information" cssClass="easyui-validatebox" cssStyle="width:480px;height:100px;" validType="maxLength[100]" maxLen="100"/></td></tr>
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">

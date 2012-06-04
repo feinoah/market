@@ -18,7 +18,7 @@
 				valueField:'id',
 				textField:'roleName'
 			});
-			checkEditControl('${ctx}/admin/permission/user');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/user');
 			$('#editWin').window({onClose:function(){
 				$('#password').attr('disabled',false).attr('required',true);
 				$('#email_edit').attr('disabled',false);
@@ -34,6 +34,7 @@
 				$('#password').attr('disabled',true);
 				$('#emailLabel').removeClass('mustInput');
 				$('#nickNameLabel').removeClass('mustInput');
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				var r=[];
@@ -189,7 +190,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑用户" closed="true" style="width:625px;height:400px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="用户" closed="true" style="width:625px;height:400px;padding:5px;" modal="true">
 			<form:form modelAttribute="baseUser" id="editForm" action="${ctx}/admin/permission/user/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
@@ -235,7 +236,7 @@
 					</tr>
 					<tr><td><form:label for="remark" path="remark" cssClass="easyui-validatebox">备注：</form:label></td></tr>
 					<tr>
-						<td colspan="4"><form:textarea path="remark" cssStyle="width:535px;height:80px;" /></td>
+						<td colspan="4"><form:textarea path="remark" cssClass="easyui-validatebox" cssStyle="width:535px;height:80px;" validType="maxLength[50]" maxLen="50"/></td>
 					</tr>
 				</table>
 				<form:hidden path="id"/>

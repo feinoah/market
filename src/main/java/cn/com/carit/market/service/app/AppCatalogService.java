@@ -54,4 +54,12 @@ public interface AppCatalogService {
 	JsonPage<AppCatalog> queryByExemple(AppCatalog appCatalog, DataGridModel dgm);
 	
 	List<PortalAppCatalog> queryAll(String local);
+	
+	/**
+	 * 检测分类是否已经存在
+	 * @param name
+	 * @param local
+	 * @return
+	 */
+	int checkCatalog(String name, String local);
 }

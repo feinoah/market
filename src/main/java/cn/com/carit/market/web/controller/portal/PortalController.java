@@ -72,8 +72,8 @@ public class PortalController{
 	 * @return Map<String, Integer>
 	 * <table>
 	 * 	<tr><th>属性</th><th>描述</th></tr>
-	 * 	<tr><td>answerCode</td><td>-2：错误；-1：账号为空；0：密码为空；1：注册成功</td></tr>
-	 * 	<tr><td>accountId</td><td>帐号对象</td></tr>
+	 * 	<tr><td>answerCode</td><td>-2：错误；-1：账号为空；0：密码为空；1：注册成功；2：帐号已存在</td></tr>
+	 * 	<tr><td>accountId</td><td>帐号Id</td></tr>
 	 * </table>
 	 * @throws Exception 
 	 */
@@ -83,14 +83,22 @@ public class PortalController{
 			,BindingResult result, HttpServletRequest req) throws Exception{
 		Map<String, Integer> map=new HashMap<String, Integer>();
 		if (result.hasErrors()) {
-			map.put(Constants.ANSWER_CODE, -1);
+			log.error(result.hasErrors());
+			map.put(Constants.ANSWER_CODE, -2);
 			return map;
 		}
 		if (!StringUtils.hasText(accountInfo.getEmail())) {
+			log.error("email can't be empty...");
 			map.put(Constants.ANSWER_CODE, -1);
 			return map;
 		}
+		if(checkAccount(accountInfo.getEmail())>0){
+			log.error("this account["+accountInfo.getEmail()+"] is existed...");
+			map.put(Constants.ANSWER_CODE, 2);
+			return map;
+		}
 		if (!StringUtils.hasText(accountInfo.getPassword())) {
+			log.error("password can't be empty...");
 			map.put(Constants.ANSWER_CODE, -1);
 			return map;
 		}
@@ -101,13 +109,13 @@ public class PortalController{
 		return map;
 	}
 	/**
-	 * portal/check/account/{email}<br>
+	 * portal/check/account?email={email}<br>
 	 * 检测帐号是否已经注册，返回1表示该邮箱已经被注册，0表示未注册
 	 * @param email
 	 * @return
 	 */
-	@RequestMapping(value="check/account/{email}", method=RequestMethod.GET)
-	public @ResponseBody int checkAccount(@PathVariable String email){
+	@RequestMapping(value="check/account", method=RequestMethod.GET)
+	public @ResponseBody int checkAccount(@RequestParam String email){
 		return accountInfoService.checkAccount(email);
 	}
 	
@@ -450,4 +458,26 @@ public class PortalController{
 		return applicationService.queryHotNewFree(local, limit);
 	}
 	
+	/**
+	 * 检测应用是否已存在
+	 * <br>portal/app/check?appName=&local=cn|en
+	 * @param appName
+	 * @param local
+	 * @return
+	 */
+	@RequestMapping(value="app/check", method=RequestMethod.GET)
+	public @ResponseBody int checkAppliction(@RequestParam String appName, @RequestParam String local){
+		return applicationService.checkApplication(appName, local);
+	}
+	/**
+	 * 检测应用分类是否存在
+	 * <br>portal/app/catalog/check?appName=&local=cn|en
+	 * @param name
+	 * @param local
+	 * @return
+	 */
+	@RequestMapping(value="app/catalog/check", method=RequestMethod.GET)
+	public @ResponseBody int checkCatalog(@RequestParam String name, @RequestParam String local){
+		return appCatalogService.checkCatalog(name, local);
+	}
 }

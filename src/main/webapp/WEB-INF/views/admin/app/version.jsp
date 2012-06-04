@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
-			checkEditControl('${ctx}/admin/app/version');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
 			$('#descTabs').tabs({onSelect:function(title){
 				$(this).tabs('getSelected').show()
 			}});
@@ -17,6 +17,7 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
@@ -131,7 +132,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用版本" closed="true" style="width:680px;height:350px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="应用版本" closed="true" style="width:680px;height:350px;padding:5px;" modal="true">
 			<form:form modelAttribute="appVersionFile" id="editForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
@@ -162,10 +163,10 @@
 					<td colspan="3">
 						<div id="descTabs" class="easyui-tabs" style="width:470px;height:120px;">  
 							<div title="中文" style="padding:3px;">  
-								<form:textarea path="newFeatures"  validType="maxLength[250]"/>
+								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 							</div>  
 							<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-								<form:textarea path="enNewFeatures" validType="maxLength[250]"/>
+								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 							</div> 
 						</div>  
 					</td>

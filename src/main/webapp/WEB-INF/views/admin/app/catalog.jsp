@@ -9,14 +9,17 @@
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
-			checkEditControl('${ctx}/admin/app/catalog');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
 			$('#descTabs').tabs({onSelect:function(title){
 				$(this).tabs('getSelected').show()
 			}});
+			checkExisted($('#name_edit'),'${ctx}/portal/app/catalog/check?local=cn&name=');
+			checkExisted($('#enName_edit'),'${ctx}/portal/app/catalog/check?local=en&name=');
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				$('#name_edit').val(m.name);
@@ -132,7 +135,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用分类" closed="true" style="width:480px;height:380px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="应用分类" closed="true" style="width:480px;height:380px;padding:5px;" modal="true">
 			<form:form modelAttribute="appCatalog" id="editForm" action="${ctx}/admin/app/catalog/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
@@ -163,10 +166,10 @@
 						<td colspan="2">
 							<div id="descTabs" class="easyui-tabs" style="width:380px;height:95px;">  
 								<div title="中文" style="padding:3px;">  
-									<form:textarea path="description"  validType="maxLength[250]"/>
+									<form:textarea path="description"  class="easyui-validatebox"  validType="maxLength[50]" maxLen="50"/>
 								</div>  
 								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-									<form:textarea path="enDescription"  validType="maxLength[250]"/>
+									<form:textarea path="enDescription"  class="easyui-validatebox" validType="maxLength[50]" maxLen="50"/>
 								</div> 
 							</div> 
 						</td>

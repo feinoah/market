@@ -92,7 +92,7 @@
 						$('#editForm textarea').each(function(){
 							if($.trim($(this).val()).length>250){
 								$.messager.alert('提示', "描述超长", 'info');
-								return $(this).form('validate');
+								return false;
 							}
 						});
 						if(tag==0&&$('#apkFile').val()==''){ //新增时
@@ -124,12 +124,13 @@
 						if($('#editVersionForm input[name=status]').val()==''){return $(this).form('validate');}
 						$('#editVersionForm textarea').each(function(){
 							if($.trim($(this).val()).length>250){
-								$.messager.alert('提示', "描述超长", 'info');
-								return $(this).form('validate');
+								$.messager.alert('提示', "描述超长，最多输入250个字符", 'info');
+								return false;
 							}
 						});
 						if($('#versionFile').val()==''){
-							return $(this).form('validate');
+							$.messager.alert('提示', "应用文件必须上传", 'info');
+							return false;
 						}
 						return true;
 					},
@@ -149,11 +150,14 @@
 				}).submit();
 			});
 			checkEditControl();
+			checkExisted($('#appName_edit'),'${ctx}/portal/app/check?local=cn&appName=');
+			checkExisted($('#enName_edit'),'${ctx}/portal/app/check?local=en&appName=');
 		});
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
 				tag=1;
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
@@ -349,16 +353,16 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑应用" iconCls="icon-edit" closed="true" style="width:650px;height:468px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:468px;padding:5px;" modal="true">
 			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;" enctype="multipart/form-data">
 				<div id="appTabs" class="easyui-tabs" style="width:590px;height:345px;">
 					<div title="基本信息" style="padding:3px;">  
 						<table>
 							<tr>
 								<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
-								<td><form:input path="appName" cssClass="easyui-validatebox" required="true" validType="CHS"/></td>
+								<td><form:input path="appName" id="appName_edit" cssClass="easyui-validatebox" required="true"/></td>
 								<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-								<td><form:input path="enName" cssClass="easyui-validatebox" required="true"/></td>
+								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true"/></td>
 							</tr>
 							<tr>
 								<td><label	for="appVersionFile.size" class="mustInput">文件大小：</label></td>
@@ -398,26 +402,26 @@
 						<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">
 							<div id="desc_tabs" title="应用描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="description" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="description" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enDescription" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="enDescription" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div> 
 							</div>
 						 	<div id="permission_tabs" title="权限描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="permissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="permissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enPermissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="enPermissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div> 
 							</div>
 							<div id="features_tabs" title="特性描述" border="false" class="easyui-tabs" style="width:580px;height:85px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="appVersionFile.newFeatures" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="appVersionFile.newFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="appVersionFile.enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[250]"/>
+									<form:textarea path="appVersionFile.enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
 								</div> 
 							</div>
 						</div> 
@@ -432,7 +436,7 @@
 						<table>
 							<tr>
 								<td><label class="mustInput">应用文件：</label></td>
-								<td><input type="file"  name="apkFile" id="apkFile" class="easyui-validatebox" required="true"/></td>
+								<td><input type="file"  name="apkFile" id="apkFile" class="easyui-validatebox" required="true" /></td>
 						</tr>
 						<tr>
 							<td><label>图标：</label></td>
@@ -489,10 +493,10 @@
 					<td colspan="3">
 						<div id="new_features_tabs" class="easyui-tabs" style="width:420px;height:100px;">
 							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[250]"></textarea>
+								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
 							</div>  
 							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[250]"></textarea>
+								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
 							</div> 
 						</div>
 					</td>

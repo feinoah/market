@@ -180,6 +180,11 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 			args.add(appCatalog.getName());
 			argTypes.add(12);// java.sql.Types type
 		}
+		if (StringUtils.hasText(appCatalog.getEnName())) {
+			sql.append(" and en_name like CONCAT('%',?,'%')");
+			args.add(appCatalog.getEnName());
+			argTypes.add(12);// java.sql.Types type
+		}
 		if (StringUtils.hasText(appCatalog.getDescription())) {
 			sql.append(" and description like CONCAT('%',?,'%')");
 			args.add(appCatalog.getDescription());
@@ -229,6 +234,23 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		String sql="select * from "+viewName;
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.query(sql, portalRowMapper);
+	}
+
+	@Override
+	public int checkCatalog(String name, String local) {
+		String viewName="v_app_catalog_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_app_catalog_en";
+		}
+		String sql="select 1 from "+viewName+" where name=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		int result=0;
+		try {
+			result=jdbcTemplate.queryForInt(sql, name);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+		return result;
 	}
 	
 }

@@ -148,5 +148,13 @@ public class ApplicationServiceImpl implements ApplicationService{
 		}
 		return applicationDao.queryHotNewFree(local, limit);
 	}
+
+	@Override
+	public int checkApplication(String appName, String local) {
+		if(StringUtils.hasText(appName)){
+			return applicationDao.checkApplication(appName, local);
+		}
+		return 0;
+	}
 	
 }

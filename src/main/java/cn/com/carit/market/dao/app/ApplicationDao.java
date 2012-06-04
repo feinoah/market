@@ -88,4 +88,12 @@ public interface ApplicationDao {
 	 */
 	List<PortalApplication> queryHotNewFree(String local, int limit);
 	
+	/**
+	 * 检测应用是否存在
+	 * @param appName
+	 * @param local
+	 * @return
+	 */
+	int checkApplication(String appName, String local);
+	
 }

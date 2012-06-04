@@ -64,7 +64,6 @@
 			$('#editWin').window({
 				onClose:function(){
 					$('#editForm input[type=text]').val('');
-					$('#editForm input[type=textarea]').val('');
 				}
 			});
 			// 检测权限
@@ -73,6 +72,7 @@
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=email]').val(m.email);
@@ -309,7 +309,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑账号" closed="true" style="width:700px;height:380px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="账号" closed="true" style="width:700px;height:380px;padding:5px;" modal="true">
 			<form:form modelAttribute="accountInfo" id="editForm" action="${ctx}/admin/app/account/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>

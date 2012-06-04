@@ -529,5 +529,22 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.query(sql, new Object[]{limit}, portalRowMapper);
 	}
+
+	@Override
+	public int checkApplication(String appName, String local) {
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		String sql="select 1 from "+viewName+" where app_name=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		int result=0;
+		try {
+			result=jdbcTemplate.queryForInt(sql, appName);
+		} catch (Exception e) {
+			log.warn(e.getMessage());
+		}
+		return result;
+	}
 	
 }

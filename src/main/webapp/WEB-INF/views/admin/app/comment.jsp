@@ -9,12 +9,13 @@
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
 		$(function(){
-			checkEditControl('${ctx}/admin/app/comment');
+			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
 			$('.datagrid-toolbar a:first').hide();//没有新增
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				$('#appName_edit').val(m.appName);
 				$('#enName_edit').val(m.enName);
@@ -143,7 +144,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="编辑评论" closed="true" style="width:650px;height:300px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="评论" closed="true" style="width:650px;height:300px;padding:5px;" modal="true">
 			<form:form modelAttribute="appComment" id="editForm" action="${ctx}/admin/app/comment/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
@@ -169,7 +170,7 @@
 				</tr>
 				<tr>
 					<td><form:label for="comment" path="comment" cssClass="mustInput">内容：</form:label></td>
-					<td colspan="3"><form:textarea path="comment"  required="true" validType="maxLength[250]"/></td>
+					<td colspan="3"><form:textarea path="comment" cssClass="easyui-validatebox" required="true" validType="maxLength[250]" maxLen="250"/></td>
 				</tr>
 				</table>
 				<form:hidden path="id"/>
