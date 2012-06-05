@@ -745,10 +745,11 @@ body {
 }
 
 .reg {
-	width: 460px;
+	text-align: left;
 	font-size: 14px;
 	line-height: 25px;
 	overflow: hidden;
+	padding: 25px 5px;
 }
 
 .reg dl {
@@ -783,43 +784,6 @@ body {
 	position: absolute
 }
 
-.onShow,.onFocus,.onError,.onCorrect,.onLoad {
-	background: url(../images/reg_bg.png) no-repeat 3000px 3000px;
-	padding-left: 30px;
-	font-size: 12px;
-	height: 25px;
-	width: 124px;
-	display: inline-block;
-	line-height: 25px;
-	vertical-align: middle;
-	overflow: hidden;
-	margin-left: 6px
-}
-
-.onShow {
-	color: #999;
-	padding-left: 0px
-}
-
-.onFocus {
-	background-position: 0px -30px;
-	color: #333
-}
-
-.onError {
-	background-position: 0px -60px;
-	color: #333
-}
-
-.onCorrect {
-	background-position: 0px 0;
-	text-indent: -9000px
-}
-
-.onLoad {
-	background-position: 0px 0
-}
-
 .reg_m {
 	margin-left: 90px
 }
@@ -843,4 +807,34 @@ body {
 	-moz-border-radius: 100px;
 	-webkit-border-radius: 100px;
 	border-radius: 100px;
+}
+
+.onShow,.onFocus,.onError,.onCorrect,.onLoad,onSuccess {
+	padding-left: 30px;
+	font-size: 12px;
+	height: 25px;
+	width: 124px;
+	display: inline-block;
+	line-height: 25px;
+	vertical-align: middle;
+	overflow: hidden;
+	margin-left: 6px
+}
+.onCorrect{
+	background: url(../images/onCorrect.gif) no-repeat;
+}
+.onError{
+	background: url(../images/onError.gif) no-repeat;
+}
+.onFocus{
+	background: url(../images/onFocus.gif) no-repeat;
+}
+.onLoad{
+	background: url(../images/onLoad.gif) no-repeat;
+}
+.onShow{
+	background: url(../images/onShow.gif) no-repeat;
+}
+.onSuccess{
+	background: url(../images/onSuccess.gif) no-repeat;
 }

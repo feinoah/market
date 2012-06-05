@@ -3,18 +3,18 @@
 	<form action="../portal/register" id="regForm" method="post">
 		<dl>
 			<dd>
-				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onshow"></span>
+				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">请输入邮箱地址</span>
 			</dd>
 			<dd>
-				<span class="title">昵称：</span><input class="reg_input" name="nickName" id="nickName" type="text" /><span id="nickNameTip" class="onshow"></span>
+				<span class="title">昵称：</span><input class="reg_input" name="nickName" id="nickName" type="text" /><span id="nickNameTip" class="onShow">请输入3~15位昵称</span>
 			</dd>
 		</dl>
 		<dl>
 			<dd>
-				<span class="title">登录密码：</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onshow"></span>
+				<span class="title">登录密码：</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onShow">请输入6~18位数字、字母、!@#$%^&*()_</span>
 			</dd>
 			<dd>
-				<span class="title">确认登录密码：</span><input class="reg_input" type="password" id="t_RePass" name="t_RePass" /><span id="t_RePassTip" class="onshow"></span>
+				<span class="title">确认登录密码：</span><input class="reg_input" type="password" id="t_RePass" name="t_RePass" /><span id="t_RePassTip" class="onShow">请确认输入上面的密码</span>
 			</dd>
 		</dl>
 		<div class="f_reg_but">
@@ -26,39 +26,33 @@
 <script type="text/javascript">
 <!--
 $(function() {
-	$.formValidator.initConfig({formid:"regForm",debug:false,submitonce:true,
-		onerror:function(msg,obj,errorlist){
-			alert(msg);
+	$('#email').blur(function(){
+		var email=$(this).val();
+		if(chkEmail(email)){
+			$('#emailTip').attr('class', '').addClass('onLoad').html('正在检查此账号是否可用');
+			$.getJSON('/market/portal/check/account?email='+email, function(data) {
+				if (data>0) {
+					$('#emailTip').attr('class', '').addClass('onError').html('此账号已被注册');
+				} else {
+					$('#emailTip').attr('class', '').addClass('onSuccess').html('此账号可用');
+				}
+			});
+		} else {
+			$('#emailTip').attr('class', '').addClass('onError').html('请输入正确的邮箱格式');
 		}
+	}).focus(function(){
+		$('#emailTip').attr('class', '').addClass('onFocus');
 	});
-	$("#email").formValidator({
-		onShow : "请输入邮箱地址",
-		onFocus : "用户名至少5个字符,最多30个字符",
-		onCorrect : "该邮箱地址可以注册"
-	}).inputValidator({
-		min : 5,
-		max : 30,
-		onError : "你输入的邮箱地址非法,请确认"
-	}).regexValidator({
-		regExp:"email", 
-		dataType:"enum",
-		onError:"你输入的邮箱地址格式不正确"
-	}).ajaxValidator({
-		dataType : "json",
-		async : true,
-		url : "../portal/check/account?email="+$(this).val(),
-		success : function(data) {
-			if (data > 0){}
-				return false;
-			}
-			return true;
-		},
-		//buttons : $("#button"),
-		error : function(jqXHR, textStatus, errorThrown) {
-			alert("服务器没有返回数据，可能服务器忙，请重试" + errorThrown);
-		},
-		onError : "该用户名不可用，请更换用户名",
-		onWait : "正在对用户名进行合法性校验，请稍候..."
+	$('#nickName').blur(function(){
+		var v=$.trim($(this).val());
+
+		if(v.length<3||v.length>15){
+			$('#nickNameTip').attr('class', '').addClass('onError').html('请输入3~15位昵称');
+		} else{
+			$('#nickNameTip').attr('class', '').addClass('onCorrect').html('输入正确');
+		}
+	}).focus(function(){
+		$('#nickNameTip').attr('class', '').addClass('onFocus');
 	});
 });
 //-->
