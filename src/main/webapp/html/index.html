@@ -2,42 +2,99 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>中通福瑞——应用市场</title>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="cache-control" content="no-store, must-revalidate" />
+<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
+<meta http-equiv="expires" content="0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js"></script>
+<link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
+<link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
 <link href="resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
-<link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon"/>
-<link rel="icon" href="resources/favicon.ico" type="image/x-icon"/>
+<link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="resources/formvalidator4.1.1/formValidator-4.1.1.js"></script>
+<script type="text/javascript" src="resources/formvalidator4.1.1/formValidatorRegex.js"></script>
 <script type="text/javascript">
-$(function(){
-	$.getJSON('portal/catalog/all?local=cn', function(data) {
-		if(data){
-			$('#catalog_con').empty();
-			$.each(data,function(i,o){
-				$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="">'+o.name+'</a></li>');
-			})
-			$('#catalog_con').append('<li>');
-		}
+	var _loadingICO;
+	$(function() {
+		_loadingICO='resources/public/images/loading.gif';
+		$('body').append("<script src='resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
+		$('#reg').click(function(){
+			Util.Dialog({
+				title : '用户注册',
+				content : 'url:get?html/reg.html?t='+new Date().getTime(),
+				showbg: true,
+				width : 500,
+				height : 300
+			});
+			return false;
+		});
+		
+		$.getJSON('portal/catalog/all?local=cn', function(data) {
+			if (data) {
+				$('#catalog_con').empty();
+				$.each(data, function(i, o) {
+					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="">'+o.name+'</a></li>');
+				});
+				$('#catalog_con').append('<li>');
+			}
+		});
+		$.getJSON('portal/app/hot/free/5?local=cn', function(data) {
+			if (data) {
+				$('#freeTop').empty();
+				$.each(data, function(i, o) {
+					$('#freeTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+				});
+				$('#freeTop').append('<li class="more">全部热门免费应用</li>');
+			}
+		});
+		$.getJSON('portal/app/hot/free/new/5?local=cn', function(data) {
+			if (data) {
+				$('#freeNewTop').empty();
+				$.each(data, function(i, o) {
+					$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+				});
+				$('#freeNewTop').append('<li class="more">全部热门免费新品</li>');
+			}
+		});
+
+		$.getJSON('portal/app/hot/free/12?local=cn',function(data) {
+			if (data) {
+			$('#clerk_recommend').empty();
+				$.each(data,function(i, o) {
+					$('#clerk_recommend').append(
+						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						+o.appName
+						+'</label><label class="label2">'
+						+o.appName
+						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
+						+o.downCount
+						+'</span>)</div>'
+					);
+				});
+			}
+		});
+		$.getJSON('portal/app/hot/free/new/12?local=cn',
+		function(data) {
+			if (data) {
+				$('#clerk_recommend_car').empty();
+				$.each(data,function(i, o) {
+					$('#clerk_recommend_car').append(
+						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						+o.appName
+						+'</label><label class="label2">'
+						+o.appName
+						+'</label><label class="label2">'
+						+o.appName
+						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
+						+o.downCount
+						+'</span>)</div>'
+					);
+				});
+			}
+		});
 	});
-	$.getJSON('portal/app/hot/free/5?local=', function(data) {
-		if(data){
-			$('#freeTop').empty();
-			$.each(data,function(i,o){
-				$('#freeTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>GOOGLEINC.</label></li>');
-			})
-			$('#freeTop').append('<li class="more">全部热门免费应用</li>');
-		}
-	});
-	$.getJSON('portal/app/hot/free/new/5?local=', function(data) {
-		if(data){
-			$('#freeNewTop').empty();
-			$.each(data,function(i,o){
-				$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>GOOGLEINC.</label></li>');
-			})
-			$('#freeNewTop').append('<li class="more">全部热门免费应用</li>');
-		}
-	});
-});
 </script>
 </head>
 <body style="margin: 0; padding: 0; text-align: center;">
@@ -55,10 +112,10 @@ $(function(){
 						style="height: 40px; width: 312px; margin-left: 200px;"></input></td>
 					<td><button type="button"
 							style="height: 42px; width: 72px; margin-left: 5px;">search</button></td>
-					<td><button type="button"
+					<td><button id="login" type="button"
 							style="height: 42px; width: 72px; margin-left: 30px;">logo
 							in</button></td>
-					<td><button type="button"
+					<td><button id="reg" type="button"
 							style="height: 42px; width: 72px; margin-left: 5px;">register</button></td>
 				</tr>
 			</table>
@@ -113,7 +170,7 @@ $(function(){
 			</div>
 			<div id="left_bottom"
 				style="float: left; width: 330px; height: 445px; margin-top: 13px; background-color: white">
-				<div id="con_one_1" style="padding:30px 0;">
+				<div id="con_one_1" style="padding: 30px 0;">
 					<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费新品</b></font>
 					<ul id="freeNewTop">
 						<li><span>1</span><a href="d">Maps</a><label>GOOGLEINC.</label></li>
@@ -134,53 +191,14 @@ $(function(){
 			</div>
 			<div class="Contentbox2" style="background-color: white">
 				<div id="con_two_1">
-					<div
-						style="border-bottom: 1px solid #D7D7D7; margin-left: 38px; margin-right: 38px">
+					<div id="clerk_recommend">
+						<div>
+							<img src="resources/public/images/icon1.jpg" alt="" /> <label
+								class="label1">Recipe Search</label> <label class="abel2">ALLTHECOOKS.COM</label>
+							<img src="resources/public/images/star.jpg" /> (<span>15,333</span>)
+							<input type="submit" value="" />
 
-
-						<table width="600px" cellspacing="0px"
-							style="border-collapse: collapse; border-right: 0px; border-left: 0px; border-bottom: 1px">
-							<tr style="height: 154px;">
-								<td align="left" style="width: 150px"><img
-									src="resources/public/images/icon1.jpg" alt=""
-									style="display: block" /> <label
-									style="width: 100%; display: block">Recipe Search</label> <label
-									style="display: block; color: gray; font-size: 12px">ALLTHECOOKS.COM</label>
-									<img src="resources/public/images/star.jpg"
-									style="display: inline-block" /><label
-									style="display: inline-block; font-size: 12px">(10,898)</label>
-									<input name="install" type="submit" id="install" value=""
-									style="background: url(resources/public/images/install.jpg); border-style: none; width: 36px; height: 18px; background-repeat: no-repeat;" />
-									<a href="appDetail.jsp">安装</a></td>
-								<td style="width: 150px"><img
-									src="resources/public/images/icon1.jpg" alt=""
-									style="display: block" /> <label
-									style="width: 100%; display: block">Recipe Search</label> <label
-									style="display: block; color: gray; font-size: 12px">ALLTHECOOKS.COM</label>
-									<img src="resources/public/images/star.jpg"
-									style="display: inline-block" /><label
-									style="display: inline-block; font-size: 12px">(10,898)</label>
-									<img src="resources/public/images/install.jpg" alt="" /></td>
-								<td style="width: 150px"><img
-									src="resources/public/images/icon1.jpg" alt=""
-									style="display: block" /> <label
-									style="width: 100%; display: block">Recipe Search</label> <label
-									style="display: block; color: gray; font-size: 12px">ALLTHECOOKS.COM</label>
-									<img src="resources/public/images/star.jpg"
-									style="display: inline-block" /><label
-									style="display: inline-block; font-size: 12px">(10,898)</label>
-									<img src="resources/public/images/install.jpg" alt="" /></td>
-								<td style="width: 150px"><img
-									src="resources/public/images/icon1.jpg" alt=""
-									style="display: block" /> <label
-									style="width: 100%; display: block">Recipe Search</label> <label
-									style="display: block; color: gray; font-size: 12px">ALLTHECOOKS.COM</label>
-									<img src="resources/public/images/star.jpg"
-									style="display: inline-block" /><label
-									style="display: inline-block; font-size: 12px">(10,898)</label>
-									<img src="resources/public/images/install.jpg" alt="" /></td>
-							</tr>
-						</table>
+						</div>
 					</div>
 					<div class="carousel-more-link">
 						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
@@ -188,11 +206,23 @@ $(function(){
 					</div>
 
 				</div>
-				<div id="con_two_2" style="display: none">店员推荐·车机</div>
+				<div id="con_two_2" style="display: none">
+					<div id="clerk_recommend_car">
+						<div>
+							<img src="resources/public/images/icon1.jpg" alt="" /> <label
+								class="label1">Recipe Search</label> <label class="abel2">ALLTHECOOKS.COM</label>
+							<img src="resources/public/images/star.jpg" /> (<span>15,333</span>)
+							<input type="submit" value="" />
 
+						</div>
+					</div>
+					<div class="carousel-more-link">
+						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
+							class="more-arrow" style="margin-right: 45px">›</span></a>
+					</div>
+				</div>
 			</div>
 		</div>
-
 		<div class="wide-editorial-image-panel"
 			style="float: right; background-color: white">
 			<div class="panel-image goog-inline-block">
@@ -212,10 +242,7 @@ $(function(){
 				</div>
 			</div>
 		</div>
-
-
 	</div>
-
 	<script>
 		var nums = [], timer, n = $$("idSlider").getElementsByTagName("td").length, st = new SlideTrans(
 				"idContainer", "idSlider", 4, {
@@ -252,8 +279,8 @@ $(function(){
 		/*第一种形式 第二种形式 更换显示样式*/
 		function setTab(name, cursel, n) {
 			for (i = 1; i <= n; i++) {
-				var menu = document.getElementById(name + i);
-				var con = document.getElementById("con_" + name + "_" + i);
+				var menu = document.getElementById(name+i);
+				var con = document.getElementById("con_"+name+"_"+i);
 				menu.className = i == cursel ? "hover" : "";
 				con.style.display = i == cursel ? "block" : "none";
 			}

@@ -56,6 +56,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setStatus(rs.getInt("status"));
 			application.setCreateTime(rs.getTimestamp("create_time"));
 			application.setUpdateTime(rs.getTimestamp("update_time"));
+			application.setBigIcon(rs.getString("big_icon"));
+			application.setDeveloper(rs.getString("developer"));
 			return application;
 		}
 	};
@@ -80,6 +82,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setDescription(rs.getString("description"));
 			application.setPermissionDesc(rs.getString("permission_desc"));
 			application.setImages(rs.getString("images"));
+			application.setBigIcon(rs.getString("big_icon"));
+			application.setDeveloper(rs.getString("developer"));
 			return application;
 		}
 	};
@@ -87,12 +91,12 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 	@Override
 	public int add(final Application application) {
 		final String sql = "insert into t_application (app_name"
-				+ ", en_name, version, icon, catalog_id"
+				+ ", en_name, version, icon, big_icon, developer, catalog_id"
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
 				+ ", app_level, description , permission_desc, en_description , en_permission_desc"
 				+ ", images" + ", status" + ", create_time" + ", update_time"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -100,46 +104,30 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			public PreparedStatement createPreparedStatement(Connection con)
 					throws SQLException {
 				PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setString(1, application.getAppName());
-				ps.setString(2, application.getEnName());
-				ps.setString(3, application.getVersion());
-				ps.setString(4, application.getIcon());
-				ps.setInt(5, application.getCatalogId());
-				ps.setString(6, application.getSize()); 
-				ps.setString(7, application.getAppFilePath());
-				ps.setString(8, application.getPlatform());
-				ps.setInt(9, application.getSupportLanguages());
-				ps.setDouble(10, application.getPrice()==null?0:application.getPrice()); 
-				ps.setInt(11, application.getAppLevel()); 
-				ps.setString(12, application.getDescription());
-				ps.setString(13, application.getPermissionDesc());
-				ps.setString(14, application.getEnDescription());
-				ps.setString(15, application.getEnPermissionDesc()); 
-				ps.setString(16, application.getImages());
-				ps.setInt(17, application.getStatus());
+				int i=1;
+				ps.setString(i++, application.getAppName());
+				ps.setString(i++, application.getEnName());
+				ps.setString(i++, application.getVersion());
+				ps.setString(i++, application.getIcon());
+				ps.setString(i++, application.getBigIcon());
+				ps.setString(i++, application.getDeveloper());
+				ps.setInt(i++, application.getCatalogId());
+				ps.setString(i++, application.getSize()); 
+				ps.setString(i++, application.getAppFilePath());
+				ps.setString(i++, application.getPlatform());
+				ps.setInt(i++, application.getSupportLanguages());
+				ps.setDouble(i++, application.getPrice()==null?0:application.getPrice()); 
+				ps.setInt(i++, application.getAppLevel()); 
+				ps.setString(i++, application.getDescription());
+				ps.setString(i++, application.getPermissionDesc());
+				ps.setString(i++, application.getEnDescription());
+				ps.setString(i++, application.getEnPermissionDesc()); 
+				ps.setString(i++, application.getImages());
+				ps.setInt(i++, application.getStatus());
 				return ps;
 			}
 		}, gkHolder);
 		return gkHolder.getKey().intValue();
-		/*return jdbcTemplate.update(sql, 
-				application.getAppName(),
-				application.getEnName(), 
-				application.getVersion(),
-				application.getIcon(), 
-				application.getCatalogId(),
-				application.getSize(), 
-				application.getAppFilePath(),
-				application.getPlatform(), 
-				application.getSupportLanguages(),
-				application.getPrice(), 
-				application.getDownCount(),
-				application.getAppLevel(), 
-				application.getDescription(),
-				application.getPermissionDesc(),
-				application.getEnDescription(),
-				application.getEnPermissionDesc(), 
-				application.getImages(),
-				application.getStatus());*/
 	}
 
 	@Override
@@ -169,6 +157,14 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		if (StringUtils.hasText(application.getIcon())) {
 			sql.append(", icon=?");
 			args.add(application.getIcon());
+		}
+		if (StringUtils.hasText(application.getBigIcon())) {
+			sql.append(", big_icon=?");
+			args.add(application.getBigIcon());
+		}
+		if (StringUtils.hasText(application.getDeveloper())) {
+			sql.append(", developer=?");
+			args.add(application.getDeveloper());
 		}
 		if (application.getCatalogId() != null) {
 			sql.append(", catalog_id=?");
@@ -248,8 +244,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 
 	@Override
 	public List<Application> query() {
-		return this.jdbcTemplate
-				.query("select * from t_application", rowMapper);
+		String sql="select * from t_application";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, rowMapper);
 	}
 
 	@Override
@@ -315,6 +312,16 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		if (StringUtils.hasText(application.getIcon())) {
 			sql.append(" and icon like CONCAT('%',?,'%')");
 			args.add(application.getIcon());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getBigIcon())) {
+			sql.append(", big_icon like CONCAT('%',?,'%')");
+			args.add(application.getBigIcon());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getDeveloper())) {
+			sql.append(", developer like CONCAT('%',?,'%')");
+			args.add(application.getDeveloper());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (application.getCatalogId() != null) {
@@ -415,6 +422,18 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" and icon like CONCAT('%',?,'%')");
 			countSql.append(" and icon like CONCAT('%',?,'%')");
 			args.add(application.getIcon());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getBigIcon())) {
+			sql.append(", big_icon like CONCAT('%',?,'%')");
+			countSql.append(", big_icon like CONCAT('%',?,'%')");
+			args.add(application.getBigIcon());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getDeveloper())) {
+			sql.append(", developer like CONCAT('%',?,'%')");
+			countSql.append(", developer like CONCAT('%',?,'%')");
+			args.add(application.getDeveloper());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (application.getCatalogId() != null) {

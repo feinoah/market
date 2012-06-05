@@ -107,6 +107,17 @@ public class ApplicationController {
         		multipartFile.transferTo(file);
 	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
 			}
+	        MultipartFile bigIconMultipartFile = multipartRequest.getFile("bigIconFile");
+	        if (bigIconMultipartFile!=null&&bigIconMultipartFile.getOriginalFilename().length()>0) { // 有ICON文件
+	        	// 获取文件的后缀 
+	        	suffix = bigIconMultipartFile.getOriginalFilename().substring(
+	        			bigIconMultipartFile.getOriginalFilename().lastIndexOf("."));
+	        	// 随机文件名
+	        	fileName =  application.getEnName()+"_"+radom+"_big"+ suffix;// 构建文件名称
+	        	File file = AttachmentUtil.getIconFile(fileName);
+	        	bigIconMultipartFile.transferTo(file);
+	        	application.setBigIcon(Constants.BASE_PATH_ICON+fileName);
+			}
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("imageFile");
 	        int i=0;

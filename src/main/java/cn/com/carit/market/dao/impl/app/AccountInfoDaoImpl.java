@@ -194,7 +194,13 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	public AccountInfo queryByEmail(String email) {
 		String sql = "select * from t_account_info where email=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		return query(sql, email, rowMapper);
+		AccountInfo account=null;
+		try {
+			account=query(sql, email, rowMapper);
+		} catch (Exception e) {
+			log.error(e.getMessage());
+		}
+		return account;
 	}
 
 	@Override

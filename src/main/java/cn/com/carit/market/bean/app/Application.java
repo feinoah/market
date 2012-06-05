@@ -9,10 +9,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 /**
- * Application
- * Auto generated Code
+ * Application Auto generated Code
  */
-public class Application  implements Serializable{
+public class Application implements Serializable {
 	/**
 	 * 
 	 */
@@ -37,6 +36,14 @@ public class Application  implements Serializable{
 	 * icon
 	 */
 	private String icon;
+	/**
+	 * bigIcon
+	 */
+	private String bigIcon;
+	/**
+	 * developer
+	 */
+	private String developer;
 	/**
 	 * catalogId
 	 */
@@ -79,7 +86,7 @@ public class Application  implements Serializable{
 	 */
 	private String permissionDesc;
 	private String enPermissionDesc;
-	
+
 	/**
 	 * 截图路径，以“;”分隔
 	 */
@@ -97,155 +104,213 @@ public class Application  implements Serializable{
 	 * updateTime
 	 */
 	private Date updateTime;
-	
+
 	/**
 	 * 版本文件
 	 */
 	@JsonIgnore
 	private AppVersionFile appVersionFile;
-	
 
-	public void setId(int value) {
-		this.id = value;
-	}
-	public int getId() {
-		return this.id;
-	}
-	public void setAppName(String value) {
-		this.appName = value;
-	}
-	public String getAppName() {
-		return this.appName;
-	}
-	
-	public String getEnName() {
-		return enName;
-	}
-	public void setEnName(String enName) {
-		this.enName = enName;
-	}
-	public void setVersion(String value) {
-		this.version = value;
-	}
-	public String getVersion() {
-		return this.version;
-	}
-	public void setIcon(String value) {
-		this.icon = value;
-	}
-	public String getIcon() {
-		return this.icon;
-	}
-	public void setCatalogId(Integer value) {
-		this.catalogId = value;
-	}
-	public Integer getCatalogId() {
-		return this.catalogId;
-	}
-	public void setSize(String value) {
-		this.size = value;
-	}
-	public String getSize() {
-		return this.size;
-	}
-	public void setAppFilePath(String value) {
-		this.appFilePath = value;
-	}
-	public String getAppFilePath() {
-		return this.appFilePath;
-	}
-	public void setPlatform(String value) {
-		this.platform = value;
-	}
-	public String getPlatform() {
-		return this.platform;
-	}
-	public void setSupportLanguages(Integer value) {
-		this.supportLanguages = value;
-	}
-	public Integer getSupportLanguages() {
-		return this.supportLanguages;
-	}
-	public void setPrice(Double value) {
-		this.price = value;
-	}
-	public Double getPrice() {
-		return this.price;
-	}
-	public void setDownCount(Integer value) {
-		this.downCount = value;
-	}
-	public Integer getDownCount() {
-		return this.downCount;
-	}
-	public void setAppLevel(Integer value) {
-		this.appLevel = value;
-	}
-	public Integer getAppLevel() {
-		return this.appLevel;
-	}
-	public void setDescription(String value) {
-		this.description = value;
-	}
-	public String getDescription() {
-		return this.description;
-	}
-	public void setPermissionDesc(String value) {
-		this.permissionDesc = value;
-	}
-	public String getPermissionDesc() {
-		return this.permissionDesc;
-	}
-	public void setStatus(Integer value) {
-		this.status = value;
-	}
-	public Integer getStatus() {
-		return this.status;
-	}
-	public void setCreateTime(Date value) {
-		this.createTime = value;
-	}
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return this.createTime;
-	}
-	public void setUpdateTime(Date value) {
-		this.updateTime = value;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return this.updateTime;
-	}
-	public String getImages() {
-		return images;
-	}
-	public void setImages(String images) {
-		this.images = images;
-	}
-
-	public String [] getImageList(){
-		if (this.images!=null && this.images.trim().length()>0) {
+	public String[] getImageList() {
+		if (this.images != null && this.images.trim().length() > 0) {
 			return this.images.trim().split(";");
 		}
 		return null;
 	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public void setAppName(String appName) {
+		this.appName = appName;
+	}
+
+	public String getEnName() {
+		return enName;
+	}
+
+	public void setEnName(String enName) {
+		this.enName = enName;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+
+	public String getBigIcon() {
+		return bigIcon;
+	}
+
+	public void setBigIcon(String bigIcon) {
+		this.bigIcon = bigIcon;
+	}
+
+	public String getDeveloper() {
+		return developer;
+	}
+
+	public void setDeveloper(String developer) {
+		this.developer = developer;
+	}
+
+	public Integer getCatalogId() {
+		return catalogId;
+	}
+
+	public void setCatalogId(Integer catalogId) {
+		this.catalogId = catalogId;
+	}
+
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
+	public String getAppFilePath() {
+		return appFilePath;
+	}
+
+	public void setAppFilePath(String appFilePath) {
+		this.appFilePath = appFilePath;
+	}
+
+	public String getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(String platform) {
+		this.platform = platform;
+	}
+
+	public Integer getSupportLanguages() {
+		return supportLanguages;
+	}
+
+	public void setSupportLanguages(Integer supportLanguages) {
+		this.supportLanguages = supportLanguages;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public Integer getDownCount() {
+		return downCount;
+	}
+
+	public void setDownCount(Integer downCount) {
+		this.downCount = downCount;
+	}
+
+	public Integer getAppLevel() {
+		return appLevel;
+	}
+
+	public void setAppLevel(Integer appLevel) {
+		this.appLevel = appLevel;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 	public String getEnDescription() {
 		return enDescription;
 	}
+
 	public void setEnDescription(String enDescription) {
 		this.enDescription = enDescription;
 	}
+
+	public String getPermissionDesc() {
+		return permissionDesc;
+	}
+
+	public void setPermissionDesc(String permissionDesc) {
+		this.permissionDesc = permissionDesc;
+	}
+
 	public String getEnPermissionDesc() {
 		return enPermissionDesc;
 	}
+
 	public void setEnPermissionDesc(String enPermissionDesc) {
 		this.enPermissionDesc = enPermissionDesc;
 	}
+
+	public String getImages() {
+		return images;
+	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
 	public AppVersionFile getAppVersionFile() {
 		return appVersionFile;
 	}
+
 	public void setAppVersionFile(AppVersionFile appVersionFile) {
 		this.appVersionFile = appVersionFile;
 	}
-	
+
 }

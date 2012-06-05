@@ -1,0 +1,23 @@
+<div class="reg login" id="loginDiv">
+	<form action="portal/login " method="post" id="loginForm">
+		<dl>
+			<div style="height: 17px; overflow: hidden"></div>
+			<dd>
+				<span class="title">邮箱地址：</span><input class="reg_input"
+					name="email" type="text" id="t_Email"
+					onblur="checkemail(this.value)" /><span id="t_EmailTip"
+					class="onshow"></span>
+			</dd>
+			<dd>
+				<span class="title">登录密码：</span><input class="reg_input"
+					onblur="return checkpasswd(this);" id="t_UserPass"
+					name="t_UserPass" type="password" /><span id="t_UserPassTip"
+					class="onshow"></span>
+			</dd>
+		</dl>
+		<div class="f_reg_but">
+			<input id="button" name="button" type="submit" value="登录"
+				class="l_button" /><span class="clew_txt">还没账号？<a href="#">立即注册</a></span>
+		</div>
+	</form>
+</div>

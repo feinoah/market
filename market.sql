@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50524
 File Encoding         : 65001
 
-Date: 2012-05-30 18:07:20
+Date: 2012-06-05 18:23:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -24,7 +24,7 @@ CREATE TABLE `t_account_info` (
   `email` varchar(30) NOT NULL COMMENT '邮箱',
   `password` varchar(32) NOT NULL COMMENT '密码',
   `nick_name` varchar(50) DEFAULT NULL COMMENT '昵称',
-  `gender` tinyint(4) NOT NULL DEFAULT '0' COMMENT '性别 0：保密；1：男；2：女',
+  `gender` tinyint(4) NOT NULL DEFAULT '0' COMMENT '性别 0：女 1：男 2：保密',
   `birthday` date DEFAULT NULL COMMENT '生日',
   `photo` varchar(200) DEFAULT NULL COMMENT '头像',
   `balance` double DEFAULT '0' COMMENT '余额',
@@ -40,8 +40,14 @@ CREATE TABLE `t_account_info` (
   `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_account_info_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Records of t_account_info
+-- ----------------------------
+INSERT INTO `t_account_info` VALUES ('1', 'test@test.com', '11111', 'test', '1', '2012-05-22', null, '0', null, null, null, null, null, null, null, '1', '2012-05-22 16:47:10', '2012-05-22 10:21:03');
+INSERT INTO `t_account_info` VALUES ('2', 'test2@test.com', '11111', 'test2', '0', null, null, '0', null, null, null, null, null, null, null, '1', '2012-05-22 16:47:05', '2012-05-22 11:19:22');
+INSERT INTO `t_account_info` VALUES ('3', 'test3@carit.com', '873f0d6061d9551724058c7a89841404', '测试', '2', null, null, '0', null, null, null, null, null, null, null, '1', '2012-06-04 11:40:53', '2012-06-04 11:40:53');
 
 -- ----------------------------
 -- Table structure for `t_application`
@@ -52,6 +58,8 @@ CREATE TABLE `t_application` (
   `app_name` varchar(50) NOT NULL COMMENT '应用名称',
   `en_name` varchar(50) NOT NULL COMMENT '显示名称',
   `version` varchar(10) DEFAULT NULL COMMENT '版本',
+  `developer` varchar(100) DEFAULT NULL COMMENT '开发商',
+  `big_icon` varchar(100) DEFAULT NULL COMMENT '大图表',
   `icon` varchar(100) DEFAULT NULL COMMENT '图标',
   `catalog_id` int(11) NOT NULL COMMENT '应用类型',
   `size` varchar(10) DEFAULT NULL COMMENT '应用大小',
@@ -69,9 +77,16 @@ CREATE TABLE `t_application` (
   `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态：0 停用， 1 启用',
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_t_application_app_name` (`app_name`),
+  UNIQUE KEY `idx_t_application_en_name` (`en_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Records of t_application
+-- ----------------------------
+INSERT INTO `t_application` VALUES ('4', '新浪微博', 'Sina Weibo', '3.1', '新浪科技', 'icons/Sina Weibo_34290237617778_big.png', 'icons/Sina Weibo_34290237617778.png', '4', '4M', 'apks/Sina Weibo_3.1_28203369060862.apk', '', '0', '0', '0', '2', '', '', '', '', null, '1', '2012-06-01 15:12:23', '2012-06-05 18:21:53');
+INSERT INTO `t_application` VALUES ('5', '测试', 'test', '1', null, null, 'icons/Sina Weibo_23214215408100.png', '2', null, 'apks/test_28781685532245.apk', '', '0', '0', '0', '2', 'ddddddddddd', '', '', '', null, '1', '2012-06-01 16:38:46', '2012-06-01 16:45:07');
 
 -- ----------------------------
 -- Table structure for `t_app_catalog`
@@ -88,9 +103,15 @@ CREATE TABLE `t_app_catalog` (
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
+  UNIQUE KEY `idx_t_app_catalog_name` (`name`) USING BTREE,
+  UNIQUE KEY `idx_t_app_catalog_en_name` (`en_name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Records of t_app_catalog
+-- ----------------------------
+INSERT INTO `t_app_catalog` VALUES ('2', '车载', 'car', '车载应用 导航  地方', 'car navigater 爱的', '2', '0', '2012-05-20 12:25:46', '2012-05-29 09:49:49');
+INSERT INTO `t_app_catalog` VALUES ('4', '生活', '', '生活应用', null, '2', '1', '2012-05-20 14:20:16', '2012-05-20 14:20:16');
 
 -- ----------------------------
 -- Table structure for `t_app_comment`
@@ -108,7 +129,7 @@ CREATE TABLE `t_app_comment` (
   PRIMARY KEY (`id`),
   KEY `idx_t_user_comment_app_id` (`app_id`) USING BTREE,
   KEY `idx_t_user_comment_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_comment
@@ -148,12 +169,14 @@ CREATE TABLE `t_app_version_file` (
   `create_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '创建时间',
   `update_time` timestamp NOT NULL DEFAULT '2012-05-08 11:53:35' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_app_version_file
 -- ----------------------------
-INSERT INTO `t_app_version_file` VALUES ('3', '6', '2.9.1', '4M', 'apks\\Sina Weibo_2.9.1_28609486200226.apk', '2.9.1正式版\r\n1.内置5款滤镜特效,发图片更精彩。\r\n2.优化私信语音聊天功能。\r\n3.私信支持图片和文字同时发布。\r\n4.新增内置浏览器，浏览网页无需跳出微博。\r\n5.修复若干Bug，增强稳定性。', 'dddddddddddddd', '1', '2012-05-29 09:22:14', '2012-05-29 16:40:36');
+INSERT INTO `t_app_version_file` VALUES ('3', '4', '2.9.1', '4M', 'apks\\Sina Weibo_2.9.1_28609486200226.apk', '2.9.1正式版\r\n1.内置5款滤镜特效,发图片更精彩。\r\n2.优化私信语音聊天功能。\r\n3.私信支持图片和文字同时发布。\r\n4.新增内置浏览器，浏览网页无需跳出微博。\r\n5.修复若干Bug，增强稳定性。', 'dddddddddddddd', '1', '2012-05-29 09:22:14', '2012-05-29 16:40:36');
+INSERT INTO `t_app_version_file` VALUES ('4', '4', '3.1', '4M', 'apks/Sina Weibo_3.1_28203369060862.apk', 'ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd,', null, '1', '2012-06-01 16:35:29', '2012-06-01 16:35:29');
+INSERT INTO `t_app_version_file` VALUES ('5', '5', '1', '', 'apks/test_28781685532245.apk', '', '', '1', '2012-06-01 16:45:07', '2012-06-01 16:45:07');
 
 -- ----------------------------
 -- Table structure for `t_base_field`
@@ -259,7 +282,7 @@ CREATE TABLE `t_base_role` (
   `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_t_base_role_name` (`role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of t_base_role
@@ -267,6 +290,7 @@ CREATE TABLE `t_base_role` (
 INSERT INTO `t_base_role` VALUES ('1', 'Administrator', '超级管理员', '2012-05-18 22:01:19', '2012-05-18 22:01:19');
 INSERT INTO `t_base_role` VALUES ('2', 'Market管理员', 'Market管理员', '2012-05-17 10:35:08', '2012-05-17 10:35:08');
 INSERT INTO `t_base_role` VALUES ('5', '模块管理员', '模块管理员', '2012-05-18 13:01:54', '2012-05-18 13:01:54');
+INSERT INTO `t_base_role` VALUES ('6', '测试', '测试', '2012-06-01 14:38:31', '2012-06-01 14:38:31');
 
 -- ----------------------------
 -- Table structure for `t_base_role_module`
@@ -286,6 +310,7 @@ CREATE TABLE `t_base_role_module` (
 -- ----------------------------
 INSERT INTO `t_base_role_module` VALUES ('1', '1');
 INSERT INTO `t_base_role_module` VALUES ('5', '1');
+INSERT INTO `t_base_role_module` VALUES ('6', '1');
 INSERT INTO `t_base_role_module` VALUES ('1', '2');
 INSERT INTO `t_base_role_module` VALUES ('5', '2');
 INSERT INTO `t_base_role_module` VALUES ('1', '3');
@@ -327,10 +352,15 @@ INSERT INTO `t_base_role_module` VALUES ('1', '32');
 INSERT INTO `t_base_role_module` VALUES ('1', '33');
 INSERT INTO `t_base_role_module` VALUES ('1', '34');
 INSERT INTO `t_base_role_module` VALUES ('1', '35');
+INSERT INTO `t_base_role_module` VALUES ('6', '35');
 INSERT INTO `t_base_role_module` VALUES ('1', '36');
+INSERT INTO `t_base_role_module` VALUES ('6', '36');
 INSERT INTO `t_base_role_module` VALUES ('1', '37');
+INSERT INTO `t_base_role_module` VALUES ('6', '37');
 INSERT INTO `t_base_role_module` VALUES ('1', '38');
+INSERT INTO `t_base_role_module` VALUES ('6', '38');
 INSERT INTO `t_base_role_module` VALUES ('1', '39');
+INSERT INTO `t_base_role_module` VALUES ('6', '39');
 INSERT INTO `t_base_role_module` VALUES ('1', '40');
 INSERT INTO `t_base_role_module` VALUES ('1', '41');
 INSERT INTO `t_base_role_module` VALUES ('1', '42');
@@ -362,7 +392,7 @@ CREATE TABLE `t_base_user` (
 -- ----------------------------
 -- Records of t_base_user
 -- ----------------------------
-INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', '系统管理员', '系统管理员', '1', '2012-05-30 18:06:25', '2012-05-13 15:19:44', '1', '系统管理员', '127.0.0.1', '2012-05-30 18:06:25', null, null);
+INSERT INTO `t_base_user` VALUES ('1', 'admin@admin.com', '7d2331557888b9c2d51ee1cb44df0ef2', '系统管理员', '系统管理员', '1', '2012-06-05 18:10:12', '2012-05-13 15:19:44', '1', '系统管理员', '127.0.0.1', '2012-06-05 18:10:12', null, null);
 INSERT INTO `t_base_user` VALUES ('4', 'lanb@carit.com.cn', '5887e361c81bbf2ec1c428426cc0a734', '兰斌', '兰斌', '1', '2012-05-30 14:45:42', '2012-05-30 14:45:42', '1', '应用管理员', null, null, '', '');
 
 -- ----------------------------
@@ -389,13 +419,13 @@ INSERT INTO `t_base_user_role` VALUES ('1', '5');
 -- View structure for `v_application_cn`
 -- ----------------------------
 DROP VIEW IF EXISTS `v_application_cn`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_cn` AS select `a`.`id` AS `id`,`a`.`app_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`name` AS `catalog_name`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`description` AS `description`,`a`.`permission_desc` AS `permission_desc`,`a`.`images` AS `images`,`a`.`update_time` AS `update_time` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_cn` AS select `a`.`id` AS `id`,`a`.`app_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`big_icon` AS `big_icon`,`a`.`developer` AS `developer`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`name` AS `catalog_name`,`a`.`catalog_id` AS `catalog_id`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`description` AS `description`,`a`.`permission_desc` AS `permission_desc`,`a`.`images` AS `images`,`a`.`update_time` AS `update_time` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
 
 -- ----------------------------
 -- View structure for `v_application_en`
 -- ----------------------------
 DROP VIEW IF EXISTS `v_application_en`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_en` AS select `a`.`id` AS `id`,`a`.`en_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`en_name` AS `catalog_name`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`en_description` AS `description`,`a`.`en_permission_desc` AS `permission_desc`,`a`.`images` AS `images`,`a`.`update_time` AS `update_time` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`carit`@`localhost` SQL SECURITY DEFINER VIEW `v_application_en` AS select `a`.`id` AS `id`,`a`.`en_name` AS `app_name`,`a`.`icon` AS `icon`,`a`.`big_icon` AS `big_icon`,`a`.`developer` AS `developer`,`a`.`version` AS `version`,`a`.`icon` AS `t_application`,`b`.`en_name` AS `catalog_name`,`a`.`catalog_id` AS `catalog_id`,`a`.`size` AS `size`,`a`.`app_file_path` AS `app_file_path`,`a`.`platform` AS `platform`,`a`.`support_languages` AS `support_languages`,`a`.`price` AS `price`,`a`.`down_count` AS `down_count`,`a`.`app_level` AS `app_level`,`a`.`en_description` AS `description`,`a`.`en_permission_desc` AS `permission_desc`,`a`.`images` AS `images`,`a`.`update_time` AS `update_time` from (`t_application` `a` left join `t_app_catalog` `b` on((`a`.`catalog_id` = `b`.`id`))) ;
 
 -- ----------------------------
 -- View structure for `v_app_catalog_cn`

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.portal.PortalAccountInfo;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
 import cn.com.carit.market.bean.portal.PortalAppComment;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
@@ -122,13 +124,9 @@ public class PortalController{
 	/**
 	 * 登录 portal/login
 	 * <table>
-	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-3</td><td>密码错误次数太多，临时限制登录</td></tr>
-	 * 	<tr><td>-2</td><td>账号被锁定</td></tr>
-	 * 	<tr><td>-1</td><td>账号不存在</td></tr>
-	 * 	<tr><td>0</td><td>密码错误</td></tr>
-	 * 	<tr><td>1</td><td>登录成功</td></tr>
-	 * 	<tr><td>其它</td><td>后台异常</td></tr>
+	 * 	<tr><th>属性</th><th>描述</th></tr>
+	 * 	<tr><td>answerCode</td><td>-3：密码错误次数太多，临时限制登录；-2：账号被锁定；-1：账号不存在；0：密码错误；1：登录成功</td></tr>
+	 * 	<tr><td>portalUser</td><td>{@link PortalAccountInfo}</td></tr>
 	 * </table>
 	 * @param email
 	 * @param password
@@ -138,31 +136,37 @@ public class PortalController{
 	 */
 	@RequestMapping(value="login", method=RequestMethod.POST)
 	@ResponseBody
-	public int login(@RequestParam("email") String email
+	public Map<String,Object> login(@RequestParam("email") String email
 			, @RequestParam("password") String password
 			, HttpServletRequest req) throws Exception{
 		HttpSession session=req.getSession();
 		Object obj=session.getAttribute(Constants.PASSWORD_ERROR_COUNT+email);
 		Integer errorCount= obj==null?0:(Integer)obj;
+		Map<String,Object> result=new HashMap<String, Object>();
 		if (errorCount!=null && errorCount.intValue()>=Constants.MAX_PWD_ERROR_COUNT) {
 			log.error("Limit login:password error count("+errorCount+") >="+Constants.MAX_PWD_ERROR_COUNT);
-			return -3;
+			result.put(Constants.ANSWER_CODE, -3);
+			return result;
 		}
 		Map<String, Object> resultMap=accountInfoService.login(email, password
 				, req.getRemoteAddr());
 		Integer answerCode=(Integer) resultMap.get(Constants.ANSWER_CODE);
+		result.put(Constants.ANSWER_CODE, answerCode);
+		PortalAccountInfo portalAccount=new PortalAccountInfo();
 		if (answerCode!=null ) {//有响应
 			if (answerCode.intValue()==1) {// 登录成功
 				// 清除密码错误次数
 				AccountInfo account=(AccountInfo) resultMap.get(email);
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, 0);
 				session.setAttribute(Constants.PORTAL_USER, account);
+				BeanUtils.copyProperties(account, portalAccount);
+				result.put(Constants.PORTAL_USER, portalAccount);
 			}
 			if (answerCode.intValue()==0) {// 密码错误
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);
 			}
 		}
-		return answerCode;
+		return result;
 	}
 	
 	/**

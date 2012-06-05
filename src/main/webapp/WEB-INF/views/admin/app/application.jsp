@@ -42,7 +42,7 @@
 					iconCls:'icon-add',
 					handler:function() {
 						tag=0;
-						
+						$('#editWin').window({title:'新增'+winTitle});
 						$('#editWin').window('open');
 						$('#editWin').show();
 					}
@@ -84,6 +84,7 @@
 						if($('#editForm input[name=catalogId]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=appName]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=enName]').val()==''){return $(this).form('validate');}
+						if($('#developer_edit').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=version]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=size]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=status]').val()==''){return $(this).form('validate');}
@@ -162,8 +163,9 @@
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
 				$('#editForm input[name=enName]').val(m.enName);
+				$('#developer_edit').val(m.developer);
 				$('#editForm input[name=version]').val(m.version);
-				$('#editForm input[name=size]').val(m.size);
+				$('#size_edit').val(m.size);
 				$('#catalogId_edit').combobox('setValue',m.catalogId);
 				$('#editForm input[name=platform]').val(m.platform);
 				$('#supportLanguages_edit').combobox('setValue',m.supportLanguages);
@@ -337,7 +339,10 @@
 						<th field="appName" width="100" align="center">应用名称</th>
 						<th field="enName" width="100" align="center">英文名称</th>
 						<th field="version" width="60" align="center">版本</th>
-						<th field="icon" width="60" align="center" hidden="true">图标路径</th>
+						<th field="developer" width="60" align="center">开发商</th>
+						<th field="icon" width="60" align="center" hidden="true"/>
+						<th field="bigicon" width="60" align="center" hidden="true"/>
+						<th field="size" width="60" align="center" hidden="true"/>
 						<th field="catalogId" width="80" align="center" formatter="catalogFormatter">分类</th>
 						<th field="appFilePath" width="100" align="center"  hidden="true">应用文件路径</th>
 						<th field="platform" width="100" align="center">适用平台</th>
@@ -353,9 +358,9 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:468px;padding:5px;" modal="true">
-			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:10px 20px;" enctype="multipart/form-data">
-				<div id="appTabs" class="easyui-tabs" style="width:590px;height:345px;">
+		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:460px;padding:3px;overflow: hidden;" modal="true">
+			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:0px 20px;" enctype="multipart/form-data">
+				<div id="appTabs" class="easyui-tabs" style="width:590px;height:380px;overflow: hidden;">
 					<div title="基本信息" style="padding:3px;">  
 						<table>
 							<tr>
@@ -365,8 +370,12 @@
 								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true"/></td>
 							</tr>
 							<tr>
+								<td><form:label	for="developer" path="developer"  cssClass="mustInput">开发商：</form:label></td>
+								<td><form:input path="developer" id="developer_edit" cssClass="easyui-validatebox" required="true"/></td>
+							</tr>
+							<tr>
 								<td><label	for="appVersionFile.size" class="mustInput">文件大小：</label></td>
-								<td><input type="text" name="appVersionFile.size" id="size" class="easyui-validatebox" required="true"/></td>
+								<td><input type="text" name="appVersionFile.size" id="size_edit" class="easyui-validatebox" required="true"/></td>
 								<td><label	for="version" class="mustInput">版本：</label></td>
 								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
 							</tr>
@@ -439,8 +448,12 @@
 								<td><input type="file"  name="apkFile" id="apkFile" class="easyui-validatebox" required="true" /></td>
 						</tr>
 						<tr>
-							<td><label>图标：</label></td>
+							<td><label>小图标：</label></td>
 							<td><input type="file"  name="iconFile" id="iconFile"/></td>
+						</tr>
+						<tr>
+							<td><label>大图标：</label></td>
+							<td><input type="file"  name="bigIconFile" id="bigIconFile"/></td>
 						</tr>
 						<tr>
 							<td rowspan="2"><label>截图</label></td><td><input type="file" name="imageFile" /></td><td><input type="file" name="imageFile" /></td><td><input type="file" name="imageFile" /></td>

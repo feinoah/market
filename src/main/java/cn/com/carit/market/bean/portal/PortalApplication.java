@@ -32,6 +32,14 @@ public class PortalApplication implements Serializable {
 	 */
 	private String icon;
 	/**
+	 * bigIcon
+	 */
+	private String bigIcon;
+	/**
+	 * developer
+	 */
+	private String developer;
+	/**
 	 * catalogId
 	 */
 	@JsonIgnore
@@ -222,6 +230,22 @@ public class PortalApplication implements Serializable {
 
 	public void setLocal(String local) {
 		this.local = local;
+	}
+
+	public String getBigIcon() {
+		return bigIcon;
+	}
+
+	public void setBigIcon(String bigIcon) {
+		this.bigIcon = bigIcon;
+	}
+
+	public String getDeveloper() {
+		return developer;
+	}
+
+	public void setDeveloper(String developer) {
+		this.developer = developer;
 	}
 	
 }
