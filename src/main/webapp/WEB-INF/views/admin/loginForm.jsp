@@ -8,6 +8,10 @@
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript">
 		$(function (){
+			// 检测是否是超时在iframe显示登录页
+			if($('.easyui-layout', window.parent.document).html()){
+				window.parent.location.reload();
+			}
 			$('#loginWin').window('open');
 			$('#loginWin').window('open');
 			$('#submit').click(function(){

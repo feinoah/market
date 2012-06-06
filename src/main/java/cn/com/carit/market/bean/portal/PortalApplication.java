@@ -1,8 +1,12 @@
 package cn.com.carit.market.bean.portal;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import cn.com.carit.market.common.jackjson.CustomDateSerializer;
 
 /**
  * Application Auto generated Code
@@ -88,6 +92,10 @@ public class PortalApplication implements Serializable {
 	 */
 	@JsonIgnore
 	private String images;
+	/**
+	 * 更新日期
+	 */
+	private Date updateTime;
 
 	public int getId() {
 		return id;
@@ -246,6 +254,15 @@ public class PortalApplication implements Serializable {
 
 	public void setDeveloper(String developer) {
 		this.developer = developer;
+	}
+	
+	@JsonSerialize(using = CustomDateSerializer.class)
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 	
 }

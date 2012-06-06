@@ -122,6 +122,17 @@ public class PortalController{
 	}
 	
 	/**
+	 * portal/account/login/check<br>
+	 * 检测登录状态
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="account/login/check", method=RequestMethod.GET)
+	public @ResponseBody AccountInfo checkLogin(HttpServletRequest req){
+		return (AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+	}
+	
+	/**
 	 * 登录 portal/login
 	 * <table>
 	 * 	<tr><th>属性</th><th>描述</th></tr>

@@ -13,23 +13,21 @@
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="resources/public/scripts/SlideTrans.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="resources/public/scripts/jquery.form.js"></script>
 <script type="text/javascript" src="resources/public/scripts/utils.js"></script>
 <script type="text/javascript">
 	var _loadingICO;
 	$(function() {
+		chkLogin();
 		_loadingICO='resources/public/images/loading.gif';
 		$('body').append("<script src='resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
 		$('#reg').click(function(){
-			Util.Dialog({
-				title : '用户注册',
-				content : 'url:get?html/reg.html?t='+new Date().getTime(),
-				showbg: true,
-				width : 500,
-				height : 300
-			});
-			return false;
+			regWin();
 		});
-		
+		$('#login').click(function(){
+			loginWin();
+		});
 		$.getJSON('portal/catalog/all?local=cn', function(data) {
 			if (data) {
 				$('#catalog_con').empty();
@@ -98,26 +96,16 @@
 </head>
 <body style="margin: 0; padding: 0; text-align: center;">
 
-	<div id="wrapper"
-		style="width: 1024px; margin: 0 auto; text-align: left; position: relative;">
-		<div id="header"
-			style="height: 75px; width: 100%; background-color: #DEDEDE;">
-			<table>
-				<tr>
-					<td><img src="resources/public/images/carit_logo1.png"
-						height="62px" width="154px"
-						style="margin-left: 50px; margin-top: 8px" /></td>
-					<td><input type="text" name="txtNo" size="20"
-						style="height: 40px; width: 312px; margin-left: 200px;"></input></td>
-					<td><button type="button"
-							style="height: 42px; width: 72px; margin-left: 5px;">search</button></td>
-					<td><button id="login" type="button"
-							style="height: 42px; width: 72px; margin-left: 30px;">logo
-							in</button></td>
-					<td><button id="reg" type="button"
-							style="height: 42px; width: 72px; margin-left: 5px;">register</button></td>
-				</tr>
-			</table>
+	<div id="wrapper">
+		<div id="header">
+			<ul>
+				<li><img src="resources/public/images/carit_logo1.png"/></li>
+				<li><input type="text" name="txtNo"/></li>
+				<li><button id="search">搜索</button></li>
+				<li name="before_login"><button id="login">登录</button></li>
+				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li id="after_login" style="display: none;"><span></span></li>
+			</ul>
 		</div>
 
 		<div class="container" id="idContainer"

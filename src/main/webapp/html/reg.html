@@ -1,6 +1,6 @@
 <!--注册开始-->
 <div class="reg">
-	<form action="../portal/register" id="regForm" method="post">
+	<form id="regForm" method="post">
 		<dl>
 			<dd>
 				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">请输入邮箱地址</span>
@@ -18,7 +18,7 @@
 			</dd>
 		</dl>
 		<div class="f_reg_but">
-			<input id="button" name="button" type="submit" value="免费注册" class="r_button" /><span class="clew_txt">如果您已有帐号，可<a href="#">直接登录</a></span>
+			<input id="button" type="button" value="免费注册" class="r_button" /><span class="clew_txt">如果您已有帐号，可<a href="#" id="directLogin">直接登录</a></span>
 		</div>
 	</form>
 </div>
@@ -27,10 +27,10 @@
 <!--
 $(function() {
 	$('#email').blur(function(){
-		var email=$(this).val();
+		var email=$.trim($(this).val());
 		if(chkEmail(email)){
 			$('#emailTip').attr('class', '').addClass('onLoad').html('正在检查此账号是否可用');
-			$.getJSON('/market/portal/check/account?email='+email, function(data) {
+			$.getJSON(app.name+'/portal/check/account?email='+email, function(data) {
 				if (data>0) {
 					$('#emailTip').attr('class', '').addClass('onError').html('此账号已被注册');
 				} else {
@@ -38,21 +38,84 @@ $(function() {
 				}
 			});
 		} else {
-			$('#emailTip').attr('class', '').addClass('onError').html('请输入正确的邮箱格式');
+			$('#emailTip').attr('class', '').addClass('onError').html('请输入邮箱地址');
 		}
 	}).focus(function(){
-		$('#emailTip').attr('class', '').addClass('onFocus');
+		$('#emailTip').attr('class', '').addClass('onFocus').html('请输入邮箱地址');
 	});
 	$('#nickName').blur(function(){
 		var v=$.trim($(this).val());
-
 		if(v.length<3||v.length>15){
 			$('#nickNameTip').attr('class', '').addClass('onError').html('请输入3~15位昵称');
 		} else{
 			$('#nickNameTip').attr('class', '').addClass('onCorrect').html('输入正确');
 		}
 	}).focus(function(){
-		$('#nickNameTip').attr('class', '').addClass('onFocus');
+		$('#nickNameTip').attr('class', '').addClass('onFocus').html('请输入3~15位昵称');
+	});
+	$('#password').blur(function(){
+		var v=$.trim($(this).val());
+		if(v.length<6||v.length>18){
+			$('#passwordTip').attr('class', '').addClass('onError').html('请输入6~18位数字、字母、!@#$%^&*()_');
+		}else{
+			if(chkPwd(v)){
+				$('#passwordTip').attr('class', '').addClass('onCorrect').html('输入正确');
+			}else{
+				$('#passwordTip').attr('class', '').addClass('onError').html('请输入6~18位数字、字母、!@#$%^&*()_');
+			}
+		}
+	}).focus(function(){$('#passwordTip').attr('class', '').addClass('onFocus').html('请输入6~18位数字、字母、!@#$%^&*()_');});
+	$('#t_RePass').blur(function(){
+		var pwd=$.trim($(this).val());
+		if(pwd){
+			if($.trim($('#password').val())==pwd){
+				$('#t_RePassTip').attr('class', '').addClass('onCorrect').html('输入正确');
+			}else{
+				$('#t_RePassTip').attr('class', '').addClass('onError').html('两次密码输入不一致');
+			}
+		}else{
+			$('#t_RePassTip').attr('class', '').addClass('onError').html('请确认输入上面的密码');
+		}
+	}).focus(function(){$('#t_RePassTip').attr('class', '').addClass('onFocus').html('请确认输入上面的密码');});
+	$('#button').click(function(){
+		$('#regForm').form({
+			url:app.name+'/portal/register',
+			dataType : 'text',  
+			onSubmit:function(){
+				var tag=true;
+				$('span[id$="Tip"]').each(function(){
+					if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
+						tag=false;
+						$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
+						return false;
+					}
+				});
+				return tag;
+		    }, 
+	    	success:function(data){
+				if(data){
+					var map=$.parseJSON(data);
+					if(map){
+						if(map.answerCode==-2){
+							tips('button','未知错误','bottom');
+						}
+						if(map.answerCode==1){
+							//tips('button','注册成功','bottom');
+							Util.Dialog.remove('regWin');
+							chkLogin();//切换登录状态
+						}
+					}else{
+						tips('button','后台系统异','bottom');
+					}
+				}else{
+					tips('button','后台系统异','bottom');
+				}
+		    }
+		}).submit();
+	});
+	$('#directLogin').click(function(){
+		Util.Dialog.remove('regWin');
+		loginWin();
 	});
 });
 //-->

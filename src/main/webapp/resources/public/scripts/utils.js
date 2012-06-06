@@ -1,3 +1,59 @@
+var app={name:'/market'};
+
+var chkLogin=function(){
+	$.getJSON(app.name+'/portal/account/login/check', function(data) {
+		if (data) {
+			$('li[name=before_login]').hide();
+			$('#after_login').show().children().html('欢迎您：'+data.nickName);
+		}
+	});
+}
+
+var regWin=function(){
+	Util.Dialog({
+		boxID : 'regWin',
+		title : '用户注册',
+		content : 'url:get?html/reg.html?t='+new Date().getTime(),
+		showbg: true,
+		width : 580,
+		height : 280
+	});
+	return false;
+}
+
+var loginWin=function(){
+	Util.Dialog({
+		boxID : 'loginWin',
+		title : '用户登录',
+		content : 'url:get?html/login.html?t='+new Date().getTime(),
+		showbg: true,
+		width : 480,
+		height : 220
+	});
+	return false;
+}
+
+var tips=function(ref,txt,_arrow){
+	Util.Dialog({
+		type: 'tips',
+		boxID: 'Tip_tips',
+		referID: ref,
+		//width: 150,
+		height: 14,
+		border: { opacity: '0', radius: '3'},
+		closestyle: 'gray',
+		arrow: _arrow,
+		fixed: false,
+		arrowset: {val: '10px'},
+		content: 'text:'+txt,
+		position: { 
+			left: '-20px', 
+			top: '-50px',
+			lin: true,
+			tin: false
+		}
+	});
+}
 /**
  * 检测邮箱合法性
  * @param v
@@ -22,6 +78,7 @@ function chkPwd(val){
 	var pwdRe=new RegExp('^[a-zA-Z0-9!@#$%^&*()_]{6,18}$');
 	return pwdRe.test(val);
 }
+
 /**
  * 检查身份证号码，支持X
  * @param num

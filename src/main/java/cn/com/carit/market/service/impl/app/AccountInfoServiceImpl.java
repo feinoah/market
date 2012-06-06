@@ -112,12 +112,6 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			resultMap.put(Constants.ANSWER_CODE, -1);
 			return resultMap;
 		}
-		if((accountInfo.getStatus()&Constants.STATUS_LOCKED)!=0){
-			// 帐号被锁定
-			log.error("User["+email+"] does not exist...");
-			resultMap.put(Constants.ANSWER_CODE, -3);
-			return resultMap;
-		}
 		// 密码加密
 		password=MD5Util.md5Hex(password);
 		// 二次加密
@@ -125,6 +119,12 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 		if (!password.equalsIgnoreCase(accountInfo.getPassword())) {
 			//密码错误
 			resultMap.put(Constants.ANSWER_CODE, 0);
+			return resultMap;
+		}
+		if((accountInfo.getStatus()&Constants.STATUS_LOCKED)!=0){
+			// 帐号被锁定
+			log.error("User["+email+"] does not exist...");
+			resultMap.put(Constants.ANSWER_CODE, -2);
 			return resultMap;
 		}
 		// 更新登录时间/IP

@@ -1,23 +1,97 @@
 <div class="reg login" id="loginDiv">
-	<form action="portal/login " method="post" id="loginForm">
+	<form method="post" id="loginForm">
 		<dl>
 			<div style="height: 17px; overflow: hidden"></div>
 			<dd>
-				<span class="title">邮箱地址：</span><input class="reg_input"
-					name="email" type="text" id="t_Email"
-					onblur="checkemail(this.value)" /><span id="t_EmailTip"
-					class="onshow"></span>
+				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">请输入邮箱地址</span>
 			</dd>
 			<dd>
-				<span class="title">登录密码：</span><input class="reg_input"
-					onblur="return checkpasswd(this);" id="t_UserPass"
-					name="t_UserPass" type="password" /><span id="t_UserPassTip"
-					class="onshow"></span>
+				<span class="title">登录密码：</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onShow">请输入6~18位密码</span>
 			</dd>
 		</dl>
 		<div class="f_reg_but">
-			<input id="button" name="button" type="submit" value="登录"
-				class="l_button" /><span class="clew_txt">还没账号？<a href="#">立即注册</a></span>
+			<input id="button" type="button" value="登录"
+				class="l_button" /><span class="clew_txt">还没账号？<a href="#" id="regNow">立即注册</a></span>
 		</div>
 	</form>
 </div>
+<!--注册结束-->
+<script type="text/javascript">
+<!--
+$(function() {
+	$('#email').blur(function(){
+		var email=$.trim($(this).val());
+		if(chkEmail(email)){
+			$('#emailTip').attr('class', '').addClass('onSuccess').html('');
+		} else {
+			$('#emailTip').attr('class', '').addClass('onError').html('请输入邮箱地址');
+		}
+	}).focus(function(){
+		$('#emailTip').attr('class', '').addClass('onFocus').html('请输入邮箱地址');
+	});
+	$('#password').blur(function(){
+		var v=$.trim($(this).val());
+		if(v.length<6||v.length>18){
+			$('#passwordTip').attr('class', '').addClass('onError').html('请输入6~18位密码');
+		}else{
+			$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
+		}
+	}).focus(function(){
+		$('#passwordTip').attr('class', '').addClass('onFocus').html('请输入6~18位密码');
+	}).keydown(function(e){
+		if(e.which==13){
+			$('#button').click();
+		}
+	});
+	$('#button').click(function(){
+		$('#loginForm').form({
+			url:app.name+'/portal/login',
+			dataType : 'text',  
+			onSubmit:function(){
+				var tag=true;
+				$('span[id$="Tip"]').each(function(){
+					if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
+						tag=false;
+						$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
+						return false;
+					}
+				});
+				return tag;
+		    }, 
+	    	success:function(data){
+				if(data){
+					var map=$.parseJSON(data);
+					if(map){
+						if(map.answerCode==-3){
+							tips('password','密码错误次数超过限制，半小时内限制登录','bottom');
+						}
+						if(map.answerCode==-2){
+							tips('email','账号被锁定','bottom');
+						}
+						if(map.answerCode==-1){
+							tips('email','账号不存在','bottom');
+						}
+						if(map.answerCode==0){
+							tips('password','密码错误','bottom');
+						}
+						if(map.answerCode==1){
+							$('li[name=before_login]').hide();
+							$('#after_login').show().children().html('欢迎您：'+map.portalUser.nickName);
+							Util.Dialog.remove('loginWin');
+						}
+					}else{
+						tips('button','后台系统异','bottom');
+					}
+				}else{
+					tips('button','后台系统异','bottom');
+				}
+		    }
+		}).submit();
+	});
+	$('#regNow').click(function(){
+		Util.Dialog.remove('loginWin');
+		regWin();
+	});
+});
+//-->
+</script>

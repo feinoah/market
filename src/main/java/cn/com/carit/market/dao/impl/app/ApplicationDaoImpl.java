@@ -84,6 +84,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setImages(rs.getString("images"));
 			application.setBigIcon(rs.getString("big_icon"));
 			application.setDeveloper(rs.getString("developer"));
+			application.setUpdateTime(rs.getTimestamp("update_time"));
 			return application;
 		}
 	};
