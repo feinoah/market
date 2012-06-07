@@ -166,6 +166,20 @@ function genderFormatter(v){
 	return '保密';
 }
 
+function gradeFormatter(v){
+	var result='';
+	v=parseInt(v/2);
+	for(var i=1;i<=v;i++){
+		result+='★';
+	}
+	if(v<5){
+		v=5-v;
+		for(var i=1;i<=v;i++){
+			result+='☆';
+		}
+	}
+	return result;
+}
 function checkEditControl(url){
 	$.getJSON(url, function(data) {
 		if(data.save==0&&data.del==0){

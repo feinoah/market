@@ -1,6 +1,11 @@
 package cn.com.carit.market.bean.portal;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 public class PortalAppComment  implements Serializable{
 	/**
@@ -15,6 +20,11 @@ public class PortalAppComment  implements Serializable{
 	 * comment
 	 */
 	private String comment;
+	
+	private String nickName;
+	
+	private Date updateTime;
+	
 	public Integer getGrade() {
 		return grade;
 	}
@@ -27,5 +37,17 @@ public class PortalAppComment  implements Serializable{
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	
+	public String getNickName() {
+		return nickName;
+	}
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 }

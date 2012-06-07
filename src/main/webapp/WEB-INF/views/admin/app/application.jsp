@@ -89,7 +89,7 @@
 						if($('#editForm input[name=size]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=status]').val()==''){return $(this).form('validate');}
 						if($('#editForm input[name=supportLanguages]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=appLevel]').val()==''){return $(this).form('validate');}
+						//if($('#editForm input[name=appLevel]').val()==''){return $(this).form('validate');}
 						$('#editForm textarea').each(function(){
 							if($.trim($(this).val()).length>250){
 								$.messager.alert('提示', "描述超长", 'info');
@@ -169,7 +169,7 @@
 				$('#catalogId_edit').combobox('setValue',m.catalogId);
 				$('#editForm input[name=platform]').val(m.platform);
 				$('#supportLanguages_edit').combobox('setValue',m.supportLanguages);
-				$('#appLevel_edit').numberspinner('setValue',m.appLevel);
+				//$('#appLevel_edit').numberspinner('setValue',m.appLevel);
 				$('#editForm input[name=price]').val(m.price);
 				$('#status_edit').combobox('setValue',m.status);
 				$('#permissionDesc').val(m.permissionDesc);
@@ -348,7 +348,7 @@
 						<th field="platform" width="100" align="center">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
-						<th field="appLevel" width="80" align="center">应用分级</th>
+						<th field="appLevel" width="80" align="center" formatter="gradeFormatter">应用分级</th>
 						<th field="description" width="80" align="center"  hidden="true">描述</th>
 						<th field="enDescription" width="80" align="center"  hidden="true">描述</th>
 						<th field="permissionDesc" width="80" hidden="true">权限描述</th>
@@ -372,16 +372,18 @@
 							<tr>
 								<td><form:label	for="developer" path="developer"  cssClass="mustInput">开发商：</form:label></td>
 								<td><form:input path="developer" id="developer_edit" cssClass="easyui-validatebox" required="true"/></td>
-							</tr>
-							<tr>
 								<td><label	for="appVersionFile.size" class="mustInput">文件大小：</label></td>
 								<td><input type="text" name="appVersionFile.size" id="size_edit" class="easyui-validatebox" required="true"/></td>
-								<td><label	for="version" class="mustInput">版本：</label></td>
-								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
 							</tr>
 							<tr>
+								<td><label	for="version" class="mustInput">版本：</label></td>
+								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
 								<td><labelcss Class="mustInput">分类：<label></td>
 								<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-validatebox" editable='false'/></td>
+							</tr>
+							<tr>
+							</tr>
+							<tr>
 								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 								<td>
 									<form:select path="status" id="status_edit" required="true" cssClass="easyui-validatebox easyui-combobox" editable='false' >
@@ -389,8 +391,6 @@
 										<form:option value="0">停用</form:option>
 									</form:select>
 								</td>
-							</tr>
-							<tr>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
 									<form:select path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-validatebox easyui-combobox" editable='false'>
@@ -398,8 +398,10 @@
 									<form:option value="1">英文</form:option>
 									<form:option value="2">中英双语</form:option>
 								</form:select></td>
+								<!-- 
 								<td><form:label	for="appLevel" path="appLevel" cssClass="mustInput">应用分级：</form:label></td>
 								<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-validatebox easyui-numberspinner" min="1" max="10" required="true" validType="number"/></td>
+								 -->
 							</tr>
 							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>

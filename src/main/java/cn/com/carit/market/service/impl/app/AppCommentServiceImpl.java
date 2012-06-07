@@ -8,10 +8,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAppComment;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppCommentDao;
+import cn.com.carit.market.dao.app.ApplicationDao;
 import cn.com.carit.market.service.app.AppCommentService;
 
 /**
@@ -24,6 +26,8 @@ public class AppCommentServiceImpl implements AppCommentService{
 	
 	@Resource
 	private AppCommentDao appCommentDao;
+	@Resource
+	private ApplicationDao applicationDao;
 	
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
@@ -31,11 +35,19 @@ public class AppCommentServiceImpl implements AppCommentService{
 		if (appComment==null) {
 			throw new NullPointerException("appComment object is null...");
 		}
+		if(appComment.getAppId()==null||appComment.getAppId().intValue()<=0){
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
 		if (appComment.getId()==0) {
 			appCommentDao.add(appComment);
 		} else {
 			appCommentDao.update(appComment);
 		}
+		double avg=appCommentDao.queryAvgGrade(appComment.getAppId());
+		Application application=new Application();
+		application.setId(appComment.getAppId());
+		application.setAppLevel((int) Math.rint(avg));
+		applicationDao.update(application);
 	}
 
 	@Override

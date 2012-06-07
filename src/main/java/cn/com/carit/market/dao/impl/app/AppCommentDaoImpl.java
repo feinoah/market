@@ -169,6 +169,8 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
 					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
@@ -243,6 +245,8 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			PortalAppComment appComment = new PortalAppComment();
 			appComment.setGrade(rs.getInt("grade"));
 			appComment.setComment(rs.getString("comment"));
+			appComment.setNickName(rs.getString("nick_name"));
+			appComment.setUpdateTime(rs.getTimestamp("update_time"));
 			return appComment;
 		}
 	};
@@ -250,8 +254,8 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	@Override
 	public JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm) {
 		StringBuilder sql = new StringBuilder(
-				"select grade, comment from t_app_comment where status=? and app_id=?");
-		String countSql = "select count(1) from t_app_comment where status=? and app_id=?";
+				"select a.grade, a.comment, a.update_time, b.nick_name from t_app_comment a left join t_account_info b on a.user_id=b.id where a.status=? and a.app_id=?");
+		String countSql = "select count(1) from t_app_comment a left join t_account_info b on a.user_id=b.id where a.status=? and a.app_id=?";
 		JsonPage<PortalAppComment> jsonPage = new JsonPage<PortalAppComment>(dgm.getPage(), dgm.getRows());
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
@@ -265,6 +269,8 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
 					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by a.update_time desc");
 		}
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql, args, argTypes);
@@ -278,6 +284,19 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));
 		return jsonPage;
+	}
+
+	@Override
+	public double queryAvgGrade(int appId) {
+		String sql="select avg(grade) from t_app_comment where app_id=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		double avg=0; 
+		try {
+			avg=jdbcTemplate.queryForObject(sql, Double.class, appId);
+		} catch (Exception e) {
+			log.warn("there no result of the query sql:"+sql);
+		}
+		return avg;
 	}
 
 }

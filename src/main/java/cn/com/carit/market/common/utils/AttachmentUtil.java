@@ -2,36 +2,45 @@ package cn.com.carit.market.common.utils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 public class AttachmentUtil {
 	private static final Logger logger = Logger.getLogger(AttachmentUtil.class);
+	private static volatile AttachmentUtil INSTANCE=null;
+	private static Properties p = new Properties();
 	
-	private Properties p;
+	private AttachmentUtil(){}
 	
-	public static class Holder{
-		private static AttachmentUtil INSTANCE=new AttachmentUtil();
-	}
-	
-	public static AttachmentUtil getInstance(){
-		return Holder.INSTANCE;
-	}
-	private AttachmentUtil(){
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream(
-				"resources"+File.separator+"attachment.properties");   
-		
-		
-		p = new Properties();
+	private AttachmentUtil(String path){
 		try {
-			p.load(is);
+			logger.info("init AttachmentUtil INSTANCE start...");
+			URL url=new URL(path+"/attachment.properties");
+			p.load(url.openStream());
+			logger.info("init AttachmentUtil INSTANCE end...");
+		} catch (MalformedURLException e) {
+			logger.error("read file["+path+"/attachment.properties"+"] error..."+e.getMessage());
 		} catch (IOException e) {
 			logger.error("init attachment.properties error..."+e.getMessage());
 		}
 	}
-
+	/**
+	 * 初始化
+	 * @param path
+	 */
+	public static void init(String path){
+		if (INSTANCE==null) {
+			synchronized (AttachmentUtil.class) {
+				if (INSTANCE==null) {
+					INSTANCE=new AttachmentUtil(path);
+				}
+			}
+		}
+	}
+	
 	public static void mkDir(String path){
 		File file=new File(path);
 		if (!file.exists()) {
@@ -45,7 +54,7 @@ public class AttachmentUtil {
 	}
 	
 	public static Object getValue(String key) {
-		return getInstance().p.get(key);
+		return p.get(key);
 	}
 	
 	public static File getIconFile(String fileName){
@@ -89,9 +98,9 @@ public class AttachmentUtil {
 	}
 	
 	public static String getPhotoPath(String fileName){int index=fileName.lastIndexOf(File.separator);
-	if (index!=-1) {
-		fileName=fileName.substring(index);
-	}
+		if (index!=-1) {
+			fileName=fileName.substring(index);
+		}
 		return (String)getValue("attachment.photos")+(File.separator+fileName);
 	}
 	
@@ -123,21 +132,12 @@ public class AttachmentUtil {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println(getIconFile("test"));
+		init("http://localhost:8080/market");
+		System.out.println(getValue("attachment.icons"));
+		System.out.println(getIconFile("Sina Weibo_19830703190160.png"));
 		System.out.println(getIconPath("test"));
-//		System.out.println(getImageFile("test"));
-//		File image=getImageFile("Blue hills.jpg");
-//		FileOutputStream os=new FileOutputStream(getImageFile("test.txt"));
-//		FileImageOutputStream os=new FileImageOutputStream(getImageFile("test.jpg"));
-//		FileImageInputStream is=new FileImageInputStream(image);
-//		byte[] buffer = new byte[1024];
-//		int i=-1;
-//		while ((i = is.read(buffer)) != -1) {
-//			os.write(buffer, 0, i);
-//		   }
-//		os.flush();
-//		os.close();
-//		is.close();
-		System.out.println(deleteFile(getImagePath("test.jpg")));
+		System.out.println(getImageFile("test"));
+		
+		System.out.println((int)Math.rint(5.4970));
 	}
 }

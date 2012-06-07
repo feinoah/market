@@ -2,6 +2,10 @@ package cn.com.carit.market.bean.portal;
 
 import java.util.Date;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
+
 public class PortalAccountInfo {
 	/**
 	 * id
@@ -74,9 +78,11 @@ public class PortalAccountInfo {
 	public String getLastLoginIp() {
 		return lastLoginIp;
 	}
+	
 	public void setLastLoginIp(String lastLoginIp) {
 		this.lastLoginIp = lastLoginIp;
 	}
+	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getLastLoginTime() {
 		return lastLoginTime;
 	}

@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAccountInfo;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
@@ -388,33 +389,42 @@ public class PortalController{
 	/**
 	 * 增加评论<br>
 	 * portal/app/comment/add
-	 * <table>
-	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-1</td><td>错误</td></tr>
-	 * 	<tr><td>0</td><td>没有登录</td></tr>
-	 * 	<tr><td>1</td><td>成功</td></tr>
-	 * <tr><td>其它</td><td>后台异常</td></tr>
-	 * </table>
 	 * @param appComment
 	 * @param result
 	 * @param req
-	 * @return
+	 * @return {@link Map<String,Object>}
+	 * <table>
+	 * 	<tr><th>属性</th><th>描述</th></tr>
+	 * 	<tr><td>answerCode</td><td>-1：错误；0：没有登录；1：成功</td></tr>
+	 * 	<tr><td>jsonPage</td><td>{@link JsonPage<AppComment>}</td></tr>
+	 * </table>
 	 */
-	@RequestMapping(value="portal/app/comment/add", method=RequestMethod.POST)
+	@RequestMapping(value="app/comment/add", method=RequestMethod.POST)
 	@ResponseBody
-	public int addAppComment(@ModelAttribute AppComment appComment
-			, BindingResult result, HttpServletRequest req){
+	public Map<String, Object> addAppComment(@ModelAttribute AppComment appComment
+			, BindingResult result, DataGridModel dgm, HttpServletRequest req){
+		Map<String, Object> resultMap=new HashMap<String, Object>();
 		if (result.hasErrors()) {
-			return -1;
+			log.error(result.getAllErrors());
+			resultMap.put(Constants.ANSWER_CODE, -1);
+			return resultMap;
 		}
 		AccountInfo account=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
 		if (account==null) {
 			log.error("not login comment ...");
-			return 0;
+			resultMap.put(Constants.ANSWER_CODE, 0);
+			return resultMap;
 		}
 		appComment.setUserId(account.getId());
-		appCommentService.saveOrUpdate(appComment);
-		return 1;
+		try{
+			appCommentService.saveOrUpdate(appComment);
+			resultMap.put(Constants.ANSWER_CODE, 1);
+			resultMap.put("jsonPage", appCommentService.queryComment(appComment.getAppId(), dgm));
+		}catch (Exception e) {
+			resultMap.put(Constants.ANSWER_CODE, -1);
+			log.error("add app comment error...");
+		}
+		return resultMap;
 	}
 	
 	/**
@@ -430,20 +440,21 @@ public class PortalController{
 		if (account==null) {
 			//session超时
 			log.warn("session time out...");
-//			return -2;
 //			throw new Exception("session time out...");
+			return null;
 		}
 		Application app = applicationService.queryById(appId);
 		String fileName=app.getAppFilePath();
 		if (!StringUtils.hasText(fileName)) {
 			// 文件不存在
-//			throw new Exception();
+			log.warn("can't get app file of app["+appId+"]");
+//			throw new Exception("");
+			return null;
 		}
-//		String uri=req.getProtocol()+req.getRemoteHost()+req.getRemotePort()+"/"+fileName;
-//		AppDownloadLog downlog=new AppDownloadLog();
-//		downlog.setAccountId(account.getId());
-//		downlog.setAppId(appId);
-//		appDownloadLogService.saveOrUpdate(downlog);
+		AppDownloadLog downlog=new AppDownloadLog();
+		downlog.setAccountId(account.getId());
+		downlog.setAppId(appId);
+		appDownloadLogService.saveOrUpdate(downlog);
 		return "redirect:/"+fileName;
 	}
 	

@@ -69,19 +69,6 @@
 			}
 		}
 		
-		function gradeFormatter(v){
-			var result='';
-			for(var i=1;i<=v;i++){
-				result+='★';
-			}
-			if(v<5){
-				v=5-v;
-				for(var i=1;i<=v;i++){
-					result+='☆';
-				}
-			}
-			return result;
-		}
 		</script>
 		<style>
 		#editWin label {width: 115px;}

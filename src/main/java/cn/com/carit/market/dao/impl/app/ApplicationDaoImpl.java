@@ -95,9 +95,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				+ ", en_name, version, icon, big_icon, developer, catalog_id"
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
-				+ ", app_level, description , permission_desc, en_description , en_permission_desc"
+				+ ", description , permission_desc, en_description , en_permission_desc"
 				+ ", images" + ", status" + ", create_time" + ", update_time"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -118,7 +118,6 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(i++, application.getPlatform());
 				ps.setInt(i++, application.getSupportLanguages());
 				ps.setDouble(i++, application.getPrice()==null?0:application.getPrice()); 
-				ps.setInt(i++, application.getAppLevel()); 
 				ps.setString(i++, application.getDescription());
 				ps.setString(i++, application.getPermissionDesc());
 				ps.setString(i++, application.getEnDescription());

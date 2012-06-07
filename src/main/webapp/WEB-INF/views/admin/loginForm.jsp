@@ -37,7 +37,7 @@
 		</script>
 	</head>
 	<body>
-		<div id="loginWin" class="easyui-window" title="登录后台" closed="true" style="width:600px;height:310px;padding:5px;">
+		<div id="loginWin" class="easyui-window" title="登录后台" closable="false" collapsible="false" minimizable="false" maximizable="false" style="width:380px;height:280px;padding:50px;">
 		<form:form 
 			action="${ctx}/back/login"
 			method="post"  id="loginForm">

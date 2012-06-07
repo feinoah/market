@@ -32,8 +32,13 @@
 	</head>
 
 	<body class="easyui-layout">
-		<div region="north" border="false" style="height:60px;background:#B3DFDA;">
-			<h2>您好！${adminUser.nickName}</h2>
+		<div region="north" border="false" style="height:60px;overflow:hidden;">
+			<div region="west" split="true">
+			................
+			</div>
+			<div region="east" split="true" style="width:500px;padding:10px;">
+				<span>欢迎您：${adminUser.nickName}，上次登录时间：${adminUser.lastLoginTime}，IP：${adminUser.lastLoginIp}</span>
+			</div>
 		</div>
 		<div region="west" split="true" title="导航菜单" style="width: 180px;overflow:hidden;" icon="icon-redo">
 	        <div id="menu" class="easyui-accordion" fit="true" border="false">

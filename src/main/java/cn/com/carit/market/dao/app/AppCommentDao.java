@@ -75,4 +75,6 @@ public interface AppCommentDao {
 	 * @return
 	 */
 	JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm);
+	
+	double queryAvgGrade(int appId);
 }
