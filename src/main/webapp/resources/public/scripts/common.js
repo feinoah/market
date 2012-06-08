@@ -43,6 +43,10 @@ $(function (){
 	$('#edit_submit').bind('click',function(){
 		$('#editForm').form({
 			onSubmit:function(){
+				// 避免 form validate bug
+				$('.easyui-combobox').each(function(){
+					$(this).val($(this).combobox('getText'));
+				});
 				$('#editForm textarea').each(function(){
 					if($.trim($(this).val()).length>$(this).attr('maxLen')){
 						$.messager.alert('提示', '描述超长，最多输入'+$(this).attr('maxLen')+'个字符', 'info');
@@ -50,6 +54,7 @@ $(function (){
 					}
 				});
 				var b=$(this).form('validate');
+				
 				if(b){
 					$.messager.progress({title:'请稍后',msg:'提交中...'});
 				}
@@ -217,4 +222,21 @@ function checkExisted(item,url){
 			});
 		}
 	});
+}
+
+//获得字符串长度
+function getStrLen(str){
+	if(str == null || str == ''){
+		return 0;
+	}
+	var len = 0;
+	var reg = /[a-zA-Z0-9]/;
+	for(var i=0;i<str.length;i++){
+		if(reg.test(str.charAt(i))){
+			len++;
+		}else{
+			len = len+2;
+		}
+	}
+	return len;
 }

@@ -66,15 +66,15 @@ public class AppVersionFileController {
 	public int save(@ModelAttribute AppVersionFile appVersionFile, BindingResult result
 			, HttpServletRequest request){
 		if (result.hasErrors()) {
-			log.debug(result.getAllErrors().toString());
+			log.error(result.getAllErrors().toString());
 			return -1;
 		}
 		if (appVersionFile.getAppId()==null||appVersionFile.getAppId().intValue()<=0) {
-			log.debug("appId must be bigger than 0 ...");
+			log.error("appId must be bigger than 0 ...");
 			return -1;
 		}
 		if (!StringUtils.hasText(appVersionFile.getVersion())) {
-			log.debug("version must be not empty ...");
+			log.error("version must be not empty ...");
 			return -1;
 		}
 		Application application=applicationService.queryById(appVersionFile.getAppId());
@@ -90,9 +90,6 @@ public class AppVersionFileController {
 	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
 	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+fileName);
-			} else {
-				log.debug("file must be not empty ...");
-				return -1;
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());

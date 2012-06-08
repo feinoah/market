@@ -46,6 +46,7 @@
 				$.messager.confirm('警告','删除后该分类的应用将无法关联，您确认要删除吗?',
 						function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/catalog/delete/'+ m.id,
 							type : 'GET',
@@ -54,6 +55,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {
@@ -154,7 +156,7 @@
 						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  min="1" max="1000" required="true" validType="number"  cssStyle="width:295px;"/></td>
 					</tr>
 					<tr>
-						<td><form:label	for="status" id="status_edit" path="status" cssClass="mustInput">状态：</form:label></td>
+						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
 							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:295px;" editable='false'>
 							<form:option value="1">启用</form:option>

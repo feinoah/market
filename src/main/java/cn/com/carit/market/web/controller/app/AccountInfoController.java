@@ -54,15 +54,17 @@ public class AccountInfoController {
 	@ResponseBody
 	public int save(@ModelAttribute AccountInfo accountInfo, BindingResult result) throws Exception{
 		if (result.hasErrors()) {
-			log.debug(result.getAllErrors().toString());
+			log.error(result.getAllErrors().toString());
 			return -1;
 		}
 		if (!StringUtils.hasText(accountInfo.getEmail())) {
+			log.error("email can't be empty");
 			return 0;
 		}
-		if (!StringUtils.hasText(accountInfo.getPassword())) {
+		/*if (!StringUtils.hasText(accountInfo.getPassword())) {
+			log.error("password can't be empty");
 			return 0;
-		}
+		}*/
 		accountInfoService.saveOrUpdate(accountInfo);
 		return 1;
 	}

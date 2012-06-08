@@ -42,7 +42,26 @@
 			// edit form
 			$('#edit_submit').bind('click',function(){
 				$('#editForm').form({
+						onSubmit:function(){
+						// 避免 form validate bug
+						$('.easyui-combobox combobox-f combo-f').each(function(){
+							$(this).val($(this).combobox('getText'));
+						});
+						$('#editForm textarea').each(function(){
+							if($.trim($(this).val()).length>$(this).attr('maxLen')){
+								$.messager.alert('提示', '描述超长，最多输入'+$(this).attr('maxLen')+'个字符', 'info');
+								return false;
+							}
+						});
+						var b=$(this).form('validate');
+						
+						if(b){
+							$.messager.progress({title:'请稍后',msg:'提交中...'});
+						}
+						return b;
+					},
 			    	success:function(data){
+						$.messager.progress('close');
 			    		if(data==-1){
 							$.messager.alert('错误', "编辑失败", 'error');
 			    		} else if(data>0){
@@ -78,13 +97,12 @@
 				$('#editForm input[name=email]').val(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
-				$('#editForm input[name=gender]').val(m.gender);
+				$('#gender_edit').combobox('setValue',m.gender);
 				$('#editForm input[name=officePhone]').val(m.officePhone);
 				$('#editForm input[name=mobile]').val(m.mobile);
-				$('#editForm input[name=status]').val(m.status);
-				$('#idCard').attr('idCard',true);//idCard不能在这里修改
+				$('#status_edit').combobox('setValue',m.status);
 				$('#idCard').val(m.idCard);
-				$('#birthday').val(m.birthday);
+				$('#birthday').datebox('setValue', m.birthday);
 				$('#photo').attr('src',m.photo);
 				$('#balance').val(m.balance);
 				$('#address').val(m.address);
@@ -103,6 +121,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/account/delete/'+ m.id,
 							type : 'GET',
@@ -111,6 +130,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {
@@ -139,6 +159,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要封号吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/account/lock/'+ m.id,
 							type : 'GET',
@@ -147,6 +168,7 @@
 								$.messager.alert('错误','封号失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','封号失败!','error');
 								} else if (data > 0) {
@@ -172,6 +194,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要解封吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/account/unlock/'+ m.id,
 							type : 'GET',
@@ -180,6 +203,7 @@
 								$.messager.alert('错误','解封失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','解封失败!','error');
 								} else if (data > 0) {
@@ -297,7 +321,7 @@
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>
 						<th field="gender" width="150" align="center" formatter="genderFormatter">性别</th>
-						<th field="birthday" width="60" align="center" hidden="true">生日</th>
+						<th field="birthday" width="60" align="center" hidden="true"/>
 						<th field="photo" width="60" align="center" hidden="true">头像</th>
 						<th field="balance" width="60" align="center">余额</th>
 						<th field="idCard" width="100" align="center" hidden="true">身份证号码</th>
@@ -315,8 +339,8 @@
 			<form:form modelAttribute="accountInfo" id="editForm" action="${ctx}/admin/app/account/save" method="post" cssStyle="padding:10px 20px;">
 				<table>
 					<tr>
-						<td><form:label	for="email" path="email"  cssClass="mustInput">邮箱：</form:label></td>
-						<td><form:input path="email" cssClass="easyui-validatebox" required="true" validType="email"/></td>
+						<td><form:label	for="email" path="email">邮箱：</form:label></td>
+						<td><form:input path="email"/></td>
 						<td><form:label	for="nickName" path="nickName"  cssClass="mustInput">昵称：</form:label></td>
 						<td><form:input path="nickName" required="true" cssClass="easyui-validatebox"/></td>
 					</tr>
@@ -331,7 +355,7 @@
 						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:select path="status" cssClass="easyui-combobox" editable='false'>
+							<form:select path="status" id="status_edit" cssClass="easyui-combobox" editable='false'>
 								<form:option value="1">启用</form:option>
 								<form:option value="0">停用</form:option>
 							</form:select>
@@ -340,7 +364,7 @@
 					<tr>
 						<td><form:label	for="gender" path="gender" cssClass="easyui-validatebox">性别：</form:label></td>
 						<td>
-							<form:select path="gender" cssClass="easyui-combobox" editable='false'>
+							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" editable='false'>
 							<form:option value="2">保密</form:option>
 							<form:option value="0">女</form:option>
 							<form:option value="1">男</form:option>
@@ -357,7 +381,7 @@
 					</tr>
 					<tr>
 						<td><form:label	for="address" path="address" cssClass="easyui-validatebox">地址：</form:label></td>
-						<td colspan="3"><form:input path="address" cssClass="asyui-validatebox" cssStyle="width:550px;"/></td>
+						<td colspan="3"><form:input path="address" cssStyle="width:550px;"/></td>
 					</tr>
 				</table>
 				<form:hidden path="id"/>

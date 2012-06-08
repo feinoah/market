@@ -20,21 +20,15 @@
 			});
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/user');
 			$('#editWin').window({onClose:function(){
-				$('#password').attr('disabled',false).attr('required',true);
+				$('#password').attr('disabled',false);
 				$('#email_edit').attr('disabled',false);
-				$('#passwordLabel').addClass('mustInput');
-				$('#emailLabel').addClass('mustInput');
-				$('#nickNameLabel').addClass('mustInput');
 			}})
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
-				$('#passwordLabel').removeClass('mustInput');
 				$('#password').attr('disabled',true);
-				$('#emailLabel').removeClass('mustInput');
-				$('#nickNameLabel').removeClass('mustInput');
 				$('#editWin').window('open');
 				// init data
 				var r=[];
@@ -49,7 +43,9 @@
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
 				$('#editForm input[name=officePhone]').val(m.officePhone);
-				$('#editForm input[name=mobile]').val(m.mobile);			
+				if(m.mobile!=0){
+					$('#editForm input[name=mobile]').val(m.mobile);			
+				}
 				$('#status_edit').combobox('setValue',m.status);
 				$('#gender_edit').combobox('setValue',m.gender);
 				$('#remark').val(m.remark);
@@ -68,6 +64,7 @@
 			if (user) {
 				$.messager.confirm('提示信息','您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/permission/user/delete/'+ user.id,
 							type : 'GET',
@@ -76,6 +73,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if(data==-2){
 									$.messager.alert('错误','不能删除当前登录用户!','error');
 								}else if (data == -1) {
@@ -208,27 +206,27 @@
 						<td><form:password path="password" cssClass="easyui-validatebox" validType="safepass"/></td>
 					</tr>
 					<tr>
-						<td><form:label	for="mobile" path="mobile">手机号码：</form:label></td>
-						<td><form:input path="mobile" cssClass="easyui-validatebox" validType="mobile"/></td>
-						<td><form:label	for="officePhone" path="officePhone">办公电话：</form:label></td>
-						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
-					</tr>
-					<tr>
-						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
+						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
-							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;">
+							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true">
 								<form:option value="1">启用</form:option>
 								<form:option value="0">停用</form:option>
 							</form:select>
 						</td>
-						<td><form:label	for="gender" path="gender" cssClass="easyui-validatebox">性别：</form:label></td>
+						<td><form:label	for="gender" path="gender" cssClass="mustInput">性别：</form:label></td>
 						<td>
-							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" cssStyle="width:180px;">
+							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true">
 							<form:option value="2">保密</form:option>
 							<form:option value="0">女</form:option>
 							<form:option value="1">男</form:option>
 						</form:select>
 						</td>
+					</tr>
+					<tr>
+						<td><form:label	for="mobile" path="mobile">手机号码：</form:label></td>
+						<td><form:input path="mobile" cssClass="easyui-validatebox" validType="mobile"/></td>
+						<td><form:label	for="officePhone" path="officePhone">办公电话：</form:label></td>
+						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 					</tr>
 					<tr>
 						<td><form:label for="roles" path="roles" cssClass="easyui-validatebox">角色：</form:label></td>

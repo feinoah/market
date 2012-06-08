@@ -50,6 +50,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/version/delete/'+ m.id,
 							type : 'GET',
@@ -58,6 +59,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {
@@ -155,7 +157,7 @@
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true"/></td>
 						<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
-						<td><input type="file"  name="file"  cssClass="easyui-validatebox"/></td>
+						<td><input type="file"  name="file"/></td>
 				</tr>
 				<tr>
 						<td><form:label	for="size" path="size"  cssClass="mustInput">文件夹大小：</form:label></td>

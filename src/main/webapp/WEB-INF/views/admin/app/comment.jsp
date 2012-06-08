@@ -40,6 +40,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/comment/delete/'+ m.id,
 							type : 'GET',
@@ -48,6 +49,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {

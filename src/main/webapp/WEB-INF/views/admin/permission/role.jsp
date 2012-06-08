@@ -40,16 +40,20 @@
 							arr.push(n.id);
 						 });
 						$('#modules').val(arr.join());
+						var b=$(this).form('validate');
+						if(b){
+							$.messager.progress({title:'请稍后',msg:'提交中...'});
+						}
+						return b;
 					},
 			    	success:function(data){
+			    		$.messager.progress('close');
 			    		if(data==-1){
 							$.messager.alert('错误', "编辑失败", 'error');
 			    		} else if(data>0){
 							$.messager.alert('成功', "编辑成功", 'info');
-				        	$('#editWin').window('close');
-				        	// clear form
-				        	// update rows
-				        	$('#tt').datagrid('reload');
+							$('#tt').datagrid('reload');
+							$('#editWin').window('close');
 						}else{
 			    			$.messager.alert('异常', "后台系统异常", 'error');
 						}
@@ -94,6 +98,7 @@
 			if (user) {
 				$.messager.confirm('警告','删除的同时会删除用户角色关联，您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/permission/role/delete/'+ user.id,
 							type : 'GET',
@@ -102,6 +107,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {

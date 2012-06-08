@@ -88,8 +88,8 @@
 						$('#status_edit').val($('#status_edit').combobox('getText'));
 						$('#supportLanguages_edit').val($('#supportLanguages_edit').combobox('getText'));
 						$('#editForm textarea').each(function(){
-							if($.trim($(this).val()).length>250){
-								$.messager.alert('提示', "描述超长", 'info');
+							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
+								$.messager.alert('提示', '描述超出'+$(this).attr('maxLen')+'字符', 'info');
 								return false;
 							}
 						});
@@ -124,8 +124,8 @@
 						// 避免 form validate bug
 						$('#version_status_edit').val($('#version_status_edit').combobox('getText'));
 						$('#editVersionForm textarea').each(function(){
-							if($.trim($(this).val()).length>250){
-								$.messager.alert('提示', "描述超长，最多输入250个字符", 'info');
+							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
+								$.messager.alert('提示', '描述超出'+$(this).attr('maxLen')+'字符', 'info');
 								return false;
 							}
 						});
@@ -198,6 +198,7 @@
 			if (m) {
 				$.messager.confirm('警告','您确认要删除吗?',function(data) {
 					if (data) {
+						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
 							url : '${ctx}/admin/app/application/delete/'+ m.id,
 							type : 'GET',
@@ -206,6 +207,7 @@
 								$.messager.alert('错误','删除失败!','error');
 							},
 							success : function(data) {
+								$.messager.progress('close');
 								if (data == -1) {
 									$.messager.alert('错误','删除失败!','error');
 								} else if (data > 0) {
@@ -509,10 +511,10 @@
 					<td colspan="3">
 						<div id="new_features_tabs" class="easyui-tabs" style="width:420px;height:100px;">
 							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="features" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
+								<textarea name="features" class="easyui-validatebox" validType="maxLength[250]" maxLen="250"></textarea>
 							</div>  
 							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="enFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
+								<textarea name="enFeatures" class="easyui-validatebox" validType="maxLength[250]" maxLen="250"></textarea>
 							</div> 
 						</div>
 					</td>

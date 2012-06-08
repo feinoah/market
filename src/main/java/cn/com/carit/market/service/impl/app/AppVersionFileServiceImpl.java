@@ -57,17 +57,19 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 			appVersionFileDao.update(appVersionFile);
 			if (appVersionFile.getStatus()!=null 
 					&& appVersionFile.getStatus().intValue()==Constants.STATUS_INVALID) {
-				// 获取排除当前记录外id值最大的一条记录
+				updateApp=true;
+				// 获取排除当前记录外id值的记录
 				List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
 						appVersionFile.getAppId(), appVersionFile.getId());
 				if(list!=null && list.size()>0){
-					updateApp=true;
 					AppVersionFile temp=list.get(0);
 					app.setSize(appVersionFile.getSize());
 					app.setAppFilePath(temp.getFilePath());
 					app.setVersion(temp.getVersion());
 					app.setFeatures(temp.getNewFeatures());
 					app.setEnFeatures(temp.getEnNewFeatures());
+				} else { // 最后一条有效版本
+					app.setStatus(Constants.STATUS_INVALID);
 				}
 			}
 		}
@@ -84,9 +86,16 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
+		AppVersionFile version=appVersionFileDao.queryById(id);
 		int row = appVersionFileDao.delete(id);
 		if(row>0){
-			applicationDao.updateById(id);
+			List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
+					version.getAppId(), version.getId());
+			if(list==null || list.size()==0){// 最后一条有效版本
+				applicationDao.delete(version.getAppId());
+			} else {
+				applicationDao.updateById(id);
+			}
 		}
 		return row;
 	}

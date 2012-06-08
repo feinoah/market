@@ -236,6 +236,28 @@ function hasCh(str){
 	return patrn.exec(str);
 }
 
+//验证用户昵称，只能包含中文、字母
+function valiNickname(nickname){
+	var reg = new RegExp("[^a-zA-Z\u4E00-\u9FFF]");
+	return !reg.test(nickname);
+}
+//获得字符串长度
+function getStrLength(str){
+	if(str == null){
+		return 0;
+	}
+	var len = 0;
+	var reg = /[a-zA-Z0-9]/;
+	for(var i=0;i<str.length;i++){
+		if(reg.test(str.charAt(i))){
+			len++;
+		}else{
+			len = len+2;
+		}
+	}
+	return len;
+}
+
 /**
  * 分享到腾讯微博
  * @param _url 链接URL

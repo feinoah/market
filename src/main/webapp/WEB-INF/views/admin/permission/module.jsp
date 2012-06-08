@@ -185,27 +185,27 @@
 						<td><form:label	for="moduleName" path="moduleName"  cssClass="mustInput">名称：</form:label></td>
 						<td><form:input path="moduleName" cssClass="easyui-validatebox" required="true" /></td>
 						<td><form:label	for="moduleUrl" path="moduleUrl">路径：</form:label></td>
-						<td><form:input path="moduleUrl" cssClass="easyui-validatebox"/></td>
+						<td><form:input path="moduleUrl"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="parentId" path="parentId" >父模块：</form:label></td>
 						<td>
-						<form:input path="parentId" id="parentId_edit" ssClass="easyui-validatebox"/>
+						<form:input path="parentId" id="parentId_edit" cssClass="easyui-validatebox"/>
 						</td>
-						<td><form:label	for="level" path="level" cssClass="easyui-validatebox">层级：</form:label></td>
+						<td><form:label	for="level" path="level" cssClass="emustInput">层级：</form:label></td>
 						<td>
 							<form:input path="level" id="level_edit" cssClass="easyui-numberspinner" value="1" min="1" max="10" required="true"/>
 						</td>
 					</tr>
 					<tr>
-						<td><form:label	for="expanded" path="expanded" cssClass="easyui-validatebox">展开：</form:label></td>
+						<td><form:label	for="expanded" path="expanded" cssClass="mustInput">展开：</form:label></td>
 						<td>
 							<form:select path="expanded" id="expanded_edit" cssClass="easyui-combobox" required="true">
 								<form:option value="0">-收起-</form:option>
 								<form:option value="1">-展开-</form:option>
 							</form:select>
 						</td>
-						<td><form:label for="display" path="display" cssClass="easyui-validatebox" required="true">是否隐藏：</form:label></td>
+						<td><form:label for="display" path="display" cssClass="mustInput">是否隐藏：</form:label></td>
 						<td>
 							<form:select path="display" id="display_edit" cssClass="easyui-combobox" required="true">
 								<form:option value="0">-隐藏-</form:option>

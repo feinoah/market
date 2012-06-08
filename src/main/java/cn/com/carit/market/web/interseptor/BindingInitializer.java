@@ -1,7 +1,9 @@
 package cn.com.carit.market.web.interseptor;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.beans.propertyeditors.CustomNumberEditor;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.web.bind.WebDataBinder;
@@ -9,7 +11,7 @@ import org.springframework.web.bind.support.WebBindingInitializer;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
-import cn.com.carit.market.common.springmvc.DateConvertEditor;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.springmvc.IntEditor;
 import cn.com.carit.market.common.springmvc.LongEditor;
 
@@ -32,7 +34,9 @@ public class BindingInitializer implements WebBindingInitializer {
 		binder.registerCustomEditor(int.class,new IntEditor());
 		binder.registerCustomEditor(long.class, new LongEditor());
 		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
-		binder.registerCustomEditor(Date.class,new DateConvertEditor());
+		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);  
+		dateFormat.setLenient(false);  
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));  
 	}
 
 }
