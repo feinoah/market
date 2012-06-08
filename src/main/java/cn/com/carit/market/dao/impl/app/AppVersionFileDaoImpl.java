@@ -55,11 +55,10 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public int add(final AppVersionFile appVersionFile) {
-		// TODO change values field name to ? and deal with date field
 		final String sql = "insert into t_app_version_file (app_id"
-				+ ", version, size, file_path, new_features, en_new_features"
+				+ ", version, size, file_path, new_features, en_new_features, status"
 				+ ", create_time" + ", update_time" + ") values (?"
-				+ ", ?, ?, ?, ?,?, now(), now())";
+				+ ", ?, ?, ?, ?,?, ?, now(), now())";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -68,12 +67,14 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 					throws SQLException {
 				PreparedStatement ps = con.prepareStatement(sql,
 						Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(1, appVersionFile.getAppId());
-				ps.setString(2, appVersionFile.getVersion());
-				ps.setString(3, appVersionFile.getSize());
-				ps.setString(4, appVersionFile.getFilePath());
-				ps.setString(5, appVersionFile.getNewFeatures());
-				ps.setString(6, appVersionFile.getEnNewFeatures());
+				int i=1;
+				ps.setInt(i++, appVersionFile.getAppId());
+				ps.setString(i++, appVersionFile.getVersion());
+				ps.setString(i++, appVersionFile.getSize());
+				ps.setString(i++, appVersionFile.getFilePath());
+				ps.setString(i++, appVersionFile.getNewFeatures());
+				ps.setString(i++, appVersionFile.getEnNewFeatures());
+				ps.setInt(i++, appVersionFile.getStatus());
 				return ps;
 			}
 		}, gkHolder);
@@ -146,6 +147,14 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.query(sql, new Object[]{appId}, rowMapper);
+	}
+
+	@Override
+	public List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptId) {
+		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a " +
+				"left join t_application b on a.app_id=b.id where a.app_id=? and a.status!=? and a.id!=? order by a.id desc";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{appId, Constants.STATUS_INVALID, exceptId}, rowMapper);
 	}
 
 	@Override

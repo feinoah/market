@@ -72,7 +72,7 @@
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
-				$('#editWin').window({title:'修改'+winTitle});
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=email]').val(m.email);
@@ -117,6 +117,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#ttt').datagrid('reload');
+									// clear selected
+									$('#ttt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}

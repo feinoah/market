@@ -52,6 +52,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setEnDescription(rs.getString("en_description"));
 			application.setPermissionDesc(rs.getString("permission_desc"));
 			application.setEnPermissionDesc(rs.getString("en_permission_desc"));
+			application.setFeatures(rs.getString("features"));
+			application.setEnFeatures(rs.getString("en_features"));
 			application.setImages(rs.getString("images"));
 			application.setStatus(rs.getInt("status"));
 			application.setCreateTime(rs.getTimestamp("create_time"));
@@ -81,6 +83,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setAppLevel(rs.getInt("app_level"));
 			application.setDescription(rs.getString("description"));
 			application.setPermissionDesc(rs.getString("permission_desc"));
+			application.setFeatures(rs.getString("features"));
 			application.setImages(rs.getString("images"));
 			application.setBigIcon(rs.getString("big_icon"));
 			application.setDeveloper(rs.getString("developer"));
@@ -96,8 +99,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
 				+ ", description , permission_desc, en_description , en_permission_desc"
-				+ ", images" + ", status" + ", create_time" + ", update_time"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now())";
+				+ ", images, status, create_time, update_time, features, en_features"
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?)";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -124,6 +127,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(i++, application.getEnPermissionDesc()); 
 				ps.setString(i++, application.getImages());
 				ps.setInt(i++, application.getStatus());
+				ps.setString(i++, application.getFeatures());
+				ps.setString(i++, application.getEnFeatures());
 				return ps;
 			}
 		}, gkHolder);
@@ -222,6 +227,14 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(", images=?");
 			args.add(application.getImages());
 		}
+		if (StringUtils.hasText(application.getFeatures())) {
+			sql.append(", features=?");
+			args.add(application.getFeatures());
+		}
+		if (StringUtils.hasText(application.getFeatures())) {
+			sql.append(", en_features=?");
+			args.add(application.getFeatures());
+		}
 		sql.append(" where id=?");
 		args.add(application.getId());
 		log.debug(String.format("\n%1$s\n", sql));
@@ -305,7 +318,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getVersion())) {
-			sql.append(" and version like CONCAT('%',?,'%')");
+//			sql.append(" and version like CONCAT('%',?,'%')");
+			sql.append(" and version=?");
 			args.add(application.getVersion());
 			argTypes.add(12);// java.sql.Types type
 		}
@@ -330,7 +344,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(4);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getSize())) {
-			sql.append(" and size like CONCAT('%',?,'%')");
+//			sql.append(" and size like CONCAT('%',?,'%')");
+			sql.append(" and size=?");
 			args.add(application.getSize());
 			argTypes.add(12);// java.sql.Types type
 		}
@@ -388,6 +403,16 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" and update_time=?");
 			args.add(application.getUpdateTime());
 			argTypes.add(93);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getFeatures())) {
+			sql.append(", features like CONCAT('%',?,'%')");
+			args.add(application.getFeatures());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getFeatures())) {
+			sql.append(", en_features like CONCAT('%',?,'%')");
+			args.add(application.getFeatures());
+			argTypes.add(12);// java.sql.Types type
 		}
 		return sql.toString();
 	}
@@ -494,6 +519,11 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" and permission_desc like CONCAT('%',?,'%')");
 			countSql.append(" and permission_desc like CONCAT('%',?,'%')");
 			args.add(application.getPermissionDesc());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getFeatures())) {
+			sql.append(", features like CONCAT('%',?,'%')");
+			args.add(application.getFeatures());
 			argTypes.add(12);// java.sql.Types type
 		}
 		log.debug(String.format("\n%1$s\n", sql));

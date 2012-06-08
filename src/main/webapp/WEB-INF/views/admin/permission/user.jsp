@@ -30,11 +30,11 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#passwordLabel').removeClass('mustInput');
 				$('#password').attr('disabled',true);
 				$('#emailLabel').removeClass('mustInput');
 				$('#nickNameLabel').removeClass('mustInput');
-				$('#editWin').window({title:'修改'+winTitle});
 				$('#editWin').window('open');
 				// init data
 				var r=[];
@@ -84,6 +84,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#tt').datagrid('reload');
+									// clear selected
+									$('#tt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}

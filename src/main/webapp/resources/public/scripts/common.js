@@ -9,7 +9,10 @@ $(function (){
 			text:'新增',
 			iconCls:'icon-add',
 			handler:function() {
-				$('#editWin').window({title:'新增'+winTitle});
+				$('#editWin').window({title:'新增'+winTitle,iconCls:'icon-add'});
+				$('#editForm').form('clear');
+				$('#editForm textarea').val('');
+				$('#id').val('');
 				$('#editWin').window('open');
 				$('#editWin').show();
 			}
@@ -46,9 +49,14 @@ $(function (){
 						return false;
 					}
 				});
-				return $(this).form('validate');
+				var b=$(this).form('validate');
+				if(b){
+					$.messager.progress({title:'请稍后',msg:'提交中...'});
+				}
+				return b;
 			},
 	    	success:function(data){
+				$.messager.progress('close');
 	    		if(data==-1){
 					$.messager.alert('错误', "编辑失败", 'error');
 	    		} else if(data>0){
@@ -67,8 +75,10 @@ $(function (){
 	$('#edit_reset').bind('click',function(){
 		$('#editForm').form('clear');
 	});
+	$('#editWin').window({onClose:function(){
+		$('div.validatebox-tip').remove();
+	}});
 });
-
 
 var idCard = function(value) {
 	if (value.length == 18 && 18 != value.length)

@@ -15,7 +15,7 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
-				$('#editWin').window({title:'修改'+winTitle});
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				$('#appName_edit').val(m.appName);
 				$('#enName_edit').val(m.enName);
@@ -54,6 +54,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#tt').datagrid('reload');
+									// clear selected
+									$('#tt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}

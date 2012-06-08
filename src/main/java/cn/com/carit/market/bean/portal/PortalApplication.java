@@ -49,21 +49,24 @@ public class PortalApplication implements Serializable {
 	@JsonIgnore
 	private Integer catalogId;
 	
+	/**
+	 * 分类名称
+	 */
 	private String catalogName;
 	/**
 	 * size
 	 */
 	private String size;
 	/**
-	 * appFilePath
+	 * 应用文件路径
 	 */
 	private String appFilePath;
 	/**
-	 * platform
+	 * 适用平台
 	 */
 	private String platform;
 	/**
-	 * supportLanguages
+	 * 支持语言
 	 */
 	private Integer supportLanguages;
 	/**
@@ -71,24 +74,28 @@ public class PortalApplication implements Serializable {
 	 */
 	private Double price;
 	/**
-	 * downCount
+	 * 下载次数
 	 */
 	private Integer downCount;
 	/**
-	 * appLevel
+	 * 应用评级
 	 */
 	private Integer appLevel;
 	/**
-	 * description
+	 * 应用描述
 	 */
 	private String description;
 	/**
-	 * permissionDesc
+	 * 权限描述
 	 */
 	private String permissionDesc;
-
+	
 	/**
-	 * 截图路径，以“;”分隔
+	 * 特性
+	 */
+	private String features;
+	/**
+	 * 截图路径，以“;”分隔，Json中不返回此字段，将处理成数组 imageList 返回
 	 */
 	@JsonIgnore
 	private String images;
@@ -263,6 +270,14 @@ public class PortalApplication implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(String features) {
+		this.features = features;
 	}
 	
 }

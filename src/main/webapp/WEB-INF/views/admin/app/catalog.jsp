@@ -19,17 +19,18 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
-				$('#editWin').window({title:'修改'+winTitle});
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
 				$('#name_edit').val(m.name);
 				$('#enName_edit').val(m.enName);
 				$('#displayIndex_edit').numberspinner('setValue',m.displayIndex);
-				//$('#status_edit').combobox('setValue',m.status);
-				$('#status_edit').val(m.status);			
+				$('#status_edit').combobox('setValue',m.status);
+				//$('#status_edit').val(m.status);			
 				$('#description').val(m.description);
 				$('#enDescription').val(m.enDescription);
 				$('#id').val(m.id);
+				alert(m.id)
 				$('#editWin').show();
 			} else {
 				$.messager.show({
@@ -59,6 +60,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#tt').datagrid('reload');
+									// clear selected
+									$('#tt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}

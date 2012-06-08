@@ -59,10 +59,13 @@ public class ApplicationServiceImpl implements ApplicationService{
 		}
 		// 保存版本信息
 		AppVersionFile version=application.getAppVersionFile();
-		if (StringUtils.hasText(application.getAppFilePath())) {
+		if (StringUtils.hasText(application.getAppFilePath())) { // 更新文件了
 			version.setAppId(id);
 			version.setVersion(application.getVersion());
 			version.setFilePath(application.getAppFilePath());
+			version.setNewFeatures(application.getFeatures());
+			version.setEnNewFeatures(application.getEnFeatures());
+			version.setStatus(application.getStatus());
 			appVersionFileDao.add(version);
 		}
 		return id;
@@ -79,8 +82,10 @@ public class ApplicationServiceImpl implements ApplicationService{
 			AttachmentUtil.deleteIcon(application.getIcon());
 			AttachmentUtil.deleteImages(application.getImageList());
 			List<AppVersionFile> versionList=appVersionFileDao.queryByAppId(id);
-			for (AppVersionFile appVersionFile : versionList) {
-				AttachmentUtil.deleteApk(appVersionFile.getFilePath());
+			if (versionList!=null && versionList.size()>0) {
+				for (AppVersionFile appVersionFile : versionList) {
+					AttachmentUtil.deleteApk(appVersionFile.getFilePath());
+				}
 			}
 		}
 		// 删除评论

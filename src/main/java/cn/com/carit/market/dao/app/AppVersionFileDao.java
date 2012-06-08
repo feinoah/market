@@ -55,6 +55,14 @@ public interface AppVersionFileDao {
 	List<AppVersionFile> queryByAppId(int appId);
 	
 	/**
+	 * 按应用Id和排除Id查询，返回结果按Id倒序排序
+	 * @param appId 应用Id
+	 * @param exceptId 排除之外的记录Id
+	 * @return
+	 */
+	List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptId);
+	
+	/**
 	 * 查询
 	 * @return
 	 */

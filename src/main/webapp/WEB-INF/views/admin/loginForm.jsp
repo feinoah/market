@@ -16,6 +16,7 @@
 			$('#loginWin').window('open');
 			$('#submit').click(function(){
 				$('#loginForm').form({
+					dataType:'text',
 			    	success:function(data){
 			    		if(data==-2){
 							$.messager.alert('错误', "密码错误次数太多，半小时内限制登录", 'error');

@@ -86,6 +86,9 @@ public class Application implements Serializable {
 	 */
 	private String permissionDesc;
 	private String enPermissionDesc;
+	
+	private String features;
+	private String enFeatures;
 
 	/**
 	 * 截图路径，以“;”分隔
@@ -311,6 +314,22 @@ public class Application implements Serializable {
 
 	public void setAppVersionFile(AppVersionFile appVersionFile) {
 		this.appVersionFile = appVersionFile;
+	}
+
+	public String getFeatures() {
+		return features;
+	}
+
+	public void setFeatures(String features) {
+		this.features = features;
+	}
+
+	public String getEnFeatures() {
+		return enFeatures;
+	}
+
+	public void setEnFeatures(String enFeatures) {
+		this.enFeatures = enFeatures;
 	}
 
 }

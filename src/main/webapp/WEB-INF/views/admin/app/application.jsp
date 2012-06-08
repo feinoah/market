@@ -6,8 +6,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/md5.js" ></script>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/jquery.form.js" ></script>
 		<script type="text/javascript">
 		var catalogs;
 		var tag=0;
@@ -42,8 +40,11 @@
 					iconCls:'icon-add',
 					handler:function() {
 						tag=0;
-						$('#editWin').window({title:'新增'+winTitle});
+						$('#editWin').window({title:'新增'+winTitle,iconCls:'icon-add'});
 						$('#editWin').window('open');
+						$('#editForm').form('clear');
+						$('#id').val('');
+						$('#editForm textarea').val('');
 						$('#editWin').show();
 					}
 				}, '-', {
@@ -62,6 +63,7 @@
 						if (m) {
 							$('#appId').val(m.id);
 							$('#editVersionWin').window('open');
+							$('#editVersionForm').form('clear');
 							$('#editVersionWin').show();
 						} else {
 							$.messager.show({
@@ -81,15 +83,10 @@
 			$('#edit_submit_app').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){
-						if($('#editForm input[name=catalogId]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=appName]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=enName]').val()==''){return $(this).form('validate');}
-						if($('#developer_edit').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=version]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=size]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=status]').val()==''){return $(this).form('validate');}
-						if($('#editForm input[name=supportLanguages]').val()==''){return $(this).form('validate');}
-						//if($('#editForm input[name=appLevel]').val()==''){return $(this).form('validate');}
+						// 避免 form validate bug
+						$('#catalogId_edit').val($('#catalogId_edit').combobox('getText'));
+						$('#status_edit').val($('#status_edit').combobox('getText'));
+						$('#supportLanguages_edit').val($('#supportLanguages_edit').combobox('getText'));
 						$('#editForm textarea').each(function(){
 							if($.trim($(this).val()).length>250){
 								$.messager.alert('提示', "描述超长", 'info');
@@ -100,15 +97,19 @@
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						}
-						return true;
+						var b=$(this).form('validate');
+						if(b){
+							$.messager.progress({title:'请稍后',msg:'提交中...'});
+						}
+						return b;
 				    }, 
 			    	success:function(data){
+			    		$.messager.progress('close');
 			    		if(data==-1){
 							$.messager.alert('错误', "编辑失败", 'error');
 			    		} else if(data>0){
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editWin').window('close');
-				        	// clear form
 				        	// update rows
 				        	$('#ttt').datagrid('reload');
 						}else{
@@ -120,9 +121,8 @@
 			$('#edit_submit_version').bind('click',function(){
 				$('#editVersionForm').form({
 					onSubmit:function(){
-						if($('#editVersionForm input[name=version]').val()==''){return $(this).form('validate');}
-						if($('#editVersionForm input[name=size]').val()==''){return $(this).form('validate');}
-						if($('#editVersionForm input[name=status]').val()==''){return $(this).form('validate');}
+						// 避免 form validate bug
+						$('#version_status_edit').val($('#version_status_edit').combobox('getText'));
 						$('#editVersionForm textarea').each(function(){
 							if($.trim($(this).val()).length>250){
 								$.messager.alert('提示', "描述超长，最多输入250个字符", 'info');
@@ -133,15 +133,19 @@
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						}
-						return true;
+						var b=$(this).form('validate');
+						if(b){
+							$.messager.progress({title:'请稍后',msg:'提交中...'});
+						}
+						return b;
 					},
 					success:function(data){
+						$.messager.progress('close');
 			    		if(data==-1){
 							$.messager.alert('错误', "编辑失败", 'error');
 			    		} else if(data>0){
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editVersionWin').window('close');
-				        	// clear form
 				        	// update rows
 				        	$('#ttt').datagrid('reload');
 						}else{
@@ -153,12 +157,15 @@
 			checkEditControl();
 			checkExisted($('#appName_edit'),'${ctx}/portal/app/check?local=cn&appName=');
 			checkExisted($('#enName_edit'),'${ctx}/portal/app/check?local=en&appName=');
+			$('#editVersionWin').window({onClose:function(){
+				$('.validatebox-tip').remove();
+			}});
 		});
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
 				tag=1;
-				$('#editWin').window({title:'修改'+winTitle});
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
@@ -205,6 +212,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#ttt').datagrid('reload');
+									// clear selected
+									$('#ttt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}
@@ -447,7 +456,7 @@
 						<table>
 							<tr>
 								<td><label class="mustInput">应用文件：</label></td>
-								<td><input type="file"  name="apkFile" id="apkFile" class="easyui-validatebox" required="true" /></td>
+								<td><input type="file"  name="apkFile" id="apkFile"/></td>
 						</tr>
 						<tr>
 							<td><label>小图标：</label></td>
@@ -462,14 +471,6 @@
 						</tr>
 						<tr><td><input type="file" name="imageFile" /></td></td><td><input type="file" name="imageFile" /></tr>
 						</table>
-						<!-- 
-						<div style="text-align: center; padding: 5px;">
-							<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_submit"
-								iconCls="icon-save">上 传</a>
-							<a href="javascript:void(0)" class="easyui-linkbutton" id="upload_reset"
-								iconCls="icon-undo">重 置</a>
-						</div>
-						 -->
 					</div>
 				</div>  
 			</form:form>
@@ -486,7 +487,7 @@
 				<table>
 					<tr>
 						<td><label for="filePath" class="mustInput">应用文件：</label></td>
-						<td><input type="file" name="file" id="versionFile" class="easyui-validatebox" required="true"/></td>
+						<td><input type="file" name="file" id="versionFile" /></td>
 						<td><label	for="size" class="mustInput">文件大小：</label></td>
 						<td>
 						<input type="text" name="size" id="size" class="easyui-validatebox" required="true"/>
@@ -497,21 +498,21 @@
 						<td><input type="text" name="version" id="version" required="true" class="easyui-validatebox"/></td>
 					<td><label	for="status" class="mustInput">状态：</label></td>
 					<td>
-						<select name="status" id="status_edit" required="true" class="easyui-validatebox easyui-combobox" editable='false' >
+						<select name="status" id="version_status_edit" required="true" class="easyui-validatebox easyui-combobox" editable='false' >
 							<option value="1">启用</option>
 							<option value="0">停用</option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td><label for="newFeatures" class="easyui-validatebox">新特性：</label></td>
+					<td><label for="features" class="easyui-validatebox">新特性：</label></td>
 					<td colspan="3">
 						<div id="new_features_tabs" class="easyui-tabs" style="width:420px;height:100px;">
 							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
+								<textarea name="features" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
 							</div>  
 							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
+								<textarea name="enFeatures" class="easyui-validatebox" validType="maxLength[50]" maxLen="50"></textarea>
 							</div> 
 						</div>
 					</td>
@@ -525,5 +526,9 @@
 						iconCls="icon-undo">重 置</a>
 				</div>
 			</form>
+		</div>
+		<div id="mask" style="z-index: 999999; width: 100%;height: 100%;background: #CCC;display: none;">
+			<div id="p" class="easyui-progressbar" style="width:400px;"></div>			
+		</div>
 	</body>
 </html>

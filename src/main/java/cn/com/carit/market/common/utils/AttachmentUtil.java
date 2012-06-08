@@ -118,8 +118,10 @@ public class AttachmentUtil {
 	}
 	
 	public static void deleteImages(String [] nameList){
-		for (String fileName : nameList) {
-			deleteImage(fileName);
+		if (nameList!=null && nameList.length>0) {
+			for (String fileName : nameList) {
+				deleteImage(fileName);
+			}
 		}
 	}
 	

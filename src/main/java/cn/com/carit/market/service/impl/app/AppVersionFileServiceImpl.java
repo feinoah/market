@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
@@ -38,18 +39,43 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		if (appVersionFile.getAppId()==null || appVersionFile.getAppId().intValue()<=0) {
 			throw new IllegalArgumentException("appId must be bigger than 0...");
 		}
-		if (appVersionFile.getId()==0) {
-			appVersionFileDao.add(appVersionFile);
-		} else {
-			appVersionFileDao.update(appVersionFile);
-		}
-		// 更新应用
 		Application app=new Application();
 		app.setId(appVersionFile.getAppId());
 		app.setSize(appVersionFile.getSize());
 		app.setAppFilePath(appVersionFile.getFilePath());
 		app.setVersion(appVersionFile.getVersion());
-		applicationDao.update(app);
+		app.setFeatures(appVersionFile.getNewFeatures());
+		app.setEnFeatures(appVersionFile.getEnNewFeatures());
+		boolean updateApp=false;
+		if (appVersionFile.getStatus()!=null 
+				&& appVersionFile.getStatus().intValue()!=Constants.STATUS_INVALID) {
+			updateApp=true;
+		}
+		if (appVersionFile.getId()==0) {
+			appVersionFileDao.add(appVersionFile);
+		} else {
+			appVersionFileDao.update(appVersionFile);
+			if (appVersionFile.getStatus()!=null 
+					&& appVersionFile.getStatus().intValue()==Constants.STATUS_INVALID) {
+				// 获取排除当前记录外id值最大的一条记录
+				List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
+						appVersionFile.getAppId(), appVersionFile.getId());
+				if(list!=null && list.size()>0){
+					updateApp=true;
+					AppVersionFile temp=list.get(0);
+					app.setSize(appVersionFile.getSize());
+					app.setAppFilePath(temp.getFilePath());
+					app.setVersion(temp.getVersion());
+					app.setFeatures(temp.getNewFeatures());
+					app.setEnFeatures(temp.getEnNewFeatures());
+				}
+			}
+		}
+		if (updateApp) {
+			// 更新应用
+			applicationDao.update(app);
+			
+		}
 	}
 
 	@Override

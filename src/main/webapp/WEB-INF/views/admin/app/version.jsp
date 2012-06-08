@@ -13,11 +13,19 @@
 				$(this).tabs('getSelected').show()
 			}});
 			$('.datagrid-toolbar a:first').hide();//没有新增
+			$('.icon-back').attr('title','返回').css('cursor','pointer').click(function(){
+				if(document.referrer){//非IE
+					window.location.href=document.referrer;
+					return false;
+				}else{
+					history.back();
+				}
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
-				$('#editWin').window({title:'修改'+winTitle});
+				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
 				$('#editForm input[name=appName]').val(m.appName);
@@ -56,6 +64,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#tt').datagrid('reload');
+									// clear selected
+									$('#tt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}
@@ -113,7 +123,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用版本列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" <c:if test="${not empty param.appId}">iconCls="icon-back"</c:if><c:if test="${empty param.appId}">iconCls="icon-blank"</c:if> title="应用版本列表" align="left" singleSelect="true" 
 			idField="id" url="${ctx}/admin/app/version/query?appId=${param.appId}" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>

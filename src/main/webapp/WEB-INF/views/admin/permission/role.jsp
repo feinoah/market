@@ -61,7 +61,7 @@
 			}});
 		});
 		function edit() {
-			$('#editWin').window({title:'修改'+winTitle});
+			$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window('open');
@@ -108,6 +108,8 @@
 									$.messager.alert('成功','删除成功','info');
 									// update rows
 									$('#tt').datagrid('reload');
+									// clear selected
+									$('#tt').datagrid('unselectAll');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}
