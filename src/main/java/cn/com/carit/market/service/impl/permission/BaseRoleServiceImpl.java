@@ -116,4 +116,12 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 		return baseRoleDao.queryByExemple(baseRole, dgm);
 	}
 
+	@Override
+	public int checkRoleName(String roleName) {
+		if (!StringUtils.hasText(roleName)) {
+			throw new IllegalArgumentException("roleName must be not empty...");
+		}
+		return baseRoleDao.checkRoleName(roleName);
+	}
+
 }

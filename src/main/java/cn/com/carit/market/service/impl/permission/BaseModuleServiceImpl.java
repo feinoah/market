@@ -6,6 +6,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.BaseModule;
 import cn.com.carit.market.common.utils.DataGridModel;
@@ -92,6 +93,13 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 		}
 		return baseModuleDao.queryByRoleId(roleId);
 	}
-	
+
+	@Override
+	public int checkModule(String moduleName) {
+		if (!StringUtils.hasText(moduleName)) {
+			throw new IllegalArgumentException("moduleName must be not empty...");
+		}
+		return baseModuleDao.checkModule(moduleName);
+	}
 	
 }

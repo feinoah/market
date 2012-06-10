@@ -63,6 +63,7 @@
 			$('#editWin').window({onClose:function(){
 				$('#tree').tree('uncheck',$('#tree').tree('find',1));
 			}});
+			checkExisted($('#roleName_edit'),"${ctx}/back/permission/role?name=");
 		});
 		function edit() {
 			$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
@@ -178,7 +179,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="roleName" path="roleName"  cssClass="mustInput">名称：</form:label></td>
-						<td><form:input path="roleName" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="roleName" id="roleName_edit" cssClass="easyui-validatebox" required="true" /></td>
 					</tr>
 					<tr>
 						<td><form:label	for="roleDesc" path="roleDesc" >描述：</form:label></td>

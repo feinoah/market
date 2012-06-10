@@ -72,9 +72,11 @@ public interface BaseUserDao {
 	List<BaseRole> queryRolesByUserId(int userId);
 	
 	/**
-	 * 按邮箱检测用户是否存在
+	 * 按邮箱or昵称检测用户是否存在
 	 * @param email
+	 * @param nickName
 	 * @return
 	 */
-	int checkUser(String email);
+	int checkUser(String email, String nickName);
+	
 }

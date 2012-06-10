@@ -274,9 +274,26 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 	}
 
 	@Override
-	public int checkUser(String email) {
-		String sql = "select 1 from t_base_user where email=?";
+	public int checkUser(String email, String nickName) {
+		String sql = "select 1 from t_base_user where 1=1";
+		List<Object> args = new ArrayList<Object>();
+		List<Integer> argTypes = new ArrayList<Integer>();
+		if(StringUtils.hasText(email)) {
+			sql+=" and email=?";
+			args.add(email);
+			argTypes.add(Types.VARCHAR);
+		}
+		if(StringUtils.hasText(nickName)){
+			sql+=" and nick_name=?";
+			args.add(nickName);
+			argTypes.add(Types.VARCHAR);
+		}
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.queryForInt(sql, email);
+		try {
+			return jdbcTemplate.queryForInt(sql, args, argTypes);
+		} catch (Exception e) {
+			log.warn("not exist record of email["+email+"] or nickName["+nickName+"]");
+		}
+		return 0;
 	}
 }

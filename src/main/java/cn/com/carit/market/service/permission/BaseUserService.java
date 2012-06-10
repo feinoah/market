@@ -74,10 +74,11 @@ public interface BaseUserService {
 	Map<String, Object> login(String email, String password, String ip)throws Exception;
 	
 	/**
-	 * 按邮箱检测用户是否存在
+	 * 按邮箱Or昵称检测用户是否存在
 	 * @param email
+	 * @param nickName
 	 * @return
 	 */
-	int checkUser(String email);
+	int checkUser(String email, String nickName);
 	
 }

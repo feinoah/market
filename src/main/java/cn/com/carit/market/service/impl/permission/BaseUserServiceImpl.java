@@ -158,11 +158,11 @@ public class BaseUserServiceImpl implements BaseUserService{
 	}
 
 	@Override
-	public int checkUser(String email) {
-		if (!StringUtils.hasText(email)) {
-			throw new IllegalArgumentException("email must be no empty...");
+	public int checkUser(String email, String nickName) {
+		if (!StringUtils.hasText(email) && !StringUtils.hasText(nickName)) {
+			throw new IllegalArgumentException("email and nickName must be ont is not empty...");
 		}
-		return baseUserDao.checkUser(email);
+		return baseUserDao.checkUser(email, nickName);
 	}
 	
 }

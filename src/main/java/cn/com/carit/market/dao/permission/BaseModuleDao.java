@@ -69,4 +69,11 @@ public interface BaseModuleDao {
 	 * @return
 	 */
 	List<BaseModule> queryByRoleId(int roleId);
+	
+	/**
+	 * 检测模块是否存在
+	 * @param moduleName
+	 * @return
+	 */
+	int checkModule(String moduleName);
 }

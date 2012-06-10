@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import cn.com.carit.market.bean.BaseField;
 import cn.com.carit.market.bean.BaseModule;
 import cn.com.carit.market.bean.BaseRole;
 import cn.com.carit.market.bean.BaseUser;
@@ -30,6 +31,7 @@ import cn.com.carit.market.bean.TreeMenu;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.MD5Util;
+import cn.com.carit.market.service.permission.BaseFieldService;
 import cn.com.carit.market.service.permission.BaseModuleService;
 import cn.com.carit.market.service.permission.BaseRoleService;
 import cn.com.carit.market.service.permission.BaseUserService;
@@ -42,7 +44,8 @@ import cn.com.carit.market.service.permission.BaseUserService;
 public class AdminController{
 	
 	private final Logger log = Logger.getLogger(getClass());
-	
+	@Resource
+	private BaseFieldService baseFieldService;
 	@Resource
 	private BaseUserService baseUserService;
 	@Resource
@@ -416,4 +419,39 @@ public class AdminController{
         return result;
 	}
 	
+	/**
+	 * back/permission/{type}?name=&nickName=
+	 * <br>
+	 * 检测是否存在， type=module|role|user， 分别代表检测模块名是否已经存在、角色名是否已经存在和用户Email/昵称是否已经存在
+	 * @param type
+	 * @param name
+	 * @param nickName
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="back/permission/{type}", method=RequestMethod.GET)
+	public @ResponseBody int checkExisted(@PathVariable String type, @RequestParam String name, @RequestParam String nickName) throws Exception{
+		/*if ("field".equalsIgnoreCase(type)) {
+			return baseFieldService.checkField(name);
+		} else*/ if ("module".equalsIgnoreCase(type)) {
+			return baseModuleService.checkModule(name);
+		} else if ("role".equalsIgnoreCase(type)) {
+			return baseRoleService.checkRoleName(name);	
+		} else if ("user".equalsIgnoreCase(type)) {
+			return baseUserService.checkUser(name, nickName);
+		} else {
+			throw new Exception("not support type...");
+		}
+	}
+	
+	/**
+	 * <br>back/query/field/all
+	 * @param field
+	 * @param limit
+	 * @return
+	 */
+	@RequestMapping(value="back/query/field/all")
+	public @ResponseBody List<BaseField> queryAllBaseField(){
+		return baseFieldService.query();
+	}
 }

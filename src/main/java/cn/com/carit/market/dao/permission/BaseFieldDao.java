@@ -1,4 +1,4 @@
-package cn.com.carit.market.dao;
+package cn.com.carit.market.dao.permission;
 
 import java.util.List;
 
@@ -57,9 +57,17 @@ public interface BaseFieldDao {
 	JsonPage<BaseField> queryByExemple(BaseField field, DataGridModel dgm);
 	
 	/**
-	 * 按样例获取总数
+	 * 检测字典名称是否存在
 	 * @param field
 	 * @return
 	 */
-	int getCount(BaseField field);
+	int checkField(String field);
+	
+	/**
+	 * 按字段名返回limit条记录
+	 * @param field
+	 * @param limit
+	 * @return
+	 */
+	List<BaseField> queryByField(String field, int limit);
 }

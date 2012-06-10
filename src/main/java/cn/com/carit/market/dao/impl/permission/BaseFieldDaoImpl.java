@@ -1,4 +1,4 @@
-package cn.com.carit.market.dao.impl;
+package cn.com.carit.market.dao.impl.permission;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,14 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.BaseField;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.common.utils.StringUtil;
-import cn.com.carit.market.dao.BaseFieldDao;
-
+import cn.com.carit.market.dao.impl.BaseDaoImpl;
+import cn.com.carit.market.dao.permission.BaseFieldDao;
+@Repository
 public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	
 	private final RowMapper<BaseField> rowMapper=new RowMapper<BaseField>() {
@@ -107,7 +109,7 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		StringBuilder sql=new StringBuilder("select * from t_admin_user where 1=1");
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, field);
+		sql.append(buildWhere(args, argTypes, field));
 		log.debug(String.format("\n%1$s\n", sql));
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
@@ -116,40 +118,36 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	public JsonPage<BaseField> queryByExemple(BaseField field, DataGridModel dgm) {
 		JsonPage<BaseField> jsonPage=new JsonPage<BaseField>(dgm.getPage(), dgm.getRows());
 		StringBuilder sql=new StringBuilder("select * from t_base_field where 1=1");
+		StringBuilder countSql=new StringBuilder("select count(1) from t_base_field where 1=1");
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, field);
+		String where=buildWhere(args, argTypes, field);
+		sql.append(where);
+		countSql.append(where);
+		log.debug(String.format("\n%1$s\n", countSql));
+		int totalRow=queryForInt(countSql.toString(), args, argTypes);
+		jsonPage.setTotal(totalRow);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder()) && StringUtils.hasText(dgm.getSort())) {
 			sql.append(" order by ").append(StringUtil.splitFieldWords(
 					dgm.getSort())).append(" ").append(dgm.getOrder());
 			
+		} else {
+			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		int totalRow=getCount(field);
-		// 更新
-		jsonPage.setTotal(totalRow);
 		log.debug(String.format("\n%1$s\n", sql));
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
 
-	@Override
-	public int getCount(BaseField field) {
-		StringBuilder sql=new StringBuilder("select count(1) from t_base_field where 1=1");
-		List<Object> args=new ArrayList<Object>();
-		List<Integer> argTypes=new ArrayList<Integer>();
-		buildWhere(sql, args, argTypes, field);
-		log.debug(String.format("\n%1$s\n", sql));
-		return queryForInt(sql.toString(), args, argTypes);
-	}
-	
-	private void buildWhere(StringBuilder sql, List<Object> args, 
+	private String buildWhere(List<Object> args, 
 			List<Integer> argTypes, BaseField field) {
+		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(field.getField())) {
 			sql.append(" and field=?");
 			args.add(field.getField());
@@ -180,6 +178,27 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 			args.add(field.getSort());
 			argTypes.add(Types.INTEGER);
 		}
+		return sql.toString();
 	}
 
+	@Override
+	public int checkField(String field) {
+		String sql="select 1 from t_base_field where field=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.queryForInt(sql, field);
+		} catch (Exception e) {
+			log.warn("not exist record of this field["+field+"]");
+		}
+		return 0;
+	}
+
+	@Override
+	public List<BaseField> queryByField(String field, int limit) {
+		String sql="select field, field_name from t_base_field where field like CONCAT('%',?,'%') limit ?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{field, limit}, rowMapper);
+	}
+	
+	
 }

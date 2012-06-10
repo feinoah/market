@@ -53,4 +53,10 @@ public interface BaseRoleService {
 	 */
 	JsonPage<BaseRole> queryByExemple(BaseRole baseRole, DataGridModel dgm);
 	
+	/**
+	 * 检查角色名称是否存在
+	 * @param roleName
+	 * @return
+	 */
+	int checkRoleName(String roleName);
 }

@@ -276,8 +276,8 @@ INSERT INTO `t_base_module` VALUES ('36', '查询帐号', '/admin/app/account/qu
 INSERT INTO `t_base_module` VALUES ('37', '编辑帐号', '/admin/app/account/save', '35', '2', '1', null, '0', '44', '编辑帐号', '2012-05-23 12:00:34', '2012-05-22 11:07:50');
 INSERT INTO `t_base_module` VALUES ('38', '封号', '/admin/app/account/lock', '35', '2', '1', null, '0', '45', '封号帐号', '2012-05-23 12:00:34', '2012-05-22 11:08:33');
 INSERT INTO `t_base_module` VALUES ('39', '解封', '/admin/app/account/unlock', '35', '2', '1', null, '0', '46', '解封帐号', '2012-05-23 12:00:34', '2012-05-22 11:09:38');
-INSERT INTO `t_base_module` VALUES ('40', '下载记录', '/admin/app/downloadLog', '15', '3', '1', null, '1', '47', '应用下载记录', '2012-05-23 12:00:34', '2012-05-22 11:37:44');
-INSERT INTO `t_base_module` VALUES ('41', '查询下载记录', '/admin/app/downloadLog/query', '40', '3', '1', null, '0', '48', '查询下载记录', '2012-05-23 12:00:34', '2012-05-22 11:38:50');
+INSERT INTO `t_base_module` VALUES ('40', '下载记录', '/admin/app/download', '15', '3', '1', null, '1', '47', '应用下载记录', '2012-05-23 12:00:34', '2012-05-22 11:37:44');
+INSERT INTO `t_base_module` VALUES ('41', '查询下载记录', '/admin/app/download/query', '40', '3', '1', null, '0', '48', '查询下载记录', '2012-05-23 12:00:34', '2012-05-22 11:38:50');
 INSERT INTO `t_base_module` VALUES ('42', '查询平台用户', '/admin/app/account/all', '25', '3', '1', null, '0', '50', '查询所有帐号信息（评论管理中查询下拉框）', '2012-05-29 15:20:14', '2012-05-29 15:20:10');
 INSERT INTO `t_base_module` VALUES ('43', '所有应用', '/admin/app/application/all', '15', '2', '1', null, '0', '49', '所有应用', '2012-05-29 15:54:33', '2012-05-29 15:24:04');
 
