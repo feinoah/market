@@ -12,6 +12,15 @@ INSERT INTO `t_base_field` VALUES ('7', 'platform', '支持平台', '4', 'Androi
 INSERT INTO `t_base_field` VALUES ('8', 'platform', '支持平台', '5', 'Android 2.2', '1', '2012-06-10 16:30:17', '2012-06-10 16:27:48', '8');
 INSERT INTO `t_base_field` VALUES ('9', 'platform', '支持平台', '6', 'Android 2.3', '1', '2012-06-10 16:30:19', '2012-06-10 16:29:17', '9');
 INSERT INTO `t_base_field` VALUES ('10', 'platform', '支持平台', '7', 'Android 4.0', '1', '2012-06-10 16:30:22', '2012-06-10 16:29:55', '10');
+INSERT INTO `t_base_field` VALUES ('11', 'status', '状态', '0', '停用', '1', '2012-06-10 20:13:49', '2012-06-10 20:13:46', '11');
+INSERT INTO `t_base_field` VALUES ('12', 'status', '状态', '1', '启用', '1', '2012-06-10 20:14:12', '2012-06-10 20:14:08', '12');
+INSERT INTO `t_base_field` VALUES ('13', 'account_status', '状态', '0', '停用', '1', '2012-06-10 21:19:12', '2012-06-10 21:19:09', '13');
+INSERT INTO `t_base_field` VALUES ('14', 'account_status', '状态', '1', '启用', '1', '2012-06-10 20:15:14', '2012-06-10 20:15:09', '14');
+INSERT INTO `t_base_field` VALUES ('15', 'account_status', '状态', '2', '锁定', '1', '2012-06-10 20:16:55', '2012-06-10 20:16:49', '15');
+INSERT INTO `t_base_field` VALUES ('16', 'suppor_language', '支持语言', '0', '简体中文', '1', '2012-06-10 20:35:35', '2012-06-10 20:35:31', '16');
+INSERT INTO `t_base_field` VALUES ('17', 'suppor_language', '支持语言', '1', '繁体中文', '1', '2012-06-10 20:36:21', '2012-06-10 20:36:14', '17');
+INSERT INTO `t_base_field` VALUES ('18', 'suppor_language', '支持语言', '2', '英文', '1', '2012-06-10 20:36:42', '2012-06-10 20:36:38', '18');
+INSERT INTO `t_base_field` VALUES ('19', 'suppor_language', '支持语言', '3', '多语言', '1', '2012-06-10 20:37:31', '2012-06-10 20:37:26', '19');
 COMMIT;
 
 START TRANSACTION;
