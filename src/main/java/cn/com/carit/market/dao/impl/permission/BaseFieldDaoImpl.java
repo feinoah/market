@@ -98,6 +98,13 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	}
 
 	@Override
+	public List<BaseField> queryByField(String filed) {
+		String sql="select * from t_base_field where field=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{filed}, new int[]{Types.VARCHAR}, rowMapper);
+	}
+
+	@Override
 	public List<BaseField> query() {
 		String sql="select * from t_base_field";
 		log.debug(String.format("\n%1$s\n", sql));

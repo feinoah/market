@@ -11,15 +11,27 @@
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
 			$('.datagrid-toolbar a:first').hide();//没有新增
+			$('#status').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
-				$('#appName_edit').val(m.appName);
-				$('#enName_edit').val(m.enName);
-				$('#userName_edit').val(m.userName);
+				$('#appName_edit').html(m.appName);
+				$('#enName_edit').html(m.enName);
+				$('#userName_edit').html(m.userName);
 				$('#appId_edit').val(m.appId);
 				$('#userId_edit').val(m.userId);
 				$('#grade_edit').numberspinner('setValue',m.grade);
@@ -100,11 +112,7 @@
 					<td><form:input path="grade" cssClass="easyui-numberspinner"  min="1" max="5"/></td>
 					<td><form:label for="status" path="status">状态：</form:label></td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">请选择</form:option>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status" />
 					</td>
 					<td><form:label for="comment" path="comment">内容：</form:label></td>
 					<td><form:input path="comment" /></td>
@@ -140,23 +148,20 @@
 				<table>
 					<tr>
 					<td><form:label for="appName" path="appName">应用名称：</form:label></td>
-					<td><form:input path="appName" id="appName_edit" disabled="true"/></td>
+					<td><label id="appName_edit" class="inputLabel"></label></td>
 					<td><form:label for="enName" path="enName">英文名称：</form:label></td>
-					<td><form:input path="enName" id="enName_edit" disabled="true"/></td>
+					<td><label id="enName_edit" class="inputLabel"></label></td>
 				</tr>
 				<tr>
 					<td><form:label for="userName" path="userName">评论人：</form:label></td>
-					<td><form:input path="userName" id="userName_edit" disabled="true"/></td>
+					<td><label id="userName_edit" class="inputLabel"></label></td>
 					<td><form:label for="grade" path="grade" cssClass="mustInput">等级：</form:label></td>
 					<td><form:input path="grade" id="grade_edit" cssClass="easyui-numberspinner"  min="1" max="5" required="true"/></td>
 				</tr>
 				<tr>
 					<td><form:label for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:select path="status" id="status_edit" cssClass="easyui-combobox" required="true" editable='false'>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status" id="status_edit" cssClass="easyui-validatebox" required="true"/>
 					</td>
 				</tr>
 				<tr>

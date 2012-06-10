@@ -25,6 +25,37 @@
 			}})
 			checkExisted($('#email_edit'),"${ctx}/back/permission/{type}?name=");
 			checkExisted($('#nickName_edit'),"${ctx}/back/permission/user?nickName=");
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/back/field/query/gender', function(data) {
+				if(data){
+					fieldList=data;
+				}
+			});
+			$.ajaxSettings.async = true;
+			$('#gender').combobox({
+				data:fieldList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#gender_edit').combobox({
+				data:fieldList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -137,22 +168,13 @@
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox">
-							<form:option value="">请选择</form:option>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status" cssClass="easyui-validatebox"/>
 					</td>
 					<td>
 						<form:label for="gender" path="gender">性别：</form:label>
 					</td>
 					<td>
-						<form:select path="gender" cssClass="easyui-combobox">
-							<form:option value="">请选择</form:option>
-							<form:option value="0">女</form:option>
-							<form:option value="1">男</form:option>
-							<form:option value="2">保密</form:option>
-						</form:select>
+						<form:input path="gender" cssClass="easyui-validatebox"/>
 					</td>
 					<td>
 						<form:label for="mobile" path="mobile">手机号码：</form:label>
@@ -177,7 +199,7 @@
 						<th field="email" width="150" align="center">邮箱</th>
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>
-						<th field="gender" width="150" align="center" formatter="genderFormatter">性别</th>
+						<th field="gender" width="150" align="center" formatter="fieldFormatter">性别</th>
 						<th field="mobile" width="100" align="center">手机</th>
 						<th field="officePhone" width="100" align="center">办公电话</th>
 						<th field="lastLoginTime" width="100" align="center">最后登录时间</th>
@@ -210,18 +232,11 @@
 					<tr>
 						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
-							<form:select path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true">
-								<form:option value="1">启用</form:option>
-								<form:option value="0">停用</form:option>
-							</form:select>
+							<form:input path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true"/>
 						</td>
 						<td><form:label	for="gender" path="gender" cssClass="mustInput">性别：</form:label></td>
 						<td>
-							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true">
-							<form:option value="2">保密</form:option>
-							<form:option value="0">女</form:option>
-							<form:option value="1">男</form:option>
-						</form:select>
+							<form:input path="gender" id="gender_edit" cssClass="easyui-validatebox" required="true"  cssStyle="width:180px;" />
 						</td>
 					</tr>
 					<tr>

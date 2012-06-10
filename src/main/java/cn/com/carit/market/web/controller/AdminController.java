@@ -445,7 +445,7 @@ public class AdminController{
 	}
 	
 	/**
-	 * <br>back/query/field/all
+	 * <br>back/field/query/all
 	 * @param field
 	 * @param limit
 	 * @return
@@ -453,5 +453,15 @@ public class AdminController{
 	@RequestMapping(value="back/query/field/all")
 	public @ResponseBody List<BaseField> queryAllBaseField(){
 		return baseFieldService.query();
+	}
+	
+	/**
+	 * back/field/query/{field}
+	 * @param filed
+	 * @return
+	 */
+	@RequestMapping(value="back/field/query/{field}", method=RequestMethod.GET)
+	public @ResponseBody List<BaseField> queryBaseFieldByField(@PathVariable String field){
+		return baseFieldService.queryByField(field);
 	}
 }

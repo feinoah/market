@@ -21,6 +21,18 @@
 					history.back();
 				}
 			});
+			$('#status').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -110,11 +122,7 @@
 					<td><form:input path="size" cssClass="easyui-validatebox" /></td>
 					<td><form:label for="status" path="status">状态：</form:label></td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">请选择</form:option>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status"/>
 					</td>
 				</tr>
 			</table>
@@ -164,10 +172,7 @@
 						<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
 					<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:select path="status" id="status_edit" cssClass="easyui-combobox" required="true" editable='false'>
-							<form:option value="1">启用</form:option>
-							<form:option value="0">停用</form:option>
-						</form:select>
+						<form:input path="status" id="status_edit" cssClass="easyui-validatebox" required="true"/>
 					</td>
 				</tr>
 				<tr>

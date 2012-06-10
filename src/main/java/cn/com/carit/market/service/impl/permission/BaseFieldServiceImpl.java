@@ -53,6 +53,12 @@ public class BaseFieldServiceImpl implements BaseFieldService {
 		return baseFieldDao.queryById(id);
 	}
 
+	
+	@Override
+	public List<BaseField> queryByField(String filed) {
+		return baseFieldDao.queryByField(filed);
+	}
+
 	@Override
 	public List<BaseField> query() {
 		return baseFieldDao.query();

@@ -9,11 +9,17 @@
 		<script type="text/javascript">
 		var catalogs;
 		var tag=0;
+		var languages;
 		$(function(){
 			$.ajaxSettings.async = false;
 			$.getJSON('${ctx}/portal/catalog/all?local=cn', function(data) {
 				if(data){
 					catalogs=data;
+				}
+			});
+			$.getJSON('${ctx}/back/field/query/platform', function(data) {
+				if(data){
+					fieldList=data;
 				}
 			});
 			$('#catalogId').combobox({  
@@ -31,6 +37,42 @@
 					$(this).tabs('getSelected').show()
 				}});
 			});
+			$('#platform_edit').combobox({
+				data:fieldList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/back/field/query/gender', function(data) {
+				if(data){
+					fieldList=data;
+				}
+			});
+			$.getJSON('${ctx}/back/field/query/suppor_language', function(data) {
+				if(data){
+					languages=data;
+				}
+			});
+			$('#supportLanguages_edit').combobox({
+				data:languages,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$.ajaxSettings.async = true;
 			// 初始化
 			$('#ttt').datagrid({
 				width:'100%',
@@ -174,7 +216,8 @@
 				$('#editForm input[name=version]').val(m.version);
 				$('#size_edit').val(m.size);
 				$('#catalogId_edit').combobox('setValue',m.catalogId);
-				$('#editForm input[name=platform]').val(m.platform);
+				//$('#editForm input[name=platform]').val(m.platform);
+				$('#platform_edit').combobox('setValue',m.platform);
 				$('#supportLanguages_edit').combobox('setValue',m.supportLanguages);
 				//$('#appLevel_edit').numberspinner('setValue',m.appLevel);
 				$('#editForm input[name=price]').val(m.price);
@@ -231,16 +274,14 @@
 			}
 		}
 		function lanFormatter(v){
-			if(v==0){
-				return '中文';
-			}
-			if(v==1){
-				return '英文';
-			}
-			if(v==2){
-				return '中英双语';
-			}
-			return v;
+			var result=v;
+			$.each(languages, function(key,val) {
+				if(v==val.fieldValue){
+					result=val.displayValue;
+					return false;
+				}
+			});
+			return result;
 		}
 		
 		function catalogFormatter(v){
@@ -327,11 +368,7 @@
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">请选择</form:option>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status" />
 					</td>
 				</tr>
 			</table>
@@ -356,7 +393,7 @@
 						<th field="size" width="60" align="center" hidden="true"/>
 						<th field="catalogId" width="80" align="center" formatter="catalogFormatter">分类</th>
 						<th field="appFilePath" width="100" align="center"  hidden="true">应用文件路径</th>
-						<th field="platform" width="100" align="center">适用平台</th>
+						<th field="platform" width="100" align="center" formatter="fieldFormatter">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
 						<th field="appLevel" width="80" align="center" formatter="gradeFormatter">应用分级</th>
@@ -389,7 +426,7 @@
 							<tr>
 								<td><label	for="version" class="mustInput">版本：</label></td>
 								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
-								<td><labelcss Class="mustInput">分类：<label></td>
+								<td><label for="catalogId" class="mustInput">分类：<label></td>
 								<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-validatebox" editable='false'/></td>
 							</tr>
 							<tr>
@@ -397,28 +434,18 @@
 							<tr>
 								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 								<td>
-									<form:select path="status" id="status_edit" required="true" cssClass="easyui-validatebox easyui-combobox" editable='false' >
-										<form:option value="1">启用</form:option>
-										<form:option value="0">停用</form:option>
-									</form:select>
+									<form:input path="status" id="status_edit" required="true" cssClass="easyui-validatebox" />
 								</td>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
-									<form:select path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-validatebox easyui-combobox" editable='false'>
-									<form:option value="0">中文</form:option>
-									<form:option value="1">英文</form:option>
-									<form:option value="2">中英双语</form:option>
-								</form:select></td>
-								<!-- 
-								<td><form:label	for="appLevel" path="appLevel" cssClass="mustInput">应用分级：</form:label></td>
-								<td><form:input path="appLevel" id="appLevel_edit" cssClass="easyui-validatebox easyui-numberspinner" min="1" max="10" required="true" validType="number"/></td>
-								 -->
+									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-validatebox" />
+								</td>
 							</tr>
 							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>
 								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" /></td>
 								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
-								<td><form:input path="platform"/></td>
+								<td><form:input path="platform" id="platform_edit"/></td>
 							</tr>
 						</table>
 						<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">

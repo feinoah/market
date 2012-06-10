@@ -7,6 +7,7 @@
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script type="text/javascript">
+		var accountStatusList;
 		$(function(){
 			// 初始化
 			$('#ttt').datagrid({
@@ -87,6 +88,42 @@
 			});
 			// 检测权限
 			checkEditControl();
+			$.ajaxSettings.async = false;
+			$.getJSON('${ctx}/back/field/query/gender', function(data) {
+				if(data){
+					fieldList=data;
+				}
+			});
+			$.getJSON('${ctx}/back/field/query/account_status', function(data) {
+				if(data){
+					accountStatusList=data;
+				}
+			});
+			$('#gender').combobox({
+				data:fieldList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#gender_edit').combobox({
+				data:fieldList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status').combobox({
+				data:accountStatusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:accountStatusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$.ajaxSettings.async = true;
 		});
 		function edit() {
 			var m = $('#ttt').datagrid('getSelected');
@@ -225,7 +262,7 @@
 			}
 		}
 		function checkEditControl(){
-			$.getJSON('${ctx}/back/permission/account', function(data) {
+			$.getJSON('${ctx}/back/permission/account?baseUri=/admin/app/account', function(data) {
 				if(data.save==0&&data.lock==0&&data.unlock==0){
 					$('.datagrid-toolbar').hide();
 				}
@@ -241,6 +278,16 @@
 					}
 				});
 			});
+		}
+		function accountStatusFormatter(v){
+			var result='-';
+			$.each(accountStatusList, function(key,val) {
+				if(v==val.fieldValue){
+					result=val.displayValue;
+					return false;
+				}
+			});
+			return result;
 		}
 		</script>
 		<style>
@@ -280,22 +327,13 @@
 						<form:label for="status" path="status">状态：</form:label>
 					</td>
 					<td>
-						<form:select path="status" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">请选择</form:option>
-							<form:option value="0">停用</form:option>
-							<form:option value="1">启用</form:option>
-						</form:select>
+						<form:input path="status"/>
 					</td>
 					<td>
 						<form:label for="gender" path="gender">性别：</form:label>
 					</td>
 					<td>
-						<form:select path="gender" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">请选择</form:option>
-							<form:option value="0">女</form:option>
-							<form:option value="1">男</form:option>
-							<form:option value="2">保密</form:option>
-						</form:select>
+						<form:input path="gender" cssClass="easyui-validatebox"/>
 					</td>
 					<td>
 						<form:label for="mobile" path="mobile">手机号码：</form:label>
@@ -320,7 +358,7 @@
 						<th field="email" width="150" align="center">邮箱</th>
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>
-						<th field="gender" width="150" align="center" formatter="genderFormatter">性别</th>
+						<th field="gender" width="150" align="center" formatter="fieldFormatter">性别</th>
 						<th field="birthday" width="60" align="center" hidden="true"/>
 						<th field="photo" width="60" align="center" hidden="true">头像</th>
 						<th field="balance" width="60" align="center">余额</th>
@@ -329,7 +367,7 @@
 						<th field="officePhone" width="100" align="center">办公电话</th>
 						<th field="address" width="100" align="center" hidden="true">地址</th>
 						<th field="lastLoginIp" width="100" align="center">最后登录地址</th>
-						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
+						<th field="status" width="60" align="center" formatter="accountStatusFormatter">状态</th>
 						<th field="updateTime" width="90" align="center">更新时间</th>
 					</tr>
 				</thead>
@@ -355,20 +393,13 @@
 						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:select path="status" id="status_edit" cssClass="easyui-combobox" editable='false'>
-								<form:option value="1">启用</form:option>
-								<form:option value="0">停用</form:option>
-							</form:select>
+							<form:input path="status" id="status_edit" cssClass="easyui-validatebox" required="true"/>
 						</td>
 					</tr>
 					<tr>
 						<td><form:label	for="gender" path="gender" cssClass="easyui-validatebox">性别：</form:label></td>
 						<td>
-							<form:select path="gender" id="gender_edit" cssClass="easyui-combobox" editable='false'>
-							<form:option value="2">保密</form:option>
-							<form:option value="0">女</form:option>
-							<form:option value="1">男</form:option>
-						</form:select>
+							<form:input path="gender" id="gender_edit" cssClass="easyui-validatebox" editable='false'/>
 						</td>
 						<td><form:label	for="birthday" path="birthday" cssClass="easyui-validatebox">生日：</form:label></td>
 						<td><form:input path="birthday" cssClass="easyui-datebox datebox-f combo-f"/></td>

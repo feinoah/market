@@ -1,6 +1,16 @@
+var app={name:'/market'};
 var winTitle;
+var fieldList;
+var statusList;
 $(function (){
 	winTitle=$('#editWin').window('options').title;
+	$.ajaxSettings.async = false;
+	$.getJSON(app.name+'/back/field/query/status', function(data) {
+		if(data){
+			statusList=data;
+		}
+	});
+	$.ajaxSettings.async = true;
 	// 初始化
 	$('#tt').datagrid({
 		width:'100%',
@@ -161,26 +171,28 @@ function getParamURL(form){
 	});
 	return _url;
 }
-/** 状态：0 停用；0x1 启用；0x2：禁止登录（密码错误次数过多，一定时间内禁止登录） */
+
+function fieldFormatter(v){
+	var result='-';
+	$.each(fieldList, function(key,val) {
+		if(v==val.fieldValue){
+			result=val.displayValue;
+			return false;
+		}
+	});
+	return result;
+}
+
 function statusFormatter(v){
-	if (v == 0) {
-		return '停用';
-	}
-	if ((v&2)!=0) {
-		return '禁止登录';
-	}
-	return '启用';
+	var result='-';
+	$.each(statusList, function(key,val) {
+		if(v==val.fieldValue){
+			result=val.displayValue;
+			return false;
+		}
+	});
+	return result;
 }
-
-/**
- * 性别 0：女 1：男 2：保密
- */
-function genderFormatter(v){
-	if(v==1){return '男'}
-	if(v==0){return '女'}
-	return '保密';
-}
-
 function gradeFormatter(v){
 	var result='';
 	v=parseInt(v/2);

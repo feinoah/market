@@ -11,13 +11,26 @@
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/field');
 			$('#field_edit').combobox({
-				url:'back/query/field/all',
+				url:'${ctx}/back/field/query/all',
+				method:'get',
 				autocomplete:true,
 				valueField:'field',
 				textField:'field',
 				onSelect:function(record){
 					$('#fieldName_edit').val(record.fieldName);
 				}
+			});
+			$('#status').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
+			$('#status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
 			});
 		});
 		function edit() {
@@ -26,7 +39,8 @@
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
-				$('#field_edit').val(m.field);
+				//$('#field_edit').val(m.field);
+				$('#field_edit').combobox('setValue',m.field);
 				$('#fieldName_edit').val(m.fieldName);
 				$('#fieldValue_edit').val(m.fieldValue);
 				$('#displayValue_edit').val(m.level);
@@ -77,10 +91,6 @@
 				});
 			}
 		}
-		function displayFormatter(v){
-			if(v==1){return '启用'}
-			return '停用';
-		}
 		</script>
 		<style>
 		#editWin label {width: 85px;}
@@ -111,11 +121,7 @@
 						<form:label for="enabled" path="enabled">是否启用：</form:label>
 					</td>
 					<td>
-						<form:select path="enabled" cssClass="easyui-combobox" editable='false'>
-							<form:option value="">-请选择-</form:option>
-							<form:option value="0">-启用-</form:option>
-							<form:option value="1">-停用-</form:option>
-						</form:select>
+						<form:input path="enabled" />
 					</td>
 				</tr>
 				<tr>
@@ -155,7 +161,7 @@
 						<th field="fieldName" width="100" align="center">字段描述</th>
 						<th field="fieldValue" width="40" align="center" >字段值</th>
 						<th field="displayValue" width="80" align="center">显示值</th>
-						<th field="enabled" width="60" align="center" formatter="displayFormatter">是否启用</th>
+						<th field="enabled" width="60" align="center" formatter="statusFormatter">是否启用</th>
 						<th field="sort" width="60" align="center">顺序</th>
 						<th field="createTime" width="90" align="center">创建时间</th>
 						<th field="updateTime" width="90" align="center">更新时间</th>
@@ -189,10 +195,7 @@
 					<tr>
 						<td><form:label	for="enabled" path="enabled" cssClass="mustInput">是否启用：</form:label></td>
 						<td>
-							<form:select path="enabled" id="enabled_edit" cssClass="easyui-combobox" required="true">
-								<form:option value="0">-启用-</form:option>
-								<form:option value="1">-停用-</form:option>
-							</form:select>
+							<form:input path="enabled" id="enabled_edit" cssClass="easyui-validatebox" required="true"/>
 						</td>
 					</tr>
 					<tr>

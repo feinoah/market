@@ -8,6 +8,7 @@
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="<c:url value="/resources/public/scripts/default.js"/>" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
 		<script>
 			$(function(){
 				$('#tt').tree({
@@ -27,6 +28,13 @@
 				setTimeout(function(){
 					$('body').layout('collapse','east');
 				},0);
+				$.ajaxSettings.async = false;
+				$.getJSON('${ctx}/back/field/query/status', function(data) {
+					if(data){
+						statusList=data;
+					}
+				});
+				$.ajaxSettings.async = true;
 			});
 		</script>
 	</head>

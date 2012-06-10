@@ -36,6 +36,13 @@ public interface BaseFieldDao {
 	BaseField queryById(int id);
 	
 	/**
+	 * 按字段名字查询
+	 * @param filed
+	 * @return
+	 */
+	List<BaseField> queryByField(String filed);
+	
+	/**
 	 * 查询
 	 * @return
 	 */
