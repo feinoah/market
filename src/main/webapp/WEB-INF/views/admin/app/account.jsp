@@ -134,7 +134,7 @@
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
-				$('#editForm input[name=email]').val(m.email);
+				$('#email_label').html(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
 				$('#gender_edit').combobox('setValue',m.gender);
@@ -381,7 +381,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="email" path="email">邮箱：</form:label></td>
-						<td><form:input path="email"/></td>
+						<td><label id="email_label"></label></td>
 						<td><form:label	for="nickName" path="nickName"  cssClass="mustInput">昵称：</form:label></td>
 						<td><form:input path="nickName" required="true" cssClass="easyui-validatebox"/></td>
 					</tr>
