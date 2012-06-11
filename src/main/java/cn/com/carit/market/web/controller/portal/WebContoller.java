@@ -12,7 +12,7 @@ import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.ApplicationService;
 
-@RequestMapping(value="web")
+@RequestMapping(value="")
 public class WebContoller {
 
 	@Resource
@@ -31,7 +31,7 @@ public class WebContoller {
 	@RequestMapping(value="{local}/{limit}", method=RequestMethod.GET)
 	public String index(@PathVariable int limit, @PathVariable String local
 			, Model model, HttpServletRequest request){
-		model.addAttribute("catalogList", appCatalogService.query());
+		model.addAttribute("catalogList", appCatalogService.queryAll(local));
 		model.addAttribute("hotFreeList", applicationService.queryHotFree(local, limit));
 		model.addAttribute("hotNewFreeList", applicationService.queryHotNewFree(local, limit));
 		model.addAttribute(Constants.PORTAL_USER, request.getSession().getAttribute(Constants.PORTAL_USER));

@@ -83,7 +83,10 @@
 	</context-param>
 
 	<welcome-file-list>
+		<!-- 
 		<welcome-file>/html/index.html</welcome-file>
+		 -->
+		 <welcome-file>cn/16</welcome-file>
 	</welcome-file-list>
 	<!-- Error Page定义 -->
 	<error-page>

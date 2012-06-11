@@ -6,14 +6,35 @@
 <title>中通福瑞——应用市场</title>
 <%@ include file="/WEB-INF/views/commons/nocache.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="${ctx }/resources/favicon.ico" type="image/x-icon" />
-<link rel="icon" href="${ctx }/resources/favicon.ico" type="image/x-icon" />
-<link href="${ctx }/resources/public/styles/index.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/resources/public/styles/common-1.0.css" rel="stylesheet" type="text/css" />
+<link href="${ctx }/resources/public/styles/index-1.0.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx }/resources/public/scripts/SlideTrans.js"></script>
 <script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="${ctx }/resources/public/scripts/utils.js"></script>
+<!--[if lte IE 6]>  
+<div id="ie6-warning"> 
+<img src="x.gif" width="14" height="14" onclick="closeme();" alt="关闭提示" />您正在使用 Internet Explorer 6 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://www.microsoft.com/china/windows/internet-explorer/ie8howto.aspx" target="_blank">IE8</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a>  
+</div>  
+<script type="text/javascript">  
+function closeme() 
+{ 
+   var div = document.getElementById("ie6-warning"); 
+   div.style.display ="none"; 
+} 
+function position_fixed(el, eltop, elleft){  
+// check if this is IE6  
+if(!window.XMLHttpRequest)  
+window.onscroll = function(){  
+el.style.top = (document.documentElement.scrollTop + eltop)+"px";  
+el.style.left = (document.documentElement.scrollLeft + elleft)+"px";  
+}  
+else el.style.position = "fixed";  
+}  
+position_fixed(document.getElementById("ie6-warning"),0, 0);  
+</script>  
+<![endif]--> 
 <script type="text/javascript">
 	var _loadingICO;
 	$(function() {
@@ -26,195 +47,143 @@
 		$('#login').click(function(){
 			loginWin();
 		});
+		$('.tabBar li').each(function(i){
+			$(this).click(function(){
+				$('.content').hide().eq(i).show();
+				$('.tabBar li').removeClass('currTab');
+				$(this).addClass('currTab');
+			});
+		});
+		$('.tab li').each(function(i){
+			$(this).click(function(){
+				$('.rank').hide().eq(i).show();
+				$('.tab li').removeClass('currTab');
+				$(this).addClass('currTab');
+			});
+		});
+		$('.appTab li').each(function(i){
+			$(this).click(function(){
+				$('.container').hide().eq(i).show();
+				$('.appTab li').removeClass('currTab');
+				$(this).addClass('currTab');
+			});
+		});
 	});
 </script>
 </head>
-<body style="margin: 0; padding: 0; text-align: center;">
-
-	<div id="wrapper">
-		<div id="header">
-			<ul>
-				<li><img src="${ctx }/resources/public/images/carit_logo1.png"/></li>
-				<li><input type="text" name="txtNo"/></li>
-				<li><button id="search">搜索</button></li>
-				<li name="before_login"><button id="login">登录</button></li>
-				<li name="before_login"><button id="reg" type="button">注册</button></li>
-				<li id="after_login" style="display: none;"><span></span></li>
-			</ul>
+<body>
+	<!-- header start -->
+	<div id="header">
+		<div id="nav">
+			<div id="loginBefor">
+				<button id="login">登录</button>
+				<button id="reg">注册</button>
+			</div>
+			<div id="lolginAfter"></div>
 		</div>
-
-		<div class="container" id="idContainer"
-			style="height: 311px; width: 1024px; background-color: #DEDEDE;">
-			<table id="idSlider" border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html"><img
-							src="${ctx }/resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html"><img
-							src="${ctx }/resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img
-							src="${ctx }/resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img
-							src="${ctx }/resources/public/images/first_ad.png" /></a></td>
-				</tr>
-			</table>
-			<ul class="num" id="idNum">
-			</ul>
+		<div id="searchContainer">
+			<div id="logo">
+				<input id="searchTxt" type="text"/>
+				<button id="searchBtn"></button>
+			</div>
 		</div>
-
-		<div id="left" style="float: left; width: 29%; margin-top: 7px">
-			<div id="Tab1" style="float: left; width: 330px; height: 500px;">
-
-				<div class="Menubox">
+	</div>
+	<!-- header end -->
+	
+	<!-- ad start -->
+	<div id="ad">
+		<ul>
+		</ul>
+		<div id="page_nav">
+			<span class="current">1</span>
+			<span>2</span>
+			<span>3</span>
+			<span>4</span>
+			<span>5</span>
+		</div>
+	</div>
+	<!-- ad end -->
+	
+	<!-- main start -->
+	<div id="main">
+		<div id="left_menu">
+			<ul class="tabBar">
+				<li class="currTab">
+					<span>排行榜</span>
+				</li>
+				<li><span>分类浏览</span></li>
+				<li><span>最新免费</span></li>
+			</ul>
+			<!-- 排行榜 -->
+			<div class="content">
+				<ul class="tab">
+					<li class="currTab">热门免费</li>
+					<li>热门新品</li>
+				</ul>
+				<div class="rank">
 					<ul>
-						<li id="one1" onclick="setTab('one',1,2)">排行榜</li>
-						<li id="one2" onclick="setTab('one',2,2)">分类浏览</li>
+						<c:forEach items="${hotFreeList}" var="hotFree" varStatus="stat" begin="0" end="7">
+						<li><span>${stat.index}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
+						</c:forEach>
 					</ul>
-				</div>
-				<div class="Contentbox" style="background-color: white">
-					<div id="con_one_1">
-						<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费</b></font>
-						<ul id="freeTop">
-							<c:forEach items="${hotFreeList}" var="hotFree" varStatus="stat" begin="0" end="4">
-							<li><span>${stat.index}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
-							</c:forEach>
-							<li class="more">全部免费应用</li>
-						</ul>
-					</div>
-					<div id="con_one_2" style="display: none">
-						<ul id="catalog_con">
-							<c:forEach items="${catalogList}" var="catalog" varStatus="stat">
-							<li><span>${stat.index}</span><a href="#">${catalog.name}</a></li>
-							</c:forEach>
-							<li>&nbsp;</li>
-						</ul>
+					<div class="more">
+					<a>所有免费应用<span>>></span></a>
 					</div>
 				</div>
-			</div>
-			<div id="left_bottom"
-				style="float: left; width: 330px; height: 445px; margin-top: 13px; background-color: white">
-				<div id="con_one_1" style="padding: 30px 0;">
-					<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费新品</b></font>
-					<ul id="freeNewTop">
-						<li><span>1</span><a href="d">Maps</a><label>GOOGLEINC.</label></li>
-						<li class="more">全部新应用</li>
-					</ul>
+				<div class="rank" style="display: none;">
 				</div>
-
 			</div>
-		</div>
-		<div id="Tab2"
-			style="float: right; width: 66%; height: 586px; margin-top: 7px;">
-			<div class="Menubox">
-				<ul>
-					<li id="two1" onclick="setTab('two',1,2)">店员推荐</li>
-					<li id="two2" onclick="setTab('two',2,2)">店员推荐·车机</li>
-
+			<!-- 分类 -->
+			<div class="content" style="display: none;">
+				<ul class="catalog">
+					<c:forEach items="${catalogList}" var="catalog" varStatus="stat">
+					<li><span>${stat.index}</span><a href="#">${catalog.name}</a></li>
+					</c:forEach>
 				</ul>
 			</div>
-			<div class="Contentbox2" style="background-color: white">
-				<div id="con_two_1">
-					<div id="clerk_recommend">
-						<c:forEach items="${hotFreeList}" var="app">
-						<div title="${app.appName}">
-							<img src="${app.icon}" alt="${app.appName}" />
-							<label class="label1">${app.appName}</label><label>${app.developer}</label>
-							<img src="${ctx }/resources/public/images/star.jpg" style="display: inline-block" /><span>(${app.downCount})</span>
-						</div>
-						</c:forEach>
-					<div class="carousel-more-link">
-						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
-							class="more-arrow" style="margin-right: 45px">›</span></a>
-					</div>
-
-				</div>
-				<div id="con_two_2" style="display: none">
-					<div id="clerk_recommend_car">
-						<c:forEach items="${hotNewFreeList}" var="app">
-						<div title="${app.appName}">
-							<img src="${app.icon}" alt="${app.appName}" />
-							<label class="label1">${app.appName}</label><label>${app.developer}</label>
-							<img src="${ctx }/resources/public/images/star.jpg" style="display: inline-block" /><span>(${app.downCount})</span>
-						</div>
-						</c:forEach>
-					</div>
-					<div class="carousel-more-link">
-						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
-							class="more-arrow" style="margin-right: 45px">›</span></a>
-					</div>
-				</div>
+			<!-- hotfree -->
+			<div class="content" style="display: none;">
+				<ul class="hotfree">
+					<c:forEach items="${hotFreeList}" var="hotFree" varStatus="stat" begin="0" end="9">
+					<li><span>${stat.index}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
+					</c:forEach>
+				</ul>
 			</div>
 		</div>
-		<div class="wide-editorial-image-panel"
-			style="float: right; background-color: white">
-			<div class="panel-image goog-inline-block">
-				<a href=""><img
-					src="${ctx }/resources/public/images/editer_recommend.jpg" alt="编辑推荐"></a>
-			</div>
-			<div class="panel-summary goog-inline-block">
-				<h3>
-					<a href="">编辑推荐</a>
-				</h3>
-				<div class="panel-description">我们的工作人员从 Google Play
-					中挑选的部分最佳应用。</div>
-				13691854095
-				<div class="panel-see-more">
-					<a href="">查看全部</a><a href="" class="more-arrow-link"> <span
-						class="more-arrow">›</span></a>
+		<div id="right_container">
+			<ul class="appTab">
+				<li class="currTab">推荐应用</li>
+				<li>推荐应用·车机</li>
+			</ul>
+			<div class="container">
+				<ul>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+					<li><img /><span>Map</span><label>GOOGLE INC</label></li>
+				</ul>
+				<div class="page">
+					<span class="prev"><</span>
+					<span></span>
+					<span></span>
+					<span class="next">></span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<script>
-		var nums = [], timer, n = $$("idSlider").getElementsByTagName("td").length, st = new SlideTrans(
-				"idContainer", "idSlider", 4, {
-					Vertical : false,
-					onStart : function() {//设置按钮样式
-						forEach(nums, function(o, i) {
-							o.className = st.Index == i ? "on" : "";
-						})
-					}
-				});
-
-		for ( var i = 1; i <= n; AddNum(i++)) {
-		};
-		function AddNum(i) {
-			var num = $$("idNum").appendChild(document.createElement("li"));
-			num.innerHTML = i--;
-			num.onmouseover = function() {
-				timer = setTimeout(function() {
-					num.className = "on";
-					st.Auto = false;
-					st.Run(i);
-				}, 200);
-			}
-			num.onmouseout = function() {
-				clearTimeout(timer);
-				num.className = "";
-				st.Auto = true;
-				st.Run();
-			}
-			nums[i] = num;
-		}
-		st.Run();
-
-		/*第一种形式 第二种形式 更换显示样式*/
-		function setTab(name, cursel, n) {
-			for (i = 1; i <= n; i++) {
-				var menu = document.getElementById(name+i);
-				var con = document.getElementById("con_"+name+"_"+i);
-				menu.className = i == cursel ? "hover" : "";
-				con.style.display = i == cursel ? "block" : "none";
-			}
-		}
-		window.onload = function() {
-			setTab("one", 1, 2);
-			setTab("two", 1, 2);
-		}
-	</script>
-
+	<!-- main end -->
+	<div id="footer">footer</div>
 </body>
 </html>
