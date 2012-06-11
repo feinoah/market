@@ -451,6 +451,10 @@ public class PortalController{
 //			throw new Exception("");
 			return null;
 		}
+		// 下载次数+1
+		app.setDownCount(app.getDownCount()+1);
+		applicationService.saveOrUpdate(app);
+		
 		AppDownloadLog downlog=new AppDownloadLog();
 		downlog.setAccountId(account.getId());
 		downlog.setAppId(appId);

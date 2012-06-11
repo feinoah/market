@@ -6,27 +6,26 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/field');
 			$('#field_edit').combobox({
-				url:'${ctx}/back/field/query/all',
+				url:'${ctx}/back/query/groupby/field',
 				method:'get',
-				autocomplete:true,
 				valueField:'field',
 				textField:'field',
 				onSelect:function(record){
-					$('#fieldName_edit').val(record.fieldName);
+					$('#fieldName_edit').val(record.field_name);
 				}
 			});
-			$('#status').combobox({
+			$('#enabled').combobox({
 				data:statusList,
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
-			$('#status_edit').combobox({
+			$('#enabled_edit').combobox({
 				data:statusList,
 				editable:false,
 				valueField:'fieldValue',
@@ -36,6 +35,9 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editForm input').each(function(){
+					$(this).removeClass('validatebox-invalid');
+				});
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data

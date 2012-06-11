@@ -2,6 +2,7 @@ package cn.com.carit.market.service.impl.permission;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -60,8 +61,8 @@ public class BaseFieldServiceImpl implements BaseFieldService {
 	}
 
 	@Override
-	public List<BaseField> query() {
-		return baseFieldDao.query();
+	public List<Map<String,Object>> queryGroupByField() {
+		return baseFieldDao.queryGroupByField();
 	}
 
 	@Override

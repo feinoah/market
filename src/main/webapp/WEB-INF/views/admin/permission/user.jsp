@@ -7,7 +7,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -23,8 +23,8 @@
 				$('#password').attr('disabled',false);
 				$('#email_edit').attr('disabled',false);
 			}})
-			checkExisted($('#email_edit'),"${ctx}/back/permission/{type}?name=");
-			checkExisted($('#nickName_edit'),"${ctx}/back/permission/user?nickName=");
+			checkExisted($('#email_edit'),"${ctx}/back/permission/user?nickName=&name=");
+			checkExisted($('#nickName_edit'),"${ctx}/back/permission/user?name=&nickName=");
 			$.ajaxSettings.async = false;
 			$.getJSON('${ctx}/back/field/query/gender', function(data) {
 				if(data){
@@ -61,7 +61,6 @@
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
-				$('#password').attr('disabled',true);
 				$('#editWin').window('open');
 				// init data
 				var r=[];
@@ -71,8 +70,8 @@
 						r[i]=d.id;
 					});
 				});
-				$('#email_edit').val(m.email).attr('disabled',true);
 				$('#roles').combobox('setValues',r);
+				$('#editForm input[name=email]').val(m.email);
 				$('#editForm input[name=nickName]').val(m.nickName);
 				$('#editForm input[name=realName]').val(m.realName);
 				$('#editForm input[name=officePhone]').val(m.officePhone);

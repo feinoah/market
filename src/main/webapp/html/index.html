@@ -9,12 +9,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.0" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.jsv=1.0"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.0"></script>
 <script type="text/javascript">
 	var _loadingICO;
 	$(function() {
@@ -36,7 +36,6 @@
 				$('#catalog_con').append('<li>');
 			}
 		});
-		//$.getJSON('portal/app/hot/free/5?local=cn', function(data) {
 		$.getJSON('portal/app/hot/free/12?local=cn', function(data) {
 			if (data) {
 				$('#freeTop').empty();
@@ -58,7 +57,6 @@
 				$('#freeTop').append('<li class="more">全部热门免费应用</li>');
 			}
 		});
-		//$.getJSON('portal/app/hot/free/new/5?local=cn', function(data) {
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
 			if (data) {
 				$('#freeNewTop').empty();
@@ -80,41 +78,6 @@
 				$('#freeNewTop').append('<li class="more">全部热门免费新品</li>');
 			}
 		});
-		/*
-		$.getJSON('portal/app/hot/free/12?local=cn',function(data) {
-			if (data) {
-			$('#clerk_recommend').empty();
-				$.each(data,function(i, o) {
-					$('#clerk_recommend').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
-						+o.appName
-						+'</label><label class="label2">'
-						+o.appName
-						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
-						+o.downCount
-						+'</span>)</div>'
-					);
-				});
-			}
-		});
-		$.getJSON('portal/app/hot/free/new/12?local=cn',
-		function(data) {
-			if (data) {
-				$('#clerk_recommend_car').empty();
-				$.each(data,function(i, o) {
-					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
-						+o.appName
-						+'</label><label class="label2">'
-						+o.appName
-						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
-						+o.downCount
-						+'</span>)</div>'
-					);
-				});
-			}
-		});
-		*/
 	});
 </script>
 </head>

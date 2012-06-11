@@ -290,7 +290,7 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 		}
 		log.debug(String.format("\n%1$s\n", sql));
 		try {
-			return jdbcTemplate.queryForInt(sql, args, argTypes);
+			return queryForInt(sql, args, argTypes);
 		} catch (Exception e) {
 			log.warn("not exist record of email["+email+"] or nickName["+nickName+"]");
 		}

@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 public class AttachmentUtil {
 	private static final Logger logger = Logger.getLogger(AttachmentUtil.class);
@@ -110,11 +111,19 @@ public class AttachmentUtil {
 	}
 	
 	public static boolean deleteIcon(String fileName){
+		if (!StringUtils.hasText(fileName)) {
+			logger.warn("empty fileName...");
+			return false;
+		}
 		return deleteFile(getIconPath(fileName));
 	}
 	
-	public static boolean deleteImage(String fileName){
-		return deleteFile(getImagePath(fileName));
+	public static void deleteImage(String fileName){
+		if (!StringUtils.hasText(fileName)) {
+			logger.warn("empty fileName...");
+			return;
+		}
+		deleteFile(getImagePath(fileName));
 	}
 	
 	public static void deleteImages(String [] nameList){
@@ -126,10 +135,18 @@ public class AttachmentUtil {
 	}
 	
 	public static boolean deletePhoto(String fileName){
+		if (!StringUtils.hasText(fileName)) {
+			logger.warn("empty fileName...");
+			return false;
+		}
 		return deleteFile(getPhotoPath(fileName));
 	}
 	
 	public static boolean deleteApk(String fileName){
+		if (!StringUtils.hasText(fileName)) {
+			logger.warn("empty fileName...");
+			return false;
+		}
 		return deleteFile(getApkPath(fileName));
 	}
 	

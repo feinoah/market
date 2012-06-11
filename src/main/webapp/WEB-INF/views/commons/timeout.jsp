@@ -1,4 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%><%
+<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
+<%
 	if (request.getHeader("x-requested-with") != null
 			&& request.getHeader("x-requested-with").equalsIgnoreCase(
 					"XMLHttpRequest")) {

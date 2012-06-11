@@ -445,14 +445,14 @@ public class AdminController{
 	}
 	
 	/**
-	 * <br>back/field/query/all
+	 * <br>back/query/groupby/field
 	 * @param field
 	 * @param limit
 	 * @return
 	 */
-	@RequestMapping(value="back/query/field/all")
-	public @ResponseBody List<BaseField> queryAllBaseField(){
-		return baseFieldService.query();
+	@RequestMapping(value="back/query/groupby/field")
+	public @ResponseBody List<Map<String,Object>> queryGroupByField(){
+		return baseFieldService.queryGroupByField();
 	}
 	
 	/**

@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		var catalogs;
 		var tag=0;
@@ -207,6 +207,9 @@
 			var m = $('#ttt').datagrid('getSelected');
 			if (m) {
 				tag=1;
+				$('#editForm input').each(function(){
+					$(this).removeClass('validatebox-invalid');
+				});
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data

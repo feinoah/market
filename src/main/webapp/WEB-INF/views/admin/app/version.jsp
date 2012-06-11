@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
@@ -37,17 +37,21 @@
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
+				$('#editForm input').each(function(){
+					$(this).removeClass('validatebox-invalid');
+				});
 				$('#editWin').window({title:'修改'+winTitle,iconCls:'icon-edit'});
 				$('#editWin').window('open');
 				// init data
-				$('#editForm input[name=appName]').val(m.appName);
-				$('#editForm input[name=enName]').val(m.enName);
+				$('#appName_label').html(m.appName);
+				$('#enName_label').html(m.enName);
 				$('#editForm input[name=version]').val(m.version);
 				$('#editForm input[name=size]').val(m.size);
 				$('#status_edit').combobox('setValue',m.status);
 				$('#newFeatures').val(m.newFeatures);
 				$('#enNewFeatures').val(m.enNewFeatures);
 				$('#id').val(m.id);
+				$('#appId').val(m.appId);
 				$('#editWin').show();
 			} else {
 				$.messager.show({
@@ -157,9 +161,9 @@
 				<table>
 					<tr>
 						<td><form:label	for="appName" path="appName">应用名称：</form:label></td>
-						<td><form:input path="appName" disabled="true"/></td>
+						<td><label id="appName_label"/></td>
 						<td><form:label	for="enName" path="enName">英文名称：</form:label></td>
-						<td><form:input path="enName" disabled="true"/></td>
+						<td><label id="enName_label"/></td>
 				</tr>
 				<tr>
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
@@ -172,7 +176,7 @@
 						<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
 					<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:input path="status" id="status_edit" cssClass="easyui-validatebox" required="true"/>
+						<form:input path="status" id="status_edit" cssClass="easyui-validatebox"/>
 					</td>
 				</tr>
 				<tr>

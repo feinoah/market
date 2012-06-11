@@ -1,6 +1,7 @@
 package cn.com.carit.market.service.permission;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.com.carit.market.bean.BaseField;
 import cn.com.carit.market.common.utils.DataGridModel;
@@ -35,10 +36,10 @@ public interface BaseFieldService {
 	List<BaseField> queryByField(String filed);
 	
 	/**
-	 * 查询
+	 * 查询已有字典集
 	 * @return
 	 */
-	List<BaseField> query();
+	List<Map<String,Object>>  queryGroupByField();
 	
 	/**
 	 * 条件查询

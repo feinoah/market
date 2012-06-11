@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -105,10 +106,10 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	}
 
 	@Override
-	public List<BaseField> query() {
-		String sql="select * from t_base_field";
+	public List<Map<String,Object>> queryGroupByField() {
+		String sql="select * from t_base_field group by field";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.query(sql, rowMapper);
+		return jdbcTemplate.queryForList(sql);
 	}
 
 	@Override
