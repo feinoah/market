@@ -1,42 +1,191 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
+	<title>CarIt Market</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="resources/public/scripts/SlideTrans.js" ></script>
-	<link href="resources/public/styles/default.css" rel="stylesheet" type="text/css" />
-	<link href="resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
-		<title>CarIt Market</title>
+	<script type="text/javascript" src="../resources/public/scripts/SlideTrans.js" ></script>
+	<link href="../resources/public/styles/default.css" rel="stylesheet" type="text/css" />
+	<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" type="text/css" href="../resources/jquery-easyui-1.2.6/themes/default/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="../resources/jquery-easyui-1.2.6/themes/icon.css"/>
+<link rel="stylesheet" type="text/css" href="../resources/public/styles/default.css"/>
+<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
+<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.jsp"></script>
+<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
+		
+		<script type="text/javascript">
+		$(function(){
+			_loadingICO='../resources/public/images/loading.gif';
+			$('body').append("<script src='../resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
+			chkLogin();
+			$('#reg').click(function(){
+				regWin();
+			});
+			$('#login').click(function(){
+				loginWin();
+			});
+			 $('.star span').each(function(i){
+			
+				$(this).click(function(){
+					
+					$('.star span').removeClass('starBright').addClass('starDark');
+					$('.star span').each(function(k){
+					
+						if(k<=i){//3
+							$('#star_sp'+ k).removeClass('starDark').addClass('starBright');
+						}
+					});
+					$('#grade').val((i+1)*2);
+				});
+			});
+			 $('#submitBtn').click(function(){
+				 $('#commentForm').form({
+						dataType : 'text',  
+						onSubmit:function(){
+							if(rt==''){
+								return false;
+							}
+							$('#appId').val(rt);
+							return true;
+					    }, 
+				    	success:function(data){
+							if(data){
+								var map=$.parseJSON(data);
+								if(map){
+									if(map.answerCode==-1){
+										tips('submitBtn','未知错误','bottom');
+									}
+									if(map.answerCode==0){
+										tips('submitBtn','没有登录','bottom');
+									}
+									if(map.answerCode==1){
+										location.reload();
+									}
+								}else{
+									tips('submitBtn','后台系统异常','bottom');
+								}
+							}else{
+								tips('submitBtn','后台系统异常','bottom');
+							}
+					    }
+					}).submit();
+			 });
+			 $.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
+					if(data){
+						$('#label_appname').empty().html(data.appName);
+						$('#label_author').empty().html(data.enName);
+						$('#label_count').empty().html(data.downCount);
+						$('#about_count').empty().html(data.downCount);
+						$('#about_date').empty().html(data.updateTime);
+						$('#about_version').empty().html(data.version);
+						$('#about_android_version').empty().html(data.platform);
+						$('#about_Category').empty().html(data.catalogName);
+						$('#about_size').empty().html(data.size);
+						$('#about_price').empty().html(data.price);
+						$('#about_level').empty().html(data.appLevel);
+					}
+				});
+				
+				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
+					if(data){
+						$('#appCommentSimple').empty();
+					$.each(data,function(i,o){
+					
+						$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+						   +o.updateTime+'"</span> （Samsung Galaxy S2，版本：1.4.5）<div class="doc-review-ratings-line"><img src="../resources/public/images/star3.jpg" alt="" /></div><p class="review-text">'
+						   +o.comment+'</p></div><hr>');
+					
+					})
+						
+					}
+				});
+			
+				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
+					if(data){
+						$('#appComment').empty();
+					$.each(data,function(i,o){
+					
+						$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+						   +o.updateTime+'"</span> （Samsung Galaxy S2，版本：1.4.5）<div class="doc-review-ratings-line"><img src="../resources/public/images/star3.jpg" alt="" /></div><p class="review-text">'
+						   +o.comment+'</p></div><hr>');
+					
+					})
+						
+					}
+				});
+				
+
+		$.getJSON('../portal/app/hot/free/new/4?local=', function(data) {
+			if(data){
+				$('#author_more').empty();
+				$('#author_more').append('<h3 class="detaiil_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
+				$.each(data,function(i,o){
+					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+				})
+			}
+		});
+		
+		$.getJSON('../portal/app/hot/free/4?local=', function(data) {
+			if(data){
+				$('#view_more').empty();
+				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
+				$.each(data,function(i,o){
+					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+				})
+			}
+		});
+		});
+		
+		//获得参数的方法
+		var request =
+		{
+		QueryString : function(val)
+		{
+		var uri = window.location.search;
+		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
+		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
+		}
+		}
+		
+		var rt = request.QueryString("inputStr");
+	</script>	
+		
+	
+		
 		</head>
-	<body style="margin:0;padding:0;text-align:center;">
+	<body style="margin:0;padding:0;text-align:center;"> 
 	
 	
 <div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
-<div id="header" style="height:75px;width:100%;background-color:#DEDEDE;">
-<table>
-<tr>
-<td> <img src="resources/public/images/carit_logo1.png" height="62px" width="154px" style="margin-left: 50px;margin-top: 8px"/>  </td>
-<td><input type="text" name="txtNo" size="20" style="height:40px;width:312px;margin-left:200px;"></input></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:5px;">search</button></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:30px;">logo in</button></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:5px;">register</button></td>
-</tr>
-</table>
-</div>
+		<div id="header">
+			<ul>
+				<li><img src="../resources/public/images/carit_logo1.png"/></li>
+				<li><input type="text" name="txtNo"/></li>
+				<li><button id="search">搜索</button></li>
+				<li name="before_login"><button id="login">登录</button></li>
+				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li id="after_login" style="display: none;"><span></span></li>
+			</ul>
+		</div>
 
 <div style="height:311px;width:1024px;background-color:#DEDEDE; ">
-<div style="float:left;background-image:url('resources/public/app_detail.jpg');width:328px;height:266px">
- <label style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
-    <label style="display: block;color: white;font-size: 12px;margin-left: 15px;margin-top: 5px">ALLTHECOOKS.COM</label>
+<div style="float:left;background-image:url('../resources/public/images/app_detail.jpg');width:328px;height:266px">
+ <label id="label_appname" style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
+    <label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px;margin-top: 5px">ALLTHECOOKS.COM</label>
     
     <table width="300px" border="0px" cellspacing="0px" style="border-collapse:collapse;margin-left:17px;">
     <tr >
     <td height="164px">
-    <img src="resources/public/images/app_pic.jpg" alt="" height="164px" width="136px" style="margin-left: 2px;margin-top: 17px;"/></td>
+    <img src="../resources/public/images/app_pic.jpg" alt="" height="164px" width="136px" style="margin-left: 2px;margin-top: 17px;"/></td>
     
     <td height="164px">
-     <img src="resources/public/images/star2.jpg" style="display: inline-block;height: 17px;margin-top: 130px"/>
-     <label style="display: inline-block;font-size: 15px;color: white;height: 17px;margin-top: 128px">(10,898)</label>
-     <img src="resources/public/images/install2.jpg" alt="" style="width: 85px;height: 35px;margin-left: 3px"/>
+     <img src="../resources/public/images/star2.jpg" style="display: inline-block;height: 17px;margin-top: 130px"/>
+     <a style="color: white">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;margin-top: 128px">10,898</label>)</a>
+     <img src="../resources/public/images/install2.jpg" alt="" style="width: 85px;height: 35px;margin-left: 3px"/>
      </td>
     </tr>
   
@@ -49,10 +198,10 @@
 
 <ul id="idSlider" >
 		
-			<li><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html"><img src="resources/public/images/carit_logo2.jpg"/></a></li>
-			<li><a href="http://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html"><img src="resources/public/images/carit_logo3.jpg"/></a></li>
-			<li><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img src="resources/public/images/carit_logo4.jpg"/></a></li>
-		    <li><a href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img src="resources/public/images/carit_logo5.jpg"/></a></li>
+			<li><a href=""><img src="../resources/public/images/carit_logo2.jpg"/></a></li>
+			<li><a href=""><img src="../resources/public/images/carit_logo3.jpg"/></a></li>
+			<li><a href=""><img src="../resources/public/images/carit_logo4.jpg"/></a></li>
+		    <li><a href=""><img src="../resources/public/images/carit_logo5.jpg"/></a></li>
 	
 	</ul>
 
@@ -64,125 +213,39 @@
 <!-- left top -->
 
 <div id="left" style="float:left;width:29%;margin-top:7px">
-<div style="float:left;width:330px;height:480px;background-color: white">
- <label style="width:300px;margin-left: 20px;margin-top: 7px">查看此应用的用户还查看了：</label>
+<div id="author_more" style="float:left;width:330px;height:500px;background-color: white;">
+ <label class="detaiil_label_left1_top">查看此应用的用户还查看了：</label>
+  <hr class="detail_hr"/>
   
-     <table border="2px" cellspacing="0px" width="292x" style="border-collapse:collapse;margin-left:17px;border-right: 0px;border-left: 0px;margin-top: 7px">
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
+  <div class="detail_left_div">
+  <div class="detail_left1_div">
+  <img src="../resources/public/images/icon80.jpg"/>
+  </div>
+  <div class="detail_right_div"">
+   <label style="display: block;"><b>In the Kitchen:Recipes</b></label>
+      <label class="detail_right_label1">TELEVISION FOOD</label>
+       <img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">(461)</label>
+       <label style="display: block;">￥12.55</label>
+       </div>
+       </div>
+  <hr class="detail_hr"/>
    
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-          
-   </table>
   
 </div>
 
 <!-- left bottom -->
 
-<div id="left_bottom" style="float:left;width:330px;height:588px;margin-top:13px;background-color: white">
+<div id="view_more" style="float:left;width:330px;height:588px;margin-top:13px;background-color: white">
 
    <h3>安装此应用的用户还安装了：</h3>
-   <table border="2px" cellspacing="0px" width="292x" style="border-collapse:collapse;margin-left:17px;border-right: 0px;border-left: 0px;margin-top: 7px">
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-<tr style="height: 95px;">
-   <td style="width: 80px;border-right: 0px;border-left: 0px">
-   <img src="resources/public/images/icon1.jpg" width="60px"/>
-   </td>
-   
-   <td style="border-right: 0px;border-left: 0px">
-   
-    <label style="width:204px"><b>In the Kitchen:Recipes</b></label>
-      <label style="width :60%;color:gray;font-size: 12px">TELEVISION FOOD</label>
-       <img src="resources/public/images/star.jpg" style="display: inline-block"/><label style="display: inline-block;font-size: 12px">(461)</label>
-       <label >￥12.55</label>
-   </td></tr>
-          
-   </table>
+  
+  
    
     </div>
     </div>	
 <!-- left bottom -->
     
-<div id="Tab2" style="float:right;width:66%;height:1082px;margin-top:7px;background-color: white">
+<div id="Tab2" style="float:right;width:66%;height:1107px;margin-top:7px;background-color: white">
 <div class="Menubox">
    <ul>
        <li id="two1" onclick="setTab('two',1,4)" >概览</li>
@@ -217,8 +280,8 @@
   
    <table>
    <tr>
-   <td><img src="resources/public/images/app_temp1.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
-   <td><img src="resources/public/images/app_temp2.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
+   <td><img src="../resources/public/images/app_temp1.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
+   <td><img src="../resources/public/images/app_temp2.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
    </tr>
  </table>
   
@@ -228,31 +291,30 @@
 <h4>关于此应用</h4>
 <dt style="">评分：</dt>
 
-<img src="resources/public/images/star.jpg" alt="" style="margin-left: 10px;font-size: 12px"/>
-<dd style="">(<span itemprop="ratingCount" content="15333" >15,333</span>)</dd>
+<img src="../resources/public/images/star.jpg" alt="" style="margin-left: 10px;font-size: 12px"/>
+<dd style="">(<span id="about_count" itemprop="ratingCount" content="15333" >15,333</span>)</dd>
 
 <dt style="margin-top: 8px">更新日期：</dt>
-<dd><time itemprop="datePublished">2012年5月23日</time></dd>
+<dd><time id="about_date" itemprop="datePublished">2012年5月23日</time></dd>
 <dt style="margin-top: 8px">当前版本：</dt>
-<dd itemprop="softwareVersion">1.4.4</dd>
+<dd id="about_version" itemprop="softwareVersion">1.4.4</dd>
 <dt itemprop="operatingSystems" content="Android" style="margin-top: 8px">所需的 Android 版本：</dt>
-<dd>2.3 及更高版本</dd>
+<dd><label id="about_android_version">2.3</label>及更高版本</dd>
 <dt style="margin-top: 8px">类别：</dt>
-<dd>游戏</dd>
+<dd id="about_Category">游戏</dd>
 <dt style="margin-top: 8px">已安装次数：</dt>
-<dd itemprop="numDownloads">100,000 - 500,000<div class="normalized-daily-installs-chart" style="width: 105px;"><img src="resources/public/images/chart.png"><p>最近 30 天</p></div></dd>
+<dd itemprop="numDownloads">100,000 - 500,000<div class="normalized-daily-installs-chart" style="width: 105px;"><img src="../resources/public/images/chart.png"><p>最近 30 天</p></div></dd>
    <dt style="margin-top: 8px">大小：</dt>
-   <dd itemprop="fileSize">49M</dd>
+   <dd id="about_size" itemprop="fileSize" style="display: inline-block;">49</dd><label style="display: inline-block;">M</label>
    <dt style="margin-top: 8px">价格：</dt>
    <dd itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-   <meta itemprop="price" content="0">免费<span itemprop="seller" itemscope="" itemtype="http://schema.org/Organization">
-   <meta itemprop="name" content="Android"></span></dd>
+  <label style="display: inline-block;">￥</label> <label id="about_price" style="display: inline-block;"></label>
    <dt style="margin-top: 8px">内容分级：</dt>
-   <dd itemprop="contentRating">心智成熟度-低</dd>
+   <label style="margin-left: 10px">心智成熟度-</label >  <label id="about_level"></label >
    
    </div>
    
-   <div  style="float: left;margin-left: 15px;height:475px"><h2>用户评论</h2>  
+   <div  style="float: left;margin-left: 15px;height:500px"><h2>用户评论</h2>  
    <div class="histogram-table goog-inline-block" data-csstoken="user-reviews">
    <table><tbody><tr><td class="histogram-msg top-row">5 星</td>
    <td class="top-row bar-cell">
@@ -275,42 +337,102 @@
    <div class="average-rating-title">平均评分：</div>
    <div class="average-rating-value">4.8</div>
    <div class="average-rating-stars">
-  <img src="resources/public/images/star3.jpg" alt="" />
+  <img src="../resources/public/images/star3.jpg" alt="" />
    </div>
    <div class="votes">18,191</div></div>
-   <div class="doc-review-summary"><div class="doc-review">
+   
+   
+   
+   <div id="appCommentSimple" class="doc-review-summary">
+   
+   <div class="doc-review">
    <span class="doc-review-author"><strong>tai</strong></span>
    <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：1.4.5）
-   <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
    <div class="doc-review-ratings-line">
-<img src="resources/public/images/star3.jpg" alt="" />
-   <h4 class="review-title">excellent..samsung galaxy tab 2</h4></div>
-   <div class="review-footer goog-inline-block"><div class="doc-review-label"></div>
-   <div class="per-review-controls goog-inline-block"></div></div></div><hr><div class="doc-review">
-   <span class="doc-review-author"><strong>Kwong</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月24日</span> （Samsung Galaxy S2，版本：1.4.5）
-   <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
-   <div class="doc-review-ratings-line">
-<img src="resources/public/images/star3.jpg" alt="" />
-   <h4 class="review-title">Edgarhin</h4></div>
+<img src="../resources/public/images/star3.jpg" alt="" />
+   </div>
    <p class="review-text">Nice defense game</p>
-   <div class="review-footer goog-inline-block">
-   <div class="doc-review-label"></div>
-   <div class="per-review-controls goog-inline-block"></div></div></div><hr>
-   <div class="doc-review"><span class="doc-review-author"><strong>家仁</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月23日</span> （Samsung Galaxy S2，版本：1.4.5）
-   <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
-   <div class="doc-review-ratings-line">
-  <img src="resources/public/images/star3.jpg" alt="" />
-   <h4 class="review-title">good</h4></div><p class="review-text">good</p>
-   <div class="review-footer goog-inline-block">
-   <div class="doc-review-label"></div>
-   <div class="per-review-controls goog-inline-block"></div></div></div><hr></div>
+   </div>
+   
+   <hr>
+   
+   
+   </div>
+   
+   
+   
    <a class="tabBarLink" data-tabbarid="details" data-tabbarindex="1">阅读所有用户评论</a>
    <a class="more-arrow-link" data-tabbarid="details" data-tabbarindex="1"><span class="more-arrow">›</span></a></div>
    
    </div>
-   <div id="con_two_2" style="">2</div>
+   
+   
+   
+   
+   <div id="con_two_2" style="">
+   
+   <div  style="float: left;margin-left: 15px;height:1107px"><h2>用户评分</h2>  
+   <div class="histogram-table goog-inline-block" data-csstoken="user-reviews">
+   <table><tbody><tr><td class="histogram-msg top-row">5 星</td>
+   <td class="top-row bar-cell">
+   <span class="bar bar5" style="width:150px">&nbsp;</span>&nbsp;
+   <span>15,014</span></td></tr><tr><td class="middle-row histogram-msg">4 星</td>
+   <td class="middle-row bar-cell">
+   <span class="bar bar4" style="width:24px">&nbsp;</span>&nbsp;
+   <span>2,383</span></td></tr><tr><td class="middle-row histogram-msg">3 星</td>
+   <td class="middle-row bar-cell">
+   <span class="bar bar3" style="width:5px">&nbsp;</span>&nbsp;
+   <span>487</span></td></tr><tr><td class="middle-row histogram-msg">2 星</td>
+   <td class="middle-row bar-cell">
+   <span class="bar bar2" style="width:1px">&nbsp;</span>&nbsp;
+   <span>84</span></td></tr><tr><td class="bottom-row histogram-msg">1 星</td>
+   <td class="bottom-row bar-cell">
+   <span class="bar bar1" style="width:2px">&nbsp;</span>&nbsp;
+   <span>223</span></td></tr></tbody></table></div>
+   
+   <div class="average-rating average-rating-panel goog-inline-block">
+   <div class="average-rating-title">平均评分：</div>
+   <div class="average-rating-value">4.8</div>
+   <div class="average-rating-stars">
+  <img src="../resources/public/images/star3.jpg" alt="" />
+   </div>
+   <div class="votes">18,191</div></div>
+   <div>
+   <h2 class="goog-inline-block middle-vertical-align">用户评论</h2>
+   <div id="write-review-toggle" class="goog-inline-block toggle-button" data-toggletarget="my-review-panel-id write-review-container" tabindex="0">我要评论 &gt;</div>
+   </div>
+   
+   <form action="../portal/app/comment/add" method="post" id="commentForm" >
+   <div id="commentInput">
+       内容：<input id="comment" name="comment" type="text" style="width: 600px;height: 150px;display: block"/>
+       <div class="star">评分：<span id="star_sp0" class="starDark"></span><span id="star_sp1" class="starDark"></span><span id="star_sp2" class="starDark"></span>
+   <span id="star_sp3" class="starDark"></span><span id="star_sp4" class="starDark"></span>
+   <button class="comment_submit" id="submitBtn">提交</button></div>
+   <input type="hidden" name="grade" id="grade"/>
+   <input type="hidden" name="appId" id="appId"/>
+   </div>
+   </form>
+   
+   
+   <div id="appComment" class="doc-review-summary">  
+   <div class="doc-review">
+   <span class="doc-review-author"><strong>tai</strong></span>
+   <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：1.4.5）
+   <div class="doc-review-ratings-line">
+<img src="../resources/public/images/star3.jpg" alt="" />
+   </div>
+   <p class="review-text">Nice defense game</p>
+   </div>
+   
+   <hr>
+   
+ 
+   
+   </div>
+   
+   
+   
+   </div>
    
   <div id="con_two_3" style="">3</div>
   
@@ -322,7 +444,7 @@
   
  
  </div>
-
+</div>
 	
 	
 		

@@ -26,7 +26,6 @@
 			    textField:'moduleName'  
 			}); 
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/module');
-			checkExisted($('#moduleName_edit'),"${ctx}/back/permission/module?name=");
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -187,7 +186,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="moduleName" path="moduleName"  cssClass="mustInput">名称：</form:label></td>
-						<td><form:input path="moduleName" id="moduleName_edit" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="moduleName" id="moduleName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/back/permission/module','name']"/></td>
 						<td><form:label	for="moduleUrl" path="moduleUrl">路径：</form:label></td>
 						<td><form:input path="moduleUrl"/></td>
 					</tr>

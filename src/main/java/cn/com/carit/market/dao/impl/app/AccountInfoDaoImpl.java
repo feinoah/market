@@ -198,6 +198,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		try {
 			account=query(sql, email, rowMapper);
 		} catch (Exception e) {
+			log.warn("no record of the email["+email+"]...");
 			log.error(e.getMessage());
 		}
 		return account;
@@ -366,13 +367,13 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	public int checkAccount(String email) {
 		String sql="select 1 from t_account_info where email=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		int result=0;
 		try {
-			result=jdbcTemplate.queryForInt(sql, email);
+			return jdbcTemplate.queryForInt(sql, email);
 		} catch (Exception e) {
+			log.warn("no record of the email["+email+"]...");
 			log.warn(e.getMessage());
 		}
-		return result;
+		return 0;
 	}
 	
 }

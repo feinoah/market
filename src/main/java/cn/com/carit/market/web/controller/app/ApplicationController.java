@@ -135,6 +135,7 @@ public class ApplicationController {
 				}
         		i++;
 			}
+	        application.setImages(images.toString());
 	        applicationService.saveOrUpdate(application);
 	        return 1;
         } catch (IllegalStateException e) {

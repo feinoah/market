@@ -63,7 +63,6 @@
 			$('#editWin').window({onClose:function(){
 				$('#tree').tree('uncheck',$('#tree').tree('find',1));
 			}});
-			checkExisted($('#roleName_edit'),"${ctx}/back/permission/role?name=");
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -182,7 +181,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="roleName" path="roleName"  cssClass="mustInput">名称：</form:label></td>
-						<td><form:input path="roleName" id="roleName_edit" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="roleName" id="roleName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/back/permission/role','name']"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="roleDesc" path="roleDesc" >描述：</form:label></td>

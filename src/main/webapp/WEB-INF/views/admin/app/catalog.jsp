@@ -13,8 +13,6 @@
 			$('#descTabs').tabs({onSelect:function(title){
 				$(this).tabs('getSelected').show()
 			}});
-			checkExisted($('#name_edit'),'${ctx}/portal/app/catalog/check?local=cn&name=');
-			checkExisted($('#enName_edit'),'${ctx}/portal/app/catalog/check?local=en&name=');
 			$('#status').combobox({
 				data:statusList,
 				editable:false,
@@ -156,11 +154,11 @@
 				<table>
 					<tr>
 						<td><form:label	for="name" path="name"  cssClass="mustInput">分类名称：</form:label></td>
-						<td><form:input path="name" id="name_edit" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="name" id="name_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/catalog/check?local=cn','name']"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" /></td>
+						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/catalog/check?local=en','name']"/></td>
 					</tr>
 					<tr>
 						<td><form:label for="displayIndex" path="displayIndex" cssClass="mustInput">顺序：</form:label></td>

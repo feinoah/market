@@ -176,12 +176,13 @@ public class BaseRoleDaoImpl extends BaseDaoImpl  implements
 
 	@Override
 	public int checkRoleName(String roleName) {
-		String sql="select 1 from t_base_module where role_name=?";
+		String sql="select 1 from t_base_role  where role_name=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		try {
 			return jdbcTemplate.queryForInt(sql, roleName);
 		} catch (Exception e) {
 			log.warn("not exist record of this roleName["+roleName+"]");
+			log.warn(e.getMessage());
 		}
 		return 0;
 	}

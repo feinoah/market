@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
@@ -290,13 +291,26 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	public double queryAvgGrade(int appId) {
 		String sql="select avg(grade) from t_app_comment where app_id=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		double avg=0; 
 		try {
-			avg=jdbcTemplate.queryForObject(sql, Double.class, appId);
+			return jdbcTemplate.queryForObject(sql, Double.class, appId);
 		} catch (Exception e) {
-			log.warn("there no result of the query sql:"+sql);
+			log.warn("no comment of app["+appId+"]...");
+			log.warn(e.getMessage());
 		}
-		return avg;
+		return 0;
+	}
+
+	@Override
+	public List<Map<String, Object>> statCommentGrade(int appId) {
+		String sql="select round(grade/2) grade, count(1) total from t_app_comment where app_id=? group by round(grade/2)";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.queryForList(sql, appId);
+		} catch (Exception e) {
+			log.warn("no comment of app["+appId+"]...");
+			log.warn(e.getMessage());
+		}
+		return null;
 	}
 
 }

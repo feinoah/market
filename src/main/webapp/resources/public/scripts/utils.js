@@ -1,4 +1,4 @@
-var app={name:'/market'};
+var app={name:'/market',domain:'http://localhost:8080'};
 
 var chkLogin=function(){
 	$.getJSON(app.name+'/portal/account/login/check', function(data) {
@@ -13,7 +13,7 @@ var regWin=function(){
 	Util.Dialog({
 		boxID : 'regWin',
 		title : '用户注册',
-		content : 'url:get?html/reg.html?t='+new Date().getTime(),
+		content : 'url:get?'+app.domain+app.name+'/html/reg.html?t='+new Date().getTime(),
 		showbg: true,
 		width : 580,
 		height : 280
@@ -25,7 +25,7 @@ var loginWin=function(){
 	Util.Dialog({
 		boxID : 'loginWin',
 		title : '用户登录',
-		content : 'url:get?html/login.html?t='+new Date().getTime(),
+		content : 'url:get?'+app.domain+app.name+'/html/login.html?t='+new Date().getTime(),
 		showbg: true,
 		width : 480,
 		height : 220

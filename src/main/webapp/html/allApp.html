@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<script type="text/javascript" src="http://localhost:8080/market/resources/public/scripts/SlideTrans.js" ></script>
+	<link href="http://localhost:8080/market/resources/public/styles/default.css" rel="stylesheet" type="text/css" />
+	<link href="http://localhost:8080/market/resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
+	<link rel="shortcut icon" href="http://localhost:8080/market/resources/favicon.ico" type="image/x-icon"/>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/market/resources/jquery-easyui-1.2.6/themes/default/easyui.css"/>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/market/resources/jquery-easyui-1.2.6/themes/icon.css"/>
+<link rel="stylesheet" type="text/css" href="http://localhost:8080/market/resources/public/styles/default.css"/>
+<link rel="icon" href="resources/favicon.ico" type="image/x-icon"/>
+	<script type="text/javascript" src="http://localhost:8080/market/resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://localhost:8080/market/resources/jquery-easyui-1.2.6/jquery.easyui.min.js" ></script>
+<script type="text/javascript" src="http://localhost:8080/market/resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
+		<title>CarIt Market</title>
+		
+		<script type="text/javascript">
+	
+		function submit(id)
+		{
+		window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);//传入参数
+		}
+		
+		//获得参数的方法
+		var request =
+		{
+		QueryString : function(val)
+		{
+		var uri = window.location.search;
+		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
+		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
+		}
+		}
+		
+		var rt = request.QueryString("inputStr");
+		
+		
+		
+$(function(){
+			
+	
+
+	$.getJSON('../portal/app/hot/free/new/100?local=', function(data) {
+		if(data){
+			$('#allApp').empty();
+			$.each(data,function(i,o){
+				$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('+o.id+')" type="image" src="http://localhost:8080/market/resources/public/images/icon78.png"></input><img src="http://localhost:8080/market/resources/public/images/star4.jpg"></img></td><td><label class="app_l1">'+o.appName+'</label><label class="app_l2">ESCAPIST GAMES LIMITED</label><label class="app_l3">The world wide best selling smart phone astronomy app Star Chart. The best se...</label><img src="http://localhost:8080/market/resources/public/images/install.jpg"></img></td></tr></table></div>');
+			})
+		}
+	});
+	
+	
+});
+	</script>	
+		
+	
+		
+		</head>
+	<body style="margin:0;padding:0;text-align:center;"> 
+	
+	
+<div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
+<div id="header" style="height:75px;width:100%;background-color:#DEDEDE;">
+<table>
+<tr>
+<td> <img src="http://localhost:8080/market/resources/public/images/carit_logo1.png" height="62px" width="154px" style="margin-left: 50px;margin-top: 8px"/>  </td>
+<td><input type="text" name="txtNo" size="20" style="height:40px;width:312px;margin-left:200px;"></input></td>
+<td><button type="button" style="height:42px;width:72px;margin-left:5px;">search</button></td>
+<td><button type="button" style="height:42px;width:72px;margin-left:30px;">logo in</button></td>
+<td><button type="button" style="height:42px;width:72px;margin-left:5px;">register</button></td>
+</tr>
+</table>
+</div>
+
+
+		<div>
+			<div class="page-banner">
+				<table>
+					
+						<tr>
+							<td style="height: 58px"><img src="http://localhost:8080/market/resources/public/images/icona.jpg" style="width: 58px;height: 47px;margin-bottom: 15px"></img></td>
+							<td style="height: 58px"><label style="margin-bottom: 15px; color: white;font-size: 23px;" class="goog-inline-block">店员推荐（应用）</label></td>
+						</tr>
+					
+				</table>
+			</div>
+			<div class="container-container">
+			
+			   <div id="allApp" style="margin-top: 40px; margin-left: 40px;width:980px">
+			   <div class="appItem">
+			   <table><tr><td width="80px"><img src="http://localhost:8080/market/resources/public/images/icon78.png"></img>
+			   <img src="http://localhost:8080/market/resources/public/images/star4.jpg"></img></td>
+			   <td><label class="app_l1">Star Chart</label><label class="app_l2">ESCAPIST GAMES LIMITED</label><label class="app_l3">The world wide best selling smart phone astronomy app Star Chart. The best se...</label>
+			   <img src="http://localhost:8080/market/resources/public/images/install.jpg"></img></td></tr></table>
+			   
+			   </div>
+			  
+			   </div>
+			</div>
+		</div>
+
+
+
+	</div>
+		
+	</body>
+</html>

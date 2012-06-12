@@ -11,11 +11,15 @@
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
 <link href="resources/public/styles/index.css?v=1.0" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.jsv=1.0"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.0"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="resources/public/scripts/utils.js?v=1.0"></script>
 <script type="text/javascript">
+function submit(id)
+{
+window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);//传入参数
+}
 	var _loadingICO;
 	$(function() {
 		chkLogin();
@@ -31,7 +35,7 @@
 			if (data) {
 				$('#catalog_con').empty();
 				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="">'+o.name+'</a></li>');
+					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 1>'+o.name+'</a></li>');
 				});
 				$('#catalog_con').append('<li>');
 			}
@@ -42,10 +46,10 @@
 				$('#clerk_recommend').empty();
 				$.each(data, function(i, o) {
 					if(i<5){
-						$('#freeTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+						$('#freeTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
 						+o.appName
 						+'</label><label class="label2">'
 						+o.developer
@@ -54,7 +58,7 @@
 						+'</span>)</div>'
 					);
 				});
-				$('#freeTop').append('<li class="more">全部热门免费应用</li>');
+				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2" >全部热门免费应用</a></li>');
 			}
 		});
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
@@ -63,10 +67,10 @@
 				$('#clerk_recommend_car').empty();
 				$.each(data, function(i, o) {
 					if(i<5){
-						$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a href="">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+						$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img src="'+o.icon+'" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1">'
 						+o.appName
 						+'</label><label class="label2">'
 						+o.developer
@@ -75,7 +79,7 @@
 						+'</span>)</div>'
 					);
 				});
-				$('#freeNewTop').append('<li class="more">全部热门免费新品</li>');
+				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2" >全部热门免费新品</a></li>');
 			}
 		});
 	});
@@ -175,7 +179,7 @@
 						</div>
 					</div>
 					<div class="carousel-more-link">
-						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 
@@ -191,7 +195,7 @@
 						</div>
 					</div>
 					<div class="carousel-more-link">
-						<a href="">查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 				</div>

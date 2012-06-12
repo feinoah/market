@@ -1,5 +1,6 @@
 package cn.com.carit.market.service.impl.app;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -103,4 +104,21 @@ public class AppCommentServiceImpl implements AppCommentService{
 		}
 		return appCommentDao.queryComment(appId, dgm);
 	}
+
+	@Override
+	public double queryAvgGrade(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appCommentDao.queryAvgGrade(appId);
+	}
+
+	@Override
+	public List<Map<String, Object>> statCommentGrade(int appId) {
+		if (appId<=0) {
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return appCommentDao.statCommentGrade(appId);
+	}
+	
 }

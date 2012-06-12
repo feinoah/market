@@ -423,6 +423,7 @@ public class PortalController{
 		}catch (Exception e) {
 			resultMap.put(Constants.ANSWER_CODE, -1);
 			log.error("add app comment error...");
+			e.printStackTrace();
 		}
 		return resultMap;
 	}
@@ -501,7 +502,7 @@ public class PortalController{
 	}
 	/**
 	 * 检测应用分类是否存在
-	 * <br>portal/app/catalog/check?appName=&local=cn|en
+	 * <br>portal/app/catalog/check?name=&local=cn|en
 	 * @param name
 	 * @param local
 	 * @return
@@ -509,5 +510,27 @@ public class PortalController{
 	@RequestMapping(value="app/catalog/check", method=RequestMethod.GET)
 	public @ResponseBody int checkCatalog(@RequestParam String name, @RequestParam String local){
 		return appCatalogService.checkCatalog(name, local);
+	}
+	
+	/**
+	 * 统计评论级别
+	 * <br>portal/app/comment/grade/stat/{appId}
+	 * @param appId
+	 * @return
+	 */
+	@RequestMapping(value="app/comment/grade/stat/{appId}", method=RequestMethod.GET)
+	public @ResponseBody List<Map<String, Object>> statCommentGrade(@PathVariable int appId){
+		return appCommentService.statCommentGrade(appId);
+	}
+	
+	/**
+	 * 获取应用评论的平均值
+	 * <br>portal/app/comment/grade/avg/{appId}
+	 * @param appId
+	 * @return
+	 */
+	@RequestMapping(value="app/comment/grade/avg/{appId}", method=RequestMethod.GET)
+	public @ResponseBody double queryAvgGrade(@PathVariable int appId){
+		return appCommentService.queryAvgGrade(appId);
 	}
 }

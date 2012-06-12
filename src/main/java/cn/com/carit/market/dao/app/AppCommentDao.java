@@ -1,5 +1,6 @@
 package cn.com.carit.market.dao.app;
 import java.util.List;
+import java.util.Map;
 
 import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.portal.PortalAppComment;
@@ -76,5 +77,18 @@ public interface AppCommentDao {
 	 */
 	JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm);
 	
+	/**
+	 * 获取应用平均评价
+	 * @param appId
+	 * @return
+	 */
 	double queryAvgGrade(int appId);
+	
+	/**
+	 * 统计评论级别
+	 * @param appId
+	 * @return
+	 */
+	List<Map<String, Object>> statCommentGrade(int appId);
+	
 }

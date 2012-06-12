@@ -57,12 +57,13 @@ public class ApplicationServiceImpl implements ApplicationService{
 			}
 			applicationDao.update(application);
 		}
-		// 保存版本信息
-		AppVersionFile version=application.getAppVersionFile();
 		if (StringUtils.hasText(application.getAppFilePath())) { // 更新文件了
+			// 保存版本信息
+			AppVersionFile version=new AppVersionFile();
 			version.setAppId(id);
 			version.setVersion(application.getVersion());
 			version.setFilePath(application.getAppFilePath());
+			version.setSize(application.getSize());
 			version.setNewFeatures(application.getFeatures());
 			version.setEnNewFeatures(application.getEnFeatures());
 			version.setStatus(application.getStatus());

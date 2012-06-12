@@ -197,6 +197,7 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 			return jdbcTemplate.queryForInt(sql, field);
 		} catch (Exception e) {
 			log.warn("not exist record of this field["+field+"]");
+			log.warn(e.getMessage());
 		}
 		return 0;
 	}

@@ -1,0 +1,230 @@
+@charset "utf-8";
+*{ margin:0 auto; padding:0px;}
+body {
+text-align:center; 
+width:100%; 
+height:auto;
+font: 12px 宋体, Arial;
+color: #000000;
+letter-spacing: 0px;
+line-height: 150%;
+}
+
+ul {
+	list-style-type: none; margin:0 auto; padding:0;
+	background:#F8F8F8;
+	background:-moz-linear-gradient(top,#CACACA,#F8F8F8);/*FF*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#CACACA), to(#F8F8F8));/*Chrome*/
+	background-image:-ms-radial-gradient(#CACACA 0%, ##F8F8F8 100%);/*IE10*/
+}
+img{ border:none}
+button{border:none}
+span {display:-moz-inline-box; display:inline-block;}
+label {display:-moz-inline-box; display:inline-block;}
+a {
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 12px;
+	/*去掉IE下虚线*/
+	hide-focus: expression(this.hideFocus=true); /* for ie 5+ */ 
+	outline: none; /* for firefox 1.5 + */ 
+}
+a:hover {
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 12px;
+}
+a:visited {
+	font-size: 12px;
+	text-decoration: none;
+}
+a:active{
+	text-decoration: none;
+	font-size: 12px;
+}
+a:LINK{
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 12px;
+}
+a:AFTER{
+	text-decoration: none;
+	font-size: 12px;
+}
+
+div{
+/*border:1px solid #ff0000;*/
+}
+
+#header{
+width:100%;
+}
+#nav{
+width:100%;
+background:#9C9C9C;
+}
+#nav div{height:44px; text-align:right;}
+#lolginAfter{ display:none;}
+#nav button{
+float:right;
+margin-right:15px;
+display:block;
+width:78px;
+height:44px;
+background:url(../images/btn.png);
+}
+#nav button:hover{
+background:url(../images/btn_hv.png);
+}
+#nav span{display:-moz-inline-box; display:inline-block;}
+
+#searchContainer{
+width:100%;
+height:82px;
+background:url(../images/TITEL.png);
+}
+#logo{
+width:950px;
+height:62px;
+margin-top:10px;
+margin-left:160px;
+background:url(../images/logo.png) no-repeat;
+}
+
+#logo input{
+width:319px;
+height:47px;
+font-size:24px;
+margin-left:280px;
+margin-top:7px;
+background:url(../images/search_input.png);
+}
+#logo button{
+float:right;
+margin-top:7px;
+margin-right:80px;
+width:78px;
+height:44px;
+background:url(../images/search.png);
+}
+#logo button:hover{
+background:url(../images/search_hv.png);
+}
+
+#footer{
+margin-top:3px;
+background:url(../images/TITEL.png);
+height:82px;
+width:100%;
+}
+
+.login{
+	background-color: #FFF;
+	border: 1px solid #d5cfc2;
+	font-size: 14px;
+	font-weight: bold;
+	vertical-align: middle
+}
+.reg {
+	text-align: left;
+	font-size: 14px;
+	line-height: 25px;
+	overflow: hidden;
+	padding: 40px 5px;
+}
+.l_button,.r_button {
+	background: url(../images/login_button.png);
+	background-repeat: no-repeat;
+	width: 118px;
+	height: 39px;
+	border: none;
+	cursor: pointer;
+	display: block;
+	float: left;
+	text-indent: -9000px
+}
+
+.l_button {
+	background-position: 0 -60px;
+}
+
+.r_button {
+	background-position: -138px -60px;
+	margin-right: 4px
+}
+
+.l_button:hover {
+	background-position: 0 0;
+}
+
+.r_button:hover {
+	background-position: -138px 0;
+}
+
+.f_reg_but {
+	margin: 10px 0 0 115px
+}
+
+
+.reg dl {
+	padding-left: 10px;
+	font-size: 14px;
+}
+
+.reg dl dt {
+	margin-top: 15px
+}
+
+.reg dl dd {
+	padding: 3px 0
+}
+
+.reg .title {
+	width: 100px;
+	display: inline-block;
+	text-align: right;
+	padding-right: 10px
+}
+.reg .img {
+	position: absolute
+}
+.clew_txt {
+	display: inline-block;
+	padding: 7px 0 0 15px;
+	font-size: 12px;
+}
+
+.onShow,.onFocus,.onError,.onCorrect,.onLoad,.onSuccess {
+	padding-left: 30px;
+	font-size: 12px;
+	height: 25px;
+	display: inline-block;
+	line-height: 25px;
+	vertical-align: middle;
+	overflow: hidden;
+	margin-left: 6px
+}
+.onCorrect{
+	background: url(../images/onCorrect.gif) no-repeat;
+	color: #33ff00;
+}
+.onError{
+	background: url(../images/onError.gif) no-repeat;
+	color: #ff0000;
+}
+.onFocus{
+	background: url(../images/onFocus.gif) no-repeat;
+	color: #0000ff;
+}
+.onLoad{
+	background: url(../images/onLoad.gif) no-repeat;
+	color: #848484;
+}
+.onShow{
+	background: url(../images/onShow.gif) no-repeat;
+	color: #848484;
+}
+.onSuccess{
+	background: url(../images/onSuccess.gif) no-repeat;
+	color: #33ff00;
+}

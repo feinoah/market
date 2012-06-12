@@ -266,6 +266,7 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 			return jdbcTemplate.queryForInt(sql, moduleName);
 		} catch (Exception e) {
 			log.warn("not exist record of this moduleName["+moduleName+"]");
+			log.warn(e.getMessage());
 		}
 		return 0;
 	}

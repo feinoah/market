@@ -169,7 +169,7 @@
 				</tr>
 				<tr>
 					<td><form:label for="comment" path="comment" cssClass="mustInput">内容：</form:label></td>
-					<td colspan="3"><form:textarea path="comment" cssClass="easyui-validatebox" required="true" validType="maxLength[250]" maxLen="250"/></td>
+					<td colspan="3"><form:textarea path="comment" cssClass="easyui-validatebox" required="true" validType="maxLength[500]" maxLen="500"/></td>
 				</tr>
 				</table>
 				<form:hidden path="id"/>

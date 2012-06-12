@@ -248,6 +248,7 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		try {
 			result=jdbcTemplate.queryForInt(sql, name);
 		} catch (Exception e) {
+			log.warn("no catalog name of ["+name+"]...");
 			log.warn(e.getMessage());
 		}
 		return result;

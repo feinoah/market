@@ -430,7 +430,7 @@ public class AdminController{
 	 * @throws Exception
 	 */
 	@RequestMapping(value="back/permission/{type}", method=RequestMethod.GET)
-	public @ResponseBody int checkExisted(@PathVariable String type, @RequestParam String name, @RequestParam String nickName) throws Exception{
+	public @ResponseBody int checkExisted(@PathVariable String type, @RequestParam(required=false) String name, @RequestParam(required=false) String nickName) throws Exception{
 		/*if ("field".equalsIgnoreCase(type)) {
 			return baseFieldService.checkField(name);
 		} else*/ if ("module".equalsIgnoreCase(type)) {

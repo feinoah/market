@@ -23,8 +23,6 @@
 				$('#password').attr('disabled',false);
 				$('#email_edit').attr('disabled',false);
 			}})
-			checkExisted($('#email_edit'),"${ctx}/back/permission/user?nickName=&name=");
-			checkExisted($('#nickName_edit'),"${ctx}/back/permission/user?name=&nickName=");
 			$.ajaxSettings.async = false;
 			$.getJSON('${ctx}/back/field/query/gender', function(data) {
 				if(data){
@@ -55,6 +53,9 @@
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
+			});
+			$('#email_edit').blur(function(){
+				checkExisted($(this),"${ctx}/back/permission/user?name=");
 			});
 		});
 		function edit() {
@@ -220,7 +221,7 @@
 						<td><form:label	for="email" path="email" id="emailLabel" cssClass="mustInput">邮箱：</form:label></td>
 						<td><form:input path="email" id="email_edit" cssClass="easyui-validatebox" required="true" validType="email"/></td>
 						<td><form:label	for="nickName" path="nickName" id="nickNameLabel" cssClass="mustInput">昵称：</form:label></td>
-						<td><form:input path="nickName" id="nickName_edit" required="true" cssClass="easyui-validatebox"/></td>
+						<td><form:input path="nickName" id="nickName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/back/permission/user?name=','nickName']"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="realName" path="realName">真实姓名：</form:label></td>

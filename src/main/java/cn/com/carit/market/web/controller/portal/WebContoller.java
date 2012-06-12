@@ -3,6 +3,7 @@ package cn.com.carit.market.web.controller.portal;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +13,7 @@ import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.ApplicationService;
 
-@RequestMapping(value="")
+@Controller
 public class WebContoller {
 
 	@Resource
@@ -29,8 +30,8 @@ public class WebContoller {
 	 * @return
 	 */
 	@RequestMapping(value="{local}/{limit}", method=RequestMethod.GET)
-	public String index(@PathVariable int limit, @PathVariable String local
-			, Model model, HttpServletRequest request){
+	public String index(@PathVariable String local, @PathVariable int limit, 
+			Model model, HttpServletRequest request){
 		model.addAttribute("catalogList", appCatalogService.queryAll(local));
 		model.addAttribute("hotFreeList", applicationService.queryHotFree(local, limit));
 		model.addAttribute("hotNewFreeList", applicationService.queryHotNewFree(local, limit));

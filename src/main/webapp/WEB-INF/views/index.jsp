@@ -123,7 +123,7 @@ position_fixed(document.getElementById("ie6-warning"),0, 0);
 				<div class="rank">
 					<ul>
 						<c:forEach items="${hotFreeList}" var="hotFree" varStatus="stat" begin="0" end="7">
-						<li><span>${stat.index}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
+						<li><span>${stat.count}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
 						</c:forEach>
 					</ul>
 					<div class="more">
@@ -136,8 +136,8 @@ position_fixed(document.getElementById("ie6-warning"),0, 0);
 			<!-- 分类 -->
 			<div class="content" style="display: none;">
 				<ul class="catalog">
-					<c:forEach items="${catalogList}" var="catalog" varStatus="stat">
-					<li><span>${stat.index}</span><a href="#">${catalog.name}</a></li>
+					<c:forEach items="${catalogList}" var="catalog" varStatus="stat" begin="0" end="9">
+					<li><span>${stat.count}</span><a href="#">${catalog.name}</a></li>
 					</c:forEach>
 				</ul>
 			</div>
@@ -145,7 +145,7 @@ position_fixed(document.getElementById("ie6-warning"),0, 0);
 			<div class="content" style="display: none;">
 				<ul class="hotfree">
 					<c:forEach items="${hotFreeList}" var="hotFree" varStatus="stat" begin="0" end="9">
-					<li><span>${stat.index}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
+					<li><span>${stat.count}</span><a href="#">${hotFree.appName}</a><label>${hotFree.developer}</label></li>
 					</c:forEach>
 				</ul>
 			</div>

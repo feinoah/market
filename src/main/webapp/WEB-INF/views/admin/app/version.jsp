@@ -184,10 +184,10 @@
 					<td colspan="3">
 						<div id="descTabs" class="easyui-tabs" style="width:470px;height:120px;">  
 							<div title="中文" style="padding:3px;">  
-								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 							</div>  
 							<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 							</div> 
 						</div>  
 					</td>

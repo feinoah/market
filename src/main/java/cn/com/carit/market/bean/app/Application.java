@@ -108,13 +108,6 @@ public class Application implements Serializable {
 	 */
 	private Date updateTime;
 
-	/**
-	 * 版本文件
-	 */
-	@JsonIgnore
-	private AppVersionFile appVersionFile;
-
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public String[] getImageList() {
 		if (this.images != null && this.images.trim().length() > 0) {
 			return this.images.trim().split(";");
@@ -306,14 +299,6 @@ public class Application implements Serializable {
 
 	public void setUpdateTime(Date updateTime) {
 		this.updateTime = updateTime;
-	}
-
-	public AppVersionFile getAppVersionFile() {
-		return appVersionFile;
-	}
-
-	public void setAppVersionFile(AppVersionFile appVersionFile) {
-		this.appVersionFile = appVersionFile;
 	}
 
 	public String getFeatures() {

@@ -77,7 +77,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setSize(rs.getString("size"));
 			application.setAppFilePath(rs.getString("app_file_path"));
 			application.setPlatform(rs.getString("platform"));
-			application.setSupportLanguages(rs.getInt("support_languages"));
+			application.setSupportLanguages(rs.getString("support_languages"));
 			application.setPrice(rs.getDouble("price"));
 			application.setDownCount(rs.getInt("down_count"));
 			application.setAppLevel(rs.getInt("app_level"));
@@ -233,7 +233,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		}
 		if (StringUtils.hasText(application.getFeatures())) {
 			sql.append(", en_features=?");
-			args.add(application.getFeatures());
+			args.add(application.getEnFeatures());
 		}
 		sql.append(" where id=?");
 		args.add(application.getId());
@@ -485,9 +485,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			args.add(application.getPlatform());
 			argTypes.add(12);// java.sql.Types type
 		}
-		if (application.getSupportLanguages() != null) {
-			sql.append(" and support_languages=?");
-			countSql.append(" and support_languages=?");
+		if (StringUtils.hasText(application.getSupportLanguages())) {
+			sql.append(" and support_languages like CONCAT('%',?,'%')");
+			countSql.append(" and support_languages like CONCAT('%',?,'%')");
 			args.add(application.getSupportLanguages());
 			argTypes.add(4);// java.sql.Types type
 		}
@@ -591,6 +591,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		try {
 			result=jdbcTemplate.queryForInt(sql, appName);
 		} catch (Exception e) {
+			log.warn("no application name of ["+appName+"]...");
 			log.warn(e.getMessage());
 		}
 		return result;

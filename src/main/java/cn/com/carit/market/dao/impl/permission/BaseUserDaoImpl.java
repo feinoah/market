@@ -293,6 +293,7 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 			return queryForInt(sql, args, argTypes);
 		} catch (Exception e) {
 			log.warn("not exist record of email["+email+"] or nickName["+nickName+"]");
+			log.warn(e.getMessage());
 		}
 		return 0;
 	}

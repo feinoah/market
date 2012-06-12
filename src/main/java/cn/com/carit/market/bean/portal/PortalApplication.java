@@ -68,7 +68,7 @@ public class PortalApplication implements Serializable {
 	/**
 	 * 支持语言
 	 */
-	private Integer supportLanguages;
+	private String supportLanguages;
 	/**
 	 * price
 	 */
@@ -176,11 +176,11 @@ public class PortalApplication implements Serializable {
 		this.platform = platform;
 	}
 
-	public Integer getSupportLanguages() {
+	public String getSupportLanguages() {
 		return supportLanguages;
 	}
 
-	public void setSupportLanguages(Integer supportLanguages) {
+	public void setSupportLanguages(String supportLanguages) {
 		this.supportLanguages = supportLanguages;
 	}
 

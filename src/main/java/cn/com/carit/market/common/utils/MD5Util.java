@@ -116,7 +116,7 @@ public class MD5Util {
 
 	/**
 	 * main方法用于测试
-	 *//*
+	 */
 	public static void main(String[] args) {
 		// 字符'a'的MD5码是0cc175b9c0f1b6a831c399e269772661,如果是，则成功。
 		try {
@@ -126,5 +126,9 @@ public class MD5Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}*/
+		String [] imageList="images/Sina Weibo_3802475497968_1.jpg;images/Sina Weibo_3802475497968_2.jpg;images/Sina Weibo_3802475497968_3.jpg;images/Sina Weibo_3802475497968_4.jpg;images/Sina Weibo_3802475497968_5.jpg".split(";");
+		for (String str : imageList) {
+			System.out.println(str);
+		}
+	}
 }
