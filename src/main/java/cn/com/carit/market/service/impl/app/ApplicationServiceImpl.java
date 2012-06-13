@@ -3,6 +3,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import cn.com.carit.market.service.app.ApplicationService;
 @Service
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class ApplicationServiceImpl implements ApplicationService{
+	private final Logger log = Logger.getLogger(getClass());
 	@Resource
 	private ApplicationDao applicationDao;
 	@Resource
@@ -70,6 +72,22 @@ public class ApplicationServiceImpl implements ApplicationService{
 			appVersionFileDao.add(version);
 		}
 		return id;
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int updateDownCount(int id, int downCount) {
+		if (id<=0) {
+			throw new IllegalArgumentException("id must be bigger than 0...");
+		}
+		if(downCount<=0){
+			log.warn("downCount must be bigger than 0...");
+			return 0;
+		}
+		Application application=new Application();
+		application.setId(id);
+		application.setDownCount(downCount);
+		return applicationDao.update(application);
 	}
 
 	@Override

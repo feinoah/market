@@ -25,6 +25,8 @@
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
+			checkExisted($('#name_edit'),"${ctx}/portal/app/catalog/check?local=cn&name=");
+			checkExisted($('#enName_edit'),"${ctx}/portal/app/catalog/check?local=cn&name=");
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -154,11 +156,11 @@
 				<table>
 					<tr>
 						<td><form:label	for="name" path="name"  cssClass="mustInput">分类名称：</form:label></td>
-						<td><form:input path="name" id="name_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/catalog/check?local=cn','name']"/></td>
+						<td><form:input path="name" id="name_edit" cssClass="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/catalog/check?local=en','name']"/></td>
+						<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td><form:label for="displayIndex" path="displayIndex" cssClass="mustInput">顺序：</form:label></td>

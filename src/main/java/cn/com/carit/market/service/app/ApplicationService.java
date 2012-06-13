@@ -19,6 +19,14 @@ public interface ApplicationService {
 	int saveOrUpdate(Application application);
 	
 	/**
+	 * 更新下载次数
+	 * @param id
+	 * @param downCount
+	 * @return
+	 */
+	int updateDownCount(int id, int downCount);
+	
+	/**
 	 * 删除
 	 * @param id
 	 * @return

@@ -9,6 +9,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.apache.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 /**
  * 使用java.security.MessageDigest类写的一个工具类用来获取MD5码
@@ -130,5 +131,7 @@ public class MD5Util {
 		for (String str : imageList) {
 			System.out.println(str);
 		}
+		System.out.println(StringUtils.hasText(new StringBuffer().toString()));
+		System.out.println(Math.rint(7.0/2));
 	}
 }

@@ -229,6 +229,20 @@ function gradeFormatter(v){
 	}
 	return result;
 }
+
+function appLevelFormatter(v){
+	var result='';
+	for(var i=1;i<=v;i++){
+		result+='★';
+	}
+	if(v<5){
+		v=5-v;
+		for(var i=1;i<=v;i++){
+			result+='☆';
+		}
+	}
+	return result;
+}
 function checkEditControl(url){
 	$.getJSON(url, function(data) {
 		if(data.save==0&&data.del==0){
@@ -246,16 +260,16 @@ function checkEditControl(url){
 }
 
 function checkExisted(item,url){
-	if(item.val()!=''){
+	item.change(function(){
+		if(item.val()!=''){
 		$.getJSON(url+item.val(), function(data) {
 			if(data>0){
-				$.messager.alert('提示','该邮箱地址已注册!','info');
+				$.messager.alert('提示','重复记录，请修正!','info');
 				item.val('').select();
-				return false;
 			}
 		});
-	}
-	return true;
+		}
+	});
 }
 
 //获得字符串长度

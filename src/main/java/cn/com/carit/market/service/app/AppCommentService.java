@@ -70,11 +70,11 @@ public interface AppCommentService {
 	JsonPage<PortalAppComment> queryComment(int appId, DataGridModel dgm);
 	
 	/**
-	 * 获取应用平均评价
+	 * 统计评论
 	 * @param appId
 	 * @return
 	 */
-	double queryAvgGrade(int appId);
+	Map<String,Object> statComment(int appId);
 	
 	/**
 	 * 统计评论级别

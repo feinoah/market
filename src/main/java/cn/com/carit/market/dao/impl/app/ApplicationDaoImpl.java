@@ -553,7 +553,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			viewName="v_application_en";
 		}
 		String sql = "select * from "+viewName+" where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		log.debug(String.format("\n%1$s\n", sql, id));
 		return query(sql, id, portalRowMapper);
 	}
 

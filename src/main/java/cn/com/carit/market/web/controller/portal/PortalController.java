@@ -323,7 +323,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="catalog/all", method=RequestMethod.GET)
 	@ResponseBody
-	public List<PortalAppCatalog> allCatalog(@RequestParam String local){
+	public List<PortalAppCatalog> allCatalog(@RequestParam(required=false) String local){
 		return appCatalogService.queryAll(local);
 	}
 	
@@ -353,7 +353,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public PortalApplication viewApp(@PathVariable int appId, @RequestParam String local){
+	public PortalApplication viewApp(@PathVariable int appId, @RequestParam(required=false) String local){
 		return applicationService.queryAppById(appId, local);
 	}
 	
@@ -366,7 +366,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/versions/{appId}", method=RequestMethod.GET)
 	@ResponseBody
-	public JsonPage<PortalAppVersionFile> queryAppVersions(@PathVariable int appId,  @RequestParam String local, DataGridModel dgm) {
+	public JsonPage<PortalAppVersionFile> queryAppVersions(@PathVariable int appId,  @RequestParam(required=false) String local, DataGridModel dgm) {
 		PortalAppVersionFile appVersionFile=new PortalAppVersionFile();
 		appVersionFile.setAppId(appId);
 		appVersionFile.setLocal(local);
@@ -453,8 +453,7 @@ public class PortalController{
 			return null;
 		}
 		// 下载次数+1
-		app.setDownCount(app.getDownCount()+1);
-		applicationService.saveOrUpdate(app);
+		applicationService.updateDownCount(appId, app.getDownCount()+1);
 		
 		AppDownloadLog downlog=new AppDownloadLog();
 		downlog.setAccountId(account.getId());
@@ -472,7 +471,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/hot/free/{limit}", method=RequestMethod.GET)
 	@ResponseBody
-	public List<PortalApplication> queryHotFree(@PathVariable int limit, @RequestParam String local){
+	public List<PortalApplication> queryHotFree(@PathVariable int limit, @RequestParam(required=false) String local){
 		return applicationService.queryHotFree(local, limit);
 	}
 	
@@ -485,7 +484,7 @@ public class PortalController{
 	 */
 	@RequestMapping(value="app/hot/free/new/{limit}", method=RequestMethod.GET)
 	@ResponseBody
-	public List<PortalApplication> queryHotNewFree(@PathVariable int limit, @RequestParam String local){
+	public List<PortalApplication> queryHotNewFree(@PathVariable int limit, @RequestParam(required=false) String local){
 		return applicationService.queryHotNewFree(local, limit);
 	}
 	
@@ -497,7 +496,7 @@ public class PortalController{
 	 * @return
 	 */
 	@RequestMapping(value="app/check", method=RequestMethod.GET)
-	public @ResponseBody int checkAppliction(@RequestParam String appName, @RequestParam String local){
+	public @ResponseBody int checkAppliction(@RequestParam String appName, @RequestParam(required=false) String local){
 		return applicationService.checkApplication(appName, local);
 	}
 	/**
@@ -508,29 +507,32 @@ public class PortalController{
 	 * @return
 	 */
 	@RequestMapping(value="app/catalog/check", method=RequestMethod.GET)
-	public @ResponseBody int checkCatalog(@RequestParam String name, @RequestParam String local){
+	public @ResponseBody int checkCatalog(@RequestParam String name, @RequestParam(required=false) String local){
 		return appCatalogService.checkCatalog(name, local);
 	}
 	
 	/**
 	 * 统计评论级别
-	 * <br>portal/app/comment/grade/stat/{appId}
+	 * <br>portal/app/comment/grade/group/{appId}
 	 * @param appId
 	 * @return
 	 */
-	@RequestMapping(value="app/comment/grade/stat/{appId}", method=RequestMethod.GET)
+	@RequestMapping(value="app/comment/grade/group/{appId}", method=RequestMethod.GET)
 	public @ResponseBody List<Map<String, Object>> statCommentGrade(@PathVariable int appId){
 		return appCommentService.statCommentGrade(appId);
 	}
 	
 	/**
 	 * 获取应用评论的平均值
-	 * <br>portal/app/comment/grade/avg/{appId}
+	 * <br>portal/app/comment/grade/stat/{appId}
 	 * @param appId
 	 * @return
+	 * <table>
+	 * 	<tr><th></th><th></th></tr>
+	 * </table>
 	 */
-	@RequestMapping(value="app/comment/grade/avg/{appId}", method=RequestMethod.GET)
-	public @ResponseBody double queryAvgGrade(@PathVariable int appId){
-		return appCommentService.queryAvgGrade(appId);
+	@RequestMapping(value="app/comment/grade/stat/{appId}", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> statComment(@PathVariable int appId){
+		return appCommentService.statComment(appId);
 	}
 }

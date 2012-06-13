@@ -12,14 +12,16 @@
 			$('#tree').tree({
 				method:'get',
 				checkbox:true,
+				state:'close',
 				url: '${ctx}/back/module/query/all?t='+(new Date().getTime()),
 				onClick: function(node){
 					if(node.attributes.url&&node.attributes.url!=null){
 						addTab(node.text, '${ctx}/'+node.attributes.url);
 					}
 				}
-			});		
+			});	
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/role');
+			checkExisted($('#roleName_edit'),"${ctx}/back/permission/role?name=");
 			$('#edit_submit_r').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){
@@ -181,7 +183,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="roleName" path="roleName"  cssClass="mustInput">名称：</form:label></td>
-						<td><form:input path="roleName" id="roleName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/back/permission/role','name']"/></td>
+						<td><form:input path="roleName" id="roleName_edit" cssClass="easyui-validatebox" required="true"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="roleDesc" path="roleDesc" >描述：</form:label></td>

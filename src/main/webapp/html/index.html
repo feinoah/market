@@ -18,7 +18,7 @@
 <script type="text/javascript">
 function submit(id)
 {
-window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);//传入参数
+window.open("html/appDetail.html?inputStr=" + id);//传入参数
 }
 	var _loadingICO;
 	$(function() {
@@ -35,7 +35,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 			if (data) {
 				$('#catalog_con').empty();
 				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 1>'+o.name+'</a></li>');
+					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="html/allApp.html?inputStr='+o.id+'">'+o.name+'</a></li>');
 				});
 				$('#catalog_con').append('<li>');
 			}
@@ -49,7 +49,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						$('#freeTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend').append(
-						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
 						+o.appName
 						+'</label><label class="label2">'
 						+o.developer
@@ -58,7 +58,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						+'</span>)</div>'
 					);
 				});
-				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2" >全部热门免费应用</a></li>');
+				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=" + 2" >全部热门免费应用</a></li>');
 			}
 		});
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
@@ -70,7 +70,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img src="'+o.icon+'"  class="iconImg" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1">'
 						+o.appName
 						+'</label><label class="label2">'
 						+o.developer
@@ -79,7 +79,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						+'</span>)</div>'
 					);
 				});
-				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2" >全部热门免费新品</a></li>');
+				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=" + 2" >全部热门免费新品</a></li>');
 			}
 		});
 	});
@@ -179,7 +179,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						</div>
 					</div>
 					<div class="carousel-more-link">
-						<a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 
@@ -195,7 +195,7 @@ window.open("http://localhost:8080/market/html/appDetail.html?inputStr=" + id);/
 						</div>
 					</div>
 					<div class="carousel-more-link">
-						<a href="http://localhost:8080/market/html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 				</div>

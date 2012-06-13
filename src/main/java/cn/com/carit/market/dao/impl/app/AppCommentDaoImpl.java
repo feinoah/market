@@ -286,8 +286,7 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));
 		return jsonPage;
 	}
-
-	@Override
+	
 	public double queryAvgGrade(int appId) {
 		String sql="select avg(grade) from t_app_comment where app_id=?";
 		log.debug(String.format("\n%1$s\n", sql));
@@ -298,6 +297,19 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 			log.warn(e.getMessage());
 		}
 		return 0;
+	}
+
+	@Override
+	public Map<String,Object> statComment(int appId) {
+		String sql="select count(1) count, avg(grade) avg, sum(grade) sum from t_app_comment where app_id=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.queryForMap(sql, appId);
+		} catch (Exception e) {
+			log.warn("no comment of app["+appId+"]...");
+			log.warn(e.getMessage());
+		}
+		return null;
 	}
 
 	@Override

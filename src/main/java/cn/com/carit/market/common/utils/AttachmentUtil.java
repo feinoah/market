@@ -106,6 +106,7 @@ public class AttachmentUtil {
 	}
 	
 	public static boolean deleteFile(String fileName){
+		logger.info("delete file["+fileName+"]");
 		File file = new File(fileName);
 		return file.delete();
 	}

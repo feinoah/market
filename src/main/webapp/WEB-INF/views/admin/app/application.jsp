@@ -154,6 +154,8 @@
 						}
 				    }
 				}).submit();
+				checkExisted($('#appName_edit'),"${ctx}/portal/app/check?local=cn&appName=");
+				checkExisted($('#enName_edit'),"${ctx}/portal/app/check?local=en&appName=");
 			});
 			$('#edit_submit_version').bind('click',function(){
 				$('#editVersionForm').form({
@@ -394,7 +396,7 @@
 						<th field="platform" width="100" align="center" formatter="fieldFormatter">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
-						<th field="appLevel" width="80" align="center" formatter="gradeFormatter">应用分级</th>
+						<th field="appLevel" width="80" align="center" formatter="appLevelFormatter">应用评级</th>
 						<th field="description" width="80" align="center"  hidden="true">描述</th>
 						<th field="enDescription" width="80" align="center"  hidden="true">描述</th>
 						<th field="permissionDesc" width="80" hidden="true">权限描述</th>
@@ -411,9 +413,9 @@
 						<table>
 							<tr>
 								<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
-								<td><form:input path="appName" id="appName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/check?local=cn','appName']"/></td>
+								<td><form:input path="appName" id="appName_edit" cssClass="easyui-validatebox" required="true"/></td>
 								<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" validType="gRemote['${ctx}/portal/app/check?local=en','appName']"/></td>
+								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true"/></td>
 							</tr>
 							<tr>
 								<td><form:label	for="developer" path="developer"  cssClass="mustInput">开发商：</form:label></td>

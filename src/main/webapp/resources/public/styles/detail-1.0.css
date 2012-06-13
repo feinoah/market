@@ -1,0 +1,114 @@
+@charset "utf-8";
+
+.adContainer{
+margin-top:5px;
+width:1024px;
+height:318px;
+overflow:hidden;
+}
+
+.appIcon{
+position:relative;
+float:left;
+width:266px;
+height:318px;
+border:1px solid #2A4A5C;
+background:url(../images/app_icon_bg.png);
+}
+
+.leftDetail{
+position:relative;
+float:left;
+width:266px;
+height:1110px;
+border:1px solid #2A4A5C;
+}
+.leftDetail .title{
+width:230px;
+text-align:left;
+font-size:18px;
+font-weight:bold;
+margin-top:15px;
+padding-bottom:15px;
+border-bottom:1px solid #CCCCCC;
+}
+.leftTop{
+position:relative;
+width:266px;
+height:auto;
+}
+.leftBottom{
+position:relative;
+margin-top:5px;
+width:266px;
+height:550px;
+}
+.leftTop ul, .leftBottom ul {
+position:relative;
+width:230px;
+background:none;
+}
+.leftTop ul li, .leftBottom ul li{
+position:relative;
+height:80px;
+padding:8px 5px;
+border-bottom:1px solid #CCCCCC;
+}
+.leftTop ul li img, .leftBottom ul li img{
+float:left;
+width:80px;
+height:80px;
+}
+.appBrief{
+float:right;
+text-align:left;
+width:130px;
+height:78px;
+/*border:1px solid #2A4A5C;*/
+}
+.appBrief h3{
+font-size:12px;
+}
+.appBrief label{
+width:130px;
+color:#808080;
+}
+
+.rightDetail{
+position:relative;
+float:right;
+width:750px;
+height:1110px;
+border:1px solid #2A4A5C;
+}
+.rightDetail .navTab{
+position:relative;
+/*top:-2px;*/
+height:48px;
+font-size:18px;
+font-weight:bold;
+color:#0000ef;
+}
+.rightDetail .navTab li{
+float:left;
+position:relative;
+/*top:-22px;*/
+padding-top:13px;
+cursor:pointer;
+width:187px;
+height:32px;
+}
+.rightDetail .navTab .currTab{
+color:#ffffff;
+background:#0404B4;
+	background:-moz-linear-gradient(top,#2E64FE,#0404B4);/*FF*/
+	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#2E64FE), to(#0404B4));/*Chrome*/
+	background-image:-ms-radial-gradient(#2E64FE 0%, #0404B4 100%);/*IE10*/
+}
+.rightDetail .navTab li:hover{
+color:#ffffff;
+background:#00BFFF;
+background:-moz-linear-gradient(top,#00BFFF,#086A87);/*FF*/
+background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#00BFFF), to(#086A87));/*Chrome*/
+background-image:-ms-radial-gradient(#00BFFF 0%, #086A87 100%);/*IE10*/
+}

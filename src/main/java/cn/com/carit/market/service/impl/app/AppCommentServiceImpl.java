@@ -47,7 +47,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 		double avg=appCommentDao.queryAvgGrade(appComment.getAppId());
 		Application application=new Application();
 		application.setId(appComment.getAppId());
-		application.setAppLevel((int) Math.rint(avg));
+		application.setAppLevel((int) Math.rint(avg/2));
 		applicationDao.update(application);
 	}
 
@@ -106,11 +106,11 @@ public class AppCommentServiceImpl implements AppCommentService{
 	}
 
 	@Override
-	public double queryAvgGrade(int appId) {
+	public Map<String,Object> statComment(int appId) {
 		if (appId<=0) {
 			throw new IllegalArgumentException("appId must be bigger than 0...");
 		}
-		return appCommentDao.queryAvgGrade(appId);
+		return appCommentDao.statComment(appId);
 	}
 
 	@Override

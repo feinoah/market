@@ -85,6 +85,13 @@ public interface AppCommentDao {
 	double queryAvgGrade(int appId);
 	
 	/**
+	 * 统计评论
+	 * @param appId
+	 * @return
+	 */
+	Map<String,Object> statComment(int appId);
+	
+	/**
 	 * 统计评论级别
 	 * @param appId
 	 * @return
