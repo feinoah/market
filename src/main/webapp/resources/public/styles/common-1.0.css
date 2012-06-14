@@ -19,7 +19,7 @@ ul {
 	background:#F8F8F8;
 	background:-moz-linear-gradient(top,#CACACA,#F8F8F8);/*FF*/
 	background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#CACACA), to(#F8F8F8));/*Chrome*/
-	background-image:-ms-radial-gradient(#CACACA 0%, ##F8F8F8 100%);/*IE10*/
+	background-image:-ms-radial-gradient(#CACACA 0%, #F8F8F8 100%);/*IE10*/
 }
 img{ border:none}
 button{border:none}
@@ -171,115 +171,4 @@ margin-top:3px;
 background:url(../images/TITEL.png);
 height:82px;
 width:100%;
-}
-
-.login{
-	background-color: #FFF;
-	border: 1px solid #d5cfc2;
-	font-size: 14px;
-	font-weight: bold;
-	vertical-align: middle
-}
-.reg {
-	text-align: left;
-	font-size: 14px;
-	line-height: 25px;
-	overflow: hidden;
-	padding: 40px 5px;
-}
-.l_button,.r_button {
-	background: url(../images/login_button.png);
-	background-repeat: no-repeat;
-	width: 118px;
-	height: 39px;
-	border: none;
-	cursor: pointer;
-	display: block;
-	float: left;
-	text-indent: -9000px
-}
-
-.l_button {
-	background-position: 0 -60px;
-}
-
-.r_button {
-	background-position: -138px -60px;
-	margin-right: 4px
-}
-
-.l_button:hover {
-	background-position: 0 0;
-}
-
-.r_button:hover {
-	background-position: -138px 0;
-}
-
-.f_reg_but {
-	margin: 10px 0 0 115px
-}
-
-
-.reg dl {
-	padding-left: 10px;
-	font-size: 14px;
-}
-
-.reg dl dt {
-	margin-top: 15px
-}
-
-.reg dl dd {
-	padding: 3px 0
-}
-
-.reg .title {
-	width: 100px;
-	display: inline-block;
-	text-align: right;
-	padding-right: 10px
-}
-.reg .img {
-	position: absolute
-}
-.clew_txt {
-	display: inline-block;
-	padding: 7px 0 0 15px;
-	font-size: 12px;
-}
-
-.onShow,.onFocus,.onError,.onCorrect,.onLoad,.onSuccess {
-	padding-left: 30px;
-	font-size: 12px;
-	height: 25px;
-	display: inline-block;
-	line-height: 25px;
-	vertical-align: middle;
-	overflow: hidden;
-	margin-left: 6px
-}
-.onCorrect{
-	background: url(../images/onCorrect.gif) no-repeat;
-	color: #33ff00;
-}
-.onError{
-	background: url(../images/onError.gif) no-repeat;
-	color: #ff0000;
-}
-.onFocus{
-	background: url(../images/onFocus.gif) no-repeat;
-	color: #0000ff;
-}
-.onLoad{
-	background: url(../images/onLoad.gif) no-repeat;
-	color: #848484;
-}
-.onShow{
-	background: url(../images/onShow.gif) no-repeat;
-	color: #848484;
-}
-.onSuccess{
-	background: url(../images/onSuccess.gif) no-repeat;
-	color: #33ff00;
 }

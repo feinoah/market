@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
 		<script type="text/javascript">
 		var catalogs;
 		var tag=0;
@@ -427,18 +427,18 @@
 								<td><label	for="version" class="mustInput">版本：</label></td>
 								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
 								<td><label for="catalogId" class="mustInput">分类：<label></td>
-								<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-validatebox" editable='false'/></td>
+								<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-combobox" editable='false'/></td>
 							</tr>
 							<tr>
 							</tr>
 							<tr>
 								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 								<td>
-									<form:input path="status" id="status_edit" required="true" cssClass="easyui-validatebox" />
+									<form:input path="status" id="status_edit" required="true" cssClass="easyui-combobox" />
 								</td>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
-									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-validatebox" />
+									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-combobox" />
 								</td>
 							</tr>
 							<tr>

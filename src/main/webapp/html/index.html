@@ -9,17 +9,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.0" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.1" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.0"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.1"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.0"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.1"></script>
 <script type="text/javascript">
 function submit(id)
 {
 window.open("html/appDetail.html?inputStr=" + id);//传入参数
-}
+}   
+var arrayStar = new Array("resources/public/images/comment_star1.png","resources/public/images/comment_star2.png","resources/public/images/comment_star3.png","resources/public/images/comment_star4.png",
+                       "resources/public/images/comment_star5.png","resources/public/images/comment_star6.png");
 	var _loadingICO;
 	$(function() {
 		chkLogin();
@@ -35,7 +37,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 			if (data) {
 				$('#catalog_con').empty();
 				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span>'+(i+1)+'</span><a href="html/allApp.html?inputStr='+o.id+'">'+o.name+'</a></li>');
+					$('#catalog_con').append('<li><span class="index_free_a">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?inputStr='+o.id+'">'+o.name+'</a></li>');
 				});
 				$('#catalog_con').append('<li>');
 			}
@@ -45,20 +47,21 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				$('#freeTop').empty();
 				$('#clerk_recommend').empty();
 				$.each(data, function(i, o) {
+				
 					if(i<5){
-						$('#freeTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+						$('#freeTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a onclick="submit('+o.id+')"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend').append(
-						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1"><b>'
 						+o.appName
-						+'</label><label class="label2">'
+						+'</b></label><label class="label2">'
 						+o.developer
-						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
+						+'</label><img src="'+arrayStar[o.appLevel]+'" style="display: inline-block" />(<span>'
 						+o.downCount
 						+'</span>)</div>'
 					);
 				});
-				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=" + 2" >全部热门免费应用</a></li>');
+				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=allnewfreeapp" >全部热门免费应用</a></li>');
 			}
 		});
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
@@ -67,19 +70,19 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				$('#clerk_recommend_car').empty();
 				$.each(data, function(i, o) {
 					if(i<5){
-						$('#freeNewTop').append('<li><span>'+(i+1)+'</span><a onclick="submit('+o.id+')">'+o.appName+'</a><label>'+o.developer+'</label></li>');
+						$('#freeNewTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a onclick="submit('+o.id+')"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'"  class="iconImg" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1">'
+						'<div title="'+o.appName+'"><img src="'+o.icon+'"  class="iconImg" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1"><b>'
 						+o.appName
-						+'</label><label class="label2">'
+						+'</b></label><label class="label2">'
 						+o.developer
-						+'</label><img src="resources/public/images/star.jpg" style="display: inline-block" />(<span>'
+						+'</label><img src="'+ arrayStar[o.appLevel]+'" style="display: inline-block" />(<span>'
 						+o.downCount
 						+'</span>)</div>'
 					);
 				});
-				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=" + 2" >全部热门免费新品</a></li>');
+				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=hotfreenew" >全部热门免费新品</a></li>');
 			}
 		});
 	});
@@ -170,32 +173,20 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 			<div class="Contentbox2" style="background-color: white">
 				<div id="con_two_1">
 					<div id="clerk_recommend">
-						<div>
-							<img src="resources/public/images/icon1.jpg" alt="" /> <label
-								class="label1">Recipe Search</label> <label class="abel2">ALLTHECOOKS.COM</label>
-							<img src="resources/public/images/star.jpg" /> (<span>15,333</span>)
-							<input type="submit" value="" />
-
-						</div>
+						
 					</div>
 					<div class="carousel-more-link">
-						<a href="html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?inputStr=hotfreenew">查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 
 				</div>
 				<div id="con_two_2" style="display: none">
 					<div id="clerk_recommend_car">
-						<div>
-							<img src="resources/public/images/icon1.jpg" alt="" /> <label
-								class="label1">Recipe Search</label> <label class="abel2">ALLTHECOOKS.COM</label>
-							<img src="resources/public/images/star.jpg" /> (<span>15,333</span>)
-							<input type="submit" value="" />
-
-						</div>
+						
 					</div>
 					<div class="carousel-more-link">
-						<a href="html/allApp.html?inputStr=" + 2>查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?inputStr=allnewfreeapp">查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 				</div>
@@ -205,17 +196,17 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 			style="float: right; background-color: white">
 			<div class="panel-image goog-inline-block">
 				<a href=""><img
-					src="resources/public/images/editer_recommend.jpg" alt="编辑推荐"></a>
+					src="resources/public/images/editer_recommend.jpg" alt="编辑推荐"/></a>
 			</div>
 			<div class="panel-summary goog-inline-block">
 				<h3>
-					<a href="">编辑推荐</a>
+					<font >编辑推荐</font>
 				</h3>
 				<div class="panel-description">我们的工作人员从 Google Play
 					中挑选的部分最佳应用。</div>
 				13691854095
 				<div class="panel-see-more">
-					<a href="">查看全部</a><a href="" class="more-arrow-link"> <span
+					<a href="html/allApp.html?inputStr=allnewfreeapp">查看全部</a><a href="" class="more-arrow-link"> <span
 						class="more-arrow">›</span></a>
 				</div>
 			</div>

@@ -57,14 +57,16 @@ public class AccountInfoController {
 			log.error(result.getAllErrors().toString());
 			return -1;
 		}
-		if (!StringUtils.hasText(accountInfo.getEmail())) {
-			log.error("email can't be empty");
-			return 0;
+		if (accountInfo.getId()<=0) { // 新增时
+			if (!StringUtils.hasText(accountInfo.getEmail())) {
+				log.error("email can't be empty");
+				return 0;
+			}
+			if (!StringUtils.hasText(accountInfo.getPassword())) {
+				log.error("password can't be empty");
+				return 0;
+			}
 		}
-		/*if (!StringUtils.hasText(accountInfo.getPassword())) {
-			log.error("password can't be empty");
-			return 0;
-		}*/
 		accountInfoService.saveOrUpdate(accountInfo);
 		return 1;
 	}

@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
 		<script type="text/javascript">
 		var accountStatusList;
 		$(function(){
@@ -396,7 +396,7 @@
 						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:input path="status" id="status_edit" cssClass="easyui-validatebox" required="true"/>
+							<form:input path="status" id="status_edit" cssClass="easyui-combobox" required="true"/>
 						</td>
 					</tr>
 					<tr>

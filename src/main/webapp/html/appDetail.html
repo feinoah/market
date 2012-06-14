@@ -13,11 +13,30 @@
 <link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
 <link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.jsp"></script>
+<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.1"></script>
 		
 		<script type="text/javascript">
+		var arrayStar = ["../resources/public/images/comment_star1.png","../resources/public/images/comment_star2.png","../resources/public/images/comment_star2.png",
+		                 "../resources/public/images/comment_star3.png","../resources/public/images/comment_star3.png",
+				"../resources/public/images/comment_star4.png","../resources/public/images/comment_star4.png",
+				"../resources/public/images/comment_star5.png","../resources/public/images/comment_star5.png",
+				"../resources/public/images/comment_star6.png","../resources/public/images/comment_star6.png"];
+		
+		//获得参数的方法
+		var request =
+		{
+		QueryString : function(val)
+		{
+		var uri = window.location.search;
+		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
+		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
+		}
+		}
+		
+		var rt = request.QueryString("inputStr");
+		
 		$(function(){
 			_loadingICO='../resources/public/images/loading.gif';
 			$('body').append("<script src='../resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
@@ -78,6 +97,10 @@
 					if(data){
 						$('#label_appname').empty().html(data.appName);
 						$('#label_author').empty().html(data.enName);
+						$('#img_icon').empty().attr("src",arrayStar[data.appLevel]);
+						$('#comment_star1').attr("src",arrayStar[data.appLevel]);
+						$('#comment_star2').attr("src",arrayStar[data.appLevel]);
+						$('#comment_star3').attr("src",arrayStar[data.appLevel]);
 						$('#label_count').empty().html(data.downCount);
 						$('#about_count').empty().html(data.downCount);
 						$('#about_date').empty().html(data.updateTime);
@@ -87,44 +110,40 @@
 						$('#about_size').empty().html(data.size);
 						$('#about_price').empty().html(data.price);
 						$('#about_level').empty().html(data.appLevel);
+						$('#app_description').empty().html(data.description);
+						$('#app_features').empty().html(data.features);
+						$('#av_grade1').empty().html(data.appLevel);
+						$('#av_grade2').empty().html(data.appLevel);
+						$('#app_downcount1').empty().html(data.downCount);
+						$('#app_downcount2').empty().html(data.downCount);
 					}
 				});
 				
 				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
 					if(data){
+						
 						$('#appCommentSimple').empty();
-					$.each(data,function(i,o){
-					
-						$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
-						   +o.updateTime+'"</span> （Samsung Galaxy S2，版本：1.4.5）<div class="doc-review-ratings-line"><img src="../resources/public/images/star3.jpg" alt="" /></div><p class="review-text">'
-						   +o.comment+'</p></div><hr>');
-					
-					})
-						
-					}
-				});
-			
-				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
-					if(data){
 						$('#appComment').empty();
-					$.each(data,function(i,o){
-					
-						$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
-						   +o.updateTime+'"</span> （Samsung Galaxy S2，版本：1.4.5）<div class="doc-review-ratings-line"><img src="../resources/public/images/star3.jpg" alt="" /></div><p class="review-text">'
-						   +o.comment+'</p></div><hr>');
-					
-					})
-						
+						$.each(data.rows,function(i,o){
+							if(i<3){
+							$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+							+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
+							+o.comment+'</p></div><hr>');
+							}
+							$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+							+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
+							+o.comment+'</p></div><hr>');
+							
+						});
 					}
 				});
-				
 
 		$.getJSON('../portal/app/hot/free/new/4?local=', function(data) {
 			if(data){
 				$('#author_more').empty();
 				$('#author_more').append('<h3 class="detaiil_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
 				$.each(data,function(i,o){
-					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
 			}
 		});
@@ -134,24 +153,13 @@
 				$('#view_more').empty();
 				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
 				$.each(data,function(i,o){
-					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img src="../resources/public/images/icon80.jpg"/></div><div class="detail_right_div""><label style="display: block;"><b>'+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
 			}
 		});
 		});
 		
-		//获得参数的方法
-		var request =
-		{
-		QueryString : function(val)
-		{
-		var uri = window.location.search;
-		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
-		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
-		}
-		}
 		
-		var rt = request.QueryString("inputStr");
 	</script>	
 		
 	
@@ -173,7 +181,7 @@
 		</div>
 
 <div style="height:311px;width:1024px;background-color:#DEDEDE; ">
-<div style="float:left;background-image:url('../resources/public/images/app_detail.jpg');width:328px;height:266px">
+<div style="float:left;background-image:url('../resources/public/images/app_detail.jpg');width:328px;height:266px;margin-left:-214px;">
  <label id="label_appname" style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
     <label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px;margin-top: 5px">ALLTHECOOKS.COM</label>
     
@@ -183,7 +191,7 @@
     <img src="../resources/public/images/app_pic.jpg" alt="" height="164px" width="136px" style="margin-left: 2px;margin-top: 17px;"/></td>
     
     <td height="164px">
-     <img src="../resources/public/images/star2.jpg" style="display: inline-block;height: 17px;margin-top: 130px"/>
+     <img id="img_icon" src="" style="display: inline-block;height: 17px;margin-top: 130px"/>
      <a style="color: white">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;margin-top: 128px">10,898</label>)</a>
      <img src="../resources/public/images/install2.jpg" alt="" style="width: 85px;height: 35px;margin-left: 3px"/>
      </td>
@@ -194,7 +202,7 @@
    
 
 
-<div class="container2" id="idContainer" style="float:right;">
+<div class="container2" id="idContainer" style="float:right;width:686px">
 
 <ul id="idSlider" >
 		
@@ -214,21 +222,7 @@
 
 <div id="left" style="float:left;width:29%;margin-top:7px">
 <div id="author_more" style="float:left;width:330px;height:500px;background-color: white;">
- <label class="detaiil_label_left1_top">查看此应用的用户还查看了：</label>
-  <hr class="detail_hr"/>
-  
-  <div class="detail_left_div">
-  <div class="detail_left1_div">
-  <img src="../resources/public/images/icon80.jpg"/>
-  </div>
-  <div class="detail_right_div"">
-   <label style="display: block;"><b>In the Kitchen:Recipes</b></label>
-      <label class="detail_right_label1">TELEVISION FOOD</label>
-       <img src="../resources/public/images/star.jpg"/><label class="detail_right_label2">(461)</label>
-       <label style="display: block;">￥12.55</label>
-       </div>
-       </div>
-  <hr class="detail_hr"/>
+
    
   
 </div>
@@ -261,9 +255,10 @@
   <h2>说明</h2>
   <div id="doc-description-container" class="doc-description-collapsed">
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
-  <div id="doc-original-text">Fantasy Tower Defense from the creators of Toy Soldiers &amp; Dark Alliance<p>"It's an addictive, creative game with some lovely aesthetics and challenging levels. If you're anything like me, it'll probably steal your soul." - KOTAKU </p>
+  <div id="doc-original-text"><label id="app_description">Fantasy Tower Defense from the creators of Toy Soldiers &amp; Dark Alliance 
+  "It's an addictive, creative game with some lovely aesthetics and challenging levels. If you're anything like me, it'll probably steal your soul." - KOTAKU</label>
   <p>-------- </p>
-  <p>Fast paced fantasy tower defense... from the creators of Toy Soldiers and Baldur's Gate: Dark Alliance! </p>
+  <p id="app_features">Fast paced fantasy tower defense... from the creators of Toy Soldiers and Baldur's Gate: Dark Alliance! </p>
   </div>
   </div><div class="doc-description-overflow"></div></div>
   
@@ -291,7 +286,7 @@
 <h4>关于此应用</h4>
 <dt style="">评分：</dt>
 
-<img src="../resources/public/images/star.jpg" alt="" style="margin-left: 10px;font-size: 12px"/>
+<img id="comment_star1" src="" alt="" style="margin-left: 10px;font-size: 12px"/>
 <dd style="">(<span id="about_count" itemprop="ratingCount" content="15333" >15,333</span>)</dd>
 
 <dt style="margin-top: 8px">更新日期：</dt>
@@ -335,26 +330,17 @@
    
    <div class="average-rating average-rating-panel goog-inline-block">
    <div class="average-rating-title">平均评分：</div>
-   <div class="average-rating-value">4.8</div>
+   <div id="av_grade1" class="average-rating-value">4.8</div>
    <div class="average-rating-stars">
-  <img src="../resources/public/images/star3.jpg" alt="" />
+  <img id="comment_star2" src="" alt="" />
    </div>
-   <div class="votes">18,191</div></div>
+   <div id="app_downcount1" class="votes">18,191</div></div>
    
    
    
    <div id="appCommentSimple" class="doc-review-summary">
    
-   <div class="doc-review">
-   <span class="doc-review-author"><strong>tai</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：1.4.5）
-   <div class="doc-review-ratings-line">
-<img src="../resources/public/images/star3.jpg" alt="" />
-   </div>
-   <p class="review-text">Nice defense game</p>
-   </div>
-   
-   <hr>
+  
    
    
    </div>
@@ -392,11 +378,11 @@
    
    <div class="average-rating average-rating-panel goog-inline-block">
    <div class="average-rating-title">平均评分：</div>
-   <div class="average-rating-value">4.8</div>
+   <div id="av_grade2" class="average-rating-value">4.8</div>
    <div class="average-rating-stars">
-  <img src="../resources/public/images/star3.jpg" alt="" />
+  <img id="comment_star3" src="" alt="" />
    </div>
-   <div class="votes">18,191</div></div>
+   <div id="app_downcount2" class="votes">18,191</div></div>
    <div>
    <h2 class="goog-inline-block middle-vertical-align">用户评论</h2>
    <div id="write-review-toggle" class="goog-inline-block toggle-button" data-toggletarget="my-review-panel-id write-review-container" tabindex="0">我要评论 &gt;</div>
@@ -415,17 +401,6 @@
    
    
    <div id="appComment" class="doc-review-summary">  
-   <div class="doc-review">
-   <span class="doc-review-author"><strong>tai</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：1.4.5）
-   <div class="doc-review-ratings-line">
-<img src="../resources/public/images/star3.jpg" alt="" />
-   </div>
-   <p class="review-text">Nice defense game</p>
-   </div>
-   
-   <hr>
-   
  
    
    </div>
@@ -446,7 +421,7 @@
  </div>
 </div>
 	
-	
+	</div>
 		
 <script>
 var nums = [], timer, n = $$("idSlider").getElementsByTagName("li").length,

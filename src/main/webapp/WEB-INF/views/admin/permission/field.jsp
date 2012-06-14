@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/field');
@@ -176,7 +176,7 @@
 				<table>
 					<tr>
 						<td><form:label	for="field" path="field"  cssClass="mustInput">字段名：</form:label></td>
-						<td><form:input path="field" id="field_edit" cssClass="easyui-validatebox" required="true" validType="maxLength[20]" maxLen="20"/></td>
+						<td><form:input path="field" id="field_edit" cssClass="easyui-combobox" required="true" validType="maxLength[20]" maxLen="20"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="fieldName" path="fieldName">字段描述：</form:label></td>
@@ -197,7 +197,7 @@
 					<tr>
 						<td><form:label	for="enabled" path="enabled" cssClass="mustInput">是否启用：</form:label></td>
 						<td>
-							<form:input path="enabled" id="enabled_edit" cssClass="easyui-validatebox" required="true"/>
+							<form:input path="enabled" id="enabled_edit" cssClass="easyui-combobox" required="true"/>
 						</td>
 					</tr>
 					<tr>

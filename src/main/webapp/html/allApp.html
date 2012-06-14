@@ -10,16 +10,20 @@
 <link rel="stylesheet" type="text/css" href="../resources/jquery-easyui-1.2.6/themes/icon.css"/>
 <link rel="stylesheet" type="text/css" href="../resources/public/styles/default.css"/>
 <link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
+<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
 		<title>CarIt Market</title>
 		
 		<script type="text/javascript">
-	
+		var arrayStar = new Array("../resources/public/images/comment_star1.png","../resources/public/images/comment_star2.png","../resources/public/images/comment_star3.png",
+				"../resources/public/images/comment_star4.png","../resources/public/images/comment_star5.png","../resources/public/images/comment_star6.png");
+		
 		function submit(id)
 		{
-		window.open("html/appDetail.html?inputStr=" + id);//传入参数
+		window.open("../html/appDetail.html?inputStr=" + id);//传入参数
 		}
 		
 		//获得参数的方法
@@ -38,17 +42,77 @@
 		
 		
 $(function(){
-			
-	
-
+	_loadingICO='../resources/public/images/loading.gif';
+	$('body').append("<script src='../resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
+	chkLogin();
+	$('#reg').click(function(){
+		regWin();
+	});
+	$('#login').click(function(){
+		loginWin();
+	});
+	if(rt=="allnewfreeapp"){
+		
+		$.getJSON('../portal/app/hot/free/999?local=cn', function(data) {
+			if(data){
+				$('#allApp').empty();
+				$.each(data,function(i,o){
+					$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
+							+o.id+
+							')" type="image" src="../'
+							+o.icon+
+							'"></input><img src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
+							+o.appName+
+							'</label><label class="app_l2">'
+							+o.developer+
+							'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:58px">'
+							+o.description+
+							'</div><img src="../resources/public/images/install.jpg"></img></td><td><span style="margin-top: 53px;display:block">...</span></td></tr></table></div>');
+				})
+			}
+		});
+		
+	}else if(rt=="hotfreenew"){
+		$.getJSON('../portal/app/hot/free/new/999?local=cn', function(data) {
+			if(data){
+				$('#allApp').empty();
+				$.each(data,function(i,o){
+					$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
+							+o.id+
+							')" type="image" src="../'
+							+o.icon+
+							'"></input><img src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
+							+o.appName+
+							'</label><label class="app_l2">'
+							+o.developer+
+							'</label><label class="app_l3">'
+							+o.description+
+							'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
+				})
+			}
+		});
+		
+	}else{
+		
 	$.getJSON('../portal/app/query?local=cn&page=1&rows=10&catalogId='+rt, function(data) {
 		if(data){
 			$('#allApp').empty();
 			$.each(data.rows,function(i,o){
-				$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('+o.id+')" type="image" src="../'+o.icon+'"></input><img src="../resources/public/images/star4.jpg"></img></td><td><label class="app_l1">'+o.appName+'</label><label class="app_l2">'+o.developer+'</label><label class="app_l3">'+o.description+'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
+				$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
+						+o.id+
+						')" type="image" src="../'
+						+o.icon+
+						'"></input><img src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
+						+o.appName+
+						'</label><label class="app_l2">'
+						+o.developer+
+						'</label><label class="app_l3">'
+						+o.description+
+						'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 			})
 		}
 	});
+	}
 	
 	
 });
@@ -61,17 +125,16 @@ $(function(){
 	
 	
 <div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
-<div id="header" style="height:75px;width:100%;background-color:#DEDEDE;">
-<table>
-<tr>
-<td> <img src="../resources/public/images/carit_logo1.png" height="62px" width="154px" style="margin-left: 50px;margin-top: 8px"/>  </td>
-<td><input type="text" name="txtNo" size="20" style="height:40px;width:312px;margin-left:200px;"></input></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:5px;">search</button></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:30px;">logo in</button></td>
-<td><button type="button" style="height:42px;width:72px;margin-left:5px;">register</button></td>
-</tr>
-</table>
-</div>
+	<div id="header">
+			<ul>
+				<li><img src="../resources/public/images/carit_logo1.png"/></li>
+				<li><input type="text" name="txtNo"/></li>
+				<li><button id="search">搜索</button></li>
+				<li name="before_login"><button id="login">登录</button></li>
+				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li id="after_login" style="display: none;"><span></span></li>
+			</ul>
+		</div>
 
 		<div>
 			<div class="page-banner">

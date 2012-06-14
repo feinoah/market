@@ -6,7 +6,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#tree').tree({

@@ -31,6 +31,117 @@ else el.style.position = "fixed";
 position_fixed(document.getElementById("ie6-warning"),0, 0);  
 </script>  
 <![endif]--> 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="scripts/highcharts.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('.navTab li').each(function(i){
+		$(this).click(function(){
+			$('.navTab li').removeClass('currTab');
+			$(this).addClass('currTab');
+			$('.content').hide().each(function(k){
+				if(i==k){
+					$(this).show();
+				}
+			});
+		});
+	});
+	Highcharts.setOptions({
+		chart: {
+			defaultSeriesType: 'spline',
+			//backgroundColor:'#102F43',
+			color:'#fff',
+			style:{fontFamily: '宋体'}
+		},
+		tooltip: {
+			/*backgroundColor:'#001B10',
+			borderColor :'#fff',,*/
+			borderWidth:1/*,
+			//style:{color:'#fff'},
+			crosshairs: [true, true]
+			formatter: function() {
+				return '<b>'+ this.series.name +'</b><br/>'+this.x +': '+ this.y
+				+'万';
+			}*/
+		},
+		legend: {
+			enabled: false
+		},
+		credits:{//右下角的文本
+			enabled: false
+		}
+	});
+	new Highcharts.Chart({
+		chart: {
+			renderTo: 'container',
+			type: 'bar'
+		},
+		xAxis: {
+			categories: ['★', '★★', '★★★', '★★★★', '★★★★★'],
+			title: {
+				text: null
+			}
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: '评论人数（人）',
+				align: 'high'
+			}
+		},
+		tooltip: {
+			formatter: function() {
+				return this.y +' 人';
+			}
+		},
+		plotOptions: {
+			bar: {
+				dataLabels: {
+					enabled: false
+				}
+			}
+		},
+		series: [{
+			name:'',
+			data: [107, 31, 635, 203, 8]
+		}]
+	});
+	new Highcharts.Chart({
+		chart: {
+			renderTo: 'trend-container'
+		},
+		xAxis: {
+//                categories: ['一月', '二月', '三月', '四月', '五月'],
+			title: {
+				text: null
+			}
+		},
+		yAxis: {
+			min: 0,
+			title: {
+				text: '下载人数（人）',
+				align: 'high'
+			}
+		},
+		tooltip: {
+			formatter: function() {
+				return this.y +' 人';
+			}
+		},
+		plotOptions: {
+			bar: {
+				dataLabels: {
+					enabled: false
+				}
+			}
+		},
+		series: [{
+			name:'',
+			data: [10, 31, 35, 63, 80, 85, 70]
+		}]
+	});
+});
+</script>
 </head>
 <body>
 	<!-- header start -->
@@ -99,6 +210,204 @@ position_fixed(document.getElementById("ie6-warning"),0, 0);
 				<li>新功能</li>
 				<li>权限描述</li>
 			</ul>
+			<div class="content">
+				<div class="overview-top">
+					<h2>说明</h2>
+					<div id="left">
+						<div id="description-container">
+					2012 U.S. Open Golf Championship at The Olympic Club in San Francisco
+	The United States Golf Association is pleased to present the official Android application for the 2012 U.S. Open Golf Championship at The Olympic Club in San Francisco, California, June 11-17, 2012. 
+	Key Features: 
+	LIVE video from the U.S. Open Championship, including exclusive marquee group coverage. On demand highlights will also be available throughout Championship week. All video will be viewable with Edge, 3G, and Wifi connections. 
+	Live video is available to view in the United States only. 
+	Video 
+	Exclusive LIVE marquee groups and dedicated hole coverage from the Championship, plus on demand highlights. 
+	Scores 
+	LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+	News 
+	Latest news updates from the Championship. 
+	Photos 
+	Latest photos of the day's action. 
+	Course 
+	Full course details and flyover videos from The Olympic Club. 
+	Players 
+	Biographies for the U.S. Open field. 
+	Radio 
+	Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+	
+	2012 U.S. Open Golf Championship at The Olympic Club in San Francisco
+	The United States Golf Association is pleased to present the official Android application for the 2012 U.S. Open Golf Championship at The Olympic Club in San Francisco, California, June 11-17, 2012. 
+	Key Features: 
+	LIVE video from the U.S. Open Championship, including exclusive marquee group coverage. On demand highlights will also be available throughout Championship week. All video will be viewable with Edge, 3G, and Wifi connections. 
+	Live video is available to view in the United States only. 
+	Video 
+	Exclusive LIVE marquee groups and dedicated hole coverage from the Championship, plus on demand highlights. 
+	Scores 
+	LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+	News 
+	Latest news updates from the Championship. 
+	Photos 
+	Latest photos of the day's action. 
+	Course 
+	Full course details and flyover videos from The Olympic Club. 
+	Players 
+	Biographies for the U.S. Open field. 
+	Radio 
+	Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+							<div class="description-overflow"></div>
+						</div>
+						<div class="description-show-all">
+							<div class="description-show-all-button">
+								<span class="description-show-more">More</span>
+								<span class="description-show-less">Less</span>
+							</div>
+						</div>					
+					</div>
+					<div id="right">
+						<h4>关于此应用</h4>
+						<label>评分：</label>
+						<p>
+						<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span></p>
+						<label>更新日期：</label>
+						<p>2012-6-12</p>
+						<label>当前版本：1.0</label>
+						<label>所需Android版本:</label>
+						<p>Android 2.1 以上</p>
+						<label>应用分类:</label>
+						<p>游戏</p>
+						<label>已下载次数:</label>
+						<p>30000</p>
+						<div id="trend-container">
+						</div>
+						<label>价格:</label>
+						<p>免费</p>
+						<label>大小:</label>
+						<p>2M</p>
+					</div>
+				</div>
+				<div class="overview-screenshots">
+					<h2>应用截图</h2>
+				</div>
+			</div>
+			<div class="content" style="display:none">
+				<h2>用户评论</h2>
+				<div class="reviews-chart">
+					<div class="barChart" id="container"></div>
+					<div class="avg-reviews">
+						<h4>平均评分</h4>
+						<h3>3.8</h3>
+						<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span>
+						<label>310</label>
+					</div>
+				</div>
+				<div class="user-review-list">
+					<div class="user-review">
+						<span class="review-author"><strong>George</strong></span><span class="review-date"> - June 4, 2012</span>
+						<div class="review-level">
+							<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span><span class="grayStar"></span>
+						</div>
+						<div class="review-content">
+							LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+News 
+Latest news updates from the Championship. 
+Photos 
+Latest photos of the day's action. 
+Course 
+Full course details and flyover videos from The Olympic Club. 
+Players 
+Biographies for the U.S. Open field. 
+Radio 
+Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+						</div>
+					</div>
+					<div class="user-review">
+						<span class="review-author"><strong>George</strong></span><span class="review-date"> - June 4, 2012</span>
+						<div class="review-level">
+							<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span><span class="grayStar"></span>
+						</div>
+						<div class="review-content">
+							LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+News 
+Latest news updates from the Championship. 
+Photos 
+Latest photos of the day's action. 
+Course 
+Full course details and flyover videos from The Olympic Club. 
+Players 
+Biographies for the U.S. Open field. 
+Radio 
+Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+						</div>
+					</div>
+					<div class="user-review">
+						<span class="review-author"><strong>George</strong></span><span class="review-date"> - June 4, 2012</span>
+						<div class="review-level">
+							<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span><span class="grayStar"></span>
+						</div>
+						<div class="review-content">
+							LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+News 
+Latest news updates from the Championship. 
+Photos 
+Latest photos of the day's action. 
+Course 
+Full course details and flyover videos from The Olympic Club. 
+Players 
+Biographies for the U.S. Open field. 
+Radio 
+Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+						</div>
+					</div>
+					<div class="user-review">
+						<span class="review-author"><strong>George</strong></span><span class="review-date"> - June 4, 2012</span>
+						<div class="review-level">
+							<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span><span class="grayStar"></span>
+						</div>
+						<div class="review-content">
+							LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+News 
+Latest news updates from the Championship. 
+Photos 
+Latest photos of the day's action. 
+Course 
+Full course details and flyover videos from The Olympic Club. 
+Players 
+Biographies for the U.S. Open field. 
+Radio 
+Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+						</div>
+					</div>
+					<div class="user-review">
+						<span class="review-author"><strong>George</strong></span><span class="review-date"> - June 4, 2012</span>
+						<div class="review-level">
+							<span class="brightStar"></span><span class="brightStar"></span><span class="brightStar"></span><span class="grayStar"></span><span class="grayStar"></span>
+						</div>
+						<div class="review-content">
+							LIVE real-time scoring updates from the Championship, including the Leaderboard and Starting Times. 
+News 
+Latest news updates from the Championship. 
+Photos 
+Latest photos of the day's action. 
+Course 
+Full course details and flyover videos from The Olympic Club. 
+Players 
+Biographies for the U.S. Open field. 
+Radio 
+Fans can stream live ESPN Radio coverage, and submit questions to be answered on-air by ESPN commentators via Inside The Ropes, presented by American Express.
+						</div>
+					</div>
+					<div class="review-page">
+						<span></span><span></span><span></span><span></span>
+					</div>
+				</div>
+				
+			</div>
+			<div class="content" style="display:none">
+			3
+			</div>
+			<div class="content" style="display:none">
+			4
+			</div>
 		</div>
 	</div>
 	<!-- main end -->

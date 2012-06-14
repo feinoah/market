@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
@@ -45,7 +45,6 @@
 				$('#description').val(m.description);
 				$('#enDescription').val(m.enDescription);
 				$('#id').val(m.id);
-				alert(m.id)
 				$('#editWin').show();
 			} else {
 				$.messager.show({

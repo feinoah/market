@@ -13,9 +13,7 @@
 	</bean>
 
 	<!-- JNDI DataSource for J2EE environments -->
-	<bean id="dataSource"
-		class="com.mchange.v2.c3p0.ComboPooledDataSource"
-		destroy-method="close">
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass"
 			value="${dataSource.driverClassName}" />
 		<property name="jdbcUrl" value="${dataSource.url}" />
