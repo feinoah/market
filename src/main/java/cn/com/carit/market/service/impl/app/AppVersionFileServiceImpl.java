@@ -94,7 +94,16 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 			if(list==null || list.size()==0){// 最后一条有效版本
 				applicationDao.delete(version.getAppId());
 			} else {
-				applicationDao.updateById(id);
+				AppVersionFile nextVersion=list.get(0);
+				if (id>nextVersion.getId()) { // 删除的是最新版本
+					Application application=new Application();
+					application.setId(nextVersion.getAppId());
+					application.setAppFilePath(nextVersion.getFilePath());
+					application.setFeatures(nextVersion.getNewFeatures());
+					application.setEnFeatures(nextVersion.getEnNewFeatures());
+					applicationDao.update(application);
+				}
+//				applicationDao.updateById(version.getAppId());
 			}
 		}
 		return row;

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.carit.market.bean.app.AppComment;
@@ -60,13 +60,13 @@ public class AppCommentController {
 	
 	/**
 	 * 查看
-	 * admin/app/comment/view/{id}
+	 * admin/app/comment/view?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view", method=RequestMethod.GET)
 	@ResponseBody
-	public AppComment view(@PathVariable int id){
+	public AppComment view(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return null;
@@ -76,18 +76,30 @@ public class AppCommentController {
 	
 	/**
 	 * 删除
-	 * admin/app/comment/delete/{id}
+	 * admin/app/comment/delete?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@PathVariable int id){
+	public int delete(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return -1;
 		}
 		return appCommentService.delete(id);
+	}
+	
+	/**
+	 * 批量删除
+	 * admin/app/comment/delete/batch
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="delete/batch", method=RequestMethod.POST)
+	@ResponseBody
+	public int [] deleteRows(@RequestParam String [] ids){
+		return appCommentService.batchDelete(ids);
 	}
 	
 	/**

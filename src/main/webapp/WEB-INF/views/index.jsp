@@ -131,6 +131,14 @@ position_fixed(document.getElementById("ie6-warning"),0, 0);
 					</div>
 				</div>
 				<div class="rank" style="display: none;">
+					<ul>
+						<c:forEach items="${hotNewFreeList}" var="hotNewFree" varStatus="stat" begin="0" end="7">
+						<li><span>${stat.count}</span><a href="#">${hotNewFree.appName}</a><label>${hotNewFree.developer}</label></li>
+						</c:forEach>
+					</ul>
+					<div class="more">
+					<a>所有免费新品<span>>></span></a>
+					</div>
 				</div>
 			</div>
 			<!-- 分类 -->

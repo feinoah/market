@@ -100,7 +100,7 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 
 	@Override
 	public List<BaseField> queryByField(String filed) {
-		String sql="select * from t_base_field where field=?";
+		String sql="select * from t_base_field where field=? order by field_value desc";
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.query(sql, new Object[]{filed}, new int[]{Types.VARCHAR}, rowMapper);
 	}

@@ -28,6 +28,13 @@ public interface AppCommentDao {
 	int delete(int id);
 	
 	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
+	int[] batchDelete(String[] ids);
+	
+	/**
 	 * 按应用Id删除
 	 * @param appId
 	 * @return

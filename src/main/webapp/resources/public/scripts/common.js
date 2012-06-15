@@ -54,7 +54,11 @@ $(function (){
 			iconCls:'icon-remove',
 			handler:del
 		} ],
-		onDblClickRow:edit
+		onDblClickRow:edit,
+		onLoadSuccess:function(){
+			// clear selected
+			$('#tt').datagrid('clearSelections');
+		}
 	});
 	$("#submit").bind("click", function(){
 		//先取得 datagrid 的查询参数 
@@ -82,11 +86,17 @@ $(function (){
 						return false;
 					}
 				});
-				$('#editForm input[name=email]').each(function(){
-					editForm
+				var b=true;
+				$('#editForm input[type=file]').each(function(){
+					b=chkFileType($(this).val(),$(this).attr('fileType'));
+					if(!b){
+						$.messager.alert('提示', '请上传 '+$(this).attr('fileType')+' 类型的文件', 'info');
+						b=false;
+						return false;
+					};
 				});
-				var b=$(this).form('validate');
-				
+				if(!b){return b;}
+				b=$(this).form('validate');
 				if(b){
 					$.messager.progress({title:'请稍后',msg:'提交中...'});
 				}
@@ -117,6 +127,43 @@ $(function (){
 	}});
 });
 
+function del(){
+	var m = $('#tt').datagrid('getSelected');
+	if (m) {
+		$.messager.confirm('警告','删除同时会删除关联信息，您确认要删除吗?',function(data) {
+			if (data) {
+				var _url=$('#tt').attr('url');
+				_url=_url.substring(0,_url.indexOf('query'))+'delete?id='+m.id;
+				$.messager.progress({title:'请稍后',msg:'提交中...'});
+				$.ajax({
+					url : _url,
+					type : 'GET',
+					timeout : 1000,
+					error : function() {
+						$.messager.alert('错误','删除失败!','error');
+					},
+					success : function(data) {
+						$.messager.progress('close');
+						if (data == -1) {
+							$.messager.alert('错误','删除失败!','error');
+						} else if (data > 0) {
+							$.messager.alert('成功','删除成功','info');
+							// update rows
+							$('#tt').datagrid('reload');
+						} else {
+							$.messager.alert('异常','后台系统异常','error');
+						}
+					}
+				});
+			}
+		});
+	} else {
+		$.messager.show({
+			title : '警告',
+			msg : '请先选择要删除的记录。'
+		});
+	}
+}
 var idCard = function(value) {
 	if (value.length == 18 && 18 != value.length)
 		return false;
@@ -287,4 +334,26 @@ function getStrLen(str){
 		}
 	}
 	return len;
+}
+/**
+ * 校验上传文件后缀类型是否匹配
+ * @param name 文件名
+ * @param types 允许的类型 jpg|png|apk "|"分隔
+ */
+function chkFileType(name,types){
+	if(''==name){
+		return true;
+	}
+	if(types==''){
+		return true;
+	}
+	var tArray=types.split('|');
+	var fArray=name.split('.');
+	var suffix=fArray[fArray.length-1];
+	for(var i in tArray){
+		if(suffix.toLowerCase()!=tArray[i].toLowerCase()){
+			return false;
+		}
+	}
+	return true;
 }

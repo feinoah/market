@@ -1068,3 +1068,7 @@ vertical-align: middle;
 	display:inline-block;
 	margin-left:445px;
 }
+.app_detail_icon{
+	height: 80px;
+	width: 80px;
+}

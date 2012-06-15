@@ -376,6 +376,12 @@ a:hover {
 	height: 60px;
 }
 
+#clerk_recommend_car div .iconImg{
+	width: 60px;
+	height: 60px;
+}
+
+
 #doc-description-container.doc-description-collapsed {
 	max-height: 180px;
 	overflow: hidden;

@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.2" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
@@ -32,6 +32,9 @@
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
+			});
+			$('.combobox-f').each(function(){
+				$(this).combobox('clear');
 			});
 		});
 		function edit() {
@@ -60,45 +63,6 @@
 				});
 			}
 		}
-
-		function del() {
-			var m = $('#tt').datagrid('getSelected');
-			if (m) {
-				$.messager.confirm('警告','您确认要删除吗?',function(data) {
-					if (data) {
-						$.messager.progress({title:'请稍后',msg:'提交中...'});
-						$.ajax({
-							url : '${ctx}/admin/app/version/delete/'+ m.id,
-							type : 'GET',
-							timeout : 1000,
-							error : function() {
-								$.messager.alert('错误','删除失败!','error');
-							},
-							success : function(data) {
-								$.messager.progress('close');
-								if (data == -1) {
-									$.messager.alert('错误','删除失败!','error');
-								} else if (data > 0) {
-									$.messager.alert('成功','删除成功','info');
-									// update rows
-									$('#tt').datagrid('reload');
-									// clear selected
-									$('#tt').datagrid('unselectAll');
-								} else {
-									$.messager.alert('异常','后台系统异常','error');
-								}
-							}
-						});
-					}
-				});
-			} else {
-				$.messager.show({
-					title : '警告',
-					msg : '请先选择要删除的记录。'
-				});
-			}
-		}
-		
 		</script>
 		<style>
 		#editWin label {width: 115px;}
@@ -169,10 +133,10 @@
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true"/></td>
 						<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
-						<td><input type="file"  name="file"/></td>
+						<td><input type="file" name="file" fileType="apk"/></td>
 				</tr>
 				<tr>
-						<td><form:label	for="size" path="size"  cssClass="mustInput">文件夹大小：</form:label></td>
+						<td><form:label	for="size" path="size"  cssClass="mustInput">文件大小：</form:label></td>
 						<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
 					<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>

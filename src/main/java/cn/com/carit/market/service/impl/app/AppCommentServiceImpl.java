@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ import cn.com.carit.market.service.app.AppCommentService;
 @Service
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class AppCommentServiceImpl implements AppCommentService{
-	
+	private final Logger log = Logger.getLogger(getClass());
 	@Resource
 	private AppCommentDao appCommentDao;
 	@Resource
@@ -66,6 +67,14 @@ public class AppCommentServiceImpl implements AppCommentService{
 			throw new IllegalArgumentException("appId must be bigger than 0...");
 		}
 		return appCommentDao.deleteByAppId(appId);
+	}
+
+	@Override
+	public int[] batchDelete(String[] ids) {
+		if (ids==null || ids.length==0) {
+			log.warn("id array is empty...");
+		}
+		return appCommentDao.batchDelete(ids);
 	}
 
 	@Override

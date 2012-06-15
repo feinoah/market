@@ -5,12 +5,12 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.2" ></script>
 		<script type="text/javascript">
 		var accountStatusList;
 		$(function(){
 			// 初始化
-			$('#ttt').datagrid({
+			$('#tt').datagrid({
 				width:'100%',
 				method:'get',
 				toolbar:[{
@@ -30,14 +30,14 @@
 			});
 			$("#submit").bind("click", function(){
 				//先取得 datagrid 的查询参数 
-				var params = $('#ttt').datagrid('options').queryParams;
+				var params = $('#tt').datagrid('options').queryParams;
 				//自动序列化表单元素为JSON对象
 		        var fields =$('#searchForm').serializeArray();   
 		        $.each( fields, function(i, field){
 		            params[field.name] = field.value; //设置查询参数  
 		        });
 		        //设置好查询参数 reload 一下就可以了
-		        $('#ttt').datagrid('reload'); 
+		        $('#tt').datagrid('reload'); 
 			});
 			$('#reset').bind('click',function(){ $('#searchForm').form('clear');});
 			// edit form
@@ -70,7 +70,7 @@
 				        	$('#editWin').window('close');
 				        	// clear form
 				        	// update rows
-				        	$('#ttt').datagrid('reload');
+				        	$('#tt').datagrid('reload');
 						}else{
 			    			$.messager.alert('异常', "后台系统异常", 'error');
 						}
@@ -124,9 +124,12 @@
 				textField:'displayValue'
 			});
 			$.ajaxSettings.async = true;
+			$('.combobox-f').each(function(){
+				$(this).combobox('clear');
+			});
 		});
 		function edit() {
-			var m = $('#ttt').datagrid('getSelected');
+			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
 					$(this).removeClass('validatebox-invalid');
@@ -155,53 +158,15 @@
 				});
 			}
 		}
-
-		function del() {
-			var m = $('#ttt').datagrid('getSelected');
-			if (m) {
-				$.messager.confirm('警告','您确认要删除吗?',function(data) {
-					if (data) {
-						$.messager.progress({title:'请稍后',msg:'提交中...'});
-						$.ajax({
-							url : '${ctx}/admin/app/account/delete/'+ m.id,
-							type : 'GET',
-							timeout : 1000,
-							error : function() {
-								$.messager.alert('错误','删除失败!','error');
-							},
-							success : function(data) {
-								$.messager.progress('close');
-								if (data == -1) {
-									$.messager.alert('错误','删除失败!','error');
-								} else if (data > 0) {
-									$.messager.alert('成功','删除成功','info');
-									// update rows
-									$('#ttt').datagrid('reload');
-									// clear selected
-									$('#ttt').datagrid('unselectAll');
-								} else {
-									$.messager.alert('异常','后台系统异常','error');
-								}
-							}
-						});
-					}
-				});
-			} else {
-				$.messager.show({
-					title : '警告',
-					msg : '请先选择要删除的记录。'
-				});
-			}
-		}
 		
 		function lock() {
-			var m = $('#ttt').datagrid('getSelected');
+			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$.messager.confirm('警告','您确认要封号吗?',function(data) {
 					if (data) {
 						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
-							url : '${ctx}/admin/app/account/lock/'+ m.id,
+							url : '${ctx}/admin/app/account/lock?id='+ m.id,
 							type : 'GET',
 							timeout : 1000,
 							error : function() {
@@ -214,7 +179,7 @@
 								} else if (data > 0) {
 									$.messager.alert('成功','封号成功','info');
 									// update rows
-									$('#ttt').datagrid('reload');
+									$('#tt').datagrid('reload');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}
@@ -230,13 +195,13 @@
 			}
 		}
 		function unlock() {
-			var m = $('#ttt').datagrid('getSelected');
+			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$.messager.confirm('警告','您确认要解封吗?',function(data) {
 					if (data) {
 						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
-							url : '${ctx}/admin/app/account/unlock/'+ m.id,
+							url : '${ctx}/admin/app/account/unlock?id='+ m.id,
 							type : 'GET',
 							timeout : 1000,
 							error : function() {
@@ -249,7 +214,7 @@
 								} else if (data > 0) {
 									$.messager.alert('成功','解封成功','info');
 									// update rows
-									$('#ttt').datagrid('reload');
+									$('#tt').datagrid('reload');
 								} else {
 									$.messager.alert('异常','后台系统异常','error');
 								}
@@ -285,7 +250,7 @@
 		function accountStatusFormatter(v){
 			var result='-';
 			$.each(accountStatusList, function(key,val) {
-				if(v==val.fieldValue){
+				if((v&val.fieldValue)!=0){
 					result=val.displayValue;
 					return false;
 				}
@@ -353,7 +318,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="ttt" style="height: auto;" iconCls="icon-blank" title="账号列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="账号列表" align="left" singleSelect="true" 
 			idField="id" url="${ctx}/admin/app/account/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>

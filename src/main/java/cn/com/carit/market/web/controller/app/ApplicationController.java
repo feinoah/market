@@ -13,9 +13,9 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -149,13 +149,13 @@ public class ApplicationController {
 	
 	/**
 	 * 查看
-	 * admin/app/application/view/{id}
+	 * admin/app/application/view?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view", method=RequestMethod.GET)
 	@ResponseBody
-	public Application view(@PathVariable int id){
+	public Application view(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return null;
@@ -165,13 +165,13 @@ public class ApplicationController {
 	
 	/**
 	 * 删除
-	 * admin/app/application/delete/{id}
+	 * admin/app/application/delete?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@PathVariable int id){
+	public int delete(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return -1;

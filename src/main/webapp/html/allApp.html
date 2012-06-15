@@ -14,10 +14,18 @@
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.2"></script>
 		<title>CarIt Market</title>
 		
 		<script type="text/javascript">
+		function onPicError(){
+			t = document.getElementsByClassName("allapp_detail_img");
+			 for(i = 0; i < t.length; i++){
+			     t.item(i).onerror = function(){
+			       this.src = "../resources/public/images/app_default.jpg"
+			     }
+			   }
+			}
 		var arrayStar = new Array("../resources/public/images/comment_star1.png","../resources/public/images/comment_star2.png","../resources/public/images/comment_star3.png",
 				"../resources/public/images/comment_star4.png","../resources/public/images/comment_star5.png","../resources/public/images/comment_star6.png");
 		
@@ -69,6 +77,7 @@ $(function(){
 							+o.description+
 							'</div><img src="../resources/public/images/install.jpg"></img></td><td><span style="margin-top: 53px;display:block">...</span></td></tr></table></div>');
 				})
+				onPicError();
 			}
 		});
 		
@@ -89,6 +98,7 @@ $(function(){
 							+o.description+
 							'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 				})
+				onPicError();
 			}
 		});
 		
@@ -110,6 +120,7 @@ $(function(){
 						+o.description+
 						'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 			})
+			onPicError();
 		}
 	});
 	}

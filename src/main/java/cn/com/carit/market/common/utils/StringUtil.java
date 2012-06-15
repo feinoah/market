@@ -1,6 +1,7 @@
 package cn.com.carit.market.common.utils;
 
 
+
 public class StringUtil {
 
 	/**
@@ -23,4 +24,5 @@ public class StringUtil {
 	public static void main(String[] args) {
 		System.out.println(splitFieldWords("updateTime"));
 	}
+	
 }

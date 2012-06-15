@@ -41,7 +41,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="评论列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="下载记录列表" align="left" singleSelect="true" 
 			idField="id" url="${ctx}/admin/app/download/query?appId=${param.appId}" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="downloadTime" sortOrder="desc">
 				<thead>

@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.1" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.2" ></script>
 		<script type="text/javascript">
 		var catalogs;
 		var tag=0;
@@ -69,7 +69,7 @@
 			});
 			$.ajaxSettings.async = true;
 			// 初始化
-			$('#ttt').datagrid({
+			$('#tt').datagrid({
 				width:'100%',
 				method:'get',
 				toolbar:[{
@@ -96,7 +96,7 @@
 					text :'版本',
 					iconCls:'icon-add',
 					handler:function() {
-						var m = $('#ttt').datagrid('getSelected');
+						var m = $('#tt').datagrid('getSelected');
 						if (m) {
 							$('#appId').val(m.id);
 							$('#editVersionWin').window('open');
@@ -121,9 +121,9 @@
 				$('#editForm').form({
 					onSubmit:function(){
 						// 避免 form validate bug
-						$('#catalogId_edit').val($('#catalogId_edit').combobox('getText'));
-						$('#status_edit').val($('#status_edit').combobox('getText'));
-						$('#supportLanguages_edit').val($('#supportLanguages_edit').combobox('getText'));
+						$('.easyui-combobox').each(function(){
+							$(this).val($(this).combobox('getText'));
+						});
 						$('#editForm textarea').each(function(){
 							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
 								$.messager.alert('提示', '描述超出'+$(this).attr('maxLen')+'字符', 'info');
@@ -134,7 +134,17 @@
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						}
-						var b=$(this).form('validate');
+						var b=true;
+						$('#editForm input[type=file]').each(function(){
+							b=chkFileType($(this).val(),$(this).attr('fileType'));
+							if(!b){
+								$.messager.alert('提示', '请上传 '+$(this).attr('fileType')+' 类型的文件', 'info');
+								b=false;
+								return false;
+							};
+						});
+						if(!b){return b;}
+						b=$(this).form('validate');
 						if(b){
 							$.messager.progress({title:'请稍后',msg:'提交中...'});
 						}
@@ -148,7 +158,7 @@
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editWin').window('close');
 				        	// update rows
-				        	$('#ttt').datagrid('reload');
+				        	$('#tt').datagrid('reload');
 						}else{
 			    			$.messager.alert('异常', "后台系统异常", 'error');
 						}
@@ -171,6 +181,8 @@
 						if($('#versionFile').val()==''){
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
+						} else {
+							chkFileType($('#versionFile').val(),$('#versionFile').attr('fileType'));
 						}
 						var b=$(this).form('validate');
 						if(b){
@@ -186,7 +198,7 @@
 							$.messager.alert('成功', "编辑成功", 'info');
 				        	$('#editVersionWin').window('close');
 				        	// update rows
-				        	$('#ttt').datagrid('reload');
+				        	$('#tt').datagrid('reload');
 						}else{
 			    			$.messager.alert('异常', "后台系统异常", 'error');
 						}
@@ -197,9 +209,12 @@
 			$('#editVersionWin').window({onClose:function(){
 				$('.validatebox-tip').remove();
 			}});
+			$('.combobox-f').each(function(){
+				$(this).combobox('clear');
+			});
 		});
 		function edit() {
-			var m = $('#ttt').datagrid('getSelected');
+			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				tag=1;
 				$('#editForm input').each(function(){
@@ -236,43 +251,6 @@
 			}
 		}
 
-		function del() {
-			var m = $('#ttt').datagrid('getSelected');
-			if (m) {
-				$.messager.confirm('警告','您确认要删除吗?',function(data) {
-					if (data) {
-						$.messager.progress({title:'请稍后',msg:'提交中...'});
-						$.ajax({
-							url : '${ctx}/admin/app/application/delete/'+ m.id,
-							type : 'GET',
-							timeout : 1000,
-							error : function() {
-								$.messager.alert('错误','删除失败!','error');
-							},
-							success : function(data) {
-								$.messager.progress('close');
-								if (data == -1) {
-									$.messager.alert('错误','删除失败!','error');
-								} else if (data > 0) {
-									$.messager.alert('成功','删除成功','info');
-									// update rows
-									$('#ttt').datagrid('reload');
-									// clear selected
-									$('#ttt').datagrid('unselectAll');
-								} else {
-									$.messager.alert('异常','后台系统异常','error');
-								}
-							}
-						});
-					}
-				});
-			} else {
-				$.messager.show({
-					title : '警告',
-					msg : '请先选择要删除的记录。'
-				});
-			}
-		}
 		function lanFormatter(v){
 			var result=v;
 			$.each(languages, function(key,val) {
@@ -295,7 +273,7 @@
 			return result;
 		}
 		function searchVersion() {
-			var m = $('#ttt').datagrid('getSelected');
+			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				location.href='${ctx}/admin/app/version?appId='+m.id;
 			} else {
@@ -379,7 +357,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="ttt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left" singleSelect="true" 
 			idField="id" url="${ctx}/admin/app/application/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="downCount" sortOrder="desc">
 				<thead>
@@ -451,26 +429,26 @@
 						<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">
 							<div id="desc_tabs" title="应用描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="description" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="description" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enDescription" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="enDescription" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div> 
 							</div>
 						 	<div id="permission_tabs" title="权限描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="permissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="permissionDesc" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enPermissionDesc" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="enPermissionDesc" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div> 
 							</div>
 							<div id="features_tabs" title="特性描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
 								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="features" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="features" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div>  
 								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enFeatures" cssClass="easyui-validatebox" validType="maxLength[250]" maxLen="250"/>
+									<form:textarea path="enFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
 								</div> 
 							</div>
 						</div> 
@@ -485,20 +463,20 @@
 						<table>
 							<tr>
 								<td><label class="mustInput">应用文件：</label></td>
-								<td><input type="file"  name="apkFile" id="apkFile"/></td>
+								<td><input type="file"  name="apkFile" id="apkFile" fileType='apk'/></td>
 						</tr>
 						<tr>
 							<td><label>小图标：</label></td>
-							<td><input type="file"  name="iconFile" id="iconFile"/></td>
+							<td><input type="file"  name="iconFile" id="iconFile" fileType="jpg|png"/></td>
 						</tr>
 						<tr>
 							<td><label>大图标：</label></td>
-							<td><input type="file"  name="bigIconFile" id="bigIconFile"/></td>
+							<td><input type="file"  name="bigIconFile" id="bigIconFile" fileType="jpg|png"/></td>
 						</tr>
 						<tr>
-							<td rowspan="2"><label>截图</label></td><td><input type="file" name="imageFile" /></td><td><input type="file" name="imageFile" /></td><td><input type="file" name="imageFile" /></td>
+							<td rowspan="2"><label>截图</label></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td>
 						</tr>
-						<tr><td><input type="file" name="imageFile" /></td></td><td><input type="file" name="imageFile" /></tr>
+						<tr><td><input type="file" name="imageFile" fileType="jpg|png"/></td></td><td><input type="file" name="imageFile" fileType="jpg|png"/></tr>
 						</table>
 					</div>
 				</div>  
@@ -516,7 +494,7 @@
 				<table>
 					<tr>
 						<td><label for="filePath" class="mustInput">应用文件：</label></td>
-						<td><input type="file" name="file" id="versionFile" /></td>
+						<td><input type="file" name="file" id="versionFile" fileType="apk"/></td>
 						<td><label	for="size" class="mustInput">文件大小：</label></td>
 						<td>
 						<input type="text" name="size" id="size" class="easyui-validatebox" required="true"/>
@@ -538,10 +516,10 @@
 					<td colspan="3">
 						<div id="new_features_tabs" class="easyui-tabs" style="width:420px;height:100px;">
 							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[250]" maxLen="250"></textarea>
+								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[500]" maxLen="500"></textarea>
 							</div>  
 							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="enNewFeatures" class="easyui-validatebox" validType="maxLength[250]" maxLen="250"></textarea>
+								<textarea name="enNewFeatures" class="easyui-validatebox" validType="maxLength[500]" maxLen="500"></textarea>
 							</div> 
 						</div>
 					</td>

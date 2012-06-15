@@ -9,17 +9,27 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.1" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.2" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.1"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.2"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.1"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.2"></script>
 <script type="text/javascript">
 function submit(id)
 {
 window.open("html/appDetail.html?inputStr=" + id);//传入参数
 }   
+
+function onPicError(){
+t = document.getElementsByClassName("iconImg");
+ for(i = 0; i < t.length; i++){
+     t.item(i).onerror = function(){
+       this.src = "resources/public/images/app_default.jpg"
+     }
+   }
+}
+
 var arrayStar = new Array("resources/public/images/comment_star1.png","resources/public/images/comment_star2.png","resources/public/images/comment_star3.png","resources/public/images/comment_star4.png",
                        "resources/public/images/comment_star5.png","resources/public/images/comment_star6.png");
 	var _loadingICO;
@@ -62,6 +72,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 					);
 				});
 				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=allnewfreeapp" >全部热门免费应用</a></li>');
+				onPicError();
 			}
 		});
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
@@ -83,9 +94,12 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 					);
 				});
 				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=hotfreenew" >全部热门免费新品</a></li>');
+				onPicError();
 			}
 		});
 	});
+	
+
 </script>
 </head>
 <body style="margin: 0; padding: 0; text-align: center;">
@@ -258,6 +272,8 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 			setTab("one", 1, 2);
 			setTab("two", 1, 2);
 		}
+		
+		
 	</script>
 
 </body>

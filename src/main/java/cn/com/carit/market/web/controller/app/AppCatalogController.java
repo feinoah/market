@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.carit.market.bean.app.AppCatalog;
@@ -60,13 +60,13 @@ public class AppCatalogController {
 	
 	/**
 	 * 查看
-	 * admin/app/catalog/view/{id}
+	 * admin/app/catalog/view?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view", method=RequestMethod.GET)
 	@ResponseBody
-	public AppCatalog view(@PathVariable int id){
+	public AppCatalog view(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return null;
@@ -76,13 +76,13 @@ public class AppCatalogController {
 	
 	/**
 	 * 删除
-	 * admin/app/catalog/delete/{id}
+	 * admin/app/catalog/delete?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@PathVariable int id){
+	public int delete(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return -1;

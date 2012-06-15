@@ -9,9 +9,9 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.carit.market.bean.app.AccountInfo;
@@ -73,13 +73,13 @@ public class AccountInfoController {
 	
 	/**
 	 * 查看
-	 * admin/app/account/view/{id}
+	 * admin/app/account/view?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view", method=RequestMethod.GET)
 	@ResponseBody
-	public AccountInfo view(@PathVariable int id){
+	public AccountInfo view(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return null;
@@ -89,13 +89,13 @@ public class AccountInfoController {
 	
 	/**
 	 * 删除
-	 * admin/app/account/delete/{id}
+	 * admin/app/account/delete?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@PathVariable int id){
+	public int delete(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return -1;
@@ -116,24 +116,24 @@ public class AccountInfoController {
 	
 	/**
 	 * 封号
-	 * admin/app/account/lock/{id}
+	 * admin/app/account/lock?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="lock/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="lock", method=RequestMethod.GET)
 	@ResponseBody
-	public int lock(@PathVariable int id){
+	public int lock(@RequestParam int id){
 		return accountInfoService.lockAccount(id);
 	}
 	/**
 	 * 解封
-	 * admin/app/account/unlock/{id}
+	 * admin/app/account/unlock?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="unlock/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="unlock", method=RequestMethod.GET)
 	@ResponseBody
-	public int unlock(@PathVariable int id){
+	public int unlock(@RequestParam int id){
 		return accountInfoService.unLockAccount(id);
 	}
 	/**

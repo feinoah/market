@@ -6,9 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.com.carit.market.bean.BaseModule;
@@ -55,13 +55,13 @@ public class BaseModuleController {
 	
 	/**
 	 * 查看
-	 * admin/permission/module/view/{id}
+	 * admin/permission/module/view?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="view/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="view", method=RequestMethod.GET)
 	@ResponseBody
-	public BaseModule view(@PathVariable int id){
+	public BaseModule view(@RequestParam int id){
 		if (id<=0) {
 			log.debug("The param id must be bigger than 0...");
 			return null;
@@ -71,13 +71,13 @@ public class BaseModuleController {
 	
 	/**
 	 * 删除
-	 * admin/permission/module/delete/{id}
+	 * admin/permission/module/delete?id={id}
 	 * @param id
 	 * @return
 	 */
-	@RequestMapping(value="delete/{id}", method=RequestMethod.GET)
+	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@PathVariable int id){
+	public int delete(@RequestParam int id){
 		return baseModuleService.delete(id);
 	}
 	
