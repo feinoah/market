@@ -135,6 +135,21 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
+	public int updateToInvalidByAppId(int appId, int exceptedId) {
+		StringBuilder sql = new StringBuilder(
+				"update t_app_version_file set update_time=now(), status=? where app_id=?");
+		List<Object> args = new ArrayList<Object>();
+		args.add(Constants.STATUS_INVALID);
+		args.add(appId);
+		if (exceptedId>0) {
+			sql.append(" and id!=?");
+			args.add(exceptedId);
+		}
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql.toString(), args.toArray());
+	}
+
+	@Override
 	public AppVersionFile queryById(int id) {
 		String sql = "select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.id=?";
 		log.debug(String.format("\n%1$s\n", sql));
@@ -150,11 +165,11 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	}
 
 	@Override
-	public List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptId) {
+	public List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptedId) {
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a " +
-				"left join t_application b on a.app_id=b.id where a.app_id=? and a.status!=? and a.id!=? order by a.id desc";
+				"left join t_application b on a.app_id=b.id where a.app_id=? and a.id!=? order by a.id desc";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.query(sql, new Object[]{appId, Constants.STATUS_INVALID, exceptId}, rowMapper);
+		return jdbcTemplate.query(sql, new Object[]{appId, exceptedId}, rowMapper);
 	}
 
 	@Override
@@ -195,7 +210,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 				&& StringUtils.hasText(dgm.getSort())) {
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
-					.append(" ").append(dgm.getOrder());
+					.append(" ").append(dgm.getOrder()).append(", id desc");
+		} else {
+			sql.append(" ordery by update_time, create_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());

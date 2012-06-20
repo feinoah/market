@@ -86,7 +86,7 @@ public class AppVersionFileController {
 	        	// 获取文件的后缀 
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
-	        	String fileName =  application.getEnName()+"_"+appVersionFile.getVersion()+"_"+System.nanoTime()+ suffix;// 构建文件名称
+	        	String fileName =  application.getEnName()+"_"+appVersionFile.getVersion()+"_"+System.nanoTime()+ suffix.toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getApkFile(fileName);
 					multipartFile.transferTo(file);
 	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+fileName);

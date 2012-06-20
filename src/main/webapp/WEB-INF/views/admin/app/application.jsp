@@ -5,26 +5,14 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.2" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
 		<script type="text/javascript">
-		var catalogs;
 		var tag=0;
-		var languages;
 		$(function(){
 			$.ajaxSettings.async = false;
-			$.getJSON('${ctx}/portal/catalog/all?local=cn', function(data) {
-				if(data){
-					catalogs=data;
-				}
-			});
 			$.getJSON('${ctx}/back/field/query/platform', function(data) {
 				if(data){
 					fieldList=data;
-				}
-			});
-			$.getJSON('${ctx}/back/field/query/suppor_language', function(data) {
-				if(data){
-					languages=data;
 				}
 			});
 			$.ajaxSettings.async = true;
@@ -67,7 +55,12 @@
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
-			$.ajaxSettings.async = true;
+			$('#version_status_edit').combobox({
+				data:statusList,
+				editable:false,
+				valueField:'fieldValue',
+				textField:'displayValue'
+			});
 			// 初始化
 			$('#tt').datagrid({
 				width:'100%',
@@ -178,13 +171,20 @@
 								return false;
 							}
 						});
+						var b=true;
 						if($('#versionFile').val()==''){
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						} else {
-							chkFileType($('#versionFile').val(),$('#versionFile').attr('fileType'));
+							b=chkFileType($('#versionFile').val(),$('#versionFile').attr('fileType'));
+							if(!b){
+								$.messager.alert('提示', '请上传 '+$('#versionFile').attr('fileType')+' 类型的文件', 'info');
+								b=false;
+								return false;
+							}
 						}
-						var b=$(this).form('validate');
+						if(!b){return b;}
+						b=$(this).form('validate');
 						if(b){
 							$.messager.progress({title:'请稍后',msg:'提交中...'});
 						}
@@ -205,6 +205,7 @@
 				    }
 				}).submit();
 			});
+			$('#edit_reset_version').click(function(){$('#editVersionForm').form('clear');});
 			checkEditControl();
 			$('#editVersionWin').window({onClose:function(){
 				$('.validatebox-tip').remove();
@@ -251,27 +252,6 @@
 			}
 		}
 
-		function lanFormatter(v){
-			var result=v;
-			$.each(languages, function(key,val) {
-				if(v==val.fieldValue){
-					result=val.displayValue;
-					return false;
-				}
-			});
-			return result;
-		}
-		
-		function catalogFormatter(v){
-			var result='-';
-			$.each(catalogs, function(key,val) {
-				if(v==val.id){
-					result=val.name;
-					return false;
-				}
-			});
-			return result;
-		}
 		function searchVersion() {
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
@@ -374,12 +354,12 @@
 						<th field="platform" width="100" align="center" formatter="fieldFormatter">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
 						<th field="price" width="60" align="center">价格</th>
-						<th field="appLevel" width="80" align="center" formatter="appLevelFormatter">应用评级</th>
+						<th field="appLevel" width="80" align="center" formatter="gradeFormatter">应用评级</th>
 						<th field="description" width="80" align="center"  hidden="true">描述</th>
 						<th field="enDescription" width="80" align="center"  hidden="true">描述</th>
 						<th field="permissionDesc" width="80" hidden="true">权限描述</th>
 						<th field="enPermissionDesc" width="80" hidden="true">权限描述</th>
-						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
+						<th field="status" width="60" align="center" formatter="appStatusFormatter">状态</th>
 					</tr>
 				</thead>
 			</table>
@@ -505,10 +485,8 @@
 						<td><input type="text" name="version" id="version" required="true" class="easyui-validatebox"/></td>
 					<td><label	for="status" class="mustInput">状态：</label></td>
 					<td>
-						<select name="status" id="version_status_edit" required="true" class="easyui-validatebox easyui-combobox" editable='false' >
-							<option value="1">启用</option>
-							<option value="0">停用</option>
-						</select>
+					
+						<input name="status" id="version_status_edit" required="true" class="easyui-validatebox easyui-combobox" editable='false' />
 					</td>
 				</tr>
 				<tr>
@@ -533,9 +511,6 @@
 						iconCls="icon-undo">重 置</a>
 				</div>
 			</form>
-		</div>
-		<div id="mask" style="z-index: 999999; width: 100%;height: 100%;background: #CCC;display: none;">
-			<div id="p" class="easyui-progressbar" style="width:400px;"></div>			
 		</div>
 	</body>
 </html>

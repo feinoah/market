@@ -96,4 +96,12 @@ public interface ApplicationDao {
 	 */
 	int checkApplication(String appName, String local);
 	
+	/**
+	 * 全文检索应用
+	 * @param local
+	 * @param ids
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage<PortalApplication> fullTextSearch(String local, String ids, DataGridModel dgm);
 }

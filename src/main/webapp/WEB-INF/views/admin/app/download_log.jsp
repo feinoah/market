@@ -10,7 +10,18 @@
 		$(function(){
 			// 初始化
 			$('#tt').datagrid({width:'100%',method:'get'});
-			$('.datagrid-toolbar').hide();//没有编辑
+			$("#submit").bind("click", function(){
+				//先取得 datagrid 的查询参数 
+				var params = $('#tt').datagrid('options').queryParams;
+				//自动序列化表单元素为JSON对象
+				var fields =$('#searchForm').serializeArray();   
+				$.each( fields, function(i, field){
+					params[field.name] = field.value; //设置查询参数  
+				});
+				//设置好查询参数 reload 一下就可以了
+				$('#tt').datagrid('reload'); 
+			});
+			$('#reset').bind('click',function(){ $('#searchForm').form('clear');});
 		});
 		</script>
 		<style>

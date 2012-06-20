@@ -9,12 +9,12 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.2" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.3" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.2"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.3"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.2"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.3"></script>
 <script type="text/javascript">
 function submit(id)
 {
@@ -59,10 +59,11 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 				$.each(data, function(i, o) {
 				
 					if(i<5){
-						$('#freeTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a onclick="submit('+o.id+')"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
+						$('#freeTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend').append(
-						'<div title="'+o.appName+'"><img onclick="submit('+o.id+')" class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/><label class="label1"><b>'
+							
+						'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'"><img class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/></a><label class="label1"><b>'
 						+o.appName
 						+'</b></label><label class="label2">'
 						+o.developer
@@ -81,10 +82,10 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 				$('#clerk_recommend_car').empty();
 				$.each(data, function(i, o) {
 					if(i<5){
-						$('#freeNewTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a onclick="submit('+o.id+')"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
+						$('#freeNewTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
 					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><img src="'+o.icon+'"  class="iconImg" onclick="submit('+o.id+')" alt="'+o.appName+'"/><label class="label1"><b>'
+						'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'"><img src="'+o.icon+'"  class="iconImg" alt="'+o.appName+'"/></a><label class="label1"><b>'
 						+o.appName
 						+'</b></label><label class="label2">'
 						+o.developer
@@ -108,30 +109,20 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 		<div id="header">
 			<ul>
 				<li><img src="resources/public/images/carit_logo1.png"/></li>
-				<li><input type="text" name="txtNo"/></li>
-				<li><button id="search">搜索</button></li>
-				<li name="before_login"><button id="login">登录</button></li>
-				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li><input class="index_input" type="text" name="txtNo"/></li>
+				<li><input type="button" class="search_bn" id="search"></input></li>
+				<li name="before_login"><input type="button" class="login_bn" id="login" value="登陆"></input></li>
+				<li name="before_login"><input id="reg" class="login_bn" type="button" value="注册"></input></li>
 				<li id="after_login" style="display: none;"><span></span></li>
 			</ul>
 		</div>
-
 		<div class="container" id="idContainer"
-			style="height: 311px; width: 1024px; background-color: #DEDEDE;">
+			style="height: 295px; width: 1024px; background-color: #DEDEDE;">
 			<table id="idSlider" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/06/SlideTrans.html"><img
-							src="resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2009/01/06/Tween.html"><img
-							src="resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img
-							src="resources/public/images/first_ad.png" /></a></td>
-					<td><a
-						href="http://www.cnblogs.com/cloudgamer/archive/2008/07/21/ImgCropper.html"><img
-							src="resources/public/images/first_ad.png" /></a></td>
+					<td><img src="resources/public/images/first_ad1.png" /></td>
+					<td><img src="resources/public/images/first_ad2.png" /></td>
+					<td><img src="resources/public/images/first_ad3.png" /></td>
 				</tr>
 			</table>
 			<ul class="num" id="idNum">
@@ -164,7 +155,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 				</div>
 			</div>
 			<div id="left_bottom"
-				style="float: left; width: 330px; height: 445px; margin-top: 13px; background-color: white">
+				style="float: left; width: 330px; height: 445px; margin-top: 10px; background-color: white">
 				<div id="con_one_1" style="padding: 30px 0;">
 					<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费新品</b></font>
 					<ul id="freeNewTop">
@@ -176,7 +167,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 			</div>
 		</div>
 		<div id="Tab2"
-			style="float: right; width: 66%; height: 586px; margin-top: 7px;">
+			style="float: right; width: 67%; height: 586px; margin-top: 7px;">
 			<div class="Menubox">
 				<ul>
 					<li id="two1" onclick="setTab('two',1,2)">店员推荐</li>
@@ -228,7 +219,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 	</div>
 	<script>
 		var nums = [], timer, n = $$("idSlider").getElementsByTagName("td").length, st = new SlideTrans(
-				"idContainer", "idSlider", 4, {
+				"idContainer", "idSlider", 3, {
 					Vertical : false,
 					onStart : function() {//设置按钮样式
 						forEach(nums, function(o, i) {

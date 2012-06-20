@@ -535,4 +535,20 @@ public class PortalController{
 	public @ResponseBody Map<String,Object> statComment(@PathVariable int appId){
 		return appCommentService.statComment(appId);
 	}
+	
+	/**
+	 * 全文搜索应用
+	 * <br>portal/app/search?q=&local=cn|en
+	 * @param local
+	 * @param keywords
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="app/search", method=RequestMethod.GET)
+	public @ResponseBody
+	JsonPage<PortalApplication> fullTextSearch(
+			@RequestParam(required = false) String local,
+			@RequestParam(value = "q") String keywords, DataGridModel dgm) {
+		return applicationService.fullTextSearch(local, keywords, dgm);
+	}
 }

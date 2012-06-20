@@ -48,7 +48,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 		double avg=appCommentDao.queryAvgGrade(appComment.getAppId());
 		Application application=new Application();
 		application.setId(appComment.getAppId());
-		application.setAppLevel((int) Math.rint(avg/2));
+		application.setAppLevel((int) Math.rint(avg));
 		applicationDao.update(application);
 	}
 

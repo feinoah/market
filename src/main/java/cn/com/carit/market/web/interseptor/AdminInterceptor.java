@@ -14,6 +14,7 @@ import cn.com.carit.market.bean.BaseModule;
 import cn.com.carit.market.bean.BaseUser;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
+import cn.com.carit.market.common.utils.SphinxUtil;
 
 /**
  * 后台系统拦截器
@@ -35,6 +36,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 		} 
 		// 初始化附件配置
 		AttachmentUtil.init(hostPath);
+		SphinxUtil.init();
 		log.debug("Request for: "+uri);
 		if (uri.indexOf("admin")!=-1) { // 管理员相关URL
 			BaseUser user=(BaseUser) request.getSession().getAttribute(

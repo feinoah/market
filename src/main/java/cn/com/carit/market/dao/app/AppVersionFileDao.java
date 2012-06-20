@@ -41,6 +41,13 @@ public interface AppVersionFileDao {
 	int update(AppVersionFile appVersionFile);
 	
 	/**
+	 * 加版本或启用版本时将非最新/当前版本记录更新为无效
+	 * @param appId
+	 * @param exceptedId
+	 * @return
+	 */
+	int updateToInvalidByAppId(int appId, int exceptedId);
+	/**
 	 * 按Id查询
 	 * @param id
 	 * @return
@@ -57,10 +64,10 @@ public interface AppVersionFileDao {
 	/**
 	 * 按应用Id和排除Id查询，返回结果按Id倒序排序
 	 * @param appId 应用Id
-	 * @param exceptId 排除之外的记录Id
+	 * @param exceptedId 排除之外的记录Id
 	 * @return
 	 */
-	List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptId);
+	List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptedId);
 	
 	/**
 	 * 查询

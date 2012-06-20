@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.2"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.3"></script>
 		
 		<script type="text/javascript">
 		function onPicError(){
@@ -26,6 +26,20 @@
 			     }
 			   }
 			}
+		function onBigPicError(){
+			t1 = document.getElementsByClassName("app_big_icon");
+			t2 = document.getElementsByClassName("doc-screenshot-img");
+			 for(i = 0; i < t2.length; i++){
+			     t2.item(i).onerror = function(){
+			       this.src = "../resources/public/images/image_error.jpg"
+			     }
+			   }
+			
+			
+			t1.item(0).onerror = function(){
+				this.src = "../resources/public/images/app_pic.jpg"
+			}
+		}
 		var arrayStar = ["../resources/public/images/comment_star1.png","../resources/public/images/comment_star2.png","../resources/public/images/comment_star2.png",
 		                 "../resources/public/images/comment_star3.png","../resources/public/images/comment_star3.png",
 				"../resources/public/images/comment_star4.png","../resources/public/images/comment_star4.png",
@@ -104,11 +118,15 @@
 			 $.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
 					if(data){
 						$('#label_appname').empty().html(data.appName);
-						$('#label_author').empty().html(data.enName);
+						$('#label_author').empty().html(data.developer);
 						$('#img_icon').empty().attr("src",arrayStar[data.appLevel]);
 						$('#comment_star1').attr("src",arrayStar[data.appLevel]);
 						$('#comment_star2').attr("src",arrayStar[data.appLevel]);
 						$('#comment_star3').attr("src",arrayStar[data.appLevel]);
+						$('#img_big_icon').attr("src",data.bigIcon);
+						$('#app_image1').attr("src",data.images);
+						$('#app_image2').attr("src",data.images);
+						//TODO:
 						$('#label_count').empty().html(data.downCount);
 						$('#about_count').empty().html(data.downCount);
 						$('#about_date').empty().html(data.updateTime);
@@ -125,6 +143,7 @@
 						$('#app_downcount1').empty().html(data.downCount);
 						$('#app_downcount2').empty().html(data.downCount);
 					}
+					onBigPicError();
 				});
 				
 				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
@@ -136,24 +155,28 @@
 							if(i<3){
 							$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
 							+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
-							+o.comment+'</p></div><hr>');
+							+o.comment+'</p></div><hr class="detail_comment_hr">');
 							}
 							$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
-							+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
-							+o.comment+'</p></div><hr>');
+							+o.updateTime+'"</span><img style="display:block" src="'+arrayStar[o.grade]+'" alt="" /><p class="review-text">'
+							+o.comment+'</p><hr class="detail_comment_hr"></div>');
 							
 						});
+						initPaging();
+						
 					}
 				});
 
 		$.getJSON('../portal/app/hot/free/new/4?local=', function(data) {
 			if(data){
 				$('#author_more').empty();
-				$('#author_more').append('<h3 class="detaiil_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
+				$('#author_more').append('<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
 				$.each(data,function(i,o){
-					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img class="app_detail_icon" src="'+o.icon+'"/></div><div class="detail_right_div""><label style="display: block;"><b>'
-					+o.appName+'</b></label><label class="detail_right_label1">'
-					+o.enName+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('
+					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
+							+o.id+'"><img class="app_detail_icon" src="'
+							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
+					+o.appName+'</b></a><label class="detail_right_label1">'
+					+o.developer+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('
 							+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
 				onPicError();
@@ -165,8 +188,10 @@
 				$('#view_more').empty();
 				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
 				$.each(data,function(i,o){
-					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><img class="app_detail_icon" src='+o.icon+'"/></div><div class="detail_right_div""><label style="display: block;"><b>'
-					+o.appName+'</b></label><label class="detail_right_label1">'+o.enName+'</label><img src="'
+					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
+							+o.id+'"><img class="app_detail_icon" src='
+					+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
+					+o.appName+'</b></a><label class="detail_right_label1">'+o.developer+'</label><img src="'
 					+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'
 					+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
@@ -187,33 +212,28 @@
 <div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
 		<div id="header">
 			<ul>
-				<li><img src="../resources/public/images/carit_logo1.png"/></li>
-				<li><input type="text" name="txtNo"/></li>
-				<li><button id="search">搜索</button></li>
-				<li name="before_login"><button id="login">登录</button></li>
-				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li><a href="../"><img src="../resources/public/images/carit_logo1.png"/></a></li>
+				<li><input class="index_input" type="text" name="txtNo"/></li>
+				<li><input type="button" class="search_bn" id="search"></input></li>
+				<li name="before_login"><input type="button" class="login_bn" id="login" value="登陆"></input></li>
+				<li name="before_login"><input id="reg" class="login_bn" type="button" value="注册"></input></li>
 				<li id="after_login" style="display: none;"><span></span></li>
 			</ul>
 		</div>
 
-<div style="height:311px;width:1024px;background-color:#DEDEDE; ">
+<div style="">
 <div style="float:left;background-image:url('../resources/public/images/app_detail.jpg');width:328px;height:266px;margin-left:-214px;">
  <label id="label_appname" style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
-    <label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px;margin-top: 5px">ALLTHECOOKS.COM</label>
+    <label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px">ALLTHECOOKS.COM</label>
     
-    <table width="300px" border="0px" cellspacing="0px" style="border-collapse:collapse;margin-left:17px;">
-    <tr >
-    <td height="164px">
-    <img src="../resources/public/images/app_pic.jpg" alt="" height="164px" width="136px" style="margin-left: 2px;margin-top: 17px;"/></td>
-    
-    <td height="164px">
-     <img id="img_icon" src="" style="display: inline-block;height: 17px;margin-top: 130px"/>
-     <a style="color: white">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;margin-top: 128px">10,898</label>)</a>
-     <img src="../resources/public/images/install2.jpg" alt="" style="width: 85px;height: 35px;margin-left: 3px"/>
-     </td>
-    </tr>
   
-     </table>
+    <img id="img_big_icon" class="app_big_icon"/>
+    
+ 
+     <img id="img_icon" style="display: inline-block;height: 17px;margin-top: 130px"/>
+     <a style="color: white">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;margin-top: 128px">10,898</label>)</a>
+   
+    
 </div>
    
 
@@ -236,8 +256,8 @@
   
 <!-- left top -->
 
-<div id="left" style="float:left;width:29%;margin-top:7px">
-<div id="author_more" style="float:left;width:330px;height:500px;background-color: white;">
+<div id="left" style="float:left;width:29%;margin-top:12px">
+<div id="author_more" style="float:left;width:328px;height:500px;background-color: white;">
 
    
   
@@ -245,7 +265,7 @@
 
 <!-- left bottom -->
 
-<div id="view_more" style="float:left;width:330px;height:588px;margin-top:13px;background-color: white">
+<div id="view_more" style="float:left;width:328px;height:620px;margin-top:13px;background-color: white">
 
    <h3>安装此应用的用户还安装了：</h3>
   
@@ -255,7 +275,7 @@
     </div>	
 <!-- left bottom -->
     
-<div id="Tab2" style="float:right;width:66%;height:1107px;margin-top:7px;background-color: white">
+<div id="Tab2" style="float:right;width:67%;margin-top:12px;background-color: white">
 <div class="Menubox">
    <ul>
        <li id="two1" onclick="setTab('two',1,4)" >概览</li>
@@ -267,7 +287,7 @@
 <div class="Contentbox2">  
    <div id="con_two_1" >
    <div style="float:left;margin-left: 15px;width:518px">
-  <div style="float:left;width:518px;height:229px;border-style:solid;border-width:1pt; border-color:black;border-left: 0px;border-right: 0px;border-top: 0px;background-color: #FCFCFC">
+  <div style="float:left;width:518px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-left: 0px;border-right: 0px;border-top: 0px;background-color: #FCFCFC">
   <h2>说明</h2>
   <div id="doc-description-container" class="doc-description-collapsed">
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
@@ -291,14 +311,14 @@
   
    <table>
    <tr>
-   <td><img src="../resources/public/images/app_temp1.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
-   <td><img src="../resources/public/images/app_temp2.jpg" class="doc-screenshot-img lightbox goog-inline-block" title="Towers N' Trolls"/></td>
+   <td><img id="app_image1" class="doc-screenshot-img" title=""/></td>
+   <td><img id="app_image2" class="doc-screenshot-img" title=""/></td>
    </tr>
  </table>
   
    </div></div>
    </div>
-<div  style="float:right;width:120px;height:531px;border-style:solid;border-width:1pt; border-color:black;border-bottom: 0px;border-right: 0px;border-top: 0px">
+<div  style="float:right;width:120px;height:531px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-bottom: 0px;border-right: 0px;border-top: 0px">
 <h4>关于此应用</h4>
 <dt style="">评分：</dt>
 
@@ -325,7 +345,7 @@
    
    </div>
    
-   <div  style="float: left;margin-left: 15px;height:500px"><h2>用户评论</h2>  
+   <div  style="float: left;margin-left: 15px;"><h2>用户评论</h2>  
    <div class="histogram-table goog-inline-block" data-csstoken="user-reviews">
    <table><tbody><tr><td class="histogram-msg top-row">5 星</td>
    <td class="top-row bar-cell">
@@ -354,7 +374,7 @@
    
    
    
-   <div id="appCommentSimple" class="doc-review-summary">
+   <div id="appCommentSimple" class="doc-review-summary_simple">
    
   
    
@@ -417,13 +437,70 @@
    
    
    <div id="appComment" class="doc-review-summary">  
+   
+   <!--  <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月11日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
  
+    
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月12日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+  
+  
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月13日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+   
+   
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月14日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+
+  
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月15日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+
+ 
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月16日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月17日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+ 
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月18日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+ 
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月19日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+  
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月20日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+  
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月21日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   
+ ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
+    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
+    <span class="doc-review-date">评论日期：2012年6月21日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
+   
+ ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>-->
+   
+   
    
    </div>
    
+   <div>一共<span id="a1" style="color:#FF0000"></span>页　当前在
+<span id="a2" style="color:#FF0000"></span>页　
+<span id="a3"></span>　<a onClick="change(--pageno)">上一页</a>　　
+<a onClick="change(++pageno)">下一页</a></div>
    
-   
-   </div>
    
   <div id="con_two_3" style="">3</div>
   
@@ -438,7 +515,7 @@
 </div>
 	
 	</div>
-		
+		</div>
 <script>
 var nums = [], timer, n = $$("idSlider").getElementsByTagName("li").length,
 st = new SlideTrans("idContainer", "idSlider", 4, { onStart: function(){//设置按钮样式
@@ -472,6 +549,52 @@ function setTab(name,cursel,n){
   
    setTab("two",1,4);
  }
+ 
+ var pageall;
+ var pagesize=7;          //每页多少条信息
+ var a = document.getElementById("appComment").getElementsByTagName("div"); 
+ var zz =new Array(a.length); 
+ function initPaging(){
+
+ for(var i=0;i <a.length;i++) 
+ { zz[i]=a[i].innerHTML } //div的字符串数组付给zz
+ var pageno=1               //当前页
+
+ if(zz.length%pagesize==0)
+ {pageall =zz.length/pagesize }
+ else
+ {pageall =parseInt(zz.length/pagesize)+1}   //一共多少页
+ change(1);
+ }
+ function change(e){
+ pageno=e;
+ if(e<1)//如果输入页<1页
+ { e=1;pageno=1}//就等于第1页 ， 当前页为1
+ 
+ if(e>pageall)//如果输入页大于最大页 
+ {e=pageall;pageno=pageall}//输入页和当前页都=最大页
+ document.getElementById("appComment").innerHTML=""//全部清空
+ for(var i=0;i<pagesize;i++)
+ {
+    var div =document.createElement("div")//建立div对象
+    div.innerHTML=zz[(e-1)*pagesize+i]//建立显示元素
+    document.getElementById("appComment").appendChild(div)//加入all中 
+    if(zz[(e-1)*pagesize+i+1]==null)//超出范围跳出
+    break 
+ }
+ var ye=""
+ for(var j=1;j<=pageall;j++)
+ {
+ if(e==j)
+ {ye=ye+"<span style='color:#FF0000'>[<a onClick='change("+j+")'>"+j+"</a>]</span>"}
+ else
+ {ye=ye+"[<a onClick='change("+j+")'>"+j+"</a>]"}
+ }
+ document.getElementById("a1").innerHTML=pageall
+ document.getElementById("a2").innerHTML=pageno
+ document.getElementById("a3").innerHTML=ye
+ }
+
 
 </script>	
 		

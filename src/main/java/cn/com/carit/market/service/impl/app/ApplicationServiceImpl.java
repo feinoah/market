@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
+import org.sphx.api.SphinxException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.common.utils.SphinxUtil;
 import cn.com.carit.market.dao.app.AppCommentDao;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
 import cn.com.carit.market.dao.app.ApplicationDao;
@@ -179,6 +181,23 @@ public class ApplicationServiceImpl implements ApplicationService{
 			return applicationDao.checkApplication(appName, local);
 		}
 		return 0;
+	}
+
+	@Override
+	public JsonPage<PortalApplication> fullTextSearch(String local,
+			String keywords, DataGridModel dgm) {
+		if (!StringUtils.hasText(keywords)) {
+			log.warn("keyword is empty...");
+			return new JsonPage<PortalApplication>();
+		}
+		String ids;
+		try {
+			ids = SphinxUtil.getApplicationIdsAsStr(keywords);
+			return applicationDao.fullTextSearch(local, ids, dgm);
+		} catch (SphinxException e) {
+			log.error("fullTextSearch application error...\r\n"+e.getMessage());
+		}
+		return new JsonPage<PortalApplication>();
 	}
 	
 }

@@ -2,6 +2,9 @@ var app={name:'/market'};
 var winTitle;
 var fieldList;
 var statusList;
+var appStatusList;
+var catalogs;
+var languages;
 // 扩展
 $.extend($.fn.validatebox.defaults.rules, {  
 	minLength:{validator: function(v, p){return v.length>p[0];},message: '最少输入{0}个字符'},
@@ -29,6 +32,21 @@ $(function (){
 			statusList=data;
 		}
 	});
+	$.getJSON(app.name+'/back/field/query/app_status', function(data) {
+		if(data){
+			appStatusList=data;
+		}
+	});
+	$.getJSON(app.name+'/portal/catalog/all?local=cn', function(data) {
+		if(data){
+			catalogs=data;
+		}
+	});
+	$.getJSON(app.name+'/back/field/query/suppor_language', function(data) {
+		if(data){
+			languages=data;
+		}
+	});
 	$.ajaxSettings.async = true;
 	// 初始化
 	$('#tt').datagrid({
@@ -44,6 +62,7 @@ $(function (){
 				$('#id').val('');
 				$('#editWin').window('open');
 				$('#editWin').show();
+				$('.validatebox-tip').remove();
 			}
 		}, '-', {
 			text:'修改',
@@ -88,12 +107,14 @@ $(function (){
 				});
 				var b=true;
 				$('#editForm input[type=file]').each(function(){
-					b=chkFileType($(this).val(),$(this).attr('fileType'));
-					if(!b){
-						$.messager.alert('提示', '请上传 '+$(this).attr('fileType')+' 类型的文件', 'info');
-						b=false;
-						return false;
-					};
+					if($(this).val()){
+						b=chkFileType($(this).val(),$(this).attr('fileType'));
+						if(!b){
+							$.messager.alert('提示', '请上传 '+$(this).attr('fileType')+' 类型的文件', 'info');
+							b=false;
+							return false;
+						};
+					}
 				});
 				if(!b){return b;}
 				b=$(this).form('validate');
@@ -290,6 +311,38 @@ function appLevelFormatter(v){
 	}
 	return result;
 }
+function lanFormatter(v){
+	var result=v;
+	$.each(languages, function(key,val) {
+		if(v==val.fieldValue){
+			result=val.displayValue;
+			return false;
+		}
+	});
+	return result;
+}
+
+function catalogFormatter(v){
+	var result='-';
+	$.each(catalogs, function(key,val) {
+		if(v==val.id){
+			result=val.name;
+			return false;
+		}
+	});
+	return result;
+}
+
+function appStatusFormatter(v){
+	var result='-';
+	$.each(appStatusList, function(key,val) {
+		if(v==val.fieldValue){
+			result=val.displayValue;
+			return false;
+		}
+	});
+	return result;
+}
 function checkEditControl(url){
 	$.getJSON(url, function(data) {
 		if(data.save==0&&data.del==0){
@@ -351,9 +404,9 @@ function chkFileType(name,types){
 	var fArray=name.split('.');
 	var suffix=fArray[fArray.length-1];
 	for(var i in tArray){
-		if(suffix.toLowerCase()!=tArray[i].toLowerCase()){
-			return false;
+		if(suffix.toLowerCase()==tArray[i].toLowerCase()){
+			return true;
 		}
 	}
-	return true;
+	return false;
 }

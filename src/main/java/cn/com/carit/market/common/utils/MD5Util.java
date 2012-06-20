@@ -132,6 +132,5 @@ public class MD5Util {
 			System.out.println(str);
 		}
 		System.out.println(StringUtils.hasText(new StringBuffer().toString()));
-		System.out.println(Math.rint(7.0/2));
 	}
 }

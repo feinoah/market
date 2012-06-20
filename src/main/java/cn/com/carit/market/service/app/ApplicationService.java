@@ -94,4 +94,13 @@ public interface ApplicationService {
 	 * @return
 	 */
 	int checkApplication(String appName, String local);
+	
+	/**
+	 * 全文检索应用
+	 * @param local
+	 * @param keywords
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage<PortalApplication> fullTextSearch(String local, String keywords, DataGridModel dgm);
 }

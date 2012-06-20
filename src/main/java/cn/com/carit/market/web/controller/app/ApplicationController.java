@@ -90,7 +90,7 @@ public class ApplicationController {
         		suffix = apkMultipartFile.getOriginalFilename().substring(
         				apkMultipartFile.getOriginalFilename().lastIndexOf("."));
         		// 随机文件名
-        		fileName =  application.getEnName()+"_"+radom+ suffix;// 构建文件名称
+        		fileName =  application.getEnName()+"_"+radom+ suffix.toLowerCase();// 构建文件名称
         		File apkFile=AttachmentUtil.getApkFile(fileName);
         		apkMultipartFile.transferTo(apkFile);
         		application.setAppFilePath(Constants.BASE_PATH_APK+fileName);
@@ -102,7 +102,7 @@ public class ApplicationController {
 	        	suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	fileName =  application.getEnName()+"_"+radom+ suffix;// 构建文件名称
+	        	fileName =  application.getEnName()+"_"+radom+ suffix.toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
 	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
@@ -113,7 +113,7 @@ public class ApplicationController {
 	        	suffix = bigIconMultipartFile.getOriginalFilename().substring(
 	        			bigIconMultipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	fileName =  application.getEnName()+"_"+radom+"_big"+ suffix;// 构建文件名称
+	        	fileName =  application.getEnName()+"_"+radom+"_big"+ suffix.toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
 	        	bigIconMultipartFile.transferTo(file);
 	        	application.setBigIcon(Constants.BASE_PATH_ICON+fileName);
@@ -124,8 +124,8 @@ public class ApplicationController {
 	        for (MultipartFile imageFile : imageFiles) {
 	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
 	        		fileName = imageFile.getOriginalFilename();  
-	        		String extName = fileName.substring(fileName.lastIndexOf(".")).toLowerCase();  
-	        		String lastFileName = application.getEnName()+"_"+radom+"_"+(i+1)+extName;
+	        		String extName = fileName.substring(fileName.lastIndexOf("."));  
+	        		String lastFileName = application.getEnName()+"_"+radom+"_"+(i+1)+extName.toLowerCase();
 	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(lastFileName)); 
 	        		if (i<4) {
 	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");

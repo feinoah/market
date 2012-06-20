@@ -5,9 +5,8 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.2" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
 		<script type="text/javascript">
-		var accountStatusList;
 		$(function(){
 			// 初始化
 			$('#tt').datagrid({
@@ -94,11 +93,6 @@
 					fieldList=data;
 				}
 			});
-			$.getJSON('${ctx}/back/field/query/account_status', function(data) {
-				if(data){
-					accountStatusList=data;
-				}
-			});
 			$('#gender').combobox({
 				data:fieldList,
 				editable:false,
@@ -112,13 +106,13 @@
 				textField:'displayValue'
 			});
 			$('#status').combobox({
-				data:accountStatusList,
+				data:statusList,
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
 			$('#status_edit').combobox({
-				data:accountStatusList,
+				data:statusList,
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
@@ -247,16 +241,6 @@
 				});
 			});
 		}
-		function accountStatusFormatter(v){
-			var result='-';
-			$.each(accountStatusList, function(key,val) {
-				if((v&val.fieldValue)!=0){
-					result=val.displayValue;
-					return false;
-				}
-			});
-			return result;
-		}
 		</script>
 		<style>
 		#editWin label {width: 115px;}
@@ -307,7 +291,7 @@
 						<form:label for="mobile" path="mobile">手机号码：</form:label>
 					</td>
 					<td>
-						<form:input path="gender"/>
+						<form:input path="mobile"/>
 					</td>
 				</tr>
 			</table>
@@ -335,7 +319,7 @@
 						<th field="officePhone" width="100" align="center">办公电话</th>
 						<th field="address" width="100" align="center" hidden="true">地址</th>
 						<th field="lastLoginIp" width="100" align="center">最后登录地址</th>
-						<th field="status" width="60" align="center" formatter="accountStatusFormatter">状态</th>
+						<th field="status" width="60" align="center" formatter="statusFormatter">状态</th>
 						<th field="updateTime" width="90" align="center">更新时间</th>
 					</tr>
 				</thead>

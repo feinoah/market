@@ -292,7 +292,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				&& StringUtils.hasText(dgm.getSort())) {
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
-					.append(" ").append(dgm.getOrder());
+					.append(" ").append(dgm.getOrder()).append(", update_time desc");
+		} else {
+			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
@@ -526,7 +528,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			args.add(application.getFeatures());
 			argTypes.add(12);// java.sql.Types type
 		}
-		log.debug(String.format("\n%1$s\n", sql));
+		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql.toString(), args, argTypes);
 		// 排序
 		if (StringUtils.hasText(dgm.getOrder())
@@ -595,6 +597,41 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			log.warn(e.getMessage());
 		}
 		return result;
+	}
+
+	@Override
+	public JsonPage<PortalApplication> fullTextSearch(String local,
+			String ids, DataGridModel dgm) {
+		JsonPage<PortalApplication> jsonPage = new JsonPage<PortalApplication>(dgm.getPage(), dgm.getRows());
+		if (!StringUtils.hasText(ids)) {
+			return jsonPage;
+		}
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		StringBuilder sql = new StringBuilder("select * from ").append(
+				viewName).append(" where id in (").append(ids).append(")");
+		StringBuilder countSql=new StringBuilder("select count(1) from ").append(
+				viewName).append(" where id in (").append(ids).append(")");
+		log.debug(String.format("\n%1$s\n", sql));
+		int totalRow = jdbcTemplate.queryForInt(countSql.toString());
+		// 更新
+		jsonPage.setTotal(totalRow);
+		// 排序
+		if (StringUtils.hasText(dgm.getOrder())
+				&& StringUtils.hasText(dgm.getSort())) {
+			sql.append(" order by ")
+					.append(StringUtil.splitFieldWords(dgm.getSort()))
+					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by update_time desc");
+		}
+		sql.append(" limit ?, ?");
+		log.debug(String.format("\n%1$s\n", sql));
+		List<PortalApplication> rows=jdbcTemplate.query(sql.toString(), new Object[]{jsonPage.getStartRow(), jsonPage.getPageSize()}, portalRowMapper);
+		jsonPage.setRows(rows);
+		return jsonPage;
 	}
 	
 }

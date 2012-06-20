@@ -14,7 +14,7 @@
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.2"></script>
+<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.3"></script>
 		<title>CarIt Market</title>
 		
 		<script type="text/javascript">
@@ -73,9 +73,9 @@ $(function(){
 							+o.appName+
 							'</label><label class="app_l2">'
 							+o.developer+
-							'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:58px">'
+							'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:57px">'
 							+o.description+
-							'</div><img src="../resources/public/images/install.jpg"></img></td><td><span style="margin-top: 53px;display:block">...</span></td></tr></table></div>');
+							'</div><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 				})
 				onPicError();
 			}
@@ -94,9 +94,9 @@ $(function(){
 							+o.appName+
 							'</label><label class="app_l2">'
 							+o.developer+
-							'</label><label class="app_l3">'
+							'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:57px">'
 							+o.description+
-							'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
+							'</div><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 				})
 				onPicError();
 			}
@@ -116,9 +116,9 @@ $(function(){
 						+o.appName+
 						'</label><label class="app_l2">'
 						+o.developer+
-						'</label><label class="app_l3">'
+						'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:57px">'
 						+o.description+
-						'</label><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
+						'</div><img src="../resources/public/images/install.jpg"></img></td></tr></table></div>');
 			})
 			onPicError();
 		}
@@ -138,11 +138,11 @@ $(function(){
 <div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
 	<div id="header">
 			<ul>
-				<li><img src="../resources/public/images/carit_logo1.png"/></li>
-				<li><input type="text" name="txtNo"/></li>
-				<li><button id="search">搜索</button></li>
-				<li name="before_login"><button id="login">登录</button></li>
-				<li name="before_login"><button id="reg" type="button">注册</button></li>
+				<li><a href="../"><img src="../resources/public/images/carit_logo1.png"/></a></li>
+				<li><input class="index_input" type="text" name="txtNo"/></li>
+				<li style="line-height: 59px;"><input type="button" class="search_bn" id="search"></input></li>
+				<li name="before_login"><input type="button" class="login_bn" id="login" value="登陆"></input></li>
+				<li name="before_login"><input id="reg" class="login_bn" type="button" value="注册"></input></li>
 				<li id="after_login" style="display: none;"><span></span></li>
 			</ul>
 		</div>

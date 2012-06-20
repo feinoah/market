@@ -3,11 +3,11 @@
 	height: 75px; width: 100%; background-color: #DEDEDE;
 }
 #header ul{list-style: none;margin: 0 auto;}
-#header ul li{float: left;line-height: 70px;}
+#header ul li{float: left;line-height: 56px;}
 #header ul li img{
 	margin-left: 20px; margin-top: 8px;height: 62px;width: 154px;
 }
-#header ul li input{
+.index_input{
 	height: 40px; width: 312px; margin-left: 200px;font-size: 20px;margin-top:12px;
 }
 #header ul li button{
@@ -157,15 +157,7 @@ caption,th {
 	font-weight: bold
 }
 
-a:link {
-	color: #00F;
-	text-decoration: none;
-}
 
-a:visited {
-	color: #00F;
-	text-decoration: none;
-}
 
 a:hover {
 	color: #c00;
@@ -199,6 +191,7 @@ a:hover {
 }
 
 .Menubox li {
+	font-size:20px;
 	float: left;
 	display: block;
 	cursor: pointer;
@@ -209,6 +202,7 @@ a:hover {
 }
 
 .Menubox li.hover {
+	font-size:20px;
 	padding: 0px;
 	width: 163px;
 	border-left: 1px solid #A8C29F;
@@ -404,7 +398,6 @@ a:hover {
 }
 
 #doc-description-container.doc-description-collapsed {
-	max-height: 180px;
 	overflow: hidden;
 }
 
@@ -457,8 +450,10 @@ a,a:visited {
 }
 
 .doc-screenshot-img {
-	max-height: 139px;
-	max-width: 232px;
+	height: 139px;
+	width: 232px;
+	position: relative;
+	display: inline-block;
 }
 
 .screenshot-carousel-button-next {
@@ -613,8 +608,11 @@ h3,h3 a,h3 a:visited {
 
 .doc-review-summary {
 	margin-top: 1em;
+	height:568px;
 }
-
+.doc-review-summary_simple{
+	margin-top: 1em;
+}
 .doc-review {
 	margin-top: 15px;
 }
@@ -673,11 +671,6 @@ h3,h3 a,h3 a:visited {
 h4,h5,table {
 	font-size: 1em;
 }
-
-body {
-	font-family: "Droid Sans", Arial, sans-serif;
-}
-
 body {
 	font-size: 62.5%;
 	font-family: Arial, sans-serif;
@@ -697,7 +690,7 @@ body,.app-icon,.stripes {
 }
 
 body {
-	background-color: #EDEDED;
+	background-image: url(../images/body_bg.gif);
 	font-family: "Droid Sans", Arial, sans-serif;
 }
 
@@ -767,8 +760,12 @@ body {
 }
 .detail_hr{
 	margin-left: 15px;margin-right: 15px;
+	color:#D7D7D7;background-color:#D7D7D7;height:1px;line-height:1px;border:none;
 }
-.detaiil_label_left1_top{
+.detail_comment_hr{
+	color:#D7D7D7;background-color:#D7D7D7;height:1px;line-height:1px;border:none;
+}
+.detail_label_left1_top{
 	margin-left:17px;width:300px;font-size: 15px;
 }
 .g-doc-1026 {
@@ -801,7 +798,7 @@ height: 35px;
 margin-top: 4px;
 padding-left: 60px;
 width: 35px;
-background:url("http://localhost:8080/market/resources/public/images/icona.jpg");
+background:url("../images/icona.jpg");
 }
 .page-banner-text {
 color: white;
@@ -1001,7 +998,7 @@ height: 60px;
 }
 
 .id input,.pw input,.in_id,.in_mo,.reg_input,.reg_input_pic {
-	_behavior: url(js/Round_htc.htc);
+	_behavior: url(hover_htc.htc);
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
@@ -1009,7 +1006,7 @@ height: 60px;
 }
 
 .user_button a,.pay_but {
-	_behavior: url(js/Round_htc.htc);
+	_behavior: url(hover_htc.htc);
 	-moz-border-radius: 100px;
 	-webkit-border-radius: 100px;
 	border-radius: 100px;
@@ -1051,13 +1048,13 @@ vertical-align: middle;
 	
 }
 .starBright{
-	background-image: url("http://localhost:8080/market/resources/public/images/star_2.png");
+	background-image: url("../images/star_2.png");
 	width:12px;
 	height:12px;
 	display:inline-block; 
 }
 .starDark{
-	background-image: url("http://localhost:8080/market/resources/public/images/star_1.png");
+	background-image: url("../images/star_1.png");
 	width:12px;
 	height:12px;
 	display:inline-block; 
@@ -1071,4 +1068,36 @@ vertical-align: middle;
 .app_detail_icon{
 	height: 80px;
 	width: 80px;
+}
+.search_bn{
+background:url(../images/search_button.png) left top no-repeat;
+width:72px;
+height:29px;	
+border:none;
+cursor:pointer;
+margin-left: 20px;
+}
+.search_bn:hover{
+background:url(../images/search_button_hover.png) left top no-repeat;
+}
+.login_bn{
+	background:url(../images/login_bu.png) left top no-repeat;
+	color:white;
+ font-weight: bold;
+width:72px;
+height:29px;	
+border:none;
+cursor:pointer;
+margin-left: 20px;
+margin-top:18.5px;
+text-align: center;
+}
+.login_bn:hover{
+	background:url(../images/login_bu_hover.png) left top no-repeat;
+}
+.app_big_icon{
+	margin-top: 17px;
+	margin-left: 15px;
+	height: 140px;
+	width: 140px;
 }

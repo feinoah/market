@@ -254,6 +254,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 
 	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AccountInfo accountInfo) {
+		log.debug("gender="+accountInfo.getGender());
 		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(accountInfo.getEmail())) {
 			sql.append(" and email like CONCAT('%',?,'%')");
@@ -326,7 +327,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			argTypes.add(93);// java.sql.Types type
 		}
 		if (accountInfo.getStatus() != null) {
-			sql.append(" and (status&?)!=0");
+			sql.append(" and status=?");
 			args.add(accountInfo.getStatus());
 			argTypes.add(-6);// java.sql.Types type
 		}
@@ -352,15 +353,15 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 
 	@Override
 	public int lockAccount(int id) {
-		String sql="update t_account_info set update_time=now(), status=(status|?) where id=?";
+		String sql="update t_account_info set update_time=now(), status=? where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.update(sql, Constants.STATUS_LOCKED, id);
+		return jdbcTemplate.update(sql, Constants.STATUS_INVALID, id);
 	}
 	@Override
 	public int unLockAccount(int id) {
-		String sql="update t_account_info set update_time=now(), status=(status&~?) where id=?";
+		String sql="update t_account_info set update_time=now(), status=? where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.update(sql, Constants.STATUS_LOCKED, id);
+		return jdbcTemplate.update(sql, Constants.STATUS_VALID, id);
 	}
 
 	@Override

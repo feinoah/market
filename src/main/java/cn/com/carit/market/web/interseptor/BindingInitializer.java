@@ -26,15 +26,15 @@ public class BindingInitializer implements WebBindingInitializer {
 	@Override
 	public void initBinder(WebDataBinder binder, WebRequest request) {
 //		dateFormat.setLenient(false);
+		binder.registerCustomEditor(int.class,new IntEditor());
+		binder.registerCustomEditor(long.class, new LongEditor());
+		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		binder.registerCustomEditor(String.class,new StringTrimmerEditor(false));
 		binder.registerCustomEditor(Integer.class,new CustomNumberEditor(Integer.class, null, true));
 		binder.registerCustomEditor(Long.class, new CustomNumberEditor(Long.class,null, true));
 		binder.registerCustomEditor(Double.class,  new CustomNumberEditor(Double.class, null, true));
 		binder.registerCustomEditor(Byte.class, new CustomNumberEditor(Byte.class, null, true));
 		binder.registerCustomEditor(Float.class, new CustomNumberEditor(Float.class, null, true));
-		binder.registerCustomEditor(int.class,new IntEditor());
-		binder.registerCustomEditor(long.class, new LongEditor());
-		binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
 		binder.registerCustomEditor(String[].class, new StringArrayPropertyEditor());
 		SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.DATE_FORMATTER);  
 		dateFormat.setLenient(false);  

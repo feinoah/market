@@ -118,8 +118,8 @@ public class AccountInfo  implements Serializable{
 	public String getNickName() {
 		return this.nickName;
 	}
-	public void setGender(Byte value) {
-		this.gender = value;
+	public void setGender(Byte gender) {
+		this.gender = gender;
 	}
 	public Byte getGender() {
 		return this.gender;

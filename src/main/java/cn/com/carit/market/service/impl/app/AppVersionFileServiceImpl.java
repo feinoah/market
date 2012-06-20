@@ -47,36 +47,35 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		app.setFeatures(appVersionFile.getNewFeatures());
 		app.setEnFeatures(appVersionFile.getEnNewFeatures());
 		boolean updateApp=false;
-		if (appVersionFile.getStatus()!=null 
-				&& appVersionFile.getStatus().intValue()!=Constants.STATUS_INVALID) {
-			updateApp=true;
-		}
+		int exceptedId = 0;
 		if (appVersionFile.getId()==0) {
-			appVersionFileDao.add(appVersionFile);
-		} else {
-			appVersionFileDao.update(appVersionFile);
 			if (appVersionFile.getStatus()!=null 
-					&& appVersionFile.getStatus().intValue()==Constants.STATUS_INVALID) {
+					&& appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) {
+				// 新增/编辑的是有效版本，标记更新应用
 				updateApp=true;
-				// 获取排除当前记录外id值的记录
-				List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
-						appVersionFile.getAppId(), appVersionFile.getId());
-				if(list!=null && list.size()>0){
-					AppVersionFile temp=list.get(0);
-					app.setSize(appVersionFile.getSize());
-					app.setAppFilePath(temp.getFilePath());
-					app.setVersion(temp.getVersion());
-					app.setFeatures(temp.getNewFeatures());
-					app.setEnFeatures(temp.getEnNewFeatures());
-				} else { // 最后一条有效版本
+			}
+			// 加新版本记录
+			exceptedId=appVersionFileDao.add(appVersionFile);
+		} else {
+			exceptedId=appVersionFile.getId();
+			if (appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) { // 标记更新应用
+				updateApp=true;
+			} else {
+				AppVersionFile oldRecord = appVersionFileDao.queryById(appVersionFile.getId());
+				// 将最后一条有效版本更新为无效，应用更新为无效
+				if (oldRecord.getStatus().intValue()==Constants.STATUS_VALID) { 
 					app.setStatus(Constants.STATUS_INVALID);
+					updateApp=true;
 				}
 			}
+			// 更新版本记录
+			appVersionFileDao.update(appVersionFile);
 		}
 		if (updateApp) {
+			// 将旧版本置为无效
+			appVersionFileDao.updateToInvalidByAppId(appVersionFile.getAppId(), exceptedId);
 			// 更新应用
 			applicationDao.update(app);
-			
 		}
 	}
 
@@ -91,10 +90,13 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		if(row>0){
 			List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
 					version.getAppId(), version.getId());
-			if(list==null || list.size()==0){// 最后一条有效版本
+			if(list==null || list.size()==0){// 最后一条版本记录
 				applicationDao.delete(version.getAppId());
 			} else {
 				AppVersionFile nextVersion=list.get(0);
+				// 启用该条版本
+				nextVersion.setStatus(Constants.STATUS_VALID);
+				appVersionFileDao.update(nextVersion);
 				if (id>nextVersion.getId()) { // 删除的是最新版本
 					Application application=new Application();
 					application.setId(nextVersion.getAppId());
