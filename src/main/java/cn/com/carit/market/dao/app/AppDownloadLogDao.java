@@ -1,7 +1,9 @@
 package cn.com.carit.market.dao.app;
+import java.util.Date;
 import java.util.List;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
+import cn.com.carit.market.bean.portal.AppDownStat;
 import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -76,5 +78,20 @@ public interface AppDownloadLogDao {
 	 */
 	JsonPage<PortalAppDownloadLog> queryByExemple(PortalAppDownloadLog appDownloadLog, DataGridModel dgm);
 	
+	/**
+	 * 检测用户是否下载过指定应用
+	 * @param accountId
+	 * @param appId
+	 * @return
+	 */
+	int checkUserDownLog(int accountId, int appId);
+	
+	/**
+	 * 统计应用从 startDate 到当前时间
+	 * @param appId
+	 * @param startDate
+	 * @return
+	 */
+	List<AppDownStat> statAppDownlog(int appId, Date startDate);
 	
 }

@@ -108,15 +108,6 @@ caption,th {
 	font-weight: bold
 }
 
-a:link {
-	color: #00F;
-	text-decoration: none;
-}
-
-a:visited {
-	color: #00F;
-	text-decoration: none;
-}
 
 a:hover {
 	color: #c00;
@@ -301,7 +292,7 @@ a:hover {
 }
 
 #con_one_2 ul li {
-	border-top: 1px solid #808080;
+	border-top: 1px solid #D7D7D7;
 	padding: 10px;
 }
 

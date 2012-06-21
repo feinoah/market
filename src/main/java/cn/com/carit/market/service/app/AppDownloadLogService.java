@@ -1,9 +1,10 @@
 package cn.com.carit.market.service.app;
 import java.util.List;
+import java.util.Map;
 
+import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import  cn.com.carit.market.bean.app.AppDownloadLog;
 
 /**
  * AppDownloadLogService
@@ -59,4 +60,10 @@ public interface AppDownloadLogService {
 	 */
 	JsonPage<AppDownloadLog> queryByExemple(AppDownloadLog appDownloadLog, DataGridModel dgm);
 	
+	/**
+	 * 统计应用一个月的下载趋势
+	 * @param appId
+	 * @return map 包含两个key（categories和data），分表代表X轴数据和Y轴数据
+	 */
+	Map<String, Object> appOneMonthDownTrend(int appId);
 }

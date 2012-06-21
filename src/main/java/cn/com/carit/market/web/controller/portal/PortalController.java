@@ -395,7 +395,7 @@ public class PortalController{
 	 * @return {@link Map<String,Object>}
 	 * <table>
 	 * 	<tr><th>属性</th><th>描述</th></tr>
-	 * 	<tr><td>answerCode</td><td>-1：错误；0：没有登录；1：成功</td></tr>
+	 * 	<tr><td>answerCode</td><td>-2：没下载过该应用；-1：错误；0：没有登录；1：成功</td></tr>
 	 * 	<tr><td>jsonPage</td><td>{@link JsonPage<AppComment>}</td></tr>
 	 * </table>
 	 */
@@ -418,6 +418,11 @@ public class PortalController{
 		appComment.setUserId(account.getId());
 		try{
 			appCommentService.saveOrUpdate(appComment);
+			int answerCode=appCommentService.saveOrUpdate(appComment);
+			if (answerCode<0) {
+				resultMap.put(Constants.ANSWER_CODE, answerCode);
+				return resultMap;
+			}
 			resultMap.put(Constants.ANSWER_CODE, 1);
 			resultMap.put("jsonPage", appCommentService.queryComment(appComment.getAppId(), dgm));
 		}catch (Exception e) {
@@ -550,5 +555,22 @@ public class PortalController{
 			@RequestParam(required = false) String local,
 			@RequestParam(value = "q") String keywords, DataGridModel dgm) {
 		return applicationService.fullTextSearch(local, keywords, dgm);
+	}
+	
+	/**
+	 * 应用一个月内的下载趋势
+	 * <br>portal/app/month/down/trend/{appId}
+	 * <b>返回参数</b>
+	 * <table>
+	 * 	<tr><th>名称</th><th>描述</th></tr>
+	 * 	<tr><td>categories</td><td>X轴数据列表</td></tr>
+	 * 	<tr><td>data</td><td>Y轴数据列表</td></tr>
+	 * </table>
+	 * @param appId
+	 * @return
+	 */
+	@RequestMapping(value="/app/month/down/trend/{appId}")
+	public @ResponseBody Map<String, Object> appOneMonthDownTrend(@PathVariable int appId){
+		return appDownloadLogService.appOneMonthDownTrend(appId);
 	}
 }

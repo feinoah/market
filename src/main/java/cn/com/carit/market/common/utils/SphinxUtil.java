@@ -33,7 +33,7 @@ public class SphinxUtil {
 			 Integer.parseInt((String) properties.get("sphinx.port")));
 //			sphinxClient = new SphinxClient("192.168.0.241", 9312);
 			 SPHINX_INDEX = (String) properties.get("sphinx.index");
-			SPHINX_INDEX = "application_cn_idx";
+//			SPHINX_INDEX = "application_cn_idx";
 			sphinxClient.SetWeights(new int[] { 100, 1 });
 			sphinxClient.SetLimits(0, Integer.MAX_VALUE);
 			sphinxClient.SetMatchMode(SphinxClient.SPH_MATCH_EXTENDED2);
@@ -136,7 +136,9 @@ public class SphinxUtil {
 				}
 			}
 		}
-		searchFor.delete(searchFor.lastIndexOf("|*"), searchFor.length());
+		if (searchFor.lastIndexOf("|*")!=-1) {
+			searchFor.delete(searchFor.lastIndexOf("|*"), searchFor.length());
+		}
 //		StringBuilder queryBuilder = new StringBuilder();
 //		String query = searchFor.toString();
 //		queryBuilder.append("@app_name *" + query + "  | ");

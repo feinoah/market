@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
+import cn.com.carit.market.bean.portal.AppDownStat;
 import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
@@ -259,6 +261,37 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			}
 		}));
 		return jsonPage;
+	}
+
+	@Override
+	public int checkUserDownLog(int accountId, int appId) {
+		String sql="select 1 from t_app_download_log where account_id=? and app_id=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.queryForInt(sql, accountId, appId);
+		} catch (Exception e) {
+			log.warn("not exist record of accountId["+accountId+"] or appId["+appId+"]");
+			log.warn(e.getMessage());
+		}
+		return 0;
+	}
+
+	@Override
+	public List<AppDownStat> statAppDownlog(int appId, Date startDate) {
+		String sql="select download_time date, count(1) count" 
+				+ " from t_app_download_log where app_id=? and download_time>?"
+				+ " group by date_format(download_time,'%Y-%c-%d')";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.query(sql, new Object[]{appId, startDate}
+		, new int[]{Types.INTEGER, Types.TIMESTAMP}, new RowMapper<AppDownStat>() {
+			@Override
+			public AppDownStat mapRow(ResultSet rs, int rowNum) throws SQLException {
+				AppDownStat stat=new AppDownStat();
+				stat.setDate(rs.getDate("date"));
+				stat.setCount(rs.getInt("count"));
+				return stat;
+			}
+		});
 	}
 	
 }

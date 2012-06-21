@@ -47,7 +47,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 			if (data) {
 				$('#catalog_con').empty();
 				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span class="index_free_a">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?inputStr='+o.id+'">'+o.name+'</a></li>');
+					$('#catalog_con').append('<li><span class="index_free_a">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?inputStr='+o.id+'"><b>'+o.name+'</b></a></li>');
 				});
 				$('#catalog_con').append('<li>');
 			}
@@ -209,7 +209,6 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 				</h3>
 				<div class="panel-description">我们的工作人员从 Google Play
 					中挑选的部分最佳应用。</div>
-				13691854095
 				<div class="panel-see-more">
 					<a href="html/allApp.html?inputStr=allnewfreeapp">查看全部</a><a href="" class="more-arrow-link"> <span
 						class="more-arrow">›</span></a>

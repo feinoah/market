@@ -17,7 +17,7 @@ public interface AppCommentService {
 	 * @param appComment
 	 * @return
 	 */
-	void saveOrUpdate(AppComment appComment);
+	int saveOrUpdate(AppComment appComment);
 	
 	/**
 	 * 删除

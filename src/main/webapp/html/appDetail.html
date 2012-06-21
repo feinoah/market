@@ -124,8 +124,13 @@
 						$('#comment_star2').attr("src",arrayStar[data.appLevel]);
 						$('#comment_star3').attr("src",arrayStar[data.appLevel]);
 						$('#img_big_icon').attr("src",data.bigIcon);
-						$('#app_image1').attr("src",data.images);
-						$('#app_image2').attr("src",data.images);
+						$.each(data.imageList,function(i,item){
+							if(i<2){
+								$('#app_image'+(i+1)).attr("src",item);
+							} else {
+								return false;
+							}
+						});
 						//TODO:
 						$('#label_count').empty().html(data.downCount);
 						$('#about_count').empty().html(data.downCount);
