@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			// 初始化
@@ -44,7 +44,7 @@
 				$('#editForm').form({
 						onSubmit:function(){
 						// 避免 form validate bug
-						$('.easyui-combobox combobox-f combo-f').each(function(){
+						$('.combobox-f').each(function(){
 							$(this).val($(this).combobox('getText'));
 						});
 						$('#editForm textarea').each(function(){
@@ -345,7 +345,7 @@
 						<td><form:input path="officePhone" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="status" path="status" cssClass="easyui-validatebox">状态：</form:label></td>
 						<td>
-							<form:input path="status" id="status_edit" cssClass="easyui-combobox" required="true"/>
+							<form:input path="status" id="status_edit" required="true"/>
 						</td>
 					</tr>
 					<tr>

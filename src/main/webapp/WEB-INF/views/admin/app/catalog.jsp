@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
@@ -133,7 +133,7 @@
 					<tr>
 						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
-							<form:input path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:295px;" required="true"/>
+							<form:input path="status" id="status_edit" required="true"/>
 						</td>
 					</tr>
 					<tr>

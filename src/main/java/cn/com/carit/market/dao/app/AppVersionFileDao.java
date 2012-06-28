@@ -47,12 +47,27 @@ public interface AppVersionFileDao {
 	 * @return
 	 */
 	int updateToInvalidByAppId(int appId, int exceptedId);
+	
+	/**
+	 * 
+	 * @param appId
+	 * @param version
+	 * @return
+	 */
+	int updateToValidByAppIdAndVersion(int appId, String version);
 	/**
 	 * 按Id查询
 	 * @param id
 	 * @return
 	 */
 	AppVersionFile queryById(int id);
+	
+	/**
+	 * 根据AppId获取有效版本（有效版本只有一个）
+	 * @param appId
+	 * @return
+	 */
+	AppVersionFile queryValidVersionByAppId(int appId);
 	
 	/**
 	 * 按应用Id查询

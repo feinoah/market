@@ -148,6 +148,11 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
+	@Override
+	public int updateToValidByAppIdAndVersion(int appId, String version) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	@Override
 	public AppVersionFile queryById(int id) {
@@ -156,6 +161,13 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		return query(sql, id, rowMapper);
 	}
 
+
+	@Override
+	public AppVersionFile queryValidVersionByAppId(int appId) {
+		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=? and a.status=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.queryForObject(sql, new Object[]{appId, Constants.STATUS_VALID}, rowMapper);
+	}
 	
 	@Override
 	public List<AppVersionFile> queryByAppId(int appId) {

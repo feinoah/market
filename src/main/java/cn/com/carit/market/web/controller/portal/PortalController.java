@@ -417,7 +417,6 @@ public class PortalController{
 		}
 		appComment.setUserId(account.getId());
 		try{
-			appCommentService.saveOrUpdate(appComment);
 			int answerCode=appCommentService.saveOrUpdate(appComment);
 			if (answerCode<0) {
 				resultMap.put(Constants.ANSWER_CODE, answerCode);
@@ -455,7 +454,7 @@ public class PortalController{
 			// 文件不存在
 			log.warn("can't get app file of app["+appId+"]");
 //			throw new Exception("");
-			return null;
+			return "redirect:/";
 		}
 		// 下载次数+1
 		applicationService.updateDownCount(appId, app.getDownCount()+1);
@@ -572,5 +571,31 @@ public class PortalController{
 	@RequestMapping(value="/app/month/down/trend/{appId}")
 	public @ResponseBody Map<String, Object> appOneMonthDownTrend(@PathVariable int appId){
 		return appDownloadLogService.appOneMonthDownTrend(appId);
+	}
+	
+	/**
+	 * 查询用户下载应用记录<br>
+	 * portal/app/down/user/{userId}?local=cn|en&page=1&rows=10
+	 * @param local
+	 * @param userId
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="/app/down/user/{userId}", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<PortalApplication> queryUserDownApps(@RequestParam(required = false) String local, @PathVariable int userId, DataGridModel dgm){
+		return applicationService.queryUserDownApps(local, userId, dgm);
+	}
+	
+	/**
+	 * 查询下该应用的用户还下载过哪些应用<br>
+	 * portal/app/down/ref/{appId}?local=cn|en
+	 * @param local
+	 * @param appId
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="/app/down/ref/{appId}", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<PortalApplication> queryUserDownReferencedApps(@RequestParam(required = false) String local, @PathVariable int appId, DataGridModel dgm){
+		return applicationService.queryUserDownReferencedApps(local, appId, dgm);
 	}
 }

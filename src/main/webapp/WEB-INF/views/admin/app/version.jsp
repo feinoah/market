@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
@@ -55,6 +55,7 @@
 				$('#enNewFeatures').val(m.enNewFeatures);
 				$('#id').val(m.id);
 				$('#appId').val(m.appId);
+				$('#apkFileTxt').val(m.filePath);
 				$('#editWin').show();
 			} else {
 				$.messager.show({
@@ -133,7 +134,14 @@
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true"/></td>
 						<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
-						<td><input type="file" name="file" fileType="apk"/></td>
+						<td>
+						<div class="fileinputs">  
+							<input type="file" class="file" name="file" id="apkFile" fileType='apk' onchange="$('#apkFileTxt').val(this.value);" />  
+							<div class="fakefile">  
+								<input type="text" style="width:150px;" id="apkFileTxt"/><button>浏览</button>
+							</div>  
+						</div>
+						</td>
 				</tr>
 				<tr>
 						<td><form:label	for="size" path="size"  cssClass="mustInput">文件大小：</form:label></td>

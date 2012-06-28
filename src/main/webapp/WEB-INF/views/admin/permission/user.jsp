@@ -7,7 +7,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -198,11 +198,11 @@
 					<tr>
 						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 						<td>
-							<form:input path="status" id="status_edit" cssClass="easyui-combobox" cssStyle="width:180px;" required="true"/>
+							<form:input path="status" id="status_edit" required="true"/>
 						</td>
 						<td><form:label	for="gender" path="gender" cssClass="mustInput">性别：</form:label></td>
 						<td>
-							<form:input path="gender" id="gender_edit" cssClass="easyui-combobox" required="true"  cssStyle="width:180px;" />
+							<form:input path="gender" id="gender_edit" required="true"  cssStyle="width:180px;" />
 						</td>
 					</tr>
 					<tr>
@@ -214,7 +214,7 @@
 					<tr>
 						<td><form:label for="roles" path="roles" cssClass="easyui-validatebox">角色：</form:label></td>
 						<td colspan="3">
-							<form:input path="roles" cssClass="easyui-combobox" cssStyle="width:450px;"/>
+							<form:input path="roles" cssStyle="width:450px;"/>
 						</td>
 					</tr>
 					<tr><td><form:label for="remark" path="remark" cssClass="easyui-validatebox">备注：</form:label></td></tr>

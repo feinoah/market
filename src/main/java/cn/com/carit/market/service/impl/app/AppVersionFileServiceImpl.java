@@ -6,11 +6,13 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppVersionFileDao;
@@ -68,6 +70,10 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 					updateApp=true;
 				}
 			}
+			if (StringUtils.hasText(appVersionFile.getFilePath())) {
+				// 更新了应用文件
+				AttachmentUtil.deleteApk(appVersionFile.getFilePath());
+			}
 			// 更新版本记录
 			appVersionFileDao.update(appVersionFile);
 		}
@@ -89,20 +95,22 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		int row = appVersionFileDao.delete(id);
 		if(row>0){
 			List<AppVersionFile> list=appVersionFileDao.queryByAppIdAndExceptId(
-					version.getAppId(), version.getId());
+					version.getAppId(), id);// 除当前版本外的版本记录
 			if(list==null || list.size()==0){// 最后一条版本记录
 				applicationDao.delete(version.getAppId());
 			} else {
-				AppVersionFile nextVersion=list.get(0);
+				AppVersionFile prevVersion=list.get(0);
 				// 启用该条版本
-				nextVersion.setStatus(Constants.STATUS_VALID);
-				appVersionFileDao.update(nextVersion);
-				if (id>nextVersion.getId()) { // 删除的是最新版本
-					Application application=new Application();
-					application.setId(nextVersion.getAppId());
-					application.setAppFilePath(nextVersion.getFilePath());
-					application.setFeatures(nextVersion.getNewFeatures());
-					application.setEnFeatures(nextVersion.getEnNewFeatures());
+				prevVersion.setStatus(Constants.STATUS_VALID);
+				appVersionFileDao.update(prevVersion);
+				Application application=applicationDao.queryById(version.getAppId());
+				if (version.getVersion().equals(application.getVersion())) { // 删除的是最新版本
+//					Application application=new Application();
+					application.setId(prevVersion.getAppId());
+					application.setAppFilePath(prevVersion.getFilePath());
+					application.setFeatures(prevVersion.getNewFeatures());
+					application.setEnFeatures(prevVersion.getEnNewFeatures());
+					application.setVersion(prevVersion.getVersion());
 					applicationDao.update(application);
 				}
 //				applicationDao.updateById(version.getAppId());

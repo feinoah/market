@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
@@ -26,6 +26,27 @@
 			$('.combobox-f').each(function(){
 				$(this).combobox('clear');
 			});
+			
+			$('span[id^=star_sp]').each(function(i){
+				$(this).click(function(){
+					if(i%2==0){
+						$('#star_sp'+i).removeClass('starBright_left').addClass('starDark_left');
+					}else{
+						$('#star_sp'+i).removeClass('starBright_right').addClass('starDark_right');
+					}
+					$('span[id^=star_sp]').each(function(k){
+						if(k<=i){//3
+							if(k%2==0){
+								$('#star_sp'+ k).removeClass('starDark_left').addClass('starBright_left');
+								}
+							else{
+								$('#star_sp'+ k).removeClass('starDark_right').addClass('starBright_right');
+							}
+						}
+					});
+					$('#grade_edit').val((i+1));
+				});
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -40,7 +61,19 @@
 				$('#userName_edit').html(m.userName);
 				$('#appId_edit').val(m.appId);
 				$('#userId_edit').val(m.userId);
-				$('#grade_edit').numberspinner('setValue',m.grade);
+				$('#grade_edit').val(m.grade);
+				if(m.grade){
+					$('span[id^=star_sp]').each(function(i){
+						if(i<m.grade){
+							if(i%2==0){
+								$('#star_sp'+i).removeClass('starDark_left').addClass('starBright_left');
+								}
+							else{
+								$('#star_sp'+i).removeClass('starDark_right').addClass('starBright_right');
+							}
+						}
+					});
+				}
 				$('#status_edit').combobox('setValue',m.status);
 				$('#editForm textarea').val(m.comment);
 				$('#id').val(m.id);
@@ -124,12 +157,13 @@
 					<td><form:label for="userName" path="userName">评论人：</form:label></td>
 					<td><label id="userName_edit" class="inputLabel"></label></td>
 					<td><form:label for="grade" path="grade" cssClass="mustInput">等级：</form:label></td>
-					<td><form:input path="grade" id="grade_edit" cssClass="easyui-numberspinner"  min="1" max="5" required="true"/></td>
+					<td><span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span></td>
+					<form:hidden path="grade" id="grade_edit"/>
 				</tr>
 				<tr>
 					<td><form:label for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:input path="status" id="status_edit" cssClass="easyui-combobox" required="true"/>
+						<form:input path="status" id="status_edit" required="true"/>
 					</td>
 				</tr>
 				<tr>

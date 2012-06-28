@@ -1,184 +1,167 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	<title>CarIt Market</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>中通福瑞——应用市场</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="../resources/public/scripts/SlideTrans.js" ></script>
 	<link href="../resources/public/styles/default.css" rel="stylesheet" type="text/css" />
 	<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
-<link rel="stylesheet" type="text/css" href="../resources/jquery-easyui-1.2.6/themes/default/easyui.css"/>
-<link rel="stylesheet" type="text/css" href="../resources/jquery-easyui-1.2.6/themes/icon.css"/>
-<link rel="stylesheet" type="text/css" href="../resources/public/styles/default.css"/>
-<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
+	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
+	<link href="../resources/public/styles/common.css?v=1.4" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.3"></script>
-		
-		<script type="text/javascript">
-		function onPicError(){
-			t = document.getElementsByClassName("app_detail_icon");
-			 for(i = 0; i < t.length; i++){
-			     t.item(i).onerror = function(){
-			       this.src = "../resources/public/images/app_default.jpg"
-			     }
-			   }
+	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
+	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
+	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.4"></script>
+	<script type="text/javascript">
+	function onPicError(){
+		$('.app_detail_icon').error(function(){
+			this.src = '../resources/public/images/app_default.jpg';
+		});
+	}
+	function onBigPicError(){
+		$('.app_big_icon').error(function(){
+			this.src='../resources/public/images/app_pic.jpg';
+		});
+		$('.doc-screenshot-img').error(function(){
+			this.src='../resources/public/images/image_error.jpg';
+		});
+	}
+	var rt = request.QueryString("inputStr");
+	$(function(){
+		Highcharts.setOptions({
+			chart: {
+				defaultSeriesType: 'spline',
+				backgroundColor:'#F7F7F7',
+				color:'#fff',
+				style:{fontFamily: '宋体'}
+			},
+			plotOptions: {//绘图线条控制
+				spline:{
+					marker:{
+						radius:2
+					},
+					lineWidth:1//线条粗细
+				},
+				bar: {
+					dataLabels: {
+						enabled: false
+					}
+				}
+			},
+			credits:{//右下角的文本
+				enabled: false
+			},
+			legend:{
+				enabled: false
 			}
-		function onBigPicError(){
-			t1 = document.getElementsByClassName("app_big_icon");
-			t2 = document.getElementsByClassName("doc-screenshot-img");
-			 for(i = 0; i < t2.length; i++){
-			     t2.item(i).onerror = function(){
-			       this.src = "../resources/public/images/image_error.jpg"
-			     }
-			   }
-			
-			
-			t1.item(0).onerror = function(){
-				this.src = "../resources/public/images/app_pic.jpg"
-			}
-		}
-		var arrayStar = ["../resources/public/images/comment_star1.png","../resources/public/images/comment_star2.png","../resources/public/images/comment_star2.png",
-		                 "../resources/public/images/comment_star3.png","../resources/public/images/comment_star3.png",
-				"../resources/public/images/comment_star4.png","../resources/public/images/comment_star4.png",
-				"../resources/public/images/comment_star5.png","../resources/public/images/comment_star5.png",
-				"../resources/public/images/comment_star6.png","../resources/public/images/comment_star6.png"];
-		
-		//获得参数的方法
-		var request =
-		{
-		QueryString : function(val)
-		{
-		var uri = window.location.search;
-		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
-		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
-		}
-		}
-		
-		var rt = request.QueryString("inputStr");
-		
-		$(function(){
-			_loadingICO='../resources/public/images/loading.gif';
-			$('body').append("<script src='../resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
-			chkLogin();
-			$('#reg').click(function(){
-				regWin();
+		});	
+		$('.Menubox ul li').each(function(i){
+			$(this).click(function(){
+				$('.Menubox ul li').removeClass('hover').eq(i).addClass('hover');
+				$('div[id^=con_two_]').hide().eq(i).show();
 			});
-			$('#login').click(function(){
-				loginWin();
-			});
-			 $('.star span').each(function(i){
-			
-				$(this).click(function(){
-					
-					$('.star span').removeClass('starBright').addClass('starDark');
-					$('.star span').each(function(k){
-					
-						if(k<=i){//3
-							$('#star_sp'+ k).removeClass('starDark').addClass('starBright');
+		});
+	 	$('.star span').each(function(i){
+			$(this).click(function(){
+				if(i%2==0){
+					$('#star_sp'+i).removeClass('starBright_left').addClass('starDark_left');
+				}else{
+					$('#star_sp'+i).removeClass('starBright_right').addClass('starDark_right');
+				}
+				$('.star span').each(function(k){
+					if(k<=i){//3
+						if(k%2==0){
+							$('#star_sp'+ k).removeClass('starDark_left').addClass('starBright_left');
+							}
+						else{
+							$('#star_sp'+ k).removeClass('starDark_right').addClass('starBright_right');
 						}
-					});
-					$('#grade').val((i+1)*2);
+						
+					}
 				});
+				$('#grade').val((i+1));
 			});
-			 $('#submitBtn').click(function(){
-				 $('#commentForm').form({
-						dataType : 'text',  
-						onSubmit:function(){
-							if(rt==''){
-								return false;
-							}
-							$('#appId').val(rt);
-							return true;
-					    }, 
-				    	success:function(data){
-							if(data){
-								var map=$.parseJSON(data);
-								if(map){
-									if(map.answerCode==-1){
-										tips('submitBtn','未知错误','bottom');
-									}
-									if(map.answerCode==0){
-										tips('submitBtn','没有登录','bottom');
-									}
-									if(map.answerCode==1){
-										location.reload();
-									}
-								}else{
-									tips('submitBtn','后台系统异常','bottom');
-								}
-							}else{
-								tips('submitBtn','后台系统异常','bottom');
-							}
-					    }
-					}).submit();
-			 });
-			 $.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
-					if(data){
-						$('#label_appname').empty().html(data.appName);
-						$('#label_author').empty().html(data.developer);
-						$('#img_icon').empty().attr("src",arrayStar[data.appLevel]);
-						$('#comment_star1').attr("src",arrayStar[data.appLevel]);
-						$('#comment_star2').attr("src",arrayStar[data.appLevel]);
-						$('#comment_star3').attr("src",arrayStar[data.appLevel]);
-						$('#img_big_icon').attr("src",data.bigIcon);
-						$.each(data.imageList,function(i,item){
-							if(i<2){
-								$('#app_image'+(i+1)).attr("src",item);
-							} else {
-								return false;
-							}
-						});
-						//TODO:
-						$('#label_count').empty().html(data.downCount);
-						$('#about_count').empty().html(data.downCount);
-						$('#about_date').empty().html(data.updateTime);
-						$('#about_version').empty().html(data.version);
-						$('#about_android_version').empty().html(data.platform);
-						$('#about_Category').empty().html(data.catalogName);
-						$('#about_size').empty().html(data.size);
-						$('#about_price').empty().html(data.price);
-						$('#about_level').empty().html(data.appLevel);
-						$('#app_description').empty().html(data.description);
-						$('#app_features').empty().html(data.features);
-						$('#av_grade1').empty().html(data.appLevel);
-						$('#av_grade2').empty().html(data.appLevel);
-						$('#app_downcount1').empty().html(data.downCount);
-						$('#app_downcount2').empty().html(data.downCount);
+		});
+	 	$('#submitBtn').click(function(){
+	 		$('#commentForm').form({
+	 			dataType : 'text',  
+				onSubmit:function(){
+					if(rt==''){
+						return false;
 					}
-					onBigPicError();
-				});
-				
-				$.getJSON('../portal/app/comments/'+rt+'?local=cn', function(data) {
+					$('#appId').val(rt);
+					return true;
+			    }, 
+		    	success:function(data){
 					if(data){
-						
-						$('#appCommentSimple').empty();
-						$('#appComment').empty();
-						$.each(data.rows,function(i,o){
-							if(i<3){
-							$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
-							+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
-							+o.comment+'</p></div><hr class="detail_comment_hr">');
+						var map=$.parseJSON(data);
+						if(map){
+							if(map.answerCode==-1){
+								tips('submitBtn','请填内容或评分','bottom');
 							}
-							$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
-							+o.updateTime+'"</span><img style="display:block" src="'+arrayStar[o.grade]+'" alt="" /><p class="review-text">'
-							+o.comment+'</p><hr class="detail_comment_hr"></div>');
-							
-						});
-						initPaging();
-						
+							if(map.answerCode==0){
+								tips('submitBtn','没有登录','bottom');
+							}
+							if(map.answerCode==1){
+								location.reload();
+							}
+						}else{
+							tips('submitBtn','后台系统异常','bottom');
+						}
+					}else{
+						tips('submitBtn','后台系统异常','bottom');
+					}
+			    }
+			}).submit();
+		});
+	 	$.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
+			if(data){
+				$('#label_appname').empty().html(data.appName);
+				$('#label_author').empty().html(data.developer);
+				$('#img_icon').empty().attr("src",arrayStar[data.appLevel]);
+				$('#comment_star1').attr("src",arrayStar[data.appLevel]);
+				$('#comment_star2').attr("src",arrayStar[data.appLevel]);
+				$('#comment_star3').attr("src",arrayStar[data.appLevel]);
+				$('#img_big_icon').attr("src","../"+data.bigIcon);
+				$.each(data.imageList,function(i,item){
+					if(i<2){
+						$('#app_image'+(i+1)).attr("src","../"+item);
+					} else {
+						return false;
 					}
 				});
-
+				//TODO:
+				$('#label_count').empty().html(data.downCount);
+				$('#about_count').empty().html(data.downCount);
+				$('#about_date').empty().html(data.updateTime);
+				$('#about_version').empty().html(data.version);
+				$('#app_version').empty().html(data.version);
+				$('#about_android_version').empty().html(data.platform);
+				$('#about_Category').empty().html(data.catalogName);
+				$('#about_size').empty().html(data.size);
+				$('#app_size').empty().html(data.size);
+				$('#about_price').empty().html(data.price);
+				$('#about_level').empty().html(data.appLevel);
+				$('#app_description').empty().html(data.description);
+				$('#app_features').empty().html(data.features);
+				$('#app_permission').empty().html(data.permissionDesc);
+				$('#av_grade1').empty().html(data.appLevel);
+				$('#av_grade2').empty().html(data.appLevel);
+				$('#app_downcount1').empty().html(data.downCount);
+				$('#app_downcount2').empty().html(data.downCount);
+			}
+			onBigPicError();
+		});
+			
 		$.getJSON('../portal/app/hot/free/new/4?local=', function(data) {
 			if(data){
 				$('#author_more').empty();
 				$('#author_more').append('<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
 				$.each(data,function(i,o){
 					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
-							+o.id+'"><img class="app_detail_icon" src="'
+							+o.id+'"><img class="app_detail_icon" src="../'
 							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'
 					+o.developer+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('
@@ -188,14 +171,14 @@
 			}
 		});
 		
-		$.getJSON('../portal/app/hot/free/4?local=', function(data) {
+		$.getJSON('../portal/app/down/ref/'+rt+'?rows=6', function(data) {
 			if(data){
 				$('#view_more').empty();
 				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
-				$.each(data,function(i,o){
+				$.each(data.rows,function(i,o){
 					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
-							+o.id+'"><img class="app_detail_icon" src='
-					+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
+							+o.id+'"><img class="app_detail_icon" src="../'
+					+o.icon+'"/></a></div><div class="detail_right_div"><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'+o.developer+'</label><img src="'
 					+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'
 					+o.price+'</label></div></div><hr class="detail_hr"/>');
@@ -203,94 +186,209 @@
 				onPicError();
 			}
 		});
+		$('#download_btn').click(function(){
+			if($('#lolginAfter').is(":visible")){
+				open('../portal/app/down/'+rt);
+			}else{
+				loginWin();
+			}
+		});
+		doPage(1);
+		var _data=[0,0,0,0,0]
+		$.getJSON('../portal/app/comment/grade/group/'+rt, function(json){
+			$.each(json,function(i,o){
+				if(o.grade%2!=0){
+					o.grade++;
+				}
+				_data[o.grade/2]+=o.total;
+			});
+			new Highcharts.Chart({
+				chart: {
+					renderTo: 'bar_0',
+					type: 'bar'
+				},
+				xAxis: {
+					categories: ['★', '★★', '★★★', '★★★★', '★★★★★'],
+					title: {
+						enabled: false
+					}
+				},
+				yAxis: {
+					title: {
+						text: '评论人数（人）',
+						align: 'high'
+					}
+				},
+				tooltip: {
+					formatter: function() {
+						return this.y +' 人';
+					}
+				},
+				
+				series: [{
+					data: _data
+				}
+				]
+			});
+			new Highcharts.Chart({
+				chart: {
+					renderTo: 'bar_1',
+					type: 'bar'
+				},
+				xAxis: {
+					categories: ['★', '★★', '★★★', '★★★★', '★★★★★'],
+					title: {
+						text: null
+					}
+				},
+				yAxis: {
+					title: {
+						text: '评论人数（人）',
+						align: 'high'
+					}
+				},
+				tooltip: {
+					formatter: function() {
+						return this.y +' 人';
+					}
+				},
+				
+				series: [{
+					data: _data
+				}
+				]
+			});
+		});
+		$.getJSON('../portal/app/month/down/trend/'+rt, function(json){
+			if(json){
+				new Highcharts.Chart({
+					chart: {
+						renderTo: 'downTrend'
+					},
+					xAxis: {
+						type: 'datetime',
+						categories: json.categories,
+						title: {
+							text:null
+						},
+						labels:{step:15}
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text:null
+						},
+					},
+					tooltip: {
+						formatter: function() {
+							return this.x+' '+ this.y +' 人';
+						}
+					},
+					series: [{
+						data: json.data
+					}]
+				});
+			}
+		});
+	});
+	function doPage(page){
+		$.getJSON('../portal/app/comments/'+rt+'?local=cn&page='+page+'&rows=10', function(data) {
+			if(data){
+				pagination(page, data.totalPage);
+				if(page==1){
+				$('#appCommentSimple').empty();
+				}
+				$('#appComment').empty();
+				$.each(data.rows,function(i,o){
+					if(page==1&&i<3){
+						$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+						+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
+						+o.comment+'</p></div><hr class="detail_comment_hr">');
+					}
+					$('#appComment').append('<div class="doc-review"><span class="doc-review-author"><strong>'+o.nickName+'</strong></span><span class="doc-review-date">评论日期：'
+					+o.updateTime+'</span><img style="display:block" src="'+arrayStar[o.grade]+'" alt="" /><p class="review-text">'
+					+o.comment+'</p><hr class="detail_comment_hr"></div>');
+				});
+			}
 		});
 		
-		
+	}
 	</script>	
 		
-	
-		
-		</head>
-	<body style="margin:0;padding:0;text-align:center;"> 
-	
-	
-<div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
+	</head>
+	<body> 
 		<div id="header">
+			<div id="nav">
+				<div id="loginBefor">
+					<button class="login_bn" id="login">登陆</button>
+					<button id="reg" class="login_bn">注册</button>
+				</div>
+				<div id="lolginAfter">
+					<span id="welcome"></span>
+					<button id="logout" class="login_bn">退出</button>
+				</div>
+			</div>
 			<ul>
 				<li><a href="../"><img src="../resources/public/images/carit_logo1.png"/></a></li>
-				<li><input class="index_input" type="text" name="txtNo"/></li>
+				<li><input class="index_input" id="search_input" type="text" name="txtNo"/></li>
 				<li><input type="button" class="search_bn" id="search"></input></li>
-				<li name="before_login"><input type="button" class="login_bn" id="login" value="登陆"></input></li>
-				<li name="before_login"><input id="reg" class="login_bn" type="button" value="注册"></input></li>
-				<li id="after_login" style="display: none;"><span></span></li>
 			</ul>
 		</div>
 
-<div style="">
-<div style="float:left;background-image:url('../resources/public/images/app_detail.jpg');width:328px;height:266px;margin-left:-214px;">
- <label id="label_appname" style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
-    <label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px">ALLTHECOOKS.COM</label>
-    
+		<div id="wrapper">
+			<div>
+				<div class="doc-banner-container-header">
+					<div class="page-banner-heading"></div>
+					<div>
+						<label id="label_appname" style="width:100%;display: block;font-size: 25px;color: white;margin-left: 15px;margin-top: 15px">Recipe Search</label>
+						<label id="label_author" style="display: block;color: white;font-size: 12px;margin-left: 15px">ALLTHECOOKS.COM</label>
+					</div>
+					<div style="float:left">
+					    <img id="img_big_icon" class="app_big_icon"/>
+					</div>
+				    <div style="width: 140px;float:right;">
+				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 20px;display:block">版本:<label id="app_version" >4.0.4</label></span>
+				     <span style="color:white;font-size:16px;font-weight: bold;">  大小:<label id="app_size" >6.25MB</label></span>
+				     <img id="img_icon" style="display: inline-block;height: 17px;"/>
+				     <a style="color: white;font-weight: bold">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;">10,898</label>)</a>
+				     <input type="button" class="download_bn" id="download_btn" value="下载"/>
+				   </div>
+				</div>
+				 
+				<div class="container2" id="idContainer" style="float:right;width:686px">
+					<ul id="idSlider" >
+						<li><a href=""><img src="../resources/public/images/carit_logo2.jpg"/></a></li>
+						<li><a href=""><img src="../resources/public/images/carit_logo3.jpg"/></a></li>
+						<li><a href=""><img src="../resources/public/images/carit_logo4.jpg"/></a></li>
+					    <li><a href=""><img src="../resources/public/images/carit_logo5.jpg"/></a></li>
+					</ul>
+					<ul class="num" id="idNum"></ul>
+				</div>
+			</div>
   
-    <img id="img_big_icon" class="app_big_icon"/>
-    
- 
-     <img id="img_icon" style="display: inline-block;height: 17px;margin-top: 130px"/>
-     <a style="color: white">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;margin-top: 128px">10,898</label>)</a>
-   
-    
-</div>
-   
+			<!-- left top -->
 
-
-<div class="container2" id="idContainer" style="float:right;width:686px">
-
-<ul id="idSlider" >
-		
-			<li><a href=""><img src="../resources/public/images/carit_logo2.jpg"/></a></li>
-			<li><a href=""><img src="../resources/public/images/carit_logo3.jpg"/></a></li>
-			<li><a href=""><img src="../resources/public/images/carit_logo4.jpg"/></a></li>
-		    <li><a href=""><img src="../resources/public/images/carit_logo5.jpg"/></a></li>
-	
-	</ul>
-
-	<ul class="num" id="idNum">
-	</ul>
-</div>
-</div>
-  
-<!-- left top -->
-
-<div id="left" style="float:left;width:29%;margin-top:12px">
-<div id="author_more" style="float:left;width:328px;height:500px;background-color: white;">
-
-   
-  
-</div>
-
-<!-- left bottom -->
-
-<div id="view_more" style="float:left;width:328px;height:620px;margin-top:13px;background-color: white">
-
-   <h3>安装此应用的用户还安装了：</h3>
-  
-  
-   
-    </div>
-    </div>	
-<!-- left bottom -->
+			<div id="left" style="float:left;width:29%;margin-top:12px">
+				<div id="author_more" style="float:left;width:328px;height:500px;background-color: white;">
+				</div>
+				<!-- left bottom -->
+				<div id="view_more" style="float:left;width:328px;height:620px;margin-top:13px;background-color: white">
+				   <h3>安装此应用的用户还安装了：</h3>
+			    </div>
+		    </div>	
+			<!-- left bottom -->
     
 <div id="Tab2" style="float:right;width:67%;margin-top:12px;background-color: white">
 <div class="Menubox">
    <ul>
-       <li id="two1" onclick="setTab('two',1,4)" >概览</li>
-       <li id="two2" onclick="setTab('two',2,4)" >用户评论</li>
-       <li id="two3" onclick="setTab('two',3,4)" >新功能</li>
-       <li id="two4" onclick="setTab('two',4,4)" >权限</li>
+       <li class="hover">概览</li>
+       <li>用户评论</li>
+       <li>新功能</li>
+       <li>权限</li>
     </ul>
       </div>
 <div class="Contentbox2">  
-   <div id="con_two_1" >
+   <div id="con_two_0" >
    <div style="float:left;margin-left: 15px;width:518px">
   <div style="float:left;width:518px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-left: 0px;border-right: 0px;border-top: 0px;background-color: #FCFCFC">
   <h2>说明</h2>
@@ -298,8 +396,6 @@
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
   <div id="doc-original-text"><label id="app_description">Fantasy Tower Defense from the creators of Toy Soldiers &amp; Dark Alliance 
   "It's an addictive, creative game with some lovely aesthetics and challenging levels. If you're anything like me, it'll probably steal your soul." - KOTAKU</label>
-  <p>-------- </p>
-  <p id="app_features">Fast paced fantasy tower defense... from the creators of Toy Soldiers and Baldur's Gate: Dark Alliance! </p>
   </div>
   </div><div class="doc-description-overflow"></div></div>
   
@@ -312,7 +408,6 @@
    <a href="" rel="nofollow" class="more-arrow-link"><span class="more-arrow">›</span></a>
    
    <div class="doc-overview-screenshots"><h2>应用屏幕截图</h2>
-   
   
    <table>
    <tr>
@@ -339,8 +434,12 @@
 <dt style="margin-top: 8px">类别：</dt>
 <dd id="about_Category">游戏</dd>
 <dt style="margin-top: 8px">已安装次数：</dt>
-<dd itemprop="numDownloads">100,000 - 500,000<div class="normalized-daily-installs-chart" style="width: 105px;"><img src="../resources/public/images/chart.png"><p>最近 30 天</p></div></dd>
-   <dt style="margin-top: 8px">大小：</dt>
+<dd itemprop="numDownloads">
+	<div class="normalized-daily-installs-chart"
+		style="width: 105px;height: 105px;" id="downTrend">
+	</div>
+</dd>
+<dt style="margin-top: 8px">大小：</dt>
    <dd id="about_size" itemprop="fileSize" style="display: inline-block;">49</dd><label style="display: inline-block;">M</label>
    <dt style="margin-top: 8px">价格：</dt>
    <dd itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -351,23 +450,8 @@
    </div>
    
    <div  style="float: left;margin-left: 15px;"><h2>用户评论</h2>  
-   <div class="histogram-table goog-inline-block" data-csstoken="user-reviews">
-   <table><tbody><tr><td class="histogram-msg top-row">5 星</td>
-   <td class="top-row bar-cell">
-   <span class="bar bar5" style="width:150px">&nbsp;</span>&nbsp;
-   <span>15,014</span></td></tr><tr><td class="middle-row histogram-msg">4 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar4" style="width:24px">&nbsp;</span>&nbsp;
-   <span>2,383</span></td></tr><tr><td class="middle-row histogram-msg">3 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar3" style="width:5px">&nbsp;</span>&nbsp;
-   <span>487</span></td></tr><tr><td class="middle-row histogram-msg">2 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar2" style="width:1px">&nbsp;</span>&nbsp;
-   <span>84</span></td></tr><tr><td class="bottom-row histogram-msg">1 星</td>
-   <td class="bottom-row bar-cell">
-   <span class="bar bar1" style="width:2px">&nbsp;</span>&nbsp;
-   <span>223</span></td></tr></tbody></table></div>
+   <div class="histogram-table goog-inline-block" id="bar_0" style="width: 320px;height: 115px;">
+   </div>
    
    <div class="average-rating average-rating-panel goog-inline-block">
    <div class="average-rating-title">平均评分：</div>
@@ -380,42 +464,19 @@
    
    
    <div id="appCommentSimple" class="doc-review-summary_simple">
-   
   
-   
-   
    </div>
-   
-   
    
    <a class="tabBarLink" data-tabbarid="details" data-tabbarindex="1">阅读所有用户评论</a>
    <a class="more-arrow-link" data-tabbarid="details" data-tabbarindex="1"><span class="more-arrow">›</span></a></div>
    
    </div>
    
+   <div id="con_two_1" style="display: none;">
    
-   
-   
-   <div id="con_two_2" style="">
-   
-   <div  style="float: left;margin-left: 15px;height:1107px"><h2>用户评分</h2>  
-   <div class="histogram-table goog-inline-block" data-csstoken="user-reviews">
-   <table><tbody><tr><td class="histogram-msg top-row">5 星</td>
-   <td class="top-row bar-cell">
-   <span class="bar bar5" style="width:150px">&nbsp;</span>&nbsp;
-   <span>15,014</span></td></tr><tr><td class="middle-row histogram-msg">4 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar4" style="width:24px">&nbsp;</span>&nbsp;
-   <span>2,383</span></td></tr><tr><td class="middle-row histogram-msg">3 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar3" style="width:5px">&nbsp;</span>&nbsp;
-   <span>487</span></td></tr><tr><td class="middle-row histogram-msg">2 星</td>
-   <td class="middle-row bar-cell">
-   <span class="bar bar2" style="width:1px">&nbsp;</span>&nbsp;
-   <span>84</span></td></tr><tr><td class="bottom-row histogram-msg">1 星</td>
-   <td class="bottom-row bar-cell">
-   <span class="bar bar1" style="width:2px">&nbsp;</span>&nbsp;
-   <span>223</span></td></tr></tbody></table></div>
+   <div  style="float: left;margin-left: 15px;"><h2>用户评分</h2>  
+   <div class="histogram-table goog-inline-block" id="bar_1" style="width: 320px;height: 115px;">
+   </div>
    
    <div class="average-rating average-rating-panel goog-inline-block">
    <div class="average-rating-title">平均评分：</div>
@@ -431,96 +492,33 @@
    
    <form action="../portal/app/comment/add" method="post" id="commentForm" >
    <div id="commentInput">
-       内容：<input id="comment" name="comment" type="text" style="width: 600px;height: 150px;display: block"/>
-       <div class="star">评分：<span id="star_sp0" class="starDark"></span><span id="star_sp1" class="starDark"></span><span id="star_sp2" class="starDark"></span>
-   <span id="star_sp3" class="starDark"></span><span id="star_sp4" class="starDark"></span>
+       内容：<input id="comment" name="comment" type="text" style="width: 600px;height: 150px;display: block"/><div class="star">评分：<span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span>
    <button class="comment_submit" id="submitBtn">提交</button></div>
    <input type="hidden" name="grade" id="grade"/>
    <input type="hidden" name="appId" id="appId"/>
    </div>
    </form>
    
-   
    <div id="appComment" class="doc-review-summary">  
-   
-   <!--  <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月11日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
- 
-    
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月12日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-  
-  
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月13日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-   
-   
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月14日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-
-  
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月15日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-
- 
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月16日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月17日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
- 
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月18日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
- 
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月19日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-  
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月20日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-  
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月21日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   
- ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>
-    <div class="doc-review"><span class="doc-review-author"><strong>aaaaaaa</strong></span>
-    <span class="doc-review-date">评论日期：2012年6月21日</span><img style="display:block" src="../resources/public/images/star3.jpg" alt="" /><p class="review-text">
-   
- ddddddddddddddddddddddddddddddddddddddddddddddddd</p><hr></div>-->
-   
-   
    
    </div>
    
-   <div>一共<span id="a1" style="color:#FF0000"></span>页　当前在
-<span id="a2" style="color:#FF0000"></span>页　
-<span id="a3"></span>　<a onClick="change(--pageno)">上一页</a>　　
-<a onClick="change(++pageno)">下一页</a></div>
-   
-   
-  <div id="con_two_3" style="">3</div>
-  
- 
-  <div id="con_two_4" style="display:none">4</div>
+   <div id="pageDiv">    
+    </div>
  </div>
  
-  
-  
- 
  </div>
+  <div id="con_two_2" style="display: none;">
+  	<div id="app_features" style="float:left;margin-left: 15px;width:518px">
+  	</div>
+  </div>
+  <div id="con_two_3" style="display: none;">
+  	<div id="app_permission" style="float:left;margin-left: 15px;width:518px">
+  	</div>
+  </div>
 </div>
-	
-	</div>
-		</div>
+</div>
+</div>
 <script>
 var nums = [], timer, n = $$("idSlider").getElementsByTagName("li").length,
 st = new SlideTrans("idContainer", "idSlider", 4, { onStart: function(){//设置按钮样式
@@ -539,67 +537,6 @@ function AddNum(i){
 	nums[i] = num;
 }
 st.Run();
-
-/*第一种形式 第二种形式 更换显示样式*/
-function setTab(name,cursel,n){
- for(i=1;i<=n;i++){
-  var menu=document.getElementById(name+i);
-  var con=document.getElementById("con_"+name+"_"+i);
-  menu.className=i==cursel?"hover":"";
-  con.style.display=i==cursel?"block":"none";
- }
-}
- window.onload = function()
- {
-  
-   setTab("two",1,4);
- }
- 
- var pageall;
- var pagesize=7;          //每页多少条信息
- var a = document.getElementById("appComment").getElementsByTagName("div"); 
- var zz =new Array(a.length); 
- function initPaging(){
-
- for(var i=0;i <a.length;i++) 
- { zz[i]=a[i].innerHTML } //div的字符串数组付给zz
- var pageno=1               //当前页
-
- if(zz.length%pagesize==0)
- {pageall =zz.length/pagesize }
- else
- {pageall =parseInt(zz.length/pagesize)+1}   //一共多少页
- change(1);
- }
- function change(e){
- pageno=e;
- if(e<1)//如果输入页<1页
- { e=1;pageno=1}//就等于第1页 ， 当前页为1
- 
- if(e>pageall)//如果输入页大于最大页 
- {e=pageall;pageno=pageall}//输入页和当前页都=最大页
- document.getElementById("appComment").innerHTML=""//全部清空
- for(var i=0;i<pagesize;i++)
- {
-    var div =document.createElement("div")//建立div对象
-    div.innerHTML=zz[(e-1)*pagesize+i]//建立显示元素
-    document.getElementById("appComment").appendChild(div)//加入all中 
-    if(zz[(e-1)*pagesize+i+1]==null)//超出范围跳出
-    break 
- }
- var ye=""
- for(var j=1;j<=pageall;j++)
- {
- if(e==j)
- {ye=ye+"<span style='color:#FF0000'>[<a onClick='change("+j+")'>"+j+"</a>]</span>"}
- else
- {ye=ye+"[<a onClick='change("+j+")'>"+j+"</a>]"}
- }
- document.getElementById("a1").innerHTML=pageall
- document.getElementById("a2").innerHTML=pageno
- document.getElementById("a3").innerHTML=ye
- }
-
 
 </script>	
 		

@@ -3,6 +3,7 @@ package cn.com.carit.market.common.utils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
@@ -117,8 +118,9 @@ public class MD5Util {
 
 	/**
 	 * main方法用于测试
+	 * @throws UnsupportedEncodingException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnsupportedEncodingException {
 		// 字符'a'的MD5码是0cc175b9c0f1b6a831c399e269772661,如果是，则成功。
 		try {
 			System.out.println(MD5Util.md5Hex("a"));
@@ -127,10 +129,8 @@ public class MD5Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String [] imageList="images/Sina Weibo_3802475497968_1.jpg;images/Sina Weibo_3802475497968_2.jpg;images/Sina Weibo_3802475497968_3.jpg;images/Sina Weibo_3802475497968_4.jpg;images/Sina Weibo_3802475497968_5.jpg".split(";");
-		for (String str : imageList) {
-			System.out.println(str);
-		}
+		String str="images/GoogleMap_1818963197773524_1.png;images/GoogleMap_1818963197773524_2.png;images/GoogleMap_1818963197773524_3.png;images/GoogleMap_1818963197773524_4.png;images/adbd8e6c900a35d51493dc111290678c_5.jpg";
+		System.out.println(str.indexOf("images/GoogleMap_1818963197773524_1.png")==-1);
 		System.out.println(StringUtils.hasText(new StringBuffer().toString()));
 	}
 }

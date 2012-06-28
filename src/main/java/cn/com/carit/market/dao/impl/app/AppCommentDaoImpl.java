@@ -321,7 +321,7 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 
 	@Override
 	public List<Map<String, Object>> statCommentGrade(int appId) {
-		String sql="select round(grade/2) grade, count(1) total from t_app_comment where app_id=? group by round(grade/2)";
+		String sql="select grade, count(1) total from t_app_comment where app_id=? group by grade";
 		log.debug(String.format("\n%1$s\n", sql));
 		try {
 			return jdbcTemplate.queryForList(sql, appId);

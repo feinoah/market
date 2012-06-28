@@ -1,14 +1,227 @@
 var app={name:'/market',domain:'http://localhost:8080'};
+var _loadingICO;
+var arrayStar = new Array(
+		app.domain+app.name+"/resources/public/images/comment_star0.png",
+		app.domain+app.name+"/resources/public/images/comment_star1.png",
+		app.domain+app.name+"/resources/public/images/comment_star2.png",
+		app.domain+app.name+"/resources/public/images/comment_star3.png",
+		app.domain+app.name+"/resources/public/images/comment_star4.png",
+		app.domain+app.name+"/resources/public/images/comment_star5.png",
+		app.domain+app.name+"/resources/public/images/comment_star6.png",
+		app.domain+app.name+"/resources/public/images/comment_star7.png",
+		app.domain+app.name+"/resources/public/images/comment_star8.png",
+		app.domain+app.name+"/resources/public/images/comment_star9.png",
+		app.domain+app.name+"/resources/public/images/comment_star10.png");
+$(function() {
+	chkLogin();
+	_loadingICO=app.domain+app.name+'/resources/public/images/loading.gif';
+	$('body').append("<script src='"+app.domain+app.name+"/resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
+	$('#reg').click(function(){
+		regWin();
+	});
+	$('#login').click(function(){
+		loginWin();
+	});
+	$('#logout').click(function(){
+		$.getJSON(app.name+'/portal/logout', function(data) {
+			if (data==1) {
+				$('#loginBefor').show();
+				$('#lolginAfter').hide();
+				$('#welcome').empty().attr('userId','');
+			}
+		});
+	});
+	$('#search').click(function(){
+		var key=$('#search_input').val();
+		if(key){
+			window.open(app.domain+app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
+		} else {
+			tips('search_input','请输入关键字','bottom');
+		}
+	});
+	$('#search_input').keydown(function(e){
+		if(e.which==13){
+			var key=$('#search_input').val();
+			if(key){
+				window.open(app.domain+app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
+			} else {
+				tips('search_input','请输入关键字','bottom');
+			}
+		}
+	}).click(function(){
+		Util.Dialog.remove('Tip_tips');
+	}).change(function(){Util.Dialog.remove('Tip_tips');});
+});
 
+
+/**
+ * 生成分页导航
+ * @param page 当前页
+ * @param total 总页数
+ */
+function pagination(page,total){
+	var html='';
+	if(page!=1){//当前页不是第一页时生成首页和上一页   
+		html+='<span onclick="doPage(1)">首页</span>'
+			+'<span onclick="doPage('+(page-1)+')">« 上一页</span>';
+	}
+	if(total<=10){ // 最多10页
+		html+='<label class="cruLabel">';
+		for(var i=1;i<=total;i++){
+			if(i==page){
+				html+='<span class="selected">'+i+'</span>';
+			}else{
+				html+='<span onclick="doPage('+i+')">'+i+'</span>';
+			}
+		}
+		html+='</label>';
+	} else {//多于10页
+		var label=total%10;
+		var curLabel=page%10;
+		if(label==0){
+			label=total/10;
+		} else {
+			label=total/10+1;
+		}
+		if(curLabel==0){
+			curLabel=page/10;
+		} else {
+			curLabel=page/10+1;
+		}
+		for(var i=1;i<=label;i++){
+			if(i==curLabel){
+				html+='<label id="p_'+i+'" class="cruLabel">';
+			}else{
+				html+='<label id="p_'+i+'">';
+			}
+			for(var j=1;j<=10;j++){
+				if(i>1){
+					html+='<span onclick="doPageLabel("p_"'+(i-1)+')">«</span>'
+				}
+				if(j==page){
+					html+='<span class="selected">'+j+'</span>';
+				}else{
+					html+='<span onclick="doPage('+j+')">'+j+'</span>';
+				}
+				if(i<label){
+					html+='<span onclick="doPageLabel("p_"'+(i+1)+')">»</span>'
+				}
+			}
+			html+='</label>';
+		}
+	}
+	if(page!=total){//当前页不是最后页时生成下一页 末页
+		html+='<span onclick="doPage('+(page+1)+')">下一页 »</span>'
+			+'<span onclick="doPage('+total+')">末页</span>'
+	}
+	$('#pageDiv').empty().html(html);
+}
+function doPageLabel(id){
+	$('label[id^=p_]').hide();
+	$('#'+id).show();
+	$('#pageDiv label[id^=p_]').removeClass('cruLabel').addClass('hideLabel');  
+    $('#'+target).removeClass('hideLabel').addClass('cruLabel');  
+}
+// 获得参数的方法
+var request ={
+	QueryString : function(val){
+		var uri = window.location.search;
+		var re = new RegExp("" +val+ "=([^&?]*)", "ig");
+		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
+	}
+};
 var chkLogin=function(){
 	$.getJSON(app.name+'/portal/account/login/check', function(data) {
 		if (data) {
-			$('li[name=before_login]').hide();
-			$('#after_login').show().children().html('欢迎您：'+data.nickName);
+			$('#loginBefor').hide();
+			$('#lolginAfter').show();
+			$('#welcome').html('欢迎您：<a href="javascript:alert('+data.id+')">'+data.nickName+'</a>').attr('userId',data.id);
 		}
 	});
-}
+};
 
+var login=function(){
+	$('#loginForm').form({
+		url:app.name+'/portal/login',
+		dataType : 'text',  
+		onSubmit:function(){
+			var tag=true;
+			$('#loginForm span[id$="Tip"]').each(function(){
+				if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
+					tag=false;
+					$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
+					return false;
+				}
+			});
+			return tag;
+		}, 
+		success:function(data){
+			if(data){
+				var map=$.parseJSON(data);
+				if(map){
+					if(map.answerCode==-3){
+						tips('password','密码错误次数超过限制，半小时内限制登录','bottom');
+					}
+					if(map.answerCode==-2){
+						tips('email','账号被锁定','bottom');
+					}
+					if(map.answerCode==-1){
+						tips('email','账号不存在','bottom');
+					}
+					if(map.answerCode==0){
+						tips('password','密码错误','bottom');
+					}
+					if(map.answerCode==1){
+						$('#loginBefor').hide();
+						$('#lolginAfter').show();
+						$('#welcome').html('欢迎您：<a href="javascript:alert('+map.portalUser.id+')">'+map.portalUser.nickName+'</a>').attr('userId',map.portalUser.id);
+						Util.Dialog.remove('loginWin');
+					}
+				}else{
+					tips('button','后台系统异','bottom');
+				}
+			}else{
+				tips('button','后台系统异','bottom');
+			}
+		}
+	}).submit();
+};
+var reg=function(){
+	$('#regForm').form({
+		url:app.name+'/portal/register',
+		dataType : 'text',  
+		onSubmit:function(){
+			var tag=true;
+			$('#regForm span[id$="Tip"]').each(function(){
+				if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
+					tag=false;
+					$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
+					return false;
+				}
+			});
+			return tag;
+	    }, 
+    	success:function(data){
+			if(data){
+				var map=$.parseJSON(data);
+				if(map){
+					if(map.answerCode==-2){
+						tips('button','未知错误','bottom');
+					}
+					if(map.answerCode==1){
+						//tips('button','注册成功','bottom');
+						Util.Dialog.remove('regWin');
+						chkLogin();//切换登录状态
+					}
+				}else{
+					tips('button','后台系统异','bottom');
+				}
+			}else{
+				tips('button','后台系统异','bottom');
+			}
+	    }
+	}).submit();
+};
 var regWin=function(){
 	Util.Dialog({
 		boxID : 'regWin',
@@ -19,7 +232,7 @@ var regWin=function(){
 		height : 280
 	});
 	return false;
-}
+};
 
 var loginWin=function(){
 	Util.Dialog({
@@ -31,7 +244,7 @@ var loginWin=function(){
 		height : 220
 	});
 	return false;
-}
+};
 
 var tips=function(ref,txt,_arrow){
 	Util.Dialog({
@@ -39,7 +252,7 @@ var tips=function(ref,txt,_arrow){
 		boxID: 'Tip_tips',
 		referID: ref,
 		//width: 150,
-		height: 14,
+		height: 20,
 		border: { opacity: '0', radius: '3'},
 		closestyle: 'gray',
 		arrow: _arrow,
@@ -53,7 +266,7 @@ var tips=function(ref,txt,_arrow){
 			tin: false
 		}
 	});
-}
+};
 /**
  * 检测邮箱合法性
  * @param v

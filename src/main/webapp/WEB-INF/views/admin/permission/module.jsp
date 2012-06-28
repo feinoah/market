@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		var modules;
 		$(function(){
@@ -172,14 +172,14 @@
 					<tr>
 						<td><form:label	for="expanded" path="expanded" cssClass="mustInput">展开：</form:label></td>
 						<td>
-							<form:select path="expanded" id="expanded_edit" cssClass="easyui-combobox" required="true">
+							<form:select path="expanded" id="expanded_edit" required="true">
 								<form:option value="0">-收起-</form:option>
 								<form:option value="1">-展开-</form:option>
 							</form:select>
 						</td>
 						<td><form:label for="display" path="display" cssClass="mustInput">是否隐藏：</form:label></td>
 						<td>
-							<form:select path="display" id="display_edit" cssClass="easyui-combobox" required="true">
+							<form:select path="display" id="display_edit" required="true">
 								<form:option value="0">-隐藏-</form:option>
 								<form:option value="1">-显示-</form:option>
 							</form:select>

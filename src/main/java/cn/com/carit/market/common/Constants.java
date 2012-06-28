@@ -3,6 +3,7 @@ package cn.com.carit.market.common;
 
 
 public class Constants {
+	public static final String CHARACTER_ENCODING_UTF8="utf-8";
 	public static final int PAGE_SIZE=10;
 	public static final int STATUS_VALID=1;
 	public static final int STATUS_INVALID=0;
@@ -10,6 +11,7 @@ public class Constants {
 	public static final String DATE_TIME_FORMATTER="yyyy-MM-dd HH:mm:ss";
 	public static final String DATE_FORMATTER="yyyy-MM-dd";
 	public static final String DATE_SHORT_FORMATTER="yyyy-M-d";
+	public static final String DATE_MONTH_DATE="M-d";
 	public static final String ADMIN_USER="adminUser";
 	public static final String PORTAL_USER="portalUser";
 	public static final String PASSWORD_ERROR_COUNT="passwordErrorCount";

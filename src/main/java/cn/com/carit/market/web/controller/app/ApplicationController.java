@@ -25,6 +25,7 @@ import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.app.ApplicationService;
 
 /**
@@ -82,15 +83,13 @@ public class ApplicationController {
 			return -1;
 		}
 		try {
-        	StringBuilder images=new StringBuilder();
-        	long radom=System.nanoTime();
+        	String prefix=MD5Util.md5Hex(application.getEnName()+application.getAppName()+application.getVersion()+System.nanoTime());
         	String suffix = "";
         	String fileName = "";
         	if (apkMultipartFile!=null && apkMultipartFile.getOriginalFilename().length()>0) { // 有APK文件
         		suffix = apkMultipartFile.getOriginalFilename().substring(
         				apkMultipartFile.getOriginalFilename().lastIndexOf("."));
-        		// 随机文件名
-        		fileName =  application.getEnName()+"_"+radom+ suffix.toLowerCase();// 构建文件名称
+        		fileName = (prefix+ suffix).toLowerCase();// 构建文件名称
         		File apkFile=AttachmentUtil.getApkFile(fileName);
         		apkMultipartFile.transferTo(apkFile);
         		application.setAppFilePath(Constants.BASE_PATH_APK+fileName);
@@ -101,8 +100,7 @@ public class ApplicationController {
 	        	// 获取文件的后缀 
 	        	suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
-	        	// 随机文件名
-	        	fileName =  application.getEnName()+"_"+radom+ suffix.toLowerCase();// 构建文件名称
+	        	fileName = (prefix+ suffix).toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
         		multipartFile.transferTo(file);
 	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
@@ -113,38 +111,52 @@ public class ApplicationController {
 	        	suffix = bigIconMultipartFile.getOriginalFilename().substring(
 	        			bigIconMultipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	fileName =  application.getEnName()+"_"+radom+"_big"+ suffix.toLowerCase();// 构建文件名称
+	        	fileName = (prefix + "_" + suffix).toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getIconFile(fileName);
 	        	bigIconMultipartFile.transferTo(file);
 	        	application.setBigIcon(Constants.BASE_PATH_ICON+fileName);
 			}
 			//页面控件的文件流
 	        List<MultipartFile> imageFiles = multipartRequest.getFiles("imageFile");
-	        int i=0;
+	        String [] imageArray = application.getImageArray();
+	        StringBuilder images=new StringBuilder();
+	        if(imageArray!=null && imageArray.length>0){
+	        	for (String str : imageArray) {
+	        		images.append(str).append(";");
+	        	}
+	        }
+	        System.err.println("before:"+images);
+	        int i=1;
 	        for (MultipartFile imageFile : imageFiles) {
 	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
 	        		fileName = imageFile.getOriginalFilename();  
-	        		String extName = fileName.substring(fileName.lastIndexOf("."));  
-	        		String lastFileName = application.getEnName()+"_"+radom+"_"+(i+1)+extName.toLowerCase();
-	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(lastFileName)); 
-	        		if (i<4) {
-	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName).append(";");
-	        		} else {
-	        			images.append(Constants.BASE_PATH_IMAGE+lastFileName);
-	        		}
+	        		suffix = fileName.substring(fileName.lastIndexOf("."));  
+	        		fileName = (prefix + "_" + (i) + suffix).toLowerCase();// 构建文件名称
+	        		FileCopyUtils.copy(imageFile.getBytes(),AttachmentUtil.getImageFile(fileName)); 
+	        		images.append(Constants.BASE_PATH_IMAGE+fileName).append(";");
 				}
         		i++;
 			}
+	        if (images.lastIndexOf(";")!=-1) {
+        		images.delete(images.lastIndexOf(";"), images.length());
+    		}
+	        System.err.println(images);
 	        application.setImages(images.toString());
 	        applicationService.saveOrUpdate(application);
 	        return 1;
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
         	return -1;
         } catch (IOException e) {
         	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
         	return -1;
-        }
+        } catch (Exception e) {
+        	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
+        	return -1;
+		}
 	}
 	
 	/**

@@ -254,7 +254,6 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 		String sql="select m.* from t_base_module m left join t_base_role_module b"
 				+ " on m.id=b.module_id where b.role_id=? order by level, display_index ";
 		log.debug(String.format("\n%1$s\n", sql));
-		log.debug("userId:"+String.format("\n%1$s\n", roleId));
 		return jdbcTemplate.query(sql, new Object[]{roleId}, new int[]{Types.INTEGER}, rowMapper);
 	}
 

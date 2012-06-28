@@ -110,7 +110,7 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 		List<Integer> data=new ArrayList<Integer>();
 		if (downLogs.size()>=30) {//刚好有30天完整记录
 			for (AppDownStat stat : downLogs) {
-				categories.add(StringUtil.dateToStr(stat.getDate(), Constants.DATE_SHORT_FORMATTER));
+				categories.add(StringUtil.dateToStr(stat.getDate(), Constants.DATE_MONTH_DATE));
 				data.add(stat.getCount());
 			}
 		} else { // 不够30天的数据
@@ -118,11 +118,11 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 			for (int i = 0; i < 30; i++) {
 				calendar.add(Calendar.DATE, +1);
 				String dateStr=StringUtil.dateToStr(calendar.getTime()
-						, Constants.DATE_SHORT_FORMATTER);
+						, Constants.DATE_MONTH_DATE);
 				categories.add(dateStr);
 				for (AppDownStat stat : downLogs) {
 					if (dateStr.equals(StringUtil.dateToStr(stat.getDate()
-							, Constants.DATE_SHORT_FORMATTER))) {
+							, Constants.DATE_MONTH_DATE))) {
 						count=stat.getCount();
 						break;
 					} else {

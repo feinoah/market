@@ -95,6 +95,8 @@ public class Application implements Serializable {
 	 */
 	@JsonIgnore
 	private String images;
+	@JsonIgnore
+	private String [] imageArray;
 	/**
 	 * status
 	 */
@@ -315,6 +317,14 @@ public class Application implements Serializable {
 
 	public void setEnFeatures(String enFeatures) {
 		this.enFeatures = enFeatures;
+	}
+
+	public String[] getImageArray() {
+		return imageArray;
+	}
+
+	public void setImageArray(String[] imageArray) {
+		this.imageArray = imageArray;
 	}
 
 }

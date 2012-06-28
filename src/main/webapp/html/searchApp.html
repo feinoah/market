@@ -13,48 +13,30 @@
 		<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 		<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.4"></script>
 		<script type="text/javascript">
-		function submit(id) {
+		function submit(id){
 			window.open("../html/appDetail.html?inputStr=" + id);//传入参数
 		}
 		
 		var rt = request.QueryString("inputStr");
-		var catalogId=request.QueryString("catalogId");
-		var status=request.QueryString("status");
 		function doPage(page){
-			var url='../portal/app/query?local=cn&page='+page+'&rows=12';
-			if(rt=='allnewfreeapp'){
-				url+='&order=desc&sort=updateTime';
-			}
-			if(rt=='hotfreenew'){
-				url+='&order=desc&sort=downCount,updateTime';
-			}
-			if(catalogId){
-				url+='&catalogId='+catalogId;
-			}
-			if(status){
-				url+='&status='+status;
-			}
-			$.getJSON(url, function(data){
+			$.getJSON('../portal/app/search?q='+rt+'&page='+page+'&rows=9', function(data) {
 				if(data){
-					
 					$('#allApp').empty();
-					var html='';
-					$.each(data.rows,function(i,o){
-						html+=' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
-							+o.id+
-							')" type="image" src="../'
-							+o.icon+
-							'"></input><img class="allApp_star" src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
-							+o.appName+
-							'</label><label class="app_l2">'
-							+o.developer+
-							'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:75px">'
-							+o.description+'</div></td></tr></table></div>';
-					});
-					html+='<div id="pageDiv"></div>';
-					$('#allApp').append(html);
 					pagination(page, data.totalPage);
-					$('.allApp_star').error(function(){
+					$.each(data.rows,function(i,o){
+						$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
+								+o.id+
+								')" type="image" src="../'
+								+o.icon+
+								'"></input><img class="search_star" src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
+								+o.appName+
+								'</label><label class="app_l2">'
+								+o.developer+
+								'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:75px">'
+								+o.description+
+								'</div></td></tr></table></div>');
+					})
+					$('.search_star').error(function(){
 						this.src = '../resources/public/images/comment_star1.png';
 					});
 					$('.allapp_detail_img').error(function(){
@@ -63,17 +45,12 @@
 				}
 			});
 		}
-		
 		$(function(){
 			doPage(1);
 		});
-	</script>	
-		
-	
-		
-		</head>
-	<body> 
-	
+		</script>	
+	</head>
+	<body>
 	<div id="header">
 		<div id="nav">
 			<div id="loginBefor">
@@ -86,29 +63,35 @@
 			</div>
 		</div>
 		<ul>
-			<li><a href="../"><img src="../resources/public/images/carit_logo1.png"/></a></li>
-			<li><input class="index_input" id="search_input" type="text" name="txtNo"/></li>
+			<li><a href="../"><img src="../resources/public/images/carit_logo1.png"></a></li>
+			<li><input class="index_input" id="search_input" type="text" name="txtNo" /></li>
 			<li><input type="button" class="search_bn" id="search"></input></li>
 		</ul>
 	</div>
-	
-<div id="wrapper" style="height:986px;width:1024px;margin:0 auto;text-align:left;position:relative;">
+	<div id="wrapper"
+		style="height: 986px; width: 1024px; margin: 0 auto; text-align: left; position: relative;">
+		
 
 		<div>
 			<div class="page-banner">
 				<table>
-					
-						<tr>
-							<td style="height: 58px"><img src="../resources/public/images/icona.jpg" style="width: 58px;height: 47px;margin-bottom: 15px"></img></td>
-							<td style="height: 58px"><label style="margin-bottom: 15px; color: white;font-size: 23px;" class="goog-inline-block">店员推荐（应用）</label></td>
-						</tr>
-					
+
+					<tr>
+						<td style="height: 58px"><img
+							src="../resources/public/images/icona.jpg"
+							style="width: 58px; height: 47px; margin-bottom: 15px"></img></td>
+						<td style="height: 58px"><label
+							style="margin-bottom: 15px; color: white; font-size: 23px;"
+							class="goog-inline-block">搜索结果：</label></td>
+					</tr>
+
 				</table>
 			</div>
 			<div class="container-container">
-			
-			   <div id="allApp" style="margin-top: 40px; margin-left: 40px;width:980px">
-					<div class="appItem">
+
+				<div id="allApp"
+					style="margin-top: 40px; margin-left: 40px; width: 980px">
+					<!--  <div class="appItem">
 						<table>
 							<tr>
 								<td width="80px"><img
@@ -122,15 +105,11 @@
 							</tr>
 						</table>
 
-					</div>
-
-					<div id="pageDiv"></div>
+					</div>-->
 				</div>
-				
+				<div id="pageDiv"></div>
 			</div>
 		</div>
-
 	</div>
-		
-	</body>
+</body>
 </html>

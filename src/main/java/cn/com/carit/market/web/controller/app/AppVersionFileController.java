@@ -24,6 +24,7 @@ import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.app.AppVersionFileService;
 import cn.com.carit.market.service.app.ApplicationService;
 
@@ -86,18 +87,25 @@ public class AppVersionFileController {
 	        	// 获取文件的后缀 
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
-	        	String fileName =  application.getEnName()+"_"+appVersionFile.getVersion()+"_"+System.nanoTime()+ suffix.toLowerCase();// 构建文件名称
+	        	String prefix=MD5Util.md5Hex(application.getEnName()+application.getAppName()+application.getVersion()+System.nanoTime());
+	        	String fileName = (prefix + suffix).toLowerCase();// 构建文件名称
 	        	File file = AttachmentUtil.getApkFile(fileName);
-					multipartFile.transferTo(file);
+				multipartFile.transferTo(file);
 	        	appVersionFile.setFilePath(Constants.BASE_PATH_APK+fileName);
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
         	return -1;
         } catch (IOException e) {
         	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
         	return -1;
-        }
+        } catch (Exception e) {
+        	log.error("upload file error..."+e.getMessage());
+        	log.error(e.getStackTrace());
+        	return -1;
+		}
 		appVersionFileService.saveOrUpdate(appVersionFile);
 		return 1;
 	}

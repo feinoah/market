@@ -8,10 +8,7 @@ font: 12px 宋体, Arial;
 color: #000000;
 letter-spacing: 0px;
 line-height: 150%;
-background:#F8F8F8;
-background:-moz-linear-gradient(top,#CDCDCDA,#F8F8F8);/*FF*/
-background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#CDCDCDA), to(#F8F8F8));/*Chrome*/
-background-image:-ms-radial-gradient(#CDCDCDA 0%, ##F8F8F8 100%);/*IE10*/
+background: url(../images/body_bg.gif);
 }
 
 ul {
@@ -57,7 +54,7 @@ a:AFTER{
 }
 
 div{
-/*border:1px solid #ff0000;*/
+background: #ffffff;
 }
 
 #header{
@@ -65,20 +62,23 @@ width:100%;
 }
 #nav{
 width:100%;
-background:#9C9C9C;
 }
-#nav div{height:44px; text-align:right;}
+#nav div{height:30px; text-align:right;}
 #lolginAfter{ display:none;}
 #nav button{
 float:right;
 margin-right:15px;
 display:block;
-width:78px;
-height:44px;
-background:url(../images/btn.png);
+width:72px;
+height:30px;
+background:url(../images/login_bu.png) left top no-repeat;
+color:white;
+font-weight: bold;
+cursor:pointer;
+text-align: center;
 }
 #nav button:hover{
-background:url(../images/btn_hv.png);
+background:url(../images/login_bu_hover.png);
 }
 #nav span{display:-moz-inline-box; display:inline-block;}
 
@@ -124,7 +124,6 @@ background:url(../images/search_hv.png);
 margin-top:5px;
 width:1024px;
 height:316px;
-border:1px solid #2A4A5C;
 overflow:hidden;
 }
 

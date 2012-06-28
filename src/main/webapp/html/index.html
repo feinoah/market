@@ -2,52 +2,64 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>中通福瑞——应用市场</title>
-<meta http-equiv="pragma" content="no-cache" />
-<meta http-equiv="cache-control" content="no-store, must-revalidate" />
-<meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT" />
-<meta http-equiv="expires" content="0" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.3" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.4" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/common.css?v=1.4" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.3"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.4"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.3"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.4"></script>
 <script type="text/javascript">
+
 function submit(id)
 {
 window.open("html/appDetail.html?inputStr=" + id);//传入参数
 }   
 
-function onPicError(){
-t = document.getElementsByClassName("iconImg");
- for(i = 0; i < t.length; i++){
-     t.item(i).onerror = function(){
-       this.src = "resources/public/images/app_default.jpg"
-     }
-   }
-}
-
-var arrayStar = new Array("resources/public/images/comment_star1.png","resources/public/images/comment_star2.png","resources/public/images/comment_star3.png","resources/public/images/comment_star4.png",
-                       "resources/public/images/comment_star5.png","resources/public/images/comment_star6.png");
-	var _loadingICO;
+	function onPicError(){
+		t = document.getElementsByClassName("iconImg");
+	 	for(i = 0; i < t.length; i++){
+	    	t.item(i).onerror = function(){
+	       		this.src = "resources/public/images/app_default.jpg"
+	     	}
+	   }
+	}
+	function onStarError(){
+		index_star = document.getElementsByClassName("index_star");
+	 	for(i = 0; i < index_star.length; i++){
+			index_star.item(i).onerror = function(){
+	       		this.src = "resources/public/images/comment_star1.png"
+	    	}
+		}
+	}
 	$(function() {
-		chkLogin();
-		_loadingICO='resources/public/images/loading.gif';
-		$('body').append("<script src='resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
-		$('#reg').click(function(){
-			regWin();
-		});
-		$('#login').click(function(){
-			loginWin();
+		// 推荐应用
+		$.getJSON('portal/app/query?rows=12&status=2', function(data) {
+			if (data.rows) {
+				$('#clerk_recommend').empty();
+				$.each(data.rows, function(i, o) {
+					$('#clerk_recommend').append(
+						'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'" target="_blank"><img class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/></a><label class="label1"><b>'
+						+o.appName
+						+'</b></label><label class="label2">'
+						+o.developer
+						+'</label><img class="index_star" src="'+arrayStar[o.appLevel]+'"/>(<span>'
+						+o.downCount
+						+'</span>)</div>'
+					);
+				});
+				onPicError();
+				onStarError();
+			}
 		});
 		$.getJSON('portal/catalog/all?local=cn', function(data) {
 			if (data) {
 				$('#catalog_con').empty();
 				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span class="index_free_a">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?inputStr='+o.id+'"><b>'+o.name+'</b></a></li>');
+					$('#catalog_con').append('<li><span class="index_free_a">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?catalogId='+o.id+'" target="_blank"><b>'+o.name+'</b></a></li>');
 				});
 				$('#catalog_con').append('<li>');
 			}
@@ -55,49 +67,50 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 		$.getJSON('portal/app/hot/free/12?local=cn', function(data) {
 			if (data) {
 				$('#freeTop').empty();
-				$('#clerk_recommend').empty();
 				$.each(data, function(i, o) {
-				
 					if(i<5){
-						$('#freeTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
+						$('#freeTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'" target="_blank"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
-					$('#clerk_recommend').append(
-							
-						'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'"><img class="iconImg" src="'+o.icon+'" alt="'+o.appName+'"/></a><label class="label1"><b>'
-						+o.appName
-						+'</b></label><label class="label2">'
-						+o.developer
-						+'</label><img src="'+arrayStar[o.appLevel]+'" style="display: inline-block" />(<span>'
-						+o.downCount
-						+'</span>)</div>'
-					);
 				});
-				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=allnewfreeapp" >全部热门免费应用</a></li>');
 				onPicError();
+				onStarError();
+				$('#freeTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=allnewfreeapp"  target="_blank">全部热门免费应用</a></li>');
+			
 			}
 		});
 		$.getJSON('portal/app/hot/free/new/12?local=cn', function(data) {
 			if (data) {
 				$('#freeNewTop').empty();
-				$('#clerk_recommend_car').empty();
 				$.each(data, function(i, o) {
 					if(i<5){
-						$('#freeNewTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
+						$('#freeNewTop').append('<li><span class="index_free_a">'+(i+1)+'</span><a href="html/appDetail.html?inputStr='+o.id+'" target="_blank"><b>'+o.appName+'</b></a><label>'+o.developer+'</label></li>');
 					}
-					$('#clerk_recommend_car').append(
-						'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'"><img src="'+o.icon+'"  class="iconImg" alt="'+o.appName+'"/></a><label class="label1"><b>'
-						+o.appName
-						+'</b></label><label class="label2">'
-						+o.developer
-						+'</label><img src="'+ arrayStar[o.appLevel]+'" style="display: inline-block" />(<span>'
-						+o.downCount
-						+'</span>)</div>'
-					);
 				});
-				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=hotfreenew" >全部热门免费新品</a></li>');
 				onPicError();
+				onStarError();
+				$('#freeNewTop').append('<li class="more"><a style="color: #104E8B;font-size: 18px;" href="html/allApp.html?inputStr=hotfreenew"  target="_blank">全部热门免费新品</a></li>');	
 			}
 		});
+		// 推荐车载
+		$.getJSON('portal/app/query?rows=12&status=2&catalogId=2', function(data) {
+				if (data.rows) {
+					$('#clerk_recommend_car').empty();
+					$.each(data.rows, function(i, o) {
+						$('#clerk_recommend_car').append(
+							'<div title="'+o.appName+'"><a href="html/appDetail.html?inputStr='+o.id+'" target="_blank"><img src="'+o.icon+'"  class="iconImg" alt="'+o.appName+'"/></a><label class="label1"><b>'
+							+o.appName
+							+'</b></label><label class="label2">'
+							+o.developer
+							+'</label><img class="index_star" src="'+ arrayStar[o.appLevel]+'"/>(<span>'
+							+o.downCount
+							+'</span>)</div>'
+						);
+					});
+					onPicError();
+					onStarError();
+				}
+			});
+	
 	});
 	
 
@@ -105,17 +118,24 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 </head>
 <body style="margin: 0; padding: 0; text-align: center;">
 
-	<div id="wrapper">
-		<div id="header">
+	<div id="header">
+		<div id="nav">
+			<div id="loginBefor">
+				<button class="login_bn" id="login">登陆</button>
+				<button id="reg" class="login_bn">注册</button>
+			</div>
+			<div id="lolginAfter">
+				<span id="welcome"></span>
+				<button id="logout" class="login_bn">退出</button>
+			</div>
 			<ul>
 				<li><img src="resources/public/images/carit_logo1.png"/></li>
-				<li><input class="index_input" type="text" name="txtNo"/></li>
+				<li><input class="index_input" id="search_input" type="text" name="txtNo"/></li>
 				<li><input type="button" class="search_bn" id="search"></input></li>
-				<li name="before_login"><input type="button" class="login_bn" id="login" value="登陆"></input></li>
-				<li name="before_login"><input id="reg" class="login_bn" type="button" value="注册"></input></li>
-				<li id="after_login" style="display: none;"><span></span></li>
 			</ul>
 		</div>
+	</div>
+	<div id="wrapper">
 		<div class="container" id="idContainer"
 			style="height: 295px; width: 1024px; background-color: #DEDEDE;">
 			<table id="idSlider" border="0" cellpadding="0" cellspacing="0">
@@ -181,7 +201,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 						
 					</div>
 					<div class="carousel-more-link">
-						<a href="html/allApp.html?inputStr=hotfreenew">查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?status=2" target="_blank">查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 
@@ -191,7 +211,7 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 						
 					</div>
 					<div class="carousel-more-link">
-						<a href="html/allApp.html?inputStr=allnewfreeapp">查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?status=2&catalogId=2" target="_blank">查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 				</div>
@@ -210,13 +230,14 @@ var arrayStar = new Array("resources/public/images/comment_star1.png","resources
 				<div class="panel-description">我们的工作人员从 Google Play
 					中挑选的部分最佳应用。</div>
 				<div class="panel-see-more">
-					<a href="html/allApp.html?inputStr=allnewfreeapp">查看全部</a><a href="" class="more-arrow-link"> <span
+					<a href="html/allApp.html?inputStr=allnewfreeapp" target="_blank">查看全部</a><a href="" class="more-arrow-link"> <span
 						class="more-arrow">›</span></a>
 				</div>
 			</div>
 		</div>
 	</div>
 	<script>
+
 		var nums = [], timer, n = $$("idSlider").getElementsByTagName("td").length, st = new SlideTrans(
 				"idContainer", "idSlider", 3, {
 					Vertical : false,

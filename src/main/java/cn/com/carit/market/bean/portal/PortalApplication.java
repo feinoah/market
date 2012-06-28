@@ -103,6 +103,9 @@ public class PortalApplication implements Serializable {
 	 * 更新日期
 	 */
 	private Date updateTime;
+	
+	@JsonIgnore
+	private Integer status;
 
 	public int getId() {
 		return id;
@@ -278,6 +281,14 @@ public class PortalApplication implements Serializable {
 
 	public void setFeatures(String features) {
 		this.features = features;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 }

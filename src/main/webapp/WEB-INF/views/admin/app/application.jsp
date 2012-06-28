@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.3" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		var tag=0;
 		$(function(){
@@ -44,13 +44,13 @@
 				textField:'displayValue'
 			});
 			$('#status').combobox({
-				data:statusList,
+				data:appStatusList,
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
 			$('#status_edit').combobox({
-				data:statusList,
+				data:appStatusList,
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
@@ -76,6 +76,7 @@
 						$('#id').val('');
 						$('#editForm textarea').val('');
 						$('#editWin').show();
+						$('.validatebox-tip').remove();
 					}
 				}, '-', {
 					text:'修改',
@@ -114,7 +115,7 @@
 				$('#editForm').form({
 					onSubmit:function(){
 						// 避免 form validate bug
-						$('.easyui-combobox').each(function(){
+						$('.combobox-f').each(function(){
 							$(this).val($(this).combobox('getText'));
 						});
 						$('#editForm textarea').each(function(){
@@ -157,8 +158,6 @@
 						}
 				    }
 				}).submit();
-				checkExisted($('#appName_edit'),"${ctx}/portal/app/check?local=cn&appName=");
-				checkExisted($('#enName_edit'),"${ctx}/portal/app/check?local=en&appName=");
 			});
 			$('#edit_submit_version').bind('click',function(){
 				$('#editVersionForm').form({
@@ -213,6 +212,8 @@
 			$('.combobox-f').each(function(){
 				$(this).combobox('clear');
 			});
+			checkExisted($('#appName_edit'),"${ctx}/portal/app/check?local=cn&appName=");
+			checkExisted($('#enName_edit'),"${ctx}/portal/app/check?local=en&appName=");
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -242,6 +243,16 @@
 				$('#enDescription').val(m.enDescription);
 				$('#features').val(m.features);
 				$('#enFeatures').val(m.enFeatures);
+				$('#apkFileTxt').val(m.appFilePath);
+				$('#iconFileTxt').val(m.icon);
+				$('#bigIconFileTxt').val(m.bigIcon);
+				if(m.imageList){
+					$('input[id^=imgFileTxt]').val('');
+					$.each(m.imageList,function(i,v){
+						$('#imgFileTxt'+(i+1)).val(v);
+					});
+				}
+				$('input[name=imageArray]').attr('disabled',false);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -287,7 +298,6 @@
 		</script>
 		<style>
 		#editWin label {width: 115px;}
-		#editWin input {width: 150px;}
 		.easyui-tabs textarea{width: 572px;height: 82px;}
 		#editVersionWin textarea {width: 410px;height: 60px;}
 		.progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
@@ -385,25 +395,25 @@
 								<td><label	for="version" class="mustInput">版本：</label></td>
 								<td><form:input path="version" required="true" class="easyui-validatebox"/></td>
 								<td><label for="catalogId" class="mustInput">分类：<label></td>
-								<td><form:input path="catalogId" id="catalogId_edit" required="true" cssClass="easyui-combobox" editable='false'/></td>
+								<td><form:input path="catalogId" id="catalogId_edit" required="true" editable='false'/></td>
 							</tr>
 							<tr>
 							</tr>
 							<tr>
 								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 								<td>
-									<form:input path="status" id="status_edit" required="true" cssClass="easyui-combobox" />
+									<form:input path="status" id="status_edit" required="true" />
 								</td>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
-									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssClass="easyui-combobox" />
+									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" />
 								</td>
 							</tr>
 							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>
 								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" /></td>
 								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
-								<td><form:input path="platform" id="platform_edit"/></td>
+								<td><form:input path="platform" id="platform_edit" required="true" /></td>
 							</tr>
 						</table>
 						<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">
@@ -443,20 +453,92 @@
 						<table>
 							<tr>
 								<td><label class="mustInput">应用文件：</label></td>
-								<td><input type="file"  name="apkFile" id="apkFile" fileType='apk'/></td>
+								<td>
+								<div class="fileinputs">  
+									<input type="file" class="file" name="apkFile" id="apkFile" fileType='apk' onchange="$('#apkFileTxt').val(this.value);"/>  
+									<div class="fakefile">  
+										<input type="text" value="" id="apkFileTxt"/><button>浏览</button>
+									</div>  
+								</div>
+								</td>
 						</tr>
 						<tr>
 							<td><label>小图标：</label></td>
-							<td><input type="file"  name="iconFile" id="iconFile" fileType="jpg|png"/></td>
+							<td>
+								<div class="fileinputs">  
+									<input type="file" class="file" name="iconFile" id="iconFile" fileType="jpg|png" onchange="$('#iconFileTxt').val(this.value);"/>
+									<div class="fakefile">  
+										<input type="text" value="" id="iconFileTxt"/><button>浏览</button>
+									</div>  
+								</div>
+							</td>
 						</tr>
 						<tr>
 							<td><label>大图标：</label></td>
-							<td><input type="file"  name="bigIconFile" id="bigIconFile" fileType="jpg|png"/></td>
+							<td>
+								<div class="fileinputs">  
+									<input type="file" class="file" name="bigIconFile" id="bigIconFile" fileType="jpg|png" onchange="$('#bigIconFileTxt').val(this.value);"/>
+									<div class="fakefile">  
+										<input type="text" value="" id="bigIconFileTxt"/><button>浏览</button>
+									</div>  
+								</div>
+							</td>
 						</tr>
 						<tr>
-							<td rowspan="2"><label>截图</label></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td><td><input type="file" name="imageFile" fileType="jpg|png"/></td>
+							<td><label>截图一：</label></td>
+							<td>
+							<div class="fileinputs">  
+								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt1').val(this.value).attr('disabled',true);"/>
+								<div class="fakefile">  
+									<input type="text" name="imageArray" id="imgFileTxt1"/><button>浏览</button>
+								</div>  
+							</div>
+							</td>
 						</tr>
-						<tr><td><input type="file" name="imageFile" fileType="jpg|png"/></td></td><td><input type="file" name="imageFile" fileType="jpg|png"/></tr>
+						<tr>
+							<td><label>截图二：</label></td>
+							<td>
+							<div class="fileinputs">  
+								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt2').val(this.value).attr('disabled',true);"/>
+								<div class="fakefile">  
+									<input type="text" name="imageArray" id="imgFileTxt2"/><button>浏览</button>
+								</div>  
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><label>截图三：</label></td>
+							<td>
+							<div class="fileinputs">  
+								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt3').val(this.value).attr('disabled',true);"/>
+								<div class="fakefile">  
+									<input type="text" name="imageArray" id="imgFileTxt3"/><button>浏览</button>
+								</div>  
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><label>截图四：</label></td>
+							<td>
+							<div class="fileinputs">  
+								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt4').val(this.value).attr('disabled',true);"/>
+								<div class="fakefile">  
+									<input type="text" name="imageArray" id="imgFileTxt4"/><button>浏览</button>
+								</div>  
+							</div>
+							</td>
+						</tr>
+						<tr>
+							<td><label>截图五：</label></td>
+							<td>
+							<div class="fileinputs">  
+								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt5').val(this.value).attr('disabled',true);"/>
+								<div class="fakefile">  
+									<input type="text" name="imageArray" id="imgFileTxt5"/><button>浏览</button>
+								</div>  
+							</div>
+							</td>
+						</tr>
 						</table>
 					</div>
 				</div>  
@@ -474,7 +556,14 @@
 				<table>
 					<tr>
 						<td><label for="filePath" class="mustInput">应用文件：</label></td>
-						<td><input type="file" name="file" id="versionFile" fileType="apk"/></td>
+						<td>
+						<div class="fileinputs">  
+							<input type="file" class="file" name="file" id="versionFile" fileType="apk" onchange="$('#versionFileTxt').val(this.value);"/>
+							<div class="fakefile">  
+								<input type="text" value="" id="versionFileTxt"/><button>浏览</button>
+							</div>  
+						</div>
+						</td>
 						<td><label	for="size" class="mustInput">文件大小：</label></td>
 						<td>
 						<input type="text" name="size" id="size" class="easyui-validatebox" required="true"/>
@@ -486,7 +575,7 @@
 					<td><label	for="status" class="mustInput">状态：</label></td>
 					<td>
 					
-						<input name="status" id="version_status_edit" required="true" class="easyui-validatebox easyui-combobox" editable='false' />
+						<input name="status" id="version_status_edit" required="true" editable='false' />
 					</td>
 				</tr>
 				<tr>

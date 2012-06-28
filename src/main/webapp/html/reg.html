@@ -34,7 +34,7 @@ $(function() {
 				if (data>0) {
 					$('#emailTip').attr('class', '').addClass('onError').html('此账号已被注册');
 				} else {
-					$('#emailTip').attr('class', '').addClass('onSuccess').html('此账号可用');
+					$('#emailTip').attr('class', '').addClass('onSuccess').html('此账号可以注册');
 				}
 			});
 		} else {
@@ -76,42 +76,19 @@ $(function() {
 		}else{
 			$('#t_RePassTip').attr('class', '').addClass('onError').html('请确认输入上面的密码');
 		}
-	}).focus(function(){$('#t_RePassTip').attr('class', '').addClass('onFocus').html('请确认输入上面的密码');});
+	}).focus(function(){
+		$('#t_RePassTip').attr('class', '').addClass('onFocus').html('请确认输入上面的密码');
+	}).keydown(function(e){
+		if(e.which==13){
+			var pwd=$.trim($(this).val());
+			if(pwd && $.trim($('#password').val())==pwd){
+				$('#t_RePassTip').attr('class', '').addClass('onCorrect').html('输入正确');
+				reg();
+			}
+		}
+	});
 	$('#button').click(function(){
-		$('#regForm').form({
-			url:app.name+'/portal/register',
-			dataType : 'text',  
-			onSubmit:function(){
-				var tag=true;
-				$('span[id$="Tip"]').each(function(){
-					if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
-						tag=false;
-						$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
-						return false;
-					}
-				});
-				return tag;
-		    }, 
-	    	success:function(data){
-				if(data){
-					var map=$.parseJSON(data);
-					if(map){
-						if(map.answerCode==-2){
-							tips('button','未知错误','bottom');
-						}
-						if(map.answerCode==1){
-							//tips('button','注册成功','bottom');
-							Util.Dialog.remove('regWin');
-							chkLogin();//切换登录状态
-						}
-					}else{
-						tips('button','后台系统异','bottom');
-					}
-				}else{
-					tips('button','后台系统异','bottom');
-				}
-		    }
-		}).submit();
+		reg();
 	});
 	$('#directLogin').click(function(){
 		Util.Dialog.remove('regWin');

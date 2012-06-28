@@ -524,9 +524,16 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getFeatures())) {
-			sql.append(", features like CONCAT('%',?,'%')");
+			sql.append(" and features like CONCAT('%',?,'%')");
+			countSql.append(" and features like CONCAT('%',?,'%')");
 			args.add(application.getFeatures());
 			argTypes.add(12);// java.sql.Types type
+		}
+		if (application.getStatus()!=null) {
+			sql.append(" and status=?");
+			countSql.append(" and status=?");
+			args.add(application.getStatus());
+			argTypes.add(Types.INTEGER);
 		}
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql.toString(), args, argTypes);
@@ -630,6 +637,80 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		sql.append(" limit ?, ?");
 		log.debug(String.format("\n%1$s\n", sql));
 		List<PortalApplication> rows=jdbcTemplate.query(sql.toString(), new Object[]{jsonPage.getStartRow(), jsonPage.getPageSize()}, portalRowMapper);
+		jsonPage.setRows(rows);
+		return jsonPage;
+	}
+
+	@Override
+	public JsonPage<PortalApplication> queryUserDownApps(String local,
+			int userId, DataGridModel dgm) {
+		JsonPage<PortalApplication> jsonPage = new JsonPage<PortalApplication>(dgm.getPage(), dgm.getRows());
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		StringBuilder sql = new StringBuilder("select a.* from ")
+				.append(viewName)
+				.append(" a where exists (select 1 from t_app_download_log where app_id=a.id and account_id=?)");
+		StringBuilder countSql = new StringBuilder("select count(1) from ")
+				.append(viewName)
+				.append(" a where exists (select 1 from t_app_download_log where app_id=a.id and account_id=?)");
+		log.debug(String.format("\n%1$s\n", sql));
+		int totalRow = jdbcTemplate.queryForInt(countSql.toString(), userId);
+		// 更新
+		jsonPage.setTotal(totalRow);
+		// 排序
+		if (StringUtils.hasText(dgm.getOrder())
+				&& StringUtils.hasText(dgm.getSort())) {
+			sql.append(" order by ")
+					.append(StringUtil.splitFieldWords(dgm.getSort()))
+					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by update_time desc");
+		}
+		sql.append(" limit ?, ?");
+		log.debug(String.format("\n%1$s\n", sql));
+		List<PortalApplication> rows = jdbcTemplate.query(
+				sql.toString(),
+				new Object[] { userId, jsonPage.getStartRow(),
+						jsonPage.getPageSize() }, portalRowMapper);
+		jsonPage.setRows(rows);
+		return jsonPage;
+	}
+
+	@Override
+	public JsonPage<PortalApplication> queryUserDownReferencedApps(
+			String local, int appId, DataGridModel dgm) {
+		JsonPage<PortalApplication> jsonPage = new JsonPage<PortalApplication>(dgm.getPage(), dgm.getRows());
+		String viewName="v_application_cn";
+		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
+			viewName="v_application_en";
+		}
+		StringBuilder sql = new StringBuilder("select a.* from ")
+				.append(viewName)
+				.append(" a left join t_app_download_log b on a.id=b.app_id left join t_app_download_log c on b.account_id=c.account_id where c.app_id=? and b.app_id!=? group by b.app_id");
+		StringBuilder countSql = new StringBuilder("select count(distinct a.id) from ")
+				.append(viewName)
+				.append(" a left join t_app_download_log b on a.id=b.app_id left join t_app_download_log c on b.account_id=c.account_id where c.app_id=? and b.app_id!=?");
+		log.debug(String.format("\n%1$s\n", sql));
+		int totalRow = jdbcTemplate.queryForInt(countSql.toString(), appId, appId);
+		// 更新
+		jsonPage.setTotal(totalRow);
+		// 排序
+		if (StringUtils.hasText(dgm.getOrder())
+				&& StringUtils.hasText(dgm.getSort())) {
+			sql.append(" order by ")
+					.append(StringUtil.splitFieldWords(dgm.getSort()))
+					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by update_time desc");
+		}
+		sql.append(" limit ?, ?");
+		log.debug(String.format("\n%1$s\n", sql));
+		List<PortalApplication> rows = jdbcTemplate.query(
+				sql.toString(),
+				new Object[] { appId, appId, jsonPage.getStartRow(),
+						jsonPage.getPageSize() }, portalRowMapper);
 		jsonPage.setRows(rows);
 		return jsonPage;
 	}

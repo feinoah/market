@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalApplication;
+import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -44,26 +45,45 @@ public class ApplicationServiceImpl implements ApplicationService{
 			throw new NullPointerException("application object is null...");
 		}
 		int id=application.getId();
+		AppVersionFile version=new AppVersionFile();
 		if (id == 0) {
 			id=applicationDao.add(application);
 		} else {
-			Application old=applicationDao.queryById(application.getId());
+			Application old=applicationDao.queryById(id);
+			version = appVersionFileDao.queryValidVersionByAppId(id);
 			if (StringUtils.hasText(application.getIcon())) {
 				// 更新了图标
 				AttachmentUtil.deleteIcon(old.getIcon());
+			}
+			if (StringUtils.hasText(application.getBigIcon())) {
+				// 更新了图标
+				AttachmentUtil.deleteIcon(old.getBigIcon());
 			}
 			
 			if (StringUtils.hasText(application.getImages())&&old.getImageList()!=null) {
 				// 更新了截图
 				for (String path : old.getImageList()) {
-					AttachmentUtil.deleteImage(path);
+					if(application.getImages().indexOf(path)==-1){//不在新串中
+						AttachmentUtil.deleteImage(path);
+					}
 				}
+			}
+			if (StringUtils.hasText(application.getAppFilePath())) {
+				// 更新了应用文件
+				AttachmentUtil.deleteApk(application.getAppFilePath());
+			}
+			if (application.getStatus().intValue()>Constants.STATUS_INVALID) {//有效
+				// 找到有效版本
+				version = appVersionFileDao.queryValidVersionByAppId(id);
+			} else {
+				// 所有版本更新为停用
+				appVersionFileDao.updateToInvalidByAppId(id, 0);
 			}
 			applicationDao.update(application);
 		}
 		if (StringUtils.hasText(application.getAppFilePath())) { // 更新文件了
 			// 保存版本信息
-			AppVersionFile version=new AppVersionFile();
+//			AppVersionFile version=new AppVersionFile();
 			version.setAppId(id);
 			version.setVersion(application.getVersion());
 			version.setFilePath(application.getAppFilePath());
@@ -71,7 +91,11 @@ public class ApplicationServiceImpl implements ApplicationService{
 			version.setNewFeatures(application.getFeatures());
 			version.setEnNewFeatures(application.getEnFeatures());
 			version.setStatus(application.getStatus());
-			appVersionFileDao.add(version);
+			if (version.getId()>0) {
+				appVersionFileDao.update(version);
+			} else {
+				appVersionFileDao.add(version);
+			}
 		}
 		return id;
 	}
@@ -199,5 +223,24 @@ public class ApplicationServiceImpl implements ApplicationService{
 		}
 		return new JsonPage<PortalApplication>();
 	}
+
+	@Override
+	public JsonPage<PortalApplication> queryUserDownApps(String local,
+			int userId, DataGridModel dgm) {
+		if(userId<=0){
+			throw new IllegalArgumentException("userId must be bigger than 0...");
+		}
+		return applicationDao.queryUserDownApps(local, userId, dgm);
+	}
+
+	@Override
+	public JsonPage<PortalApplication> queryUserDownReferencedApps(
+			String local, int appId, DataGridModel dgm) {
+		if(appId<=0){
+			throw new IllegalArgumentException("appId must be bigger than 0...");
+		}
+		return applicationDao.queryUserDownReferencedApps(local, appId, dgm);
+	}
+	
 	
 }

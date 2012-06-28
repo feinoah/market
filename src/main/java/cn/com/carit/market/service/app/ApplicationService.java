@@ -103,4 +103,22 @@ public interface ApplicationService {
 	 * @return
 	 */
 	JsonPage<PortalApplication> fullTextSearch(String local, String keywords, DataGridModel dgm);
+	
+	/**
+	 * 查询用户下载记录
+	 * @param local
+	 * @param userId
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage<PortalApplication> queryUserDownApps(String local, int userId, DataGridModel dgm);
+	
+	/**
+	 * 查询下该应用的用户还下载过哪些应用
+	 * @param local
+	 * @param appId
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage<PortalApplication> queryUserDownReferencedApps(String local, int appId, DataGridModel dgm);
 }

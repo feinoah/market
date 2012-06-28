@@ -1,4 +1,4 @@
-var app={name:'/market'};
+var app={name:'/market',domain:'http://localhost:8080'};
 var winTitle;
 var fieldList;
 var statusList;
@@ -96,7 +96,7 @@ $(function (){
 		$('#editForm').form({
 			onSubmit:function(){
 				// 避免 form validate bug
-				$('.easyui-combobox').each(function(){
+				$('.combobox-f').each(function(){
 					$(this).val($(this).combobox('getText'));
 				});
 				$('#editForm textarea').each(function(){
@@ -284,33 +284,9 @@ function statusFormatter(v){
 	return result;
 }
 function gradeFormatter(v){
-	var result='';
-	v=parseInt(v/2);
-	for(var i=1;i<=v;i++){
-		result+='★';
-	}
-	if(v<5){
-		v=5-v;
-		for(var i=1;i<=v;i++){
-			result+='☆';
-		}
-	}
-	return result;
+	return '<img src="'+app.domain+app.name+'/resources/public/images/comment_star'+v+'.png" />';
 }
 
-function appLevelFormatter(v){
-	var result='';
-	for(var i=1;i<=v;i++){
-		result+='★';
-	}
-	if(v<5){
-		v=5-v;
-		for(var i=1;i<=v;i++){
-			result+='☆';
-		}
-	}
-	return result;
-}
 function lanFormatter(v){
 	var result=v;
 	$.each(languages, function(key,val) {
