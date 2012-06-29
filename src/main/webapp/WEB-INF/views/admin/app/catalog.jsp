@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
@@ -25,8 +25,8 @@
 				valueField:'fieldValue',
 				textField:'displayValue'
 			});
-			checkExisted($('#name_edit'),"${ctx}/portal/app/catalog/check?local=cn&name=");
-			checkExisted($('#enName_edit'),"${ctx}/portal/app/catalog/check?local=cn&name=");
+			checkExisted($('#name_edit'),'${ctx}/portal/check/catalog?local=cn&name=');
+			checkExisted($('#enName_edit'),'${ctx}/portal/check/catalog?local=en&name=');
 			$('.combobox-f').each(function(){
 				$(this).combobox('clear');
 			});
@@ -143,10 +143,10 @@
 						<td colspan="2">
 							<div id="descTabs" class="easyui-tabs" style="width:380px;height:95px;">  
 								<div title="中文" style="padding:3px;">  
-									<form:textarea path="description"  class="easyui-validatebox"  validType="maxLength[50]" maxLen="50"/>
+									<form:textarea path="description"  class="easyui-validatebox"  validType="maxLength[50]" maxLen="50" msg="中文描述"/>
 								</div>  
 								<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-									<form:textarea path="enDescription"  class="easyui-validatebox" validType="maxLength[50]" maxLen="50"/>
+									<form:textarea path="enDescription"  class="easyui-validatebox" validType="maxLength[50]" maxLen="50" msg="英文描述"/>
 								</div> 
 							</div> 
 						</td>

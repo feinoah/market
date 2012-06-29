@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.bean.app.AppComment;
+import cn.com.carit.market.bean.app.AppDeveloper;
 import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.bean.portal.PortalAccountInfo;
@@ -41,6 +42,7 @@ import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.app.AccountInfoService;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.AppCommentService;
+import cn.com.carit.market.service.app.AppDeveloperService;
 import cn.com.carit.market.service.app.AppDownloadLogService;
 import cn.com.carit.market.service.app.AppVersionFileService;
 import cn.com.carit.market.service.app.ApplicationService;
@@ -66,6 +68,9 @@ public class PortalController{
 	
 	@Resource
 	private AppVersionFileService appVersionFileService;
+	
+	@Resource
+	private AppDeveloperService appDeveloperService;
 	
 	/**
 	 * 注册帐号<br>
@@ -493,26 +498,27 @@ public class PortalController{
 	}
 	
 	/**
-	 * 检测应用是否已存在
-	 * <br>portal/app/check?appName=&local=cn|en
-	 * @param appName
-	 * @param local
-	 * @return
-	 */
-	@RequestMapping(value="app/check", method=RequestMethod.GET)
-	public @ResponseBody int checkAppliction(@RequestParam String appName, @RequestParam(required=false) String local){
-		return applicationService.checkApplication(appName, local);
-	}
-	/**
-	 * 检测应用分类是否存在
-	 * <br>portal/app/catalog/check?name=&local=cn|en
+	 * 检测是否存在<br>
+	 * portal/check/{type}?local=cn|en&name=
+	 * <br>type可以是后面的值catalog|app|developer|account，对应type下name分别为分类名称（中/英）、应用名称（中/英）、开发者名称、账号邮箱地址
+	 * <br>local 非必须
+	 * @param type
 	 * @param name
 	 * @param local
 	 * @return
 	 */
-	@RequestMapping(value="app/catalog/check", method=RequestMethod.GET)
-	public @ResponseBody int checkCatalog(@RequestParam String name, @RequestParam(required=false) String local){
-		return appCatalogService.checkCatalog(name, local);
+	@RequestMapping(value="check/{type}", method=RequestMethod.GET)
+	public @ResponseBody int checkExisted(@PathVariable String type, @RequestParam String name, @RequestParam(required=false) String local){
+		if ("catalog".equalsIgnoreCase(type)) {
+			return appCatalogService.checkCatalog(name, local);
+		} else if ("app".equalsIgnoreCase(type)){
+			return applicationService.checkApplication(name, local);
+		} else if("developer".equalsIgnoreCase(type)) {
+			return appDeveloperService.checkExisted(name);
+		} else if ("account".equalsIgnoreCase(type)) {
+			return accountInfoService.checkAccount(name);
+		}
+		return 0;
 	}
 	
 	/**
@@ -598,4 +604,18 @@ public class PortalController{
 	public @ResponseBody JsonPage<PortalApplication> queryUserDownReferencedApps(@RequestParam(required = false) String local, @PathVariable int appId, DataGridModel dgm){
 		return applicationService.queryUserDownReferencedApps(local, appId, dgm);
 	}
+	
+	/**
+	 * 查询开发者<br>
+	 * portal/app/developer/query
+	 * @param developer
+	 * @param result
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="app/developer/query", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<AppDeveloper> queryDevelopers(@ModelAttribute AppDeveloper developer, BindingResult result,DataGridModel dgm){
+		return appDeveloperService.queryByExemple(developer, dgm);
+	}
+	
 }

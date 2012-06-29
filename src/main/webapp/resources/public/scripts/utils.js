@@ -135,7 +135,7 @@ var chkLogin=function(){
 		if (data) {
 			$('#loginBefor').hide();
 			$('#lolginAfter').show();
-			$('#welcome').html('欢迎您：<a href="javascript:alert('+data.id+')">'+data.nickName+'</a>').attr('userId',data.id);
+			$('#welcome').html('欢迎您：'+data.nickName+'').attr('userId',data.id);
 		}
 	});
 };

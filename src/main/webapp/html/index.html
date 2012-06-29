@@ -5,13 +5,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.4" rel="stylesheet" type="text/css" />
-<link href="resources/public/styles/common.css?v=1.4" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=1.5" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/common.css?v=1.5" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.4"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.5"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.4"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.5"></script>
 <script type="text/javascript">
 
 function submit(id)
@@ -46,9 +46,9 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 						+o.appName
 						+'</b></label><label class="label2">'
 						+o.developer
-						+'</label><img class="index_star" src="'+arrayStar[o.appLevel]+'"/>(<span>'
+						+'</label><img class="index_star" src="'+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">(<span>'
 						+o.downCount
-						+'</span>)</div>'
+						+'</span>)</div></div>'
 					);
 				});
 				onPicError();
@@ -101,9 +101,9 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 							+o.appName
 							+'</b></label><label class="label2">'
 							+o.developer
-							+'</label><img class="index_star" src="'+ arrayStar[o.appLevel]+'"/>(<span>'
+							+'</label><img class="index_star" src="'+ arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">(<span>'
 							+o.downCount
-							+'</span>)</div>'
+							+'</span>)</div></div>'
 						);
 					});
 					onPicError();
@@ -150,7 +150,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 		</div>
 
 		<div id="left" style="float: left; width: 29%; margin-top: 7px">
-			<div id="Tab1" style="float: left; width: 330px; height: 500px;">
+			<div id="Tab1" style="float: left; width: 330px; height: 550px;">
 
 				<div class="Menubox">
 					<ul>
@@ -175,7 +175,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				</div>
 			</div>
 			<div id="left_bottom"
-				style="float: left; width: 330px; height: 445px; margin-top: 10px; background-color: white">
+				style="float: left; width: 330px; height: 515px; margin-top: 10px; background-color: white">
 				<div id="con_one_1" style="padding: 30px 0;">
 					<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费新品</b></font>
 					<ul id="freeNewTop">
@@ -220,8 +220,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 		<div class="wide-editorial-image-panel"
 			style="float: right; background-color: white">
 			<div class="panel-image goog-inline-block">
-				<a href=""><img
-					src="resources/public/images/editer_recommend.jpg" alt="编辑推荐"/></a>
+				<img src="resources/public/images/editer_recommend.jpg" alt="编辑推荐"/>
 			</div>
 			<div class="panel-summary goog-inline-block">
 				<h3>

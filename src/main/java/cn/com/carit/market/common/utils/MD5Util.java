@@ -68,9 +68,9 @@ public class MD5Util {
 	 * @throws IOException
 	 */
 	public static String md5Hex(File file) throws IOException {
-		FileInputStream in = new FileInputStream(file);
-		FileChannel ch = in.getChannel();
-		MappedByteBuffer byteBuffer = ch.map(FileChannel.MapMode.READ_ONLY, 0,
+		@SuppressWarnings("resource")
+		FileInputStream fileInputStream = new FileInputStream(file);
+		MappedByteBuffer byteBuffer = fileInputStream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0,
 				file.length());
 		messagedigest.update(byteBuffer);
 		return bufferToHex(messagedigest.digest());

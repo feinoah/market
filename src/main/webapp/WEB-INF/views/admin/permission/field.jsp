@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/field');
@@ -144,11 +144,11 @@
 				<table>
 					<tr>
 						<td><form:label	for="field" path="field"  cssClass="mustInput">字段名：</form:label></td>
-						<td><form:input path="field" id="field_edit" required="true" validType="maxLength[20]" maxLen="20"/></td>
+						<td><form:input path="field" id="field_edit" required="true" validType="maxLength[20]" maxLen="20" msg="字段名"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="fieldName" path="fieldName">字段描述：</form:label></td>
-						<td><form:input path="fieldName" id="fieldName_edit" cssClass="easyui-validatebox" required="true" validType="maxLength[20]" maxLen="20"/></td>
+						<td><form:input path="fieldName" id="fieldName_edit" cssClass="easyui-validatebox" required="true" validType="maxLength[20]" maxLen="20" msg="字段描述"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="fieldValue" path="fieldValue" >字段值：</form:label></td>
@@ -159,7 +159,7 @@
 					<tr>
 						<td><form:label	for="displayValue" path="displayValue" cssClass="emustInput">显示值：</form:label></td>
 						<td>
-							<form:input path="displayValue" id="displayValue_edit" cssClass="easyui-validatebox" required="true" validType="maxLength[20]" maxLen="20"/>
+							<form:input path="displayValue" id="displayValue_edit" cssClass="easyui-validatebox" required="true" validType="maxLength[20]" maxLen="20" msg="显示值"/>
 						</td>
 					</tr>
 					<tr>

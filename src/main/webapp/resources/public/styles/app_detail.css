@@ -295,6 +295,7 @@
 	height: 275px;
 	margin-right: 140px;
 	padding-bottom: 20px;
+	margin-top:20px;
 }
 
 .screenshot-carousel-button-previous {
@@ -792,4 +793,12 @@ background:url(../images/dark_background_stripes.gif);
 }
 .doc-header-content, .page-banner-heading {
 background:url(../images/dark_background_stripes.gif);
+}
+.detail_downcount{
+	display:inline-block;
+	width:30px;
+	height:20px;
+	vertical-align:top;
+	color: white;
+	font-weight: bold
 }

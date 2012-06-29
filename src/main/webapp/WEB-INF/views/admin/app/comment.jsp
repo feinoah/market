@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
@@ -168,7 +168,7 @@
 				</tr>
 				<tr>
 					<td><form:label for="comment" path="comment" cssClass="mustInput">内容：</form:label></td>
-					<td colspan="3"><form:textarea path="comment" cssClass="easyui-validatebox" required="true" validType="maxLength[500]" maxLen="500"/></td>
+					<td colspan="3"><form:textarea path="comment" cssClass="easyui-validatebox" required="true" validType="maxLength[500]" maxLen="500" msg="评论内容"/></td>
 				</tr>
 				</table>
 				<form:hidden path="id"/>

@@ -7,8 +7,8 @@ var catalogs;
 var languages;
 // 扩展
 $.extend($.fn.validatebox.defaults.rules, {  
-	minLength:{validator: function(v, p){return v.length>p[0];},message: '最少输入{0}个字符'},
-	maxLength:{validator: function(v, p){return v.length<p[0];},message: '最多输入{0}个字符'},
+	minLength:{validator: function(v, p){return getStrLen($.trim(v))>p[0];},message: '最少输入{0}个字符(一个中文两个字符)'},
+	maxLength:{validator: function(v, p){return getStrLen($.trim(v))<p[0];},message: '最多输入{0}个字符(一个中文两个字符)'},
 	CHS:{validator:function(v, p){return /^[\u0391-\uFFE5]+$/.test(v);},message:'请输入汉字'},
 	ZIP:{validator:function(v, p){return /^[1-9]\d{5}$/.test(v);},message:'邮政编码不存在'},
 	QQ:{validator:function(v, p){return /^[1-9]\d{4,10}$/.test(v);},message:'QQ号码不正确'},
@@ -99,13 +99,15 @@ $(function (){
 				$('.combobox-f').each(function(){
 					$(this).val($(this).combobox('getText'));
 				});
+				var b=true;
 				$('#editForm textarea').each(function(){
 					if($.trim($(this).val()).length>$(this).attr('maxLen')){
-						$.messager.alert('提示', '描述超长，最多输入'+$(this).attr('maxLen')+'个字符', 'info');
+						$.messager.alert('提示', $(this).attr('msg')+'超长，最多输入'+$(this).attr('maxLen')+'个字符(一个中文两个字符)', 'info');
+						b=false;
 						return false;
 					}
 				});
-				var b=true;
+				if(!b){return b;}
 				$('#editForm input[type=file]').each(function(){
 					if($(this).val()){
 						b=chkFileType($(this).val(),$(this).attr('fileType'));
@@ -354,12 +356,12 @@ function getStrLen(str){
 		return 0;
 	}
 	var len = 0;
-	var reg = /[a-zA-Z0-9]/;
+	var reg = new RegExp("^[\\u4e00-\\u9fa5]+$", "");
 	for(var i=0;i<str.length;i++){
-		if(reg.test(str.charAt(i))){
-			len++;
+		if(reg.test(str.charAt(i))){//中文字符
+			len=len+2;
 		}else{
-			len = len+2;
+			len++;
 		}
 	}
 	return len;

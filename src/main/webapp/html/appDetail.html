@@ -8,18 +8,22 @@
 	<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
 	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/common.css?v=1.4" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/common.css?v=1.5" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.4"></script>
+	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.5"></script>
 	<script type="text/javascript">
 	function onPicError(){
 		$('.app_detail_icon').error(function(){
 			this.src = '../resources/public/images/app_default.jpg';
 		});
+	$('.container2').error(function(){
+		this.src = '../resources/public/images/big_image_error.png';
+	});
 	}
+
 	function onBigPicError(){
 		$('.app_big_icon').error(function(){
 			this.src='../resources/public/images/app_pic.jpg';
@@ -98,6 +102,9 @@
 					if(data){
 						var map=$.parseJSON(data);
 						if(map){
+							if(map.answerCode==-2){
+								tips('submitBtn','请先下载使用再评论','bottom');
+							}
 							if(map.answerCode==-1){
 								tips('submitBtn','请填内容或评分','bottom');
 							}
@@ -126,8 +133,12 @@
 				$('#comment_star3').attr("src",arrayStar[data.appLevel]);
 				$('#img_big_icon').attr("src","../"+data.bigIcon);
 				$.each(data.imageList,function(i,item){
+					
+						$('#idContainer').attr("src","../"+item);
+					
 					if(i<2){
 						$('#app_image'+(i+1)).attr("src","../"+item);
+					
 					} else {
 						return false;
 					}
@@ -151,6 +162,7 @@
 				$('#av_grade2').empty().html(data.appLevel);
 				$('#app_downcount1').empty().html(data.downCount);
 				$('#app_downcount2').empty().html(data.downCount);
+				
 			}
 			onBigPicError();
 		});
@@ -164,8 +176,9 @@
 							+o.id+'"><img class="app_detail_icon" src="../'
 							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'
-					+o.developer+'</label><img src="'+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('
-							+o.downCount+')</label><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+					+o.developer+'</label><img src="'
+					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('
+							+o.downCount+')</div><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
 				onPicError();
 			}
@@ -180,7 +193,7 @@
 							+o.id+'"><img class="app_detail_icon" src="../'
 					+o.icon+'"/></a></div><div class="detail_right_div"><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'+o.developer+'</label><img src="'
-					+arrayStar[o.appLevel]+'"/><label class="detail_right_label2">('+o.downCount+')</label><label style="display: block;">￥'
+					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('+o.downCount+')</div><label style="display: block;">￥'
 					+o.price+'</label></div></div><hr class="detail_hr"/>');
 				})
 				onPicError();
@@ -347,23 +360,23 @@
 					    <img id="img_big_icon" class="app_big_icon"/>
 					</div>
 				    <div style="width: 140px;float:right;">
-				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 20px;display:block">版本:<label id="app_version" >4.0.4</label></span>
+				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 50px;display:block">版本:<label id="app_version" >4.0.4</label></span>
 				     <span style="color:white;font-size:16px;font-weight: bold;">  大小:<label id="app_size" >6.25MB</label></span>
 				     <img id="img_icon" style="display: inline-block;height: 17px;"/>
-				     <a style="color: white;font-weight: bold">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;">10,898</label>)</a>
+				    <div class="detail_downcount">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;">10,898</label>)</div>
 				     <input type="button" class="download_bn" id="download_btn" value="下载"/>
 				   </div>
 				</div>
 				 
-				<div class="container2" id="idContainer" style="float:right;width:686px">
-					<ul id="idSlider" >
+				<img class="container2" id="idContainer" style="float:right;width:686px;"></img>
+					<!-- <ul id="idSlider" > 
 						<li><a href=""><img src="../resources/public/images/carit_logo2.jpg"/></a></li>
 						<li><a href=""><img src="../resources/public/images/carit_logo3.jpg"/></a></li>
 						<li><a href=""><img src="../resources/public/images/carit_logo4.jpg"/></a></li>
 					    <li><a href=""><img src="../resources/public/images/carit_logo5.jpg"/></a></li>
 					</ul>
-					<ul class="num" id="idNum"></ul>
-				</div>
+					<ul class="num" id="idNum"></ul> -->
+				
 			</div>
   
 			<!-- left top -->
@@ -390,7 +403,7 @@
 <div class="Contentbox2">  
    <div id="con_two_0" >
    <div style="float:left;margin-left: 15px;width:518px">
-  <div style="float:left;width:518px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-left: 0px;border-right: 0px;border-top: 0px;background-color: #FCFCFC">
+  <div style="float:left;width:518px;background-color: #FCFCFC">
   <h2>说明</h2>
   <div id="doc-description-container" class="doc-description-collapsed">
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
@@ -400,13 +413,17 @@
   </div><div class="doc-description-overflow"></div></div>
   
   </div>
-   <div style="float:left;width:518px;height:302px;">
+  
+  
+  
+   <div style="float:left;width:518px;height:302px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-left: 0px;border-right: 0px;border-bottom: 0px;margin-top:20px">
+   <div style="margin-top: 20px">
    <a href="" target="_blank" rel="nofollow">访问开发人员网站</a>
    <a href="" target="_blank" rel="nofollow" class="more-arrow-link"><span class="more-arrow">›</span></a>
    <span class="contact-developer-spacer"></span>
    <a href="" rel="nofollow">向开发人员发送电子邮件</a>
    <a href="" rel="nofollow" class="more-arrow-link"><span class="more-arrow">›</span></a>
-   
+   </div>
    <div class="doc-overview-screenshots"><h2>应用屏幕截图</h2>
   
    <table>
@@ -428,7 +445,7 @@
 <dt style="margin-top: 8px">更新日期：</dt>
 <dd><time id="about_date" itemprop="datePublished">2012年5月23日</time></dd>
 <dt style="margin-top: 8px">当前版本：</dt>
-<dd id="about_version" itemprop="softwareVersion">1.4.4</dd>
+<dd id="about_version" itemprop="softwareVersion">1.5.4</dd>
 <dt itemprop="operatingSystems" content="Android" style="margin-top: 8px">所需的 Android 版本：</dt>
 <dd><label id="about_android_version">2.3</label>及更高版本</dd>
 <dt style="margin-top: 8px">类别：</dt>
@@ -520,7 +537,7 @@
 </div>
 </div>
 <script>
-var nums = [], timer, n = $$("idSlider").getElementsByTagName("li").length,
+/*var nums = [], timer, n = $$("idSlider").getElementsByTagName("li").length,
 st = new SlideTrans("idContainer", "idSlider", 4, { onStart: function(){//设置按钮样式
 	forEach(nums, function(o, i){ o.className = st.Index == i ? "on" : ""; })
 }});
@@ -536,7 +553,7 @@ function AddNum(i){
 	}
 	nums[i] = num;
 }
-st.Run();
+st.Run();*/
 
 </script>	
 		

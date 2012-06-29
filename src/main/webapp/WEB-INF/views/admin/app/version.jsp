@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
@@ -132,7 +132,7 @@
 				</tr>
 				<tr>
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
-						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true"/></td>
+						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true" validType="length[1,50]"/></td>
 						<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
 						<td>
 						<div class="fileinputs">  
@@ -156,10 +156,10 @@
 					<td colspan="3">
 						<div id="descTabs" class="easyui-tabs" style="width:470px;height:120px;">  
 							<div title="中文" style="padding:3px;">  
-								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
+								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文新特性描述"/>
 							</div>  
 							<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500"/>
+								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文新特性描述"/>
 							</div> 
 						</div>  
 					</td>

@@ -59,7 +59,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setCreateTime(rs.getTimestamp("create_time"));
 			application.setUpdateTime(rs.getTimestamp("update_time"));
 			application.setBigIcon(rs.getString("big_icon"));
-			application.setDeveloper(rs.getString("developer"));
+			application.setDeveloper(rs.getInt("developer"));
 			return application;
 		}
 	};
@@ -87,6 +87,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setImages(rs.getString("images"));
 			application.setBigIcon(rs.getString("big_icon"));
 			application.setDeveloper(rs.getString("developer"));
+			application.setDeveloperWebsite(rs.getString("website"));
+			application.setDeveloperEmail(rs.getString("email"));
 			application.setUpdateTime(rs.getTimestamp("update_time"));
 			return application;
 		}
@@ -114,7 +116,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(i++, application.getVersion());
 				ps.setString(i++, application.getIcon());
 				ps.setString(i++, application.getBigIcon());
-				ps.setString(i++, application.getDeveloper());
+				ps.setInt(i++, application.getDeveloper());
 				ps.setInt(i++, application.getCatalogId());
 				ps.setString(i++, application.getSize()); 
 				ps.setString(i++, application.getAppFilePath());
@@ -167,7 +169,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(", big_icon=?");
 			args.add(application.getBigIcon());
 		}
-		if (StringUtils.hasText(application.getDeveloper())) {
+		if (application.getDeveloper()!=null) {
 			sql.append(", developer=?");
 			args.add(application.getDeveloper());
 		}
@@ -335,10 +337,10 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			args.add(application.getBigIcon());
 			argTypes.add(12);// java.sql.Types type
 		}
-		if (StringUtils.hasText(application.getDeveloper())) {
-			sql.append(", developer like CONCAT('%',?,'%')");
+		if (application.getDeveloper()!=null) {
+			sql.append(", developer =?");
 			args.add(application.getDeveloper());
-			argTypes.add(12);// java.sql.Types type
+			argTypes.add(4);// java.sql.Types type
 		}
 		if (application.getCatalogId() != null) {
 			sql.append(" and catalog_id=?");
@@ -461,6 +463,18 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(", developer like CONCAT('%',?,'%')");
 			countSql.append(", developer like CONCAT('%',?,'%')");
 			args.add(application.getDeveloper());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getDeveloperWebsite())) {
+			sql.append(", website like CONCAT('%',?,'%')");
+			countSql.append(", website like CONCAT('%',?,'%')");
+			args.add(application.getDeveloperWebsite());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getDeveloperEmail())) {
+			sql.append(", email like CONCAT('%',?,'%')");
+			countSql.append(", email like CONCAT('%',?,'%')");
+			args.add(application.getDeveloperEmail());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (application.getCatalogId() != null) {

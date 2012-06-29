@@ -81,7 +81,7 @@
 
 .Contentbox {
 	clear: both;
-	height: 433px;
+	height: 482px;
 	padding-top: 23px;
 }
 
@@ -169,7 +169,8 @@
 }
 
 #clerk_recommend div img,#clerk_recommend_car div img {
-	display: block;
+	display: inline-block;
+	margin-top:1px;
 }
 
 #clerk_recommend div .label1,#clerk_recommend_car div .label1 {

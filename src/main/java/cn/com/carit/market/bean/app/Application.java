@@ -43,7 +43,7 @@ public class Application implements Serializable {
 	/**
 	 * developer
 	 */
-	private String developer;
+	private Integer developer;
 	/**
 	 * catalogId
 	 */
@@ -165,11 +165,11 @@ public class Application implements Serializable {
 		this.bigIcon = bigIcon;
 	}
 
-	public String getDeveloper() {
+	public Integer getDeveloper() {
 		return developer;
 	}
 
-	public void setDeveloper(String developer) {
+	public void setDeveloper(Integer developer) {
 		this.developer = developer;
 	}
 

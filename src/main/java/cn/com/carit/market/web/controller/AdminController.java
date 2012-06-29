@@ -52,7 +52,6 @@ public class AdminController{
 	private BaseModuleService baseModuleService;
 	@Resource
 	private BaseRoleService baseRoleService;
-	
 	/**
 	 * admin
 	 * 跳转到后台首页

@@ -70,7 +70,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 			}
 			if (StringUtils.hasText(application.getAppFilePath())) {
 				// 更新了应用文件
-				AttachmentUtil.deleteApk(application.getAppFilePath());
+				AttachmentUtil.deleteApk(old.getAppFilePath());
 			}
 			if (application.getStatus().intValue()>Constants.STATUS_INVALID) {//有效
 				// 找到有效版本

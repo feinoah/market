@@ -53,6 +53,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		if (appVersionFile.getId()==0) {
 			if (appVersionFile.getStatus()!=null 
 					&& appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) {
+				app.setStatus(Constants.STATUS_VALID);
 				// 新增/编辑的是有效版本，标记更新应用
 				updateApp=true;
 			}
@@ -61,6 +62,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		} else {
 			exceptedId=appVersionFile.getId();
 			if (appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) { // 标记更新应用
+				app.setStatus(Constants.STATUS_VALID);
 				updateApp=true;
 			} else {
 				AppVersionFile oldRecord = appVersionFileDao.queryById(appVersionFile.getId());
@@ -99,21 +101,23 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 			if(list==null || list.size()==0){// 最后一条版本记录
 				applicationDao.delete(version.getAppId());
 			} else {
-				AppVersionFile prevVersion=list.get(0);
-				// 启用该条版本
-				prevVersion.setStatus(Constants.STATUS_VALID);
-				appVersionFileDao.update(prevVersion);
 				Application application=applicationDao.queryById(version.getAppId());
-				if (version.getVersion().equals(application.getVersion())) { // 删除的是最新版本
+				if(application.getVersion().equals(version.getVersion())){ // 删除的是当前关联版本
+					AppVersionFile prevVersion=list.get(0);
+					// 启用该条版本
+					prevVersion.setStatus(application.getStatus()==Constants.STATUS_INVALID?Constants.STATUS_INVALID:Constants.STATUS_VALID);
+					appVersionFileDao.update(prevVersion);
+					if (version.getVersion().equals(application.getVersion())) { // 删除的是最新版本
 //					Application application=new Application();
-					application.setId(prevVersion.getAppId());
-					application.setAppFilePath(prevVersion.getFilePath());
-					application.setFeatures(prevVersion.getNewFeatures());
-					application.setEnFeatures(prevVersion.getEnNewFeatures());
-					application.setVersion(prevVersion.getVersion());
-					applicationDao.update(application);
-				}
+						application.setId(prevVersion.getAppId());
+						application.setAppFilePath(prevVersion.getFilePath());
+						application.setFeatures(prevVersion.getNewFeatures());
+						application.setEnFeatures(prevVersion.getEnNewFeatures());
+						application.setVersion(prevVersion.getVersion());
+						applicationDao.update(application);
+					}
 //				applicationDao.updateById(version.getAppId());
+				}
 			}
 		}
 		return row;

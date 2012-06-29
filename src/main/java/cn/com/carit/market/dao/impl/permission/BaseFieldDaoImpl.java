@@ -87,6 +87,8 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 			sql.append(", sort=?");
 			val.add(field.getSort());
 		}
+		sql.append(" where id=?");
+		val.add(field.getId());
 		log.debug(String.format("\n%1$s\n", sql));
 		return jdbcTemplate.update(sql.toString(), val.toArray());
 	}

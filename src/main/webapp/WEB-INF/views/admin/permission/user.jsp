@@ -7,7 +7,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -219,7 +219,7 @@
 					</tr>
 					<tr><td><form:label for="remark" path="remark" cssClass="easyui-validatebox">备注：</form:label></td></tr>
 					<tr>
-						<td colspan="4"><form:textarea path="remark" cssClass="easyui-validatebox" cssStyle="width:535px;height:80px;" validType="maxLength[50]" maxLen="50"/></td>
+						<td colspan="4"><form:textarea path="remark" cssClass="easyui-validatebox" cssStyle="width:535px;height:80px;" validType="maxLength[50]" maxLen="50" msg="备注"/></td>
 					</tr>
 				</table>
 				<form:hidden path="id"/>

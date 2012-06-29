@@ -43,6 +43,10 @@ public class PortalApplication implements Serializable {
 	 * developer
 	 */
 	private String developer;
+	
+	private String developerWebsite;
+	
+	private String developerEmail;
 	/**
 	 * catalogId
 	 */
@@ -289,6 +293,22 @@ public class PortalApplication implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	public String getDeveloperWebsite() {
+		return developerWebsite;
+	}
+
+	public void setDeveloperWebsite(String developerWebsite) {
+		this.developerWebsite = developerWebsite;
+	}
+
+	public String getDeveloperEmail() {
+		return developerEmail;
+	}
+
+	public void setDeveloperEmail(String developerEmail) {
+		this.developerEmail = developerEmail;
 	}
 	
 }

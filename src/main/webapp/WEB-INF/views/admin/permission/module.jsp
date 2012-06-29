@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
 		<script type="text/javascript">
 		var modules;
 		$(function(){
@@ -190,7 +190,7 @@
 						<td><form:input path="displayIndex" id="displayIndex_edit" cssClass="easyui-numberspinner"  min="1" max="1000" required="true" validType="number"/></td>
 					</tr>
 					<tr><td><form:label for="information" path="information" cssClass="easyui-validatebox">描述：</form:label></td></tr>
-					<tr><td colspan="4"><form:textarea path="information" cssClass="easyui-validatebox" cssStyle="width:480px;height:100px;" validType="maxLength[100]" maxLen="100"/></td></tr>
+					<tr><td colspan="4"><form:textarea path="information" cssClass="easyui-validatebox" cssStyle="width:480px;height:100px;" validType="maxLength[100]" maxLen="100" msg="描述"/></td></tr>
 				</table>
 				<form:hidden path="id"/>
 				<div style="text-align: center; padding: 5px;">
