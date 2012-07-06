@@ -4,6 +4,7 @@ import java.util.Date;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
+import cn.com.carit.market.common.jackjson.CustomDateSerializer;
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 public class PortalAccountInfo {
@@ -20,6 +21,14 @@ public class PortalAccountInfo {
 	 */
 	private String nickName;
 	/**
+	 * gender
+	 */
+	private Byte gender;
+	/**
+	 * birthday
+	 */
+	private Date birthday;
+	/**
 	 * photo
 	 */
 	private String photo;
@@ -32,6 +41,22 @@ public class PortalAccountInfo {
 	 */
 	private String realName;
 	/**
+	 * idCard
+	 */
+	private String idCard;
+	/**
+	 * officePhone
+	 */
+	private String officePhone;
+	/**
+	 * mobile
+	 */
+	private String mobile;
+	/**
+	 * address
+	 */
+	private String address;
+	/**
 	 * lastLoginIp
 	 */
 	private String lastLoginIp;
@@ -39,55 +64,101 @@ public class PortalAccountInfo {
 	 * lastLoginTime
 	 */
 	private Date lastLoginTime;
-	public int getId() {
-		return id;
+	/**
+	 * status
+	 */
+	private Byte status;
+
+	public void setId(int value) {
+		this.id = value;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public int getId() {
+		return this.id;
+	}
+	public void setEmail(String value) {
+		this.email = value;
 	}
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setNickName(String value) {
+		this.nickName = value;
 	}
 	public String getNickName() {
-		return nickName;
+		return this.nickName;
 	}
-	public void setNickName(String nickName) {
-		this.nickName = nickName;
+	public void setGender(Byte gender) {
+		this.gender = gender;
+	}
+	public Byte getGender() {
+		return this.gender;
+	}
+	public void setBirthday(Date value) {
+		this.birthday = value;
+	}
+	@JsonSerialize(using = CustomDateSerializer.class)
+	public Date getBirthday() {
+		return this.birthday;
+	}
+	public void setPhoto(String value) {
+		this.photo = value;
 	}
 	public String getPhoto() {
-		return photo;
+		return this.photo;
 	}
-	public void setPhoto(String photo) {
-		this.photo = photo;
+	public void setBalance(Double value) {
+		this.balance = value;
 	}
 	public Double getBalance() {
-		return balance;
+		return this.balance;
 	}
-	public void setBalance(Double balance) {
-		this.balance = balance;
+	public void setRealName(String value) {
+		this.realName = value;
 	}
 	public String getRealName() {
-		return realName;
+		return this.realName;
 	}
-	public void setRealName(String realName) {
-		this.realName = realName;
+	public void setIdCard(String value) {
+		this.idCard = value;
+	}
+	public String getIdCard() {
+		return this.idCard;
+	}
+	public void setOfficePhone(String value) {
+		this.officePhone = value;
+	}
+	public String getOfficePhone() {
+		return this.officePhone;
+	}
+	public void setMobile(String value) {
+		this.mobile = value;
+	}
+	public String getMobile() {
+		return this.mobile;
+	}
+	public void setAddress(String value) {
+		this.address = value;
+	}
+	public String getAddress() {
+		return this.address;
+	}
+	public void setLastLoginIp(String value) {
+		this.lastLoginIp = value;
 	}
 	public String getLastLoginIp() {
-		return lastLoginIp;
+		return this.lastLoginIp;
 	}
-	
-	public void setLastLoginIp(String lastLoginIp) {
-		this.lastLoginIp = lastLoginIp;
+	public void setLastLoginTime(Date value) {
+		this.lastLoginTime = value;
 	}
 	@JsonSerialize(using = CustomDateTimeSerializer.class)
 	public Date getLastLoginTime() {
-		return lastLoginTime;
+		return this.lastLoginTime;
 	}
-	public void setLastLoginTime(Date lastLoginTime) {
-		this.lastLoginTime = lastLoginTime;
+	public void setStatus(Byte value) {
+		this.status = value;
 	}
-	
+	public Byte getStatus() {
+		return this.status;
+	}
 }

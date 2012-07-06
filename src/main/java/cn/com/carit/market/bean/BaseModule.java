@@ -1,27 +1,17 @@
 package cn.com.carit.market.bean;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 /**
  * 系统模块表
  * @author <a href="mailto:xiegengcai@gmail.com">Xie Gengcai</a>
  * 2012-5-12
  */
-public class BaseModule implements Serializable {
+public class BaseModule extends BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public static final int MAX_SYSTEM_MODULE_ID=100;
 	
-	/**
-	 * 模块ID
-	 */
-	private int id;
-
 	/**
 	 * 模块名称
 	 */
@@ -68,17 +58,6 @@ public class BaseModule implements Serializable {
 	 */
 	private String information;
 	
-	private Date createTime;
-	private Date updateTime;
-	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getModuleName() {
 		return moduleName;
 	}
@@ -149,22 +128,6 @@ public class BaseModule implements Serializable {
 
 	public void setInformation(String information) {
 		this.information = information;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 
 	@Override

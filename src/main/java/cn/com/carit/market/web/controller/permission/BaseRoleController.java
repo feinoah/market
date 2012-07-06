@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,16 +72,15 @@ public class BaseRoleController {
 	
 	/**
 	 * 删除
-	 * admin/permission/role/delete?id={id}
+	 * admin/permission/role/delete?id=|ids=
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id){
-		if (id<=0) {
-			log.debug("The param id must be bigger than 0...");
-			return -1;
+	public int delete(@RequestParam(required=false) int id, @RequestParam(required=false) String ids){
+		if (StringUtils.hasText(ids)) {
+			return baseRoleService.batchDelete(ids);
 		}
 		return baseRoleService.delete(id);
 	}

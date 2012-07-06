@@ -162,14 +162,33 @@ a:hover {
 }
 
 .index_input{
-	height: 40px; width: 312px; margin-left: 200px;font-size: 20px;margin-top:12px;
+height: 33px;
+width: 300px;
+font-size: 20px;
+margin-top: 7px;
+margin-right: 5px;
+	outline: none;
+	background-position-x:right;
+	padding-left:3px;
+	padding-right:3px;
+	border:1px solid white;
 }
 
 #nav{
 width:100%;
 background:#9C9C9C;
 }
-#nav div{height:31px; text-align:right;}
+.index_input_edge{
+	margin-top:18px;
+	height: 47px; 
+	width: 319px; 
+	margin-left:360px;
+	BACKGROUND-IMAGE: url(../images/search_input.png);
+}
+#nav div{
+	
+	text-align:right;
+	}
 #lolginAfter{ display:none;}
 #nav button{
 background:url(../images/login_bu.png) left top no-repeat;
@@ -202,7 +221,7 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 
 .num li {
 	float: left;
-	color: #d94b01;
+	color: #1C86EE;
 	text-align: center;
 	line-height: 16px;
 	width: 16px;
@@ -211,17 +230,16 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 	font-size: 11px;
 	cursor: pointer;
 	margin-left: 3px;
-	border: 1px solid #f47500;
+	border: 2px solid #1C86EE;
 	background-color: #fcf2cf;
 }
 
 .num li.on {
-	line-height: 18px;
-	width: 18px;
-	height: 18px;
-	font-size: 14px;
-	margin-top: -2px;
-	background-color: #ff9415;
+	line-height: 16px;
+	width: 16px;
+	height: 16px;
+	font-size: 11px;
+	background-color: #BFEFFF;
 	font-weight: bold;
 	color: #FFF;
 }
@@ -268,7 +286,7 @@ height:29px;
 border:none;
 cursor:pointer;
 margin-left: 20px;
-margin-top:18.5px;
+margin-top:25px;
 }
 .search_bn:hover{
 background:url(../images/search_button_hover.png) left top no-repeat;
@@ -397,3 +415,58 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 #pageDiv .selected{color:#FFF;background:#2AC7E1;}
 #pageDiv .cruLabel {display:;}
 #pageDiv .hideLabel {display:none;}
+
+#welcome a{
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 12px;
+	/*去掉虚线*/
+	hide-focus: expression(this.hideFocus=true); /* for ie 5+ */ 
+	outline: none; /* for firefox 1.5 + */ 
+}
+#welcome a:hover {
+	color: #ffffff;
+}
+.account{
+	padding: 10px 5px;height: 450px;
+}
+.account #info{width: 330px;float: left;}
+.account #photoCon{width: 220px;float: right;margin: 30px 10px 20px 10px;}
+#photoCon img{border: 1px #D5CFC2;width: 200px;height: 200px;}
+div.fileinputs {  
+    position: relative;
+    margin-top: 5px;
+}  
+  
+div.fakefile {  
+    position: absolute;  
+    top: 0px;  
+    left: 0px;  
+    z-index: 1; 
+}
+div.fakefile button{width: 40px;text-align: center;}
+  
+input.file {  
+    position: relative;  
+    text-align: right;  
+    -moz-opacity:0 ;  
+    filter:alpha(opacity: 0);
+	width:220px;
+    opacity: 0;  
+    z-index: 2;  
+}
+.operation{position: absolute;width:570px; height: 38px;text-align: center;top:360px;}
+.operation button{
+background: url(../images/login_bu.png) left top no-repeat;
+width: 72px;
+height: 29px;
+color: white;
+font-weight: bold;
+border: none;
+cursor: pointer;
+margin: 1px 10px;
+text-align: center;
+}
+.operation button:hover{
+background:url(../images/login_bu_hover.png) left top no-repeat;
+}

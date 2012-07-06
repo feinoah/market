@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,16 +72,18 @@ public class BaseModuleController {
 	
 	/**
 	 * 删除
-	 * admin/permission/module/delete?id={id}
+	 * admin/permission/module/delete?id=|ids=
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id){
+	public int delete(@RequestParam(required=false) int id, @RequestParam(required=false) String ids){
+		if (StringUtils.hasText(ids)) {
+			return baseModuleService.batchDelete(ids);
+		}
 		return baseModuleService.delete(id);
 	}
-	
 	/**
 	 * 查询
 	 * admin/permission/module/query

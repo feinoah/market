@@ -12,13 +12,8 @@ import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 /**
  * 用户表
  */
-public class BaseUser implements Serializable {
+public class BaseUser extends BaseBean implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * 用户ID
-	 */
-	private int id;
 
 	/**
 	 * 电子邮件地址
@@ -77,16 +72,6 @@ public class BaseUser implements Serializable {
 	/**状态：0 停用；0x1 启用；0x2：禁止登录（密码错误次数过多，一定时间内禁止登录）*/
 	private Byte status;
 	
-	/**
-	 * 创建时间
-	 */
-	@JsonIgnore
-	private Date createTime;
-	/**
-	 * 修改时间
-	 */
-	private Date updateTime;
-	
 	/**查看用户是缓存角色集合*/
 	private Set<BaseRole> roleSet;
 	
@@ -100,12 +85,6 @@ public class BaseUser implements Serializable {
 	@JsonIgnore
 	private String roles;
 	
-	public int getId() {
-		return id;
-	}
-	public void setId(int id) {
-		this.id = id;
-	}
 	public String getEmail() {
 		return email;
 	}
@@ -173,19 +152,6 @@ public class BaseUser implements Serializable {
 	/**状态：0 停用；0x1 启用；0x2：禁止登录（密码错误次数过多，一定时间内禁止登录）*/
 	public void setStatus(Byte status) {
 		this.status = status;
-	}
-	public Date getCreateTime() {
-		return createTime;
-	}
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 	/**查看用户是缓存角色集合*/
 	public Set<BaseRole> getRoleSet() {

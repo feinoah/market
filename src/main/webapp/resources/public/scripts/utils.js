@@ -1,21 +1,24 @@
-var app={name:'/market',domain:'http://localhost:8080'};
+var app={name:'/market'};
 var _loadingICO;
+var account={};
 var arrayStar = new Array(
-		app.domain+app.name+"/resources/public/images/comment_star0.png",
-		app.domain+app.name+"/resources/public/images/comment_star1.png",
-		app.domain+app.name+"/resources/public/images/comment_star2.png",
-		app.domain+app.name+"/resources/public/images/comment_star3.png",
-		app.domain+app.name+"/resources/public/images/comment_star4.png",
-		app.domain+app.name+"/resources/public/images/comment_star5.png",
-		app.domain+app.name+"/resources/public/images/comment_star6.png",
-		app.domain+app.name+"/resources/public/images/comment_star7.png",
-		app.domain+app.name+"/resources/public/images/comment_star8.png",
-		app.domain+app.name+"/resources/public/images/comment_star9.png",
-		app.domain+app.name+"/resources/public/images/comment_star10.png");
+		app.name+"/resources/public/images/comment_star0.png",
+		app.name+"/resources/public/images/comment_star1.png",
+		app.name+"/resources/public/images/comment_star2.png",
+		app.name+"/resources/public/images/comment_star3.png",
+		app.name+"/resources/public/images/comment_star4.png",
+		app.name+"/resources/public/images/comment_star5.png",
+		app.name+"/resources/public/images/comment_star6.png",
+		app.name+"/resources/public/images/comment_star7.png",
+		app.name+"/resources/public/images/comment_star8.png",
+		app.name+"/resources/public/images/comment_star9.png",
+		app.name+"/resources/public/images/comment_star10.png");
 $(function() {
 	chkLogin();
-	_loadingICO=app.domain+app.name+'/resources/public/images/loading.gif';
-	$('body').append("<script src='"+app.domain+app.name+"/resources/public/scripts/XYTipsWindow-3.0.js'><\/script>")
+	_loadingICO=app.name+'/resources/public/images/loading.gif';
+	$('body').append("<script src='"+app.name+"/resources/public/scripts/XYTipsWindow-3.0.js'><\/script>").click(function(){
+		Util.Dialog.remove('Tip_tips');
+	});
 	$('#reg').click(function(){
 		regWin();
 	});
@@ -34,7 +37,7 @@ $(function() {
 	$('#search').click(function(){
 		var key=$('#search_input').val();
 		if(key){
-			window.open(app.domain+app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
+			window.open(app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
 		} else {
 			tips('search_input','请输入关键字','bottom');
 		}
@@ -43,7 +46,7 @@ $(function() {
 		if(e.which==13){
 			var key=$('#search_input').val();
 			if(key){
-				window.open(app.domain+app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
+				window.open(app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
 			} else {
 				tips('search_input','请输入关键字','bottom');
 			}
@@ -133,9 +136,10 @@ var request ={
 var chkLogin=function(){
 	$.getJSON(app.name+'/portal/account/login/check', function(data) {
 		if (data) {
+			account=data;
 			$('#loginBefor').hide();
 			$('#lolginAfter').show();
-			$('#welcome').html('欢迎您：'+data.nickName+'').attr('userId',data.id);
+			$('#welcome').html('欢迎您：<a href="javascript:accountWin()" title="进入用户中心">'+account.nickName+'</a>&nbsp;<a href="javascript:chPwdWin()">修改密码</a>');
 		}
 	});
 };
@@ -172,9 +176,10 @@ var login=function(){
 						tips('password','密码错误','bottom');
 					}
 					if(map.answerCode==1){
+						account=map.portalUser;
 						$('#loginBefor').hide();
 						$('#lolginAfter').show();
-						$('#welcome').html('欢迎您：<a href="javascript:alert('+map.portalUser.id+')">'+map.portalUser.nickName+'</a>').attr('userId',map.portalUser.id);
+						$('#welcome').html('欢迎您：<a href="javascript:accountWin()" title="进入用户中心">'+account.nickName+'</a>&nbsp;<a href="javascript:chPwdWin()">修改密码</a>');
 						Util.Dialog.remove('loginWin');
 					}
 				}else{
@@ -210,6 +215,7 @@ var reg=function(){
 					}
 					if(map.answerCode==1){
 						//tips('button','注册成功','bottom');
+						account=map.portalUser;
 						Util.Dialog.remove('regWin');
 						chkLogin();//切换登录状态
 					}
@@ -226,26 +232,46 @@ var regWin=function(){
 	Util.Dialog({
 		boxID : 'regWin',
 		title : '用户注册',
-		content : 'url:get?'+app.domain+app.name+'/html/reg.html?t='+new Date().getTime(),
+		content : 'url:get?'+app.name+'/html/reg.html',
 		showbg: true,
-		width : 580,
+		width : 600,
 		height : 280
 	});
 	return false;
 };
-
 var loginWin=function(){
 	Util.Dialog({
 		boxID : 'loginWin',
 		title : '用户登录',
-		content : 'url:get?'+app.domain+app.name+'/html/login.html?t='+new Date().getTime(),
+		content : 'url:get?'+app.name+'/html/login.html',
 		showbg: true,
 		width : 480,
-		height : 220
+		height : 250
 	});
 	return false;
 };
-
+var accountWin=function(){
+	Util.Dialog({
+		boxID : 'accountWin',
+		title : '用户中心',
+		content : 'url:get?'+app.name+'/html/account.html',
+		showbg: true,
+		width : 580,
+		height : 420
+	});
+	return false;
+};
+var chPwdWin=function(){
+	Util.Dialog({
+		boxID : 'chPwdWin',
+		title : '修改密码',
+		content : 'url:get?'+app.name+'/html/changePwd.html',
+		showbg: true,
+		width : 600,
+		height : 235
+	});
+	return false;
+};
 var tips=function(ref,txt,_arrow){
 	Util.Dialog({
 		type: 'tips',

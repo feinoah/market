@@ -50,7 +50,12 @@ public class ApplicationServiceImpl implements ApplicationService{
 			id=applicationDao.add(application);
 		} else {
 			Application old=applicationDao.queryById(id);
-			version = appVersionFileDao.queryValidVersionByAppId(id);
+			try {//尝试找到有效版本
+				version = appVersionFileDao.queryValidVersionByAppId(id);
+			} catch (Exception e) {//没有有效版本
+				log.warn("no valid version for app["+id+"]...", e);
+				version=appVersionFileDao.queryByAppIdAndExceptId(id, 0).get(0);
+			}
 			if (StringUtils.hasText(application.getIcon())) {
 				// 更新了图标
 				AttachmentUtil.deleteIcon(old.getIcon());
@@ -72,30 +77,25 @@ public class ApplicationServiceImpl implements ApplicationService{
 				// 更新了应用文件
 				AttachmentUtil.deleteApk(old.getAppFilePath());
 			}
-			if (application.getStatus().intValue()>Constants.STATUS_INVALID) {//有效
-				// 找到有效版本
-				version = appVersionFileDao.queryValidVersionByAppId(id);
-			} else {
+			if (application.getStatus().intValue()==Constants.STATUS_INVALID) {//有效
 				// 所有版本更新为停用
 				appVersionFileDao.updateToInvalidByAppId(id, 0);
 			}
 			applicationDao.update(application);
 		}
-		if (StringUtils.hasText(application.getAppFilePath())) { // 更新文件了
-			// 保存版本信息
+		// 保存版本信息
 //			AppVersionFile version=new AppVersionFile();
-			version.setAppId(id);
-			version.setVersion(application.getVersion());
-			version.setFilePath(application.getAppFilePath());
-			version.setSize(application.getSize());
-			version.setNewFeatures(application.getFeatures());
-			version.setEnNewFeatures(application.getEnFeatures());
-			version.setStatus(application.getStatus());
-			if (version.getId()>0) {
-				appVersionFileDao.update(version);
-			} else {
-				appVersionFileDao.add(version);
-			}
+		version.setAppId(id);
+		version.setVersion(application.getVersion());
+		version.setFilePath(application.getAppFilePath());
+		version.setSize(application.getSize());
+		version.setNewFeatures(application.getFeatures());
+		version.setEnNewFeatures(application.getEnFeatures());
+		version.setStatus(application.getStatus()==Constants.STATUS_INVALID?Constants.STATUS_INVALID:Constants.STATUS_VALID);
+		if (version.getId()>0) {
+			appVersionFileDao.update(version);
+		} else {
+			appVersionFileDao.add(version);
 		}
 		return id;
 	}
@@ -138,6 +138,19 @@ public class ApplicationServiceImpl implements ApplicationService{
 		// 删除版本文件
 		appVersionFileDao.deleteByAppId(id);
 		return applicationDao.delete(id);
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			String [] array=ids.split(",");
+			for (String id : array) {
+				delete(Integer.parseInt(id.trim()));
+			}
+			return array.length;
+		}
+		return 0;
 	}
 
 	@Override

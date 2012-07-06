@@ -79,6 +79,13 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 	}
 
 	@Override
+	public int batchDelete(String ids) {
+		String sql="delete from t_app_developer where id in("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql);
+	}
+
+	@Override
 	public AppDeveloper queryById(int id) {
 		String sql="select * from t_app_developer where id=?";
 		log.debug(String.format("\n%1$s\n", sql));

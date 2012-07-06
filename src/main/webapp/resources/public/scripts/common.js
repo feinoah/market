@@ -1,4 +1,4 @@
-var app={name:'/market',domain:'http://localhost:8080'};
+var app={name:'/market'};
 var winTitle;
 var fieldList;
 var statusList;
@@ -24,6 +24,17 @@ $.extend($.fn.validatebox.defaults.rules, {
 		return _368==0;
 	},message:'重复！请修正此值'}
 });
+var simpleEditer=function(name){
+	return KindEditor.create('textarea[name="'+name+'"]', {
+		resizeType : 1,
+		allowPreviewEmoticons : false,
+		allowImageUpload : false,
+		items : [
+			'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+			'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+			'insertunorderedlist', '|', 'emoticons', 'link']
+	});
+};
 $(function (){
 	winTitle=$('#editWin').window('options').title;
 	$.ajaxSettings.async = false;
@@ -52,6 +63,7 @@ $(function (){
 	$('#tt').datagrid({
 		width:'100%',
 		method:'get',
+		//frozenColumns:[[{field:'ck',checkbox:true}]],
 		toolbar:[{
 			text:'新增',
 			iconCls:'icon-add',
@@ -286,7 +298,7 @@ function statusFormatter(v){
 	return result;
 }
 function gradeFormatter(v){
-	return '<img src="'+app.domain+app.name+'/resources/public/images/comment_star'+v+'.png" />';
+	return '<img src="'+app.name+'/resources/public/images/comment_star'+v+'.png" />';
 }
 
 function lanFormatter(v){

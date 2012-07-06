@@ -47,6 +47,15 @@ public class BaseFieldServiceImpl implements BaseFieldService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			return baseFieldDao.batchDelete(ids);
+		}
+		return 0;
+	}
+
+	@Override
 	public BaseField queryById(int id) {
 		if(id<=0){
 			throw new IllegalArgumentException("id must be bigger than 0...");

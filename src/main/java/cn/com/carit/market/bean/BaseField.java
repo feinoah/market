@@ -1,28 +1,18 @@
 package cn.com.carit.market.bean;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 /**
  * 系统字段设置表
  * @author <a href="mailto:xiegengcai@gmail.com">Xie Gengcai</a>
  * 2012-5-12
  */
-public class BaseField implements Serializable {
+public class BaseField extends BaseBean implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7296441136375402613L;
-
-	/**
-	 * 字段ID
-	 */
-	private int id;
 
 	/**
 	 * 字段
@@ -54,17 +44,6 @@ public class BaseField implements Serializable {
 	 */
 	private Integer sort;
 	
-	private Date createTime;
-	private Date updateTime;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getField() {
 		return field;
 	}
@@ -112,21 +91,4 @@ public class BaseField implements Serializable {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
 }

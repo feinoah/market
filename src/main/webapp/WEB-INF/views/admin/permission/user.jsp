@@ -7,7 +7,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -157,7 +157,7 @@
 					class="easyui-linkbutton" id="reset" iconCls="icon-undo">重 置</a>
 			</div>
 		</form:form>
-		<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" singleSelect="true" nowrap="false"
+		<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" nowrap="false" singleSelect="true" 
 			idField="id" url="${ctx}/admin/permission/user/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10, 30 ]" sortName="updateTime" sortOrder="desc">
 				<thead>

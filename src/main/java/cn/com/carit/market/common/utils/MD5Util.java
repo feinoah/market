@@ -8,9 +8,10 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
-import org.springframework.util.StringUtils;
 
 /**
  * 使用java.security.MessageDigest类写的一个工具类用来获取MD5码
@@ -129,8 +130,13 @@ public class MD5Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String str="images/GoogleMap_1818963197773524_1.png;images/GoogleMap_1818963197773524_2.png;images/GoogleMap_1818963197773524_3.png;images/GoogleMap_1818963197773524_4.png;images/adbd8e6c900a35d51493dc111290678c_5.jpg";
-		System.out.println(str.indexOf("images/GoogleMap_1818963197773524_1.png")==-1);
-		System.out.println(StringUtils.hasText(new StringBuffer().toString()));
+		// A=APP_AMS_login替换为A=XX 
+		String str="DBSaver=ActionLog||A=APP_AMS_login||C=$7||";
+		System.out.println(str.replaceAll("A=.+?(\\|\\||\\s)", "A=XX||"));
+
+Pattern pattern = Pattern.compile("@.+?(:|\\s)");
+		Matcher matcher = pattern.matcher("@正则表达式:Hello World,@正则表达式  HelloWorld");
+	
+		System.out.println(matcher.replaceAll("Java"));
 	}
 }

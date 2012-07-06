@@ -13,28 +13,37 @@
 				window.parent.location.reload();
 			}
 			$('#loginWin').window('open');
-			$('#loginWin').window('open');
 			$('#submit').click(function(){
-				$('#loginForm').form({
-					dataType:'text',
-			    	success:function(data){
-			    		if(data==-2){
-							$.messager.alert('错误', "密码错误次数太多，半小时内限制登录", 'error');
-			    		} else if(data==-1){
-							$.messager.alert('错误', "用户不存在！", 'error');
-						}else if(data==0){
-			    			$.messager.alert('错误', "密码错误！", 'error');
-						}else if(data==1){
-							//登录成功
-							location.href='${ctx}/admin'
-						} else {
-							$.messager.alert('异常', "后台系统异常", 'error');
-						}
-				    }
-				}).submit();
+				login();
+			});
+			$('#password').keydown(function(e){
+				if(e.which==13){
+					login();
+				}
 			});
 			$('#reset').bind('click',function(){ $('#loginForm').form('clear');});
 		});
+		function login(){
+			$('#loginForm').form({
+				dataType:'text',
+		    	success:function(data){
+		    		if(data==-3){
+						$.messager.alert('错误', '密码错误次数太多，半小时内限制登录', 'error');
+		    		}else if(data==-2){
+		    			$.messager.alert('提示', '账号已停用！', 'info');
+		    		}else if(data==-1){
+						$.messager.alert('错误', '用户不存在！', 'error');
+					}else if(data==0){
+		    			$.messager.alert('提示', '密码错误！', 'info');
+					}else if(data==1){
+						//登录成功
+						location.href='${ctx}/admin'
+					} else {
+						$.messager.alert('异常', '后台系统异常', 'error');
+					}
+			    }
+			}).submit();
+		}
 		</script>
 	</head>
 	<body>
@@ -48,7 +57,7 @@
 						<label for="email" path="email">邮箱：</label>
 					</td>
 					<td>
-						<input type="text" name="email" class="easyui-validatebox" value="admin@admin.com" required="true" validType="email"/>
+						<input type="text" name="email" class="easyui-validatebox" required="true" validType="email"/>
 					</td>
 				</tr>
 				<tr>
@@ -56,7 +65,7 @@
 						<label  for="password" path="password">密码：</label>
 					</td>
 					<td>
-						<input type="password" name="password" class="easyui-validatebox" value="123456" required="true" validType="length[6,20]"/>
+						<input type="password" name="password" id="password" class="easyui-validatebox" required="true" validType="length[6,20]"/>
 					</td>
 				</tr>
 			</table>

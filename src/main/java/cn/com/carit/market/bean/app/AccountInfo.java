@@ -7,6 +7,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import cn.com.carit.market.bean.BaseBean;
 import cn.com.carit.market.common.jackjson.CustomDateSerializer;
 import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
@@ -14,15 +15,11 @@ import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
  * AccountInfo
  * Auto generated Code
  */
-public class AccountInfo  implements Serializable{
+public class AccountInfo extends BaseBean implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4504537661413613532L;
-	/**
-	 * id
-	 */
-	private int id;
 	/**
 	 * email
 	 */
@@ -85,21 +82,7 @@ public class AccountInfo  implements Serializable{
 	 * status
 	 */
 	private Byte status;
-	/**
-	 * updateTime
-	 */
-	private Date updateTime;
-	/**
-	 * createTime
-	 */
-	private Date createTime;
 
-	public void setId(int value) {
-		this.id = value;
-	}
-	public int getId() {
-		return this.id;
-	}
 	public void setEmail(String value) {
 		this.email = value;
 	}
@@ -192,19 +175,4 @@ public class AccountInfo  implements Serializable{
 	public Byte getStatus() {
 		return this.status;
 	}
-	public void setUpdateTime(Date value) {
-		this.updateTime = value;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return this.updateTime;
-	}
-	public void setCreateTime(Date value) {
-		this.createTime = value;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return this.createTime;
-	}
-
 }

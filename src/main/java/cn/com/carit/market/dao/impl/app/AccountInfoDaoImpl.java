@@ -105,6 +105,13 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	}
 
 	@Override
+	public int batchDelete(String ids) {
+		String sql = "delete from t_account_info where id in("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql);
+	}
+
+	@Override
 	public int update(AccountInfo accountInfo) {
 		StringBuilder sql = new StringBuilder(
 				"update t_account_info set update_time=now()");

@@ -122,10 +122,11 @@ public class ApplicationController {
 	        StringBuilder images=new StringBuilder();
 	        if(imageArray!=null && imageArray.length>0){
 	        	for (String str : imageArray) {
-	        		images.append(str).append(";");
+	        		if (StringUtils.hasText(str)) {
+	        			images.append(str).append(";");
+					}
 	        	}
 	        }
-	        System.err.println("before:"+images);
 	        int i=1;
 	        for (MultipartFile imageFile : imageFiles) {
 	        	if (imageFile!=null&&imageFile.getOriginalFilename().length()>0) {
@@ -140,21 +141,17 @@ public class ApplicationController {
 	        if (images.lastIndexOf(";")!=-1) {
         		images.delete(images.lastIndexOf(";"), images.length());
     		}
-	        System.err.println(images);
 	        application.setImages(images.toString());
 	        applicationService.saveOrUpdate(application);
 	        return 1;
         } catch (IllegalStateException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	log.error(e.getStackTrace());
+        	log.error("upload file error...", e);
         	return -1;
         } catch (IOException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	log.error(e.getStackTrace());
+        	log.error("upload file error...", e);
         	return -1;
         } catch (Exception e) {
-        	log.error("upload file error..."+e.getMessage());
-        	log.error(e.getStackTrace());
+        	log.error("upload file error...", e);
         	return -1;
 		}
 	}
@@ -177,16 +174,15 @@ public class ApplicationController {
 	
 	/**
 	 * 删除
-	 * admin/app/application/delete?id={id}
+	 * admin/app/application/delete?id=|ids=
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id){
-		if (id<=0) {
-			log.debug("The param id must be bigger than 0...");
-			return -1;
+	public int delete(@RequestParam int id, @RequestParam(required=false) String ids){
+		if (StringUtils.hasText(ids)) {
+			return applicationService.batchDelete(ids);
 		}
 		return applicationService.delete(id);
 	}

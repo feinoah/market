@@ -1,25 +1,18 @@
 package cn.com.carit.market.bean.app;
 
 import java.io.Serializable;
-import java.util.Date;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
+import cn.com.carit.market.bean.BaseBean;
 
 /**
  * AppCatalog
  * Auto generated Code
  */
-public class AppCatalog  implements Serializable{
+public class AppCatalog extends BaseBean implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2364638845600437095L;
-	/**
-	 * id
-	 */
-	private int id;
 	/**
 	 * name
 	 */
@@ -40,21 +33,7 @@ public class AppCatalog  implements Serializable{
 	 * status
 	 */
 	private Byte status;
-	/**
-	 * createTime
-	 */
-	private Date createTime;
-	/**
-	 * updateTime
-	 */
-	private Date updateTime;
 
-	public void setId(int value) {
-		this.id = value;
-	}
-	public int getId() {
-		return this.id;
-	}
 	public void setName(String value) {
 		this.name = value;
 	}
@@ -78,20 +57,6 @@ public class AppCatalog  implements Serializable{
 	}
 	public Byte getStatus() {
 		return this.status;
-	}
-	public void setCreateTime(Date value) {
-		this.createTime = value;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return this.createTime;
-	}
-	public void setUpdateTime(Date value) {
-		this.updateTime = value;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return this.updateTime;
 	}
 	public String getEnName() {
 		return enName;

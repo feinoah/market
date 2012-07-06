@@ -97,6 +97,10 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 			sql.append(", email=?");
 			val.add(baseUser.getEmail());
 		}
+		if (StringUtils.hasText(baseUser.getPassword())) {
+			sql.append(", password=?");
+			val.add(baseUser.getPassword());
+		}
 		if (StringUtils.hasText(baseUser.getNickName())) {
 			sql.append(", nick_name=?");
 			val.add(baseUser.getNickName());

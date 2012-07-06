@@ -150,8 +150,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	}
 	@Override
 	public int updateToValidByAppIdAndVersion(int appId, String version) {
-		// TODO Auto-generated method stub
-		return 0;
+		String sql="update t_app_version_file set update_time=now(), status=? where app_id=? and version=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql, Constants.STATUS_VALID, appId, version);
 	}
 
 	@Override

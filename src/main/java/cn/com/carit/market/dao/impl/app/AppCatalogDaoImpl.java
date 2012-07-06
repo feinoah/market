@@ -83,6 +83,13 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 	}
 
 	@Override
+	public int batchDelete(String ids) {
+		String sql = "delete from t_app_catalog where id in ("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql);
+	}
+
+	@Override
 	public int update(AppCatalog appCatalog) {
 		StringBuilder sql = new StringBuilder(
 				"update t_app_catalog set update_time=now()");

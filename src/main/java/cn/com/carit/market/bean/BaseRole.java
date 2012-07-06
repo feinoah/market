@@ -1,28 +1,19 @@
 package cn.com.carit.market.bean;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
-import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
 
 /**
  * 角色表
  */
-public class BaseRole implements Serializable {
+public class BaseRole extends BaseBean implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2380774340748595044L;
-
-	/**
-	 * 角色ID
-	 */
-	private int id;
 
 	/**
 	 * 角色名称
@@ -34,22 +25,11 @@ public class BaseRole implements Serializable {
 	 */
 	private String roleDesc;
 	
-	private Date createTime;
-	private Date updateTime;
-	
 	/**添加时封装模块Id*/
 	@JsonIgnore
 	private String  modules;
 	/**查询时关联模块集*/
 	private Set<BaseModule> moduleSet;
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getRoleName() {
 		return roleName;
@@ -73,22 +53,6 @@ public class BaseRole implements Serializable {
 
 	public void setModuleSet(Set<BaseModule> moduleSet) {
 		this.moduleSet = moduleSet;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 
 	public String getModules() {

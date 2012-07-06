@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
@@ -29,11 +29,13 @@
 			
 			$('span[id^=star_sp]').each(function(i){
 				$(this).click(function(){
-					if(i%2==0){
-						$('#star_sp'+i).removeClass('starBright_left').addClass('starDark_left');
-					}else{
-						$('#star_sp'+i).removeClass('starBright_right').addClass('starDark_right');
-					}
+					$('span[id^=star_sp]').each(function(j){
+						if(j%2==0){
+							$('#star_sp'+j).removeClass('starBright_left').addClass('starDark_left');
+						}else{
+							$('#star_sp'+j).removeClass('starBright_right').addClass('starDark_right');
+						}
+					});
 					$('span[id^=star_sp]').each(function(k){
 						if(k<=i){//3
 							if(k%2==0){
@@ -126,7 +128,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="评论列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="评论列表" align="left" singleSelect="true"  
 			idField="id" url="${ctx}/admin/app/comment/query?appId=${param.appId}" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>
@@ -153,7 +155,7 @@
 					<td><form:label for="enName" path="enName">英文名称：</form:label></td>
 					<td><label id="enName_edit" class="inputLabel"></label></td>
 				</tr>
-				<tr>
+				<tr style="heigth:38px;">
 					<td><form:label for="userName" path="userName">评论人：</form:label></td>
 					<td><label id="userName_edit" class="inputLabel"></label></td>
 					<td><form:label for="grade" path="grade" cssClass="mustInput">等级：</form:label></td>

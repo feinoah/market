@@ -49,6 +49,15 @@ public class AppDeveloperServiceImpl implements AppDeveloperService {
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			return appDeveloperDao.batchDelete(ids);
+		}
+		return 0;
+	}
+
+	@Override
 	public AppDeveloper queryById(int id) {
 		if (id<=0) {
 			log.error("id must be bigger than 0..."

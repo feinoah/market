@@ -48,11 +48,53 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			accountInfoDao.add(accountInfo);
 		} else {
 			// 更新了头像
+			AccountInfo old=accountInfoDao.queryById(accountInfo.getId());
 			if (StringUtils.hasText(accountInfo.getPhoto())) {
-				AccountInfo old=accountInfoDao.queryById(accountInfo.getId());
 				AttachmentUtil.deletePhoto(old.getPhoto());
 			}
 			accountInfoDao.update(accountInfo);
+			if (!StringUtils.hasText(accountInfo.getEmail())) {
+				accountInfo.setEmail(old.getEmail());//
+			}
+			if (!StringUtils.hasText(accountInfo.getNickName())) {
+				accountInfo.setNickName(old.getNickName());
+			}
+			if (accountInfo.getGender() == null) {
+				accountInfo.setGender(old.getGender());
+			}
+			if (accountInfo.getBirthday() == null) {
+				accountInfo.setBirthday(old.getBirthday());
+			}
+			if (!StringUtils.hasText(accountInfo.getPhoto())) {
+				accountInfo.setPhoto(old.getPhoto());
+			}
+			if (accountInfo.getBalance() == null) {
+				accountInfo.setBalance(old.getBalance());
+			}
+			if (!StringUtils.hasText(accountInfo.getRealName())) {
+				accountInfo.setRealName(old.getRealName());
+			}
+			if (!StringUtils.hasText(accountInfo.getIdCard())) {
+				accountInfo.setIdCard(old.getIdCard());
+			}
+			if (!StringUtils.hasText(accountInfo.getOfficePhone())) {
+				accountInfo.setOfficePhone(old.getOfficePhone());
+			}
+			if (!StringUtils.hasText(accountInfo.getMobile())) {
+				accountInfo.setMobile(old.getMobile());
+			}
+			if (!StringUtils.hasText(accountInfo.getAddress())) {
+				accountInfo.setAddress(old.getAddress());
+			}
+			if (!StringUtils.hasText(accountInfo.getLastLoginIp())) {
+				accountInfo.setLastLoginIp(old.getLastLoginIp());
+			}
+			if (accountInfo.getLastLoginTime() == null) {
+				accountInfo.setLastLoginTime(old.getLastLoginTime());
+			}
+			if (accountInfo.getStatus() == null) {
+				accountInfo.setStatus(old.getStatus());
+			}
 		}
 		return accountInfo;
 	}
@@ -64,6 +106,15 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			throw new IllegalArgumentException("id must be bigger than 0...");
 		}
 		return accountInfoDao.delete(id);
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			return accountInfoDao.batchDelete(ids);
+		}
+		return 0;
 	}
 
 	@Override
@@ -140,10 +191,22 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
-	public int updatePwd(int id, String newPassword) {
+	public int updatePwd(int id, String oldPassword, String newPassword) throws Exception {
 		if (!StringUtils.hasText(newPassword)) {
 			throw new IllegalArgumentException("newPassword must be not empty...");
 		}
+		if (id<=0) {
+			throw new IllegalArgumentException("id must be bigger than 0...");
+		}
+		AccountInfo account=accountInfoDao.queryById(id);
+		//加密
+		oldPassword=MD5Util.md5Hex(account.getEmail()+MD5Util.md5Hex(oldPassword)+MD5Util.DISTURBSTR);
+		if(!oldPassword.equalsIgnoreCase(account.getPassword())){
+			//密码错误
+			log.error("password is incorrect ....");
+			return -1;
+		}
+		newPassword=MD5Util.md5Hex(account.getEmail()+MD5Util.md5Hex(newPassword)+MD5Util.DISTURBSTR);
 		return accountInfoDao.updatePwd(id, newPassword);
 	}
 

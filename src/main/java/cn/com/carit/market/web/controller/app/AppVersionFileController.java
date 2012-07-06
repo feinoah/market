@@ -128,16 +128,15 @@ public class AppVersionFileController {
 	
 	/**
 	 * 删除
-	 * admin/app/version/delete?id={id}
+	 * admin/app/version/delete?id=|ids=
 	 * @param id
 	 * @return
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id){
-		if (id<=0) {
-			log.debug("The param id must be bigger than 0...");
-			return -1;
+	public int delete(@RequestParam int id, @RequestParam(required=false) String ids){
+		if (StringUtils.hasText(ids)) {
+			return appVersionFileService.batchDelete(ids);
 		}
 		return appVersionFileService.delete(id);
 	}

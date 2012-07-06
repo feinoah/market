@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			// 初始化

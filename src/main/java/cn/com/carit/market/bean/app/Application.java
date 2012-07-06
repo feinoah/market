@@ -1,25 +1,19 @@
 package cn.com.carit.market.bean.app;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
+import cn.com.carit.market.bean.BaseBean;
 
 /**
  * Application Auto generated Code
  */
-public class Application implements Serializable {
+public class Application extends BaseBean implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 314936188348558691L;
-	/**
-	 * id
-	 */
-	private int id;
 	/**
 	 * appName
 	 */
@@ -101,28 +95,12 @@ public class Application implements Serializable {
 	 * status
 	 */
 	private Integer status;
-	/**
-	 * createTime
-	 */
-	private Date createTime;
-	/**
-	 * updateTime
-	 */
-	private Date updateTime;
 
 	public String[] getImageList() {
 		if (this.images != null && this.images.trim().length() > 0) {
 			return this.images.trim().split(";");
 		}
 		return null;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getAppName() {
@@ -283,24 +261,6 @@ public class Application implements Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
-	}
-
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	@JsonSerialize(using = CustomDateTimeSerializer.class)
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
 	}
 
 	public String getFeatures() {

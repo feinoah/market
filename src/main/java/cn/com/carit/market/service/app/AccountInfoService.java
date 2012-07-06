@@ -27,6 +27,13 @@ public interface AccountInfoService {
 	int delete(int id);
 	
 	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
+	int batchDelete(String ids);
+	
+	/**
 	 * 按Id查询
 	 * @param id
 	 * @return
@@ -77,9 +84,10 @@ public interface AccountInfoService {
 	 * 修改密码
 	 * @param id
 	 * @param newPassword
+	 * @param oldPassword
 	 * @return
 	 */
-	int updatePwd(int id, String newPassword);
+	int updatePwd(int id, String oldPassword, String newPassword) throws Exception;
 	
 	/**
 	 * 锁定账号

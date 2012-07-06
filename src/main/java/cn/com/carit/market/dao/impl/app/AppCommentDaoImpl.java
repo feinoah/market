@@ -82,6 +82,13 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	}
 	
 	@Override
+	public int batchDelete(String ids) {
+		String sql = "delete from t_app_comment where id in("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql);
+	}
+
+	@Override
 	public int[] batchDelete(String[] ids) {
 		String sql = "delete from t_app_comment where id=?";
 		log.debug(String.format("\n%1$s\n", sql));

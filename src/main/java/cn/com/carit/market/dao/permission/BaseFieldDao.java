@@ -23,6 +23,13 @@ public interface BaseFieldDao {
 	int delete(int id);
 	
 	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
+	int batchDelete(String ids);
+	
+	/**
 	 * 更新
 	 * @param field
 	 * @return

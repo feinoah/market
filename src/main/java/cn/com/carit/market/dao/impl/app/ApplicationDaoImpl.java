@@ -454,26 +454,26 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getBigIcon())) {
-			sql.append(", big_icon like CONCAT('%',?,'%')");
-			countSql.append(", big_icon like CONCAT('%',?,'%')");
+			sql.append(" and big_icon like CONCAT('%',?,'%')");
+			countSql.append(" and big_icon like CONCAT('%',?,'%')");
 			args.add(application.getBigIcon());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getDeveloper())) {
-			sql.append(", developer like CONCAT('%',?,'%')");
-			countSql.append(", developer like CONCAT('%',?,'%')");
+			sql.append(" and developer=?");
+			countSql.append(" and developer=?");
 			args.add(application.getDeveloper());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getDeveloperWebsite())) {
-			sql.append(", website like CONCAT('%',?,'%')");
-			countSql.append(", website like CONCAT('%',?,'%')");
+			sql.append(" and website like CONCAT('%',?,'%')");
+			countSql.append(" and website like CONCAT('%',?,'%')");
 			args.add(application.getDeveloperWebsite());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getDeveloperEmail())) {
-			sql.append(", email like CONCAT('%',?,'%')");
-			countSql.append(", email like CONCAT('%',?,'%')");
+			sql.append(" and email like CONCAT('%',?,'%')");
+			countSql.append(" and email like CONCAT('%',?,'%')");
 			args.add(application.getDeveloperEmail());
 			argTypes.add(12);// java.sql.Types type
 		}

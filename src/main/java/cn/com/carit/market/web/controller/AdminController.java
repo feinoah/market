@@ -14,6 +14,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -80,11 +82,12 @@ public class AdminController{
 	 * back/login
 	 * 用户登录<br>
 	 * <ul>
-	 * <li>-2  限制登录</li>
-	 * <li>-1  用户不存在</li>
-	 * <li>0	密码错误</li>
-	 * <li>1	登录成功</li>
-	 * <li>其它  后台异常</li>
+	 * 	<li>-3密码错误次数太多，半小时内限制登录</li>
+	 * 	<li>-2 用户不存在</li>
+	 * 	<li>-1  账号已经停用</li>
+	 * 	<li>0	密码错误</li>
+	 * 	<li>1	登录成功</li>
+	 * 	<li>其它  后台异常</li>
 	 * </ul>
 	 * @param email
 	 * @param password
@@ -101,7 +104,7 @@ public class AdminController{
 		Integer errorCount= obj==null?0:(Integer)obj;
 		if (errorCount!=null && errorCount.intValue()>=Constants.MAX_PWD_ERROR_COUNT) {
 			log.error("Limit login:password error count("+errorCount+") >="+Constants.MAX_PWD_ERROR_COUNT);
-			return -2;
+			return -3;
 		}
 		Map<String, Object> resultMap=baseUserService.login(email, password, req.getRemoteAddr());
 		Integer answerCode=(Integer) resultMap.get(Constants.ANSWER_CODE);
@@ -136,6 +139,56 @@ public class AdminController{
 			session.setAttribute(Constants.USER_ALL_MOUDLE+baseUser.getEmail(), 0);
 		}
 		return "/admin/loginForm";
+	}
+	/**
+	 * 
+	 * @param oldPassword
+	 * @param password
+	 * @param req
+	 * @return -4没有登录或登录超时；-3 非法参数（id<=0）；-2账号不存在；-1原始密码错误；1 修改成功 ；其它异常
+	 * @throws Exception
+	 */
+	@RequestMapping(value="back/user/changepwd", method=RequestMethod.POST)
+	@ResponseBody
+	public int changePassword(@RequestParam("oldPassword")String oldPassword
+			, @RequestParam("password")String password, HttpServletRequest req) throws Exception {
+		HttpSession session=req.getSession();
+		BaseUser baseUser=(BaseUser) session.getAttribute(Constants.ADMIN_USER);
+		if (baseUser==null) {//没有登录或登录超时
+			return -4;
+		}
+		return baseUserService.updatePassword(baseUser.getId(), oldPassword, password);
+	}
+	
+	/**
+	 * 修改资料
+	 * @param baseUser
+	 * @param result
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="back/user/update", method=RequestMethod.POST)
+	@ResponseBody
+	public int updateUser(@ModelAttribute BaseUser baseUser, BindingResult result, HttpServletRequest req){
+		if (result.hasErrors()) {
+			log.debug(result.getAllErrors().toString());
+			return -3;
+		}
+		HttpSession session=req.getSession();
+		BaseUser sessionUser=(BaseUser) session.getAttribute(Constants.ADMIN_USER);
+		if (sessionUser==null) {//没有登录或登录超时
+			return -2;
+		}
+		baseUser.setId(sessionUser.getId());
+		try {
+			baseUserService.updateUser(baseUser);
+			// update session user
+			session.setAttribute(Constants.ADMIN_USER, baseUserService.queryByEmail(sessionUser.getEmail()));
+			return 1;
+		} catch (Exception e) {
+			log.error("update baseUser error...", e);
+			return -1;
+		}
 	}
 	
 	@SuppressWarnings("unchecked")

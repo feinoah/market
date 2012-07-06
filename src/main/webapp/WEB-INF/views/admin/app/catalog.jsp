@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
@@ -98,7 +98,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用分类列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用分类列表" align="left" singleSelect="true"  
 			idField="id" url="${ctx}/admin/app/catalog/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="displayIndex" sortOrder="asc">
 				<thead>

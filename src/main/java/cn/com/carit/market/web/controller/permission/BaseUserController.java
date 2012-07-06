@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,10 +71,9 @@ public class BaseUserController{
 		}
 		return baseUserService.queryById(id);
 	}
-	
 	/**
 	 * 删除
-	 * admin/permission/user/delete?id={id}
+	 * admin/permission/user/delete?id=|ids=
 	 * @param id
 	 * @return 
 	 * <ul>
@@ -85,15 +85,14 @@ public class BaseUserController{
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id, HttpServletRequest req){
-		if (id<=0) {
-			log.debug("The param id must be bigger than 0...");
-			return -1;
-		}
+	public int delete(@RequestParam(required=false) int id, @RequestParam(required=false) String ids, HttpServletRequest req){
 		BaseUser user=(BaseUser) req.getSession().getAttribute(
 				Constants.ADMIN_USER);
-		if (user!=null && user.getId()==id) {
+		if (user!=null && (user.getId()==id||ids.indexOf(String.valueOf(id))!=-1)) {
 			return -2;
+		}
+		if (StringUtils.hasText(ids)) {
+			return baseUserService.batchDelete(ids);
 		}
 		return baseUserService.delete(id);
 	}

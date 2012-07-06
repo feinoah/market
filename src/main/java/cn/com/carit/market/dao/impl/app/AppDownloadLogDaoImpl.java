@@ -265,7 +265,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public int checkUserDownLog(int accountId, int appId) {
-		String sql="select 1 from t_app_download_log where account_id=? and app_id=?";
+		String sql="select count(1) from t_app_download_log where account_id=? and app_id=?";
 		log.debug(String.format("\n%1$s\n", sql));
 		try {
 			return jdbcTemplate.queryForInt(sql, accountId, appId);

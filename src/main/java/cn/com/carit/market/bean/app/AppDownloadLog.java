@@ -11,7 +11,7 @@ import cn.com.carit.market.common.jackjson.CustomDateTimeSerializer;
  * AppDownloadLog
  * Auto generated Code
  */
-public class AppDownloadLog  implements Serializable{
+public class AppDownloadLog implements Serializable{
 	/**
 	 * 
 	 */

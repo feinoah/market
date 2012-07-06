@@ -31,6 +31,13 @@ public interface AppCommentService {
 	 * @param ids
 	 * @return
 	 */
+	int batchDelete(String ids);
+	
+	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
 	int[] batchDelete(String[] ids);
 	
 	/**

@@ -22,6 +22,13 @@ public interface BaseFieldService {
 	int delete(int id);
 	
 	/**
+	 * 批量删除
+	 * @param ids
+	 * @return
+	 */
+	int batchDelete(String ids);
+	
+	/**
 	 * 按Id查询
 	 * @param id
 	 * @return

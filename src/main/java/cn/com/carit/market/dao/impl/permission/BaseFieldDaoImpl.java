@@ -61,6 +61,13 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	}
 
 	@Override
+	public int batchDelete(String ids) {
+		String sql="delete from t_base_field where id in("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql);
+	}
+
+	@Override
 	public int update(BaseField field) {
 		StringBuffer sql=new StringBuffer("update t_base_field set update_time=now()");
 		List<Object> val=new ArrayList<Object>();

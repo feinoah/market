@@ -76,6 +76,19 @@ public class BaseUserServiceImpl implements BaseUserService{
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			String [] array=ids.split(",");
+			for (String id : array) {
+				delete(Integer.parseInt(id.trim()));
+			}
+			return array.length;
+		}
+		return 0;
+	}
+
+	@Override
 	public BaseUser queryById(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -130,11 +143,10 @@ public class BaseUserServiceImpl implements BaseUserService{
 			throw new IllegalArgumentException("password must be not empty...");
 		}
 		Map<String, Object> resultMap=new HashMap<String, Object>();
-		BaseUser baseUser=null;
-		baseUser=baseUserDao.queryByEmail(email);
+		BaseUser baseUser=baseUserDao.queryByEmail(email);
 		if (baseUser==null) {
 			log.error("User["+email+"] does not exist...");
-			resultMap.put(Constants.ANSWER_CODE, -1);
+			resultMap.put(Constants.ANSWER_CODE, -2);
 			return resultMap;
 		}
 		// 密码加密
@@ -144,6 +156,11 @@ public class BaseUserServiceImpl implements BaseUserService{
 		if (!password.equalsIgnoreCase(baseUser.getPassword())) {
 			//密码错误
 			resultMap.put(Constants.ANSWER_CODE, 0);
+			return resultMap;
+		}
+		if(baseUser.getStatus().intValue()!=Constants.STATUS_VALID){
+			// 账号已经停用
+			resultMap.put(Constants.ANSWER_CODE, -1);
 			return resultMap;
 		}
 		// 更新
@@ -163,6 +180,45 @@ public class BaseUserServiceImpl implements BaseUserService{
 			throw new IllegalArgumentException("email and nickName must be ont is not empty...");
 		}
 		return baseUserDao.checkUser(email, nickName);
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int updatePassword(int id, String oldPassword, String password) throws Exception {
+		if (id<=0) {
+			log.error("id must be bigger than 0...", new IllegalArgumentException());
+			return -3;
+		}
+		BaseUser baseUser=baseUserDao.queryById(id);
+		if (baseUser==null) { // 账号不存在
+			log.error("no this record for id["+id+"]...");
+			return -2;
+		}
+		// 加密密码，加密规则 MD5Util.md5Hex(MD5Util.md5Hex(password){email}disturbStr)
+		oldPassword=MD5Util.md5Hex(baseUser.getEmail()+MD5Util.md5Hex(oldPassword)+MD5Util.DISTURBSTR);
+		if (!oldPassword.equalsIgnoreCase(baseUser.getPassword())) {//原始密码错误
+			log.error("oldPassword is incorrect...");
+			return -1;
+		}
+		password=MD5Util.md5Hex(baseUser.getEmail()+MD5Util.md5Hex(password)+MD5Util.DISTURBSTR);
+		BaseUser updateUser=new BaseUser();
+		updateUser.setId(id);
+		updateUser.setPassword(password);
+		return baseUserDao.update(updateUser);
+	}
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int updateUser(BaseUser baseUser) {
+		if (baseUser==null) {
+			log.error("baseUser is null...", new NullPointerException());
+			return -1;
+		}
+		if (baseUser.getId()<=0) {
+			log.error("Id must be bigger than 0...", new IllegalArgumentException());
+			return -1;
+		}
+		baseUser.setPassword(null);
+		return baseUserDao.update(baseUser);
 	}
 	
 }

@@ -53,7 +53,12 @@ public class BaseDaoImpl {
 		if (id instanceof String) {
 			idType=Types.VARCHAR;
 		}
-		return jdbcTemplate.queryForObject(sql, new Object[]{id}, new int[]{idType}, rowMapper);
+		try {
+			return jdbcTemplate.queryForObject(sql, new Object[]{id}, new int[]{idType}, rowMapper);
+		} catch (Exception e) {
+			log.warn("no record existed...",e);
+			return null;
+		}
 	}
 	
 	public <T> T queryForObject(String sql, List<Object> args, List<Integer> argTypes, RowMapper<T> rowMapper) {

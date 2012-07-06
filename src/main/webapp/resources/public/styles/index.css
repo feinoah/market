@@ -17,7 +17,7 @@
 .Menubox {
 	width: 100%;
 	height: 45px;
-	background-color: #DEDEDE;
+	background: url(../images/BT2_s.png);
 	line-height: 45px;
 }
 
@@ -43,10 +43,7 @@
 	font-size:20px;
 	padding: 0px;
 	width: 163px;
-	border-left: 1px solid #A8C29F;
-	border-top: 1px solid #A8C29F;
-	border-right: 1px solid #A8C29F;
-	background-color: #1C86EE;
+	background: url(../images/tab_hv.png);
 	color: #FFFFFF;
 	font-weight: bold;
 	height: 45px;
@@ -96,29 +93,32 @@
 }
 
 #con_one_1 ul li label {
-	display: -moz-inline-box;
 	display: inline-block;
 	line-height: 20px;
-	width: 230px;
-	padding-left: 30px;
+	width: 130px;
+	margin-left: 30px;
 	color: #808080;
 	font-size: 14px;
 }
 
-#con_one_1 .more {
+.more {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 	text-align: right;
 	padding: 20px;
 	color: #104E8B;
 	font-size: 18px;
 	font-weight: bold;
 	background: url(../images/all_free_app_button.jpg) no-repeat;
-	background-position: 250px 22px;
+	background-position: 295px 26px;
 }
 
 #con_one_1 ul li span {
-	display: -moz-inline-box;
 	display: inline-block;
 	width: 30px;
+	margin-top: 15px;
+	
 }
 
 #con_one_2 ul {
@@ -145,6 +145,9 @@
 	display: -moz-inline-box;
 	display: inline-block;
 	width: 30px;
+	font-size: 20px;
+    color: #414242;
+    font-weight: bold;
 }
 
 .Contentbox2 {
@@ -153,7 +156,7 @@
 	padding-top: 8px;
 }
 
-#clerk_recommend,#clerk_recommend_car {
+#clerk_recommend,#clerk_recommend_car{
 	border-bottom: 1px solid #D7D7D7;
 	margin-left: 38px;
 	margin-top: 20px;
@@ -161,30 +164,38 @@
 	width: 610px;
 	height: 432px;
 }
+#best-sale-games{
+	border-bottom: 1px solid #D7D7D7;
+	margin-left: 38px;
+	margin-top: 20px;
+	margin-right: 38px;
+	width: 610px;
+	height: 340px;
+}
 
-#clerk_recommend div,#clerk_recommend_car div {
+#clerk_recommend div,#clerk_recommend_car div,#best-sale-games div {
 	width: 149px;
 	height: 144px;
 	display: inline-block;
 }
 
-#clerk_recommend div img,#clerk_recommend_car div img {
+#clerk_recommend div img,#clerk_recommend_car div img,#best-sale-games div img {
 	display: inline-block;
 	margin-top:1px;
 }
 
-#clerk_recommend div .label1,#clerk_recommend_car div .label1 {
+#clerk_recommend div .label1,#clerk_recommend_car div .label1,#best-sale-games div .label1 {
 	width: 100%;
 	display: block;
 }
 
-#clerk_recommend div .label2,#clerk_recommend_car div .label2 {
+#clerk_recommend div .label2,#clerk_recommend_car div .label2 ,#best-sale-games div .label2 {
 	display: block;
 	color: gray;
 	font-size: 12px;
 }
 
-#clerk_recommend div .abel3,#clerk_recommend_car div .label3 {
+#clerk_recommend div .abel3,#clerk_recommend_car div .label3,#best-sale-games div .label3 {
 	display: inline-block;
 	font-size: 12px;
 }
@@ -203,6 +214,10 @@
 }
 
 #clerk_recommend_car div .iconImg{
+	width: 60px;
+	height: 60px;
+}
+#best-sale-games div .iconImg{
 	width: 60px;
 	height: 60px;
 }
@@ -458,7 +473,7 @@
 
 .wide-editorial-image-panel {
 	width: 686px;
-	height: 160px;
+	height: 480px;
 	margin-top: 9px;
 }
 
@@ -506,6 +521,15 @@
 	font-size:20px;
 	color: #414242;
     font-weight: bold;  
+    display:inline-block;
+    margin-top: 16px;
+}
+
+.index_free_catalog{
+	font-size:20px;
+	color: #414242;
+    font-weight: bold;  
+    display:inline-block;
 }
 .index_free_span{
 	font-size:20px;
@@ -515,4 +539,60 @@
     margin-top:18px;
     height:63px;
     width:20px;
+}
+#footer {
+background-color: #3D3D3D;
+border-top: 4px solid #88B131;
+color: white;
+margin-top: 1090px;
+padding-top: 25px;
+text-align: center;
+zoom: 1;
+height: 25px;
+}
+#footer-tab-edge {
+border-top: 30px solid 
+#3D3D3D;
+border-right: 30px solid 
+transparent;
+}
+.detail_hr{
+	margin-left: 15px;margin-right: 15px;
+	color:#D7D7D7;background-color:#D7D7D7;height:1px;line-height:1px;border:none;
+}
+.detail_left_div{
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-left:17px;height: 67px;width: 292px;
+}
+.detail_left1_div{
+	
+text-align: center;
+vertical-align: middle;
+	width :100px;
+	height: 67px;
+	float:left;
+}
+.app_detail_icon{
+	margin-left: 5px;
+	width :65px;height: 65px;
+}
+.detail_right_div{
+	margin-top: 10px;
+	float:right;width:60%;
+}
+.detail_right_div img{
+	display: inline-block;
+}
+.detail_right_label1{
+	display: block;color:gray;font-size: 12px;
+}
+.detail_right_label2{
+	display: inline-block;font-size: 12px;
+}
+.detail_left_div_num{
+	height:67px;
+	width:15px;
+	vertical-align: top;
+	display:inline-block
 }

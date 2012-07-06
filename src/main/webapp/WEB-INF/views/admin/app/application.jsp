@@ -5,11 +5,28 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/kindeditor-min.js"></script>
+		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/lang/zh_CN.js"></script>
 		<script type="text/javascript">
-		var tag=0;
 		var devs;
+		var descEditer;
+		var enDescEditer;
+		var permissionEditer;
+		var enPermissionEditer;
+		var featuresEditer;
+		var enFeaturesEditer;
+		var newFeaturesEditer;
+		var enNewFeaturesEditer;
 		$(function(){
+			descEditer=simpleEditer('description');
+			enDescEditer=simpleEditer('enDescription');
+			permissionEditer=simpleEditer('permissionDesc');
+			enPermissionEditer=simpleEditer('enPermissionDesc');
+			featuresEditer=simpleEditer('features');
+			enFeaturesEditer=simpleEditer('enFeatures');
+			newFeaturesEditer=simpleEditer('newFeatures');
+			enNewFeaturesEditer=simpleEditer('enNewFeatures');
 			$.ajaxSettings.async = false;
 			$.getJSON('${ctx}/back/field/query/platform', function(data) {
 				if(data){
@@ -76,6 +93,7 @@
 			$('#tt').datagrid({
 				width:'100%',
 				method:'get',
+				//frozenColumns:[[{field:'ck',checkbox:true}]],
 				toolbar:[{
 					text:'新增',
 					iconCls:'icon-add',
@@ -125,20 +143,26 @@
 			$('#edit_submit_app').bind('click',function(){
 				$('#editForm').form({
 					onSubmit:function(){
+						descEditer.sync();
+						enDescEditer.sync();
+						permissionEditer.sync();
+						enPermissionEditer.sync();
+						featuresEditer.sync();
+						enFeaturesEditer.sync();
 						// 避免 form validate bug
 						$('.combobox-f').each(function(){
 							$(this).val($(this).combobox('getText'));
 						});
 						var b=true;
-						$('#editForm textarea').each(function(){
+						/*$('#editForm textarea').each(function(){
 							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
 								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(一个中文两个字符)', 'info');
 								b=false;
 								return false;
 							}
 						});
-						if(!b){return b;}
-						if(tag==0&&$('#apkFile').val()==''){ //新增时
+						if(!b){return b;}*/
+						if($('#apkFileTxt').val()==''&&$('#apkFile').val()==''){ //新增时
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						}
@@ -172,20 +196,31 @@
 				    }
 				}).submit();
 			});
+			$('#edit_reset_app').click(function(){
+				$('#editForm').form('clear');
+				descEditer.html('');
+				enDescEditer.html('');
+				permissionEditer.html('');
+				enPermissionEditer.html('');
+				featuresEditer.html('');
+				enFeaturesEditer.html('');
+			});
 			$('#edit_submit_version').bind('click',function(){
 				$('#editVersionForm').form({
 					onSubmit:function(){
+						newFeaturesEditer.sync();
+						enNewFeaturesEditer.sync();
 						// 避免 form validate bug
 						$('#version_status_edit').val($('#version_status_edit').combobox('getText'));
 						var b=true;
-						$('#editVersionForm textarea').each(function(){
+						/*$('#editVersionForm textarea').each(function(){
 							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
 								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(一个中文两个字符)', 'info');
 								b=false;
 								return false;
 							}
 						});
-						if(!b){return b;}
+						if(!b){return b;}*/
 						if($('#versionFile').val()==''){
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
@@ -219,7 +254,11 @@
 				    }
 				}).submit();
 			});
-			$('#edit_reset_version').click(function(){$('#editVersionForm').form('clear');});
+			$('#edit_reset_version').click(function(){
+				$('#editVersionForm').form('clear');
+				newFeaturesEditer.html('');
+				enNewFeaturesEditer.html('');
+			});
 			checkEditControl();
 			$('#editVersionWin').window({onClose:function(){
 				$('.validatebox-tip').remove();
@@ -252,12 +291,12 @@
 				//$('#appLevel_edit').numberspinner('setValue',m.appLevel);
 				$('#editForm input[name=price]').val(m.price);
 				$('#status_edit').combobox('setValue',m.status);
-				$('#permissionDesc').val(m.permissionDesc);
-				$('#enPermissionDesc').val(m.enPermissionDesc);
-				$('#description').val(m.description);
-				$('#enDescription').val(m.enDescription);
-				$('#features').val(m.features);
-				$('#enFeatures').val(m.enFeatures);
+				descEditer.html(m.description);
+				enDescEditer.html(m.enDescription);
+				permissionEditer.html(m.permissionDesc);
+				enPermissionEditer.html(m.enPermissionDesc);
+				featuresEditer.html(m.features);
+				enFeaturesEditer.html(m.enFeatures);
 				$('#apkFileTxt').val(m.appFilePath);
 				$('#iconFileTxt').val(m.icon);
 				$('#bigIconFileTxt').val(m.bigIcon);
@@ -322,9 +361,7 @@
 		}
 		</script>
 		<style>
-		#editWin label {width: 115px;}
-		.easyui-tabs textarea{width: 572px;height: 82px;}
-		#editVersionWin textarea {width: 410px;height: 60px;}
+		#editWin label{padding-left: 5px;}
 		.progress { position:relative; width:400px; border: 1px solid #ddd; padding: 1px; border-radius: 3px; }
 		.bar { background-color: #B4F5B4; width:0%; height:20px; border-radius: 3px; }
 		.percent { position:absolute; display:inline-block; top:3px; left:48%; }
@@ -372,7 +409,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left" singleSelect="true"  
 			idField="id" url="${ctx}/admin/app/application/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="downCount" sortOrder="desc">
 				<thead>
@@ -399,80 +436,79 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:460px;padding:3px;overflow: hidden;" modal="true">
-			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:0px 20px;" enctype="multipart/form-data">
-				<div id="appTabs" class="easyui-tabs" style="width:590px;height:360px;overflow: hidden;">
+		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:500px;padding:3px;overflow: hidden;" modal="true">
+			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:5px;" enctype="multipart/form-data">
+				<div id="appTabs" class="easyui-tabs" style="width:620px;overflow: hidden;">
 					<div title="基本信息" style="padding:3px;">  
 						<table>
 							<tr>
 								<td><form:label	for="appName" path="appName"  cssClass="mustInput">应用名称：</form:label></td>
-								<td><form:input path="appName" id="appName_edit" cssClass="easyui-validatebox" required="true"/></td>
+								<td><form:input path="appName" id="appName_edit" cssClass="easyui-validatebox" required="true" cssStyle="width:200px;"/></td>
 								<td><form:label	for="enName" path="enName"  cssClass="mustInput">英文名称：</form:label></td>
-								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true"/></td>
+								<td><form:input path="enName" id="enName_edit" cssClass="easyui-validatebox" required="true" cssStyle="width:200px;"/></td>
 							</tr>
 							<tr>
 								<td><form:label	for="developer" path="developer"  cssClass="mustInput">开发者：</form:label></td>
-								<td><form:input path="developer" id="developer_edit" required="true" editable='false'/></td>
+								<td><form:input path="developer" id="developer_edit" required="true" editable='false' cssStyle="width:200px;"/></td>
 								<td><label	for="size" class="mustInput">文件大小：</label></td>
-								<td><input type="text" name="size" id="size_edit" class="easyui-validatebox" required="true"/></td>
+								<td><input type="text" name="size" id="size_edit" class="easyui-validatebox" required="true" style="width:200px;"/></td>
 							</tr>
 							<tr>
 								<td><label	for="version" class="mustInput">版本：</label></td>
-								<td><form:input path="version" required="true" validType="length[1,50]" class="easyui-validatebox"/></td>
+								<td><form:input path="version" required="true" validType="length[1,50]" class="easyui-validatebox" cssStyle="width:200px;"/></td>
 								<td><label for="catalogId" class="mustInput">分类：<label></td>
-								<td><form:input path="catalogId" id="catalogId_edit" required="true" editable='false'/></td>
+								<td><form:input path="catalogId" id="catalogId_edit" required="true" editable='false' cssStyle="width:200px;"/></td>
 							</tr>
 							<tr>
 							</tr>
 							<tr>
 								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 								<td>
-									<form:input path="status" id="status_edit" required="true" />
+									<form:input path="status" id="status_edit" required="true" cssStyle="width:200px;"/>
 								</td>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
-									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" />
+									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssStyle="width:200px;"/>
 								</td>
 							</tr>
 							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>
-								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" /></td>
+								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" cssStyle="width:200px;"/></td>
 								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
-								<td><form:input path="platform" id="platform_edit" required="true" /></td>
+								<td><form:input path="platform" id="platform_edit" required="true" cssStyle="width:200px;"/></td>
+							</tr>
+							<tr>
+								<td colspan="4">
+									<div id="tabs" class="easyui-tabs" style="width:585px;height:200px;overflow:hidden;">
+										<div id="desc_tabs" title="应用描述" border="false" class="easyui-tabs" style="width: 585px;">  
+											<div title="中文" style="overflow:hidden;padding:3px;">  
+												<textarea name="description" style="width: 575px;" maxLen="2000" msg="中文描述"></textarea>
+											</div>  
+											<div title="英文" style="overflow:hidden;padding:3px;">  
+												<textarea name="enDescription" style="width: 575px;" maxLen="2000" msg="英文描述"></textarea>
+											</div> 
+										</div>
+									 	<div id="permission_tabs" title="权限描述" border="false" class="easyui-tabs" style="width: 585px;"> 
+											<div title="中文" style="overflow:hidden;padding:3px;">
+												<textarea name="permissionDesc" style="width: 575px;" maxLen="2000" msg="中文权限描述"></textarea>
+											</div>  
+											<div title="英文" style="overflow:hidden;padding:3px;">  
+												<textarea name="enPermissionDesc" style="width: 575px;" maxLen="2000" msg="英文权限描述"></textarea>
+											</div> 
+										</div>
+										<div id="features_tabs" title="特性描述" border="false" class="easyui-tabs" style="width: 585px;">  
+											<div title="中文" style="overflow:hidden;padding:3px;"> 
+												<textarea name="features" style="width: 575px;" maxLen="2000" msg="中文特性描述"></textarea>
+											</div>  
+											<div title="英文" style="overflow:hidden;padding:3px;">  
+												<textarea name="enFeatures" style="width: 575px;" maxLen="2000" msg="英文特性描述"></textarea>
+											</div> 
+										</div>
+									</div> 
+								</td>
 							</tr>
 						</table>
-						<div id="tabs" class="easyui-tabs" style="width:580px;height:150px;">
-							<div id="desc_tabs" title="应用描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
-								<div title="中文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="description" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文描述"/>
-								</div>  
-								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enDescription" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文描述"/>
-								</div> 
-							</div>
-						 	<div id="permission_tabs" title="权限描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
-								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="permissionDesc" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文权限描述"/>
-								</div>  
-								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enPermissionDesc" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文文权限描述"/>
-								</div> 
-							</div>
-							<div id="features_tabs" title="特性描述" border="false" class="easyui-tabs" style="width:580px;height:100px;">  
-								<div title="中文" style="overflow:hidden;padding:3px;"> 
-									<form:textarea path="features" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文特性描述"/>
-								</div>  
-								<div title="英文" style="overflow:hidden;padding:3px;">  
-									<form:textarea path="enFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文特性描述"/>
-								</div> 
-							</div>
-						</div> 
 						<form:hidden path="id"/>
-						<!-- 
-						<form:hidden path="icon" />
-						<form:hidden path="images" />
-						<form:hidden path="appFilePath" />
-						 -->
 					</div>
 					<div title="附件" style="overflow:auto;padding:3px;display:none;"> 
 						<table>
@@ -482,7 +518,7 @@
 								<div class="fileinputs">  
 									<input type="file" class="file" name="apkFile" id="apkFile" fileType='apk' onchange="$('#apkFileTxt').val(this.value);"/>  
 									<div class="fakefile">  
-										<input type="text" value="" id="apkFileTxt"/><button>浏览</button>
+										<input type="text" value="" id="apkFileTxt" style="width:200px;"/><button>浏览</button>
 									</div>  
 								</div>
 								</td>
@@ -493,7 +529,7 @@
 								<div class="fileinputs">  
 									<input type="file" class="file" name="iconFile" id="iconFile" fileType="jpg|png" onchange="$('#iconFileTxt').val(this.value);"/>
 									<div class="fakefile">  
-										<input type="text" value="" id="iconFileTxt"/><button>浏览</button>
+										<input type="text" value="" id="iconFileTxt" style="width:200px;"/><button>浏览</button>
 									</div>  
 								</div>
 							</td>
@@ -504,7 +540,7 @@
 								<div class="fileinputs">  
 									<input type="file" class="file" name="bigIconFile" id="bigIconFile" fileType="jpg|png" onchange="$('#bigIconFileTxt').val(this.value);"/>
 									<div class="fakefile">  
-										<input type="text" value="" id="bigIconFileTxt"/><button>浏览</button>
+										<input type="text" value="" id="bigIconFileTxt" style="width:200px;"/><button>浏览</button>
 									</div>  
 								</div>
 							</td>
@@ -515,7 +551,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt1').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt1"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt1" style="width:200px;"/><button>浏览</button>
 								</div>  
 							</div>
 							</td>
@@ -526,7 +562,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt2').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt2"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt2" style="width:200px;"/><button>浏览</button>
 								</div>  
 							</div>
 							</td>
@@ -537,7 +573,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt3').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt3"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt3" style="width:200px;"/><button>浏览</button>
 								</div>  
 							</div>
 							</td>
@@ -548,7 +584,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt4').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt4"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt4" style="width:200px;"/><button>浏览</button>
 								</div>  
 							</div>
 							</td>
@@ -559,7 +595,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt5').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt5"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt5" style="width:200px;"/><button>浏览</button>
 								</div>  
 							</div>
 							</td>
@@ -568,15 +604,15 @@
 					</div>
 				</div>  
 			</form:form>
-			<div style="text-align: center; padding: 5px;">
+			<div style="text-align: center;">
 				<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_app"
 					iconCls="icon-save">保 存</a>
-				<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
+				<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset_app"
 					iconCls="icon-undo">重 置</a>
 			</div>
 		</div>
 		
-		<div id="editVersionWin" class="easyui-window" iconCls="icon-add" title="添加版本" closed="true" style="width:575px;height:300px;padding:5px;" modal="true">
+		<div id="editVersionWin" class="easyui-window" iconCls="icon-add" title="添加版本" closed="true" style="width:625px;height:350px;padding:5px;" modal="true">
 			<form id="editVersionForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
@@ -595,23 +631,22 @@
 						</td>
 				</tr>
 				<tr>
-						<td><label	for="version" class="mustInput">版本：</label></td>
-						<td><input type="text" name="version" id="version" required="true" validType="length[1,50]" class="easyui-validatebox"/></td>
+					<td><label	for="version" class="mustInput">版本：</label></td>
+					<td><input type="text" name="version" id="version" required="true" validType="length[1,50]" class="easyui-validatebox"/></td>
 					<td><label	for="status" class="mustInput">状态：</label></td>
 					<td>
-					
 						<input name="status" id="version_status_edit" required="true" editable='false' />
 					</td>
 				</tr>
 				<tr>
 					<td><label class="easyui-validatebox">新特性：</label></td>
 					<td colspan="3">
-						<div id="new_features_tabs" class="easyui-tabs" style="width:420px;height:100px;">
+						<div id="new_features_tabs" title="新特性" class="easyui-tabs" style="width:490px;height:170px;overflow:hidden;">
 							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="newFeatures" class="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文新特性描述"/>
+								<textarea name="newFeatures" style="width: 480px;"></textarea>
 							</div>  
 							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="enNewFeatures" class="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文新特性描述"/>
+								<textarea name="enNewFeatures" style="width: 480px;"></textarea>
 							</div> 
 						</div>
 					</td>

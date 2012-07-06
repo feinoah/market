@@ -50,6 +50,19 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			String [] array=ids.split(",");
+			for (String id : array) {
+				delete(Integer.parseInt(id.trim()));
+			}
+			return array.length;
+		}
+		return 0;
+	}
+
+	@Override
 	public BaseModule queryById(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");

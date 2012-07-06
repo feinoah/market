@@ -49,6 +49,15 @@ public class AppCatalogServiceImpl implements AppCatalogService{
 	}
 
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			return appCatalogDao.batchDelete(ids);
+		}
+		return 0;
+	}
+
+	@Override
 	public AppCatalog queryById(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");

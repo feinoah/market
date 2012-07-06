@@ -38,7 +38,6 @@ import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
-import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.service.app.AccountInfoService;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.AppCommentService;
@@ -134,8 +133,11 @@ public class PortalController{
 	 * @return
 	 */
 	@RequestMapping(value="account/login/check", method=RequestMethod.GET)
-	public @ResponseBody AccountInfo checkLogin(HttpServletRequest req){
-		return (AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+	public @ResponseBody PortalAccountInfo checkLogin(HttpServletRequest req){
+		PortalAccountInfo portalAccount=new PortalAccountInfo();
+		AccountInfo accountInfo=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+		BeanUtils.copyProperties(accountInfo, portalAccount);
+		return portalAccount;
 	}
 	
 	/**
@@ -205,9 +207,10 @@ public class PortalController{
 	 * portal/account/changepwd
 	 * <table>
 	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-2</td><td>session超时</td></tr>
-	 * 	<tr><td>-1</td><td>参数错误（密码、新密码不能为空）</td></tr>
-	 * 	<tr><td>0</td><td>密码错误</td></tr>
+	 * 	<tr><td>-4</td><td>session超时</td></tr>
+	 * <tr><td>-3</td><td>密码错误次数太多，半小时内限制修改</td></tr>
+	 * 	<tr><td>-2</td><td>参数错误（密码、新密码不能为空）</td></tr>
+	 * 	<tr><td>-1</td><td>原密码错误</td></tr>
 	 * 	<tr><td>1</td><td>成功</td></tr>
 	 * 	<tr><td>其它</td><td>后台异常</td></tr>
 	 * </table>
@@ -225,32 +228,36 @@ public class PortalController{
 		if (account==null) {
 			//session超时
 			log.warn("session time out...");
-			return -2;
+			return -4;
+		}
+		HttpSession session=req.getSession();
+		String email=account.getEmail();
+		Object obj=session.getAttribute(Constants.PASSWORD_ERROR_COUNT+email);
+		Integer errorCount= obj==null?0:(Integer)obj;
+		if (errorCount!=null && errorCount.intValue()>=Constants.MAX_PWD_ERROR_COUNT) {
+			log.error("Limit login:password error count("+errorCount+") >="+Constants.MAX_PWD_ERROR_COUNT);
+			return -3;
 		}
 		if (!StringUtils.hasText(oldPassword)||!StringUtils.hasText(newPassword)) {
 			log.error("oldPassword and newPassword can't not be empty...");
-			return -1;
+			return -2;
 		}
-		//加密
-		oldPassword=MD5Util.md5Hex(account.getEmail()+MD5Util.md5Hex(oldPassword)+MD5Util.DISTURBSTR);
-		if(!oldPassword.equalsIgnoreCase(account.getPassword())){
-			//密码错误
-			log.error("password is incorrect ....");
-			return 0;
+		int result=accountInfoService.updatePwd(account.getId(), oldPassword, newPassword);
+		if (result==-1) {//原始密码错误
+			session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);
+		} else {
+			session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, 0);
 		}
-		newPassword=MD5Util.md5Hex(account.getEmail()+MD5Util.md5Hex(newPassword)+MD5Util.DISTURBSTR);
-		return accountInfoService.updatePwd(account.getId(), newPassword);
+		return result;
 	}
 	
 	/**
 	 * 修改头像；请求参数 file<br>
 	 * portal/account/changephoto
 	 * <table>
-	 * 	<tr><th>返回值</th><th>描述</th></tr>
-	 * 	<tr><td>-2</td><td>session超时</td></tr>
-	 * 	<tr><td>-1</td><td>文件上传失败</td></tr>
-	 * 	<tr><td>1</td><td>成功</td></tr>
-	 * 	<tr><td>其它</td><td>后台异常</td></tr>
+	 * 	<tr><th>属性</th><th>描述</th></tr>
+	 * 	<tr><td>answerCode</td><td>-2：session超时；-1：文件上传失败；1：成功；其它：后台异常</td></tr>
+	 * 	<tr><td>photo</td><td>新头像路径</td></tr>
 	 * </table>
 	 * @param request
 	 * @return
@@ -258,12 +265,14 @@ public class PortalController{
 	 */
 	@RequestMapping(value="account/changephoto", method=RequestMethod.POST)
 	@ResponseBody
-	public int modifyPhoto(HttpServletRequest request) throws Exception{
+	public Map<String,Object> modifyPhoto(HttpServletRequest request) throws Exception{
 		AccountInfo account=(AccountInfo) request.getSession().getAttribute(Constants.PORTAL_USER);
+		Map<String,Object> resultMap=new HashMap<String, Object>();
 		if (account==null) {
 			//session超时
 			log.warn("session time out...");
-			return -2;
+			resultMap.put(Constants.ANSWER_CODE, -2);
+			return resultMap;
 		}
 		AccountInfo updateAccount=new AccountInfo();
 		updateAccount.setId(account.getId());
@@ -276,26 +285,35 @@ public class PortalController{
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	String fileName =  "user_"+account+"_"
+	        	String fileName =  "user_"+account.getId()+"_"
 	        	+System.nanoTime() + suffix;// 构建文件名称
 	        	File file = AttachmentUtil.getPhotoFile(fileName);
 					multipartFile.transferTo(file);
-					updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+fileName);
+				updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+fileName);
 			}
         } catch (IllegalStateException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	return -1;
+        	log.error("upload file error...", e);
+        	resultMap.put(Constants.ANSWER_CODE, -1);
+        	return resultMap;
         } catch (IOException e) {
-        	log.error("upload file error..."+e.getMessage());
-        	return -1;
+        	log.error("upload file error...", e);
+        	resultMap.put(Constants.ANSWER_CODE, -1);
+        	return resultMap;
         }
         accountInfoService.saveOrUpdate(updateAccount);
-		return 1;
+        resultMap.put("photo", updateAccount.getPhoto());
+        resultMap.put(Constants.ANSWER_CODE, 1);
+    	return resultMap;
 	}
 	
 	/**
 	 * 修改资料<br>
 	 * portal/account/modify
+	 * <table>
+	 * 	<tr><th>属性</th><th>描述</th></tr>
+	 * 	<tr><td>answerCode</td><td>-2：session超时；-1：未知错误；1：成功</td></tr>
+	 * 	<tr><td>portalUser</td><td>{@link PortalAccountInfo}</td></tr>
+	 * </table>
 	 * @param accountInfo
 	 * @param result
 	 * @param request
@@ -304,21 +322,31 @@ public class PortalController{
 	 */
 	@RequestMapping(value="account/modify", method=RequestMethod.POST)
 	@ResponseBody
-	public int modify(@ModelAttribute AccountInfo accountInfo, 
+	public Map<String,Object> modify(@ModelAttribute AccountInfo accountInfo, 
 			BindingResult result, HttpServletRequest request) throws Exception{
+		Map<String,Object> resultMap=new HashMap<String, Object>();
 		if (result.hasErrors()) {
 			log.debug(result.getAllErrors().toString());
-			return -1;
+			resultMap.put(Constants.ANSWER_CODE, -1);
+			return resultMap;
 		}
-		AccountInfo account=(AccountInfo) request.getSession().getAttribute(Constants.PORTAL_USER);
+		HttpSession session=request.getSession();
+		AccountInfo account=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
 		if (account==null) {
 			//session超时
 			log.warn("session time out...");
-			return -2;
+			resultMap.put(Constants.ANSWER_CODE, -2);
+			return resultMap;
 		}
 		accountInfo.setId(account.getId());
-		accountInfoService.saveOrUpdate(accountInfo);
-		return 1;
+		account=accountInfoService.saveOrUpdate(accountInfo);
+		PortalAccountInfo portalAccount=new PortalAccountInfo();
+		BeanUtils.copyProperties(account, portalAccount);
+		resultMap.put(Constants.PORTAL_USER, portalAccount);
+		// 更新session
+		session.setAttribute(Constants.PORTAL_USER, account);
+		resultMap.put(Constants.ANSWER_CODE, 1);
+		return resultMap;
 	}
 	
 	/**

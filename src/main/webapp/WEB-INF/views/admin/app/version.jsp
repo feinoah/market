@@ -5,9 +5,15 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.5" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/kindeditor-min.js"></script>
+		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/lang/zh_CN.js"></script>
 		<script type="text/javascript">
+		var newFeaturesEditer;
+		var enNewFeaturesEditer;
 		$(function(){
+			newFeaturesEditer=simpleEditer('newFeatures');
+			enNewFeaturesEditer=simpleEditer('enNewFeatures');
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/version');
 			$('#descTabs').tabs({onSelect:function(title){
 				$(this).tabs('getSelected').show()
@@ -36,6 +42,56 @@
 			$('.combobox-f').each(function(){
 				$(this).combobox('clear');
 			});
+			$('#edit_submit_vesion').click(function(){
+				$('#editForm').form({
+					onSubmit:function(){
+						tag=0;
+						newFeaturesEditer.sync();
+						enNewFeaturesEditer.sync();
+						// 避免 form validate bug
+						$('.combobox-f').each(function(){
+							$(this).val($(this).combobox('getText'));
+						});
+						var b=true;
+						if($('#apkFileTxt').val()==''&&$('#apkFile').val()==''){ //新增时
+							$.messager.alert('提示', "应用文件必须上传", 'info');
+							return false;
+						}
+						$('#editForm input[type=file]').each(function(){
+							b=chkFileType($(this).val(),$(this).attr('fileType'));
+							if(!b){
+								$.messager.alert('提示', '请上传 '+$(this).attr('fileType')+' 类型的文件', 'info');
+								b=false;
+								return false;
+							};
+						});
+						if(!b){return b;}
+						b=$(this).form('validate');
+						if(b){
+							$.messager.progress({title:'请稍后',msg:'提交中...'});
+						}
+						return b;
+				    }, 
+			    	success:function(data){
+			    		$.messager.progress('close');
+			    		if(data==-1){
+							$.messager.alert('错误', "编辑失败", 'error');
+			    		} else if(data>0){
+							$.messager.alert('成功', "编辑成功", 'info');
+				        	$('#editWin').window('close');
+				        	// update rows
+				        	$('#tt').datagrid('reload');
+						}else{
+			    			$.messager.alert('异常', "后台系统异常", 'error');
+						}
+				    }
+				}).submit();
+			});
+			$('#edit_reset_vesion').click(function(){
+				$('#editForm').form('clear');
+				newFeaturesEditer.html('');
+				enNewFeaturesEditer.html('');
+			});
 		});
 		function edit() {
 			var m = $('#tt').datagrid('getSelected');
@@ -51,8 +107,8 @@
 				$('#editForm input[name=version]').val(m.version);
 				$('#editForm input[name=size]').val(m.size);
 				$('#status_edit').combobox('setValue',m.status);
-				$('#newFeatures').val(m.newFeatures);
-				$('#enNewFeatures').val(m.enNewFeatures);
+				newFeaturesEditer.html(m.newFeatures);
+				enNewFeaturesEditer.html(m.enNewFeatures);
 				$('#id').val(m.id);
 				$('#appId').val(m.appId);
 				$('#apkFileTxt').val(m.filePath);
@@ -102,7 +158,7 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" <c:if test="${not empty param.appId}">iconCls="icon-back"</c:if><c:if test="${empty param.appId}">iconCls="icon-blank"</c:if> title="应用版本列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" <c:if test="${not empty param.appId}">iconCls="icon-back"</c:if><c:if test="${empty param.appId}">iconCls="icon-blank"</c:if> title="应用版本列表" align="left" singleSelect="true"  
 			idField="id" url="${ctx}/admin/app/version/query?appId=${param.appId}" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>
@@ -121,7 +177,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="应用版本" closed="true" style="width:680px;height:350px;padding:5px;" modal="true">
+		<div id="editWin" class="easyui-window" title="应用版本" closed="true" style="width:680px;height:380px;padding:5px;overflow:hidden;" modal="true">
 			<form:form modelAttribute="appVersionFile" id="editForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
 				<table>
 					<tr>
@@ -148,18 +204,18 @@
 						<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
 					<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
 					<td>
-						<form:input path="status" id="status_edit" cssClass="easyui-validatebox"/>
+						<form:input path="status" id="status_edit" cssClass="easyui-validatebox" cssStyle="width:180px;"/>
 					</td>
 				</tr>
 				<tr>
 					<td><form:label for="newFeatures" path="newFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
 					<td colspan="3">
-						<div id="descTabs" class="easyui-tabs" style="width:470px;height:120px;">  
-							<div title="中文" style="padding:3px;">  
-								<form:textarea path="newFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="中文新特性描述"/>
+						<div id="descTabs" class="easyui-tabs" style="width:480px;height:180px;overflow:hidden;">  
+							<div title="中文" style="padding:3px;overflow:hidden;">  
+								<form:textarea path="newFeatures" cssStyle="width:470px;"/>
 							</div>  
-							<div title="英文" style="overflow:auto;padding:3px;display:none;">  
-								<form:textarea path="enNewFeatures" cssClass="easyui-validatebox" validType="maxLength[500]" maxLen="500" msg="英文新特性描述"/>
+							<div title="英文" style="overflow:hidden;padding:3px;">  
+								<form:textarea path="enNewFeatures" cssStyle="width:470px;"/>
 							</div> 
 						</div>  
 					</td>
@@ -168,9 +224,9 @@
 				<form:hidden path="id"/>
 				<form:hidden path="appId"/>
 				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_vesion"
 						iconCls="icon-save">保 存</a>
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset"
+					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset_vesion"
 						iconCls="icon-undo">重 置</a>
 				</div>
 			</form:form>

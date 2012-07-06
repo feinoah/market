@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.app.Application;
@@ -76,6 +77,16 @@ public class AppCommentServiceImpl implements AppCommentService{
 		}
 		return appCommentDao.delete(id);
 	}
+	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	public int batchDelete(String ids) {
+		if (StringUtils.hasText(ids)) {
+			return appCommentDao.batchDelete(ids);
+		}
+		return 0;
+	}
+
 	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
 	@Override
 	public int deleteByAppId(int appId) {
