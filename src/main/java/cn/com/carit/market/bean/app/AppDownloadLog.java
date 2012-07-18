@@ -30,6 +30,8 @@ public class AppDownloadLog implements Serializable{
 	 * appId
 	 */
 	private Integer appId;
+	
+	private String version;
 
 	private String appName;
 	
@@ -57,6 +59,13 @@ public class AppDownloadLog implements Serializable{
 	}
 	public Integer getAppId() {
 		return this.appId;
+	}
+	
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
 	}
 	public void setDownloadTime(Date value) {
 		this.downloadTime = value;

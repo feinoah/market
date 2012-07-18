@@ -42,6 +42,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			appDownloadLog.setId(rs.getInt("id"));
 			appDownloadLog.setAccountId(rs.getInt("account_id"));
 			appDownloadLog.setAppId(rs.getInt("app_id"));
+			appDownloadLog.setVersion(rs.getString("version"));
 			appDownloadLog.setDownloadTime(rs.getTimestamp("download_time"));
 			appDownloadLog.setAppName(rs.getString("app_name"));
 			appDownloadLog.setEnName(rs.getString("en_name"));
@@ -52,8 +53,8 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 
 	@Override
 	public int add(final AppDownloadLog appDownloadLog) {
-		final String sql = "insert into t_app_download_log (" + "	account_id"
-				+ ", app_id" + ", download_time" + ") values (?, ?, now())";
+		final String sql = "insert into t_app_download_log (account_id"
+				+ ", app_id, version, download_time" + ") values (?, ?, ?, now())";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -62,8 +63,10 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 					throws SQLException {
 				PreparedStatement ps = con.prepareStatement(sql,
 						Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(1, appDownloadLog.getAccountId());
-				ps.setInt(2, appDownloadLog.getAppId());
+				int i=1;
+				ps.setInt(i++, appDownloadLog.getAccountId());
+				ps.setInt(i++, appDownloadLog.getAppId());
+				ps.setString(i++, appDownloadLog.getVersion());
 				return ps;
 			}
 		}, gkHolder);
@@ -87,7 +90,7 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 	@Override
 	public int update(AppDownloadLog appDownloadLog) {
 		StringBuilder sql = new StringBuilder(
-				"update t_app_download_log set update_time=now()");
+				"update t_app_download_log set 1=1");
 		List<Object> args = new ArrayList<Object>();
 		sql.append(" where id=?");
 		if (appDownloadLog.getAccountId() != null) {
@@ -154,6 +157,8 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
 					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by a.download_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
@@ -256,7 +261,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 				PortalAppDownloadLog log=new PortalAppDownloadLog();
 				log.setAccountId(rs.getInt("account_id"));
 				log.setAppId(rs.getInt("app_id"));
+				log.setVersion(rs.getString("version"));
 				log.setAppName(rs.getString("app_name"));
+				log.setDownloadTime(rs.getTimestamp("download_time"));
 				return log;
 			}
 		}));

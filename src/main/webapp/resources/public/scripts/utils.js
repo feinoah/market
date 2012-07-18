@@ -1,6 +1,7 @@
-var app={name:'/market'};
+var app={name:''};
 var _loadingICO;
 var account={};
+var catalogs={};
 var arrayStar = new Array(
 		app.name+"/resources/public/images/comment_star0.png",
 		app.name+"/resources/public/images/comment_star1.png",
@@ -14,46 +15,24 @@ var arrayStar = new Array(
 		app.name+"/resources/public/images/comment_star9.png",
 		app.name+"/resources/public/images/comment_star10.png");
 $(function() {
-	chkLogin();
 	_loadingICO=app.name+'/resources/public/images/loading.gif';
-	$('body').append("<script src='"+app.name+"/resources/public/scripts/XYTipsWindow-3.0.js'><\/script>").click(function(){
-		Util.Dialog.remove('Tip_tips');
-	});
+	$('body').append(unescape("%3Cscript src='"+app.name+"/resources/public/scripts/XYTipsWindow-3.0.js' type='text/javascript'%3E%3C/script%3E"));
 	$('#reg').click(function(){
 		regWin();
 	});
 	$('#login').click(function(){
 		loginWin();
 	});
-	$('#logout').click(function(){
-		$.getJSON(app.name+'/portal/logout', function(data) {
-			if (data==1) {
-				$('#loginBefor').show();
-				$('#lolginAfter').hide();
-				$('#welcome').empty().attr('userId','');
-			}
-		});
-	});
-	$('#search').click(function(){
-		var key=$('#search_input').val();
-		if(key){
-			window.open(app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
-		} else {
-			tips('search_input','请输入关键字','bottom');
+	$.ajaxSettings.async=false;
+	$.getJSON(app.name+'/portal/catalog/all?local=cn', function(data) {
+		if (data) {
+			catalogs=data;
 		}
 	});
-	$('#search_input').keydown(function(e){
-		if(e.which==13){
-			var key=$('#search_input').val();
-			if(key){
-				window.open(app.name+"/html/searchApp.html?inputStr=" + key);//传入参数
-			} else {
-				tips('search_input','请输入关键字','bottom');
-			}
-		}
-	}).click(function(){
-		Util.Dialog.remove('Tip_tips');
-	}).change(function(){Util.Dialog.remove('Tip_tips');});
+	$.ajaxSettings.async=true;
+	$('#indexPage').css('cursor','pointer').click(function(){
+		location.href=app.name+'/';
+	});
 });
 
 
@@ -64,7 +43,7 @@ $(function() {
  */
 function pagination(page,total){
 	var html='';
-	if(page!=1){//当前页不是第一页时生成首页和上一页   
+	if(page!=1&&total>10){//当前页不是第一页时生成首页和上一页   
 		html+='<span onclick="doPage(1)">首页</span>'
 			+'<span onclick="doPage('+(page-1)+')">« 上一页</span>';
 	}
@@ -113,7 +92,7 @@ function pagination(page,total){
 			html+='</label>';
 		}
 	}
-	if(page!=total){//当前页不是最后页时生成下一页 末页
+	if(total>10&&page!=total){//当前页不是最后页时生成下一页 末页
 		html+='<span onclick="doPage('+(page+1)+')">下一页 »</span>'
 			+'<span onclick="doPage('+total+')">末页</span>'
 	}
@@ -133,101 +112,7 @@ var request ={
 		return ((uri.match(re))?(uri.match(re)[0].substr(val.length+1)):null);
 	}
 };
-var chkLogin=function(){
-	$.getJSON(app.name+'/portal/account/login/check', function(data) {
-		if (data) {
-			account=data;
-			$('#loginBefor').hide();
-			$('#lolginAfter').show();
-			$('#welcome').html('欢迎您：<a href="javascript:accountWin()" title="进入用户中心">'+account.nickName+'</a>&nbsp;<a href="javascript:chPwdWin()">修改密码</a>');
-		}
-	});
-};
 
-var login=function(){
-	$('#loginForm').form({
-		url:app.name+'/portal/login',
-		dataType : 'text',  
-		onSubmit:function(){
-			var tag=true;
-			$('#loginForm span[id$="Tip"]').each(function(){
-				if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
-					tag=false;
-					$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
-					return false;
-				}
-			});
-			return tag;
-		}, 
-		success:function(data){
-			if(data){
-				var map=$.parseJSON(data);
-				if(map){
-					if(map.answerCode==-3){
-						tips('password','密码错误次数超过限制，半小时内限制登录','bottom');
-					}
-					if(map.answerCode==-2){
-						tips('email','账号被锁定','bottom');
-					}
-					if(map.answerCode==-1){
-						tips('email','账号不存在','bottom');
-					}
-					if(map.answerCode==0){
-						tips('password','密码错误','bottom');
-					}
-					if(map.answerCode==1){
-						account=map.portalUser;
-						$('#loginBefor').hide();
-						$('#lolginAfter').show();
-						$('#welcome').html('欢迎您：<a href="javascript:accountWin()" title="进入用户中心">'+account.nickName+'</a>&nbsp;<a href="javascript:chPwdWin()">修改密码</a>');
-						Util.Dialog.remove('loginWin');
-					}
-				}else{
-					tips('button','后台系统异','bottom');
-				}
-			}else{
-				tips('button','后台系统异','bottom');
-			}
-		}
-	}).submit();
-};
-var reg=function(){
-	$('#regForm').form({
-		url:app.name+'/portal/register',
-		dataType : 'text',  
-		onSubmit:function(){
-			var tag=true;
-			$('#regForm span[id$="Tip"]').each(function(){
-				if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
-					tag=false;
-					$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
-					return false;
-				}
-			});
-			return tag;
-	    }, 
-    	success:function(data){
-			if(data){
-				var map=$.parseJSON(data);
-				if(map){
-					if(map.answerCode==-2){
-						tips('button','未知错误','bottom');
-					}
-					if(map.answerCode==1){
-						//tips('button','注册成功','bottom');
-						account=map.portalUser;
-						Util.Dialog.remove('regWin');
-						chkLogin();//切换登录状态
-					}
-				}else{
-					tips('button','后台系统异','bottom');
-				}
-			}else{
-				tips('button','后台系统异','bottom');
-			}
-	    }
-	}).submit();
-};
 var regWin=function(){
 	Util.Dialog({
 		boxID : 'regWin',
@@ -251,6 +136,7 @@ var loginWin=function(){
 	return false;
 };
 var accountWin=function(){
+	Util.Dialog.remove("profile_tips");
 	Util.Dialog({
 		boxID : 'accountWin',
 		title : '用户中心',
@@ -262,6 +148,7 @@ var accountWin=function(){
 	return false;
 };
 var chPwdWin=function(){
+	Util.Dialog.remove("profile_tips");
 	Util.Dialog({
 		boxID : 'chPwdWin',
 		title : '修改密码',
@@ -271,6 +158,108 @@ var chPwdWin=function(){
 		height : 235
 	});
 	return false;
+};
+
+var profileTip=function(){
+	Util.Dialog.remove("message_tips");
+	Util.Dialog({
+		type: 'tips',
+		boxID: 'profile_tips',
+		referID: 'thumb_photo',
+		width: 250,
+		height: 106,
+		border: { opacity: '0', radius: '3'},
+		closestyle: 'gray',
+		arrow: 'bottom',
+		fixed: false,
+		time: 5000,
+		arrowset: {val: '130px'},
+		content: 'text:<div id="profile"><img src="'+app.name+'/'+account.photo+'" /><div><span>'+account.nickName+'</span><span id="profile_email">'+account.email+'</span><span class="operater" onclick="accountWin();">个人资料</span><span class="operater" onclick="chPwdWin();">修改密码</span></div></div>',
+		position: { 
+			left: '-190px', 
+			top: '-50px',
+			lin: true,
+			tin: false
+		}
+	});
+};
+var msgId=0;
+function getMsg(){
+	var content='';
+	$.ajaxSettings.async=false;
+	$.getJSON(app.name+'/portal/app/user/unread/sysmessage/'+account.id+'?rows=1', function(data) {
+		if(data.rows){
+			if(data.rows[0].catalog==1){
+				var arr=data.rows[0].content.split('|');
+				content+='<div class="message_tips"><p class="title">'+data.rows[0].title+'</p><p>您下载的 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> 已更新至<b>'+arr[3]+'</b>，请 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">更新</a> 您的应用！</p>';
+			} else {
+				content+='<div class="message_tips"><p class="title">'+data.rows[0].title+'</p><p>'+data.rows[0].content+'</p>';
+			}
+			msgId=data.rows[0].id;
+		}
+		if(data.totalPage>1){
+			content+='<p style="text-align:right;"><label onclick="nextMsg()">下一条</label>';
+		} else {
+			$('#message').css({
+				'background':'url('+app.name+'/resources/public/images/h_bedf916a.png)',
+				'background-position':'-24px -270px'
+			});
+			content+='<p style="text-align:right;">';
+		}
+		content+='<label onclick="allMsgWin()">全部消息>></label></p></div>';
+		$.getJSON(app.name+'/portal/app/user/read/sysmessage/'+msgId, function(data) {
+			if(data>0){
+				msgId=0;
+				$('#message').html($('#message').html()-1);
+			}
+		});
+	});
+	$.ajaxSettings.async=true;
+	return content;
+}
+function nextMsg(){
+	Util.Dialog.remove("message_tips");
+	messageTip();
+}
+var allMsgWin=function(){
+	Util.Dialog.remove("message_tips");
+	Util.Dialog({
+		boxID : 'all_system_msg',
+		title : '系统消息',
+		content : 'url:get?'+app.name+'/html/allMsg.html',
+		showbg: true,
+		width : 600,
+		height : 400
+	});
+	return false;
+};
+var messageTip=function(){
+	var msg='<div id="msgContent">';
+	if($('#message').html()>0){
+		msg=getMsg();
+	} else {
+		msg='<div class="message_tips"><p>没有未读消息...</p><p style="text-align:right;"><label onclick="allMsgWin()">全部消息>></label></p></div>';
+	}
+	Util.Dialog({
+		type: 'tips',
+		boxID: 'message_tips',
+		referID: 'message',
+		width: 350,
+		//height: 180,
+		border: { opacity: '0', radius: '3'},
+		closestyle: 'gray',
+		arrow: 'bottom',
+		fixed: false,
+		time: 20000,
+		arrowset: {val: '252px'},
+		content: 'text:'+msg+'</div>',
+		position: { 
+			left: '-248px', 
+			top: '-50px',
+			lin: true,
+			tin: false
+		}
+	});
 };
 var tips=function(ref,txt,_arrow){
 	Util.Dialog({
@@ -283,6 +272,7 @@ var tips=function(ref,txt,_arrow){
 		closestyle: 'gray',
 		arrow: _arrow,
 		fixed: false,
+		time: 3000,
 		arrowset: {val: '10px'},
 		content: 'text:'+txt,
 		position: { 

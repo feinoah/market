@@ -32,6 +32,8 @@ public class PortalAccountInfo {
 	 * photo
 	 */
 	private String photo;
+	/**缩略头像路径*/
+	private String thumbPhoto;
 	/**
 	 * balance
 	 */
@@ -105,6 +107,12 @@ public class PortalAccountInfo {
 	}
 	public String getPhoto() {
 		return this.photo;
+	}
+	public String getThumbPhoto() {
+		return thumbPhoto;
+	}
+	public void setThumbPhoto(String thumbPhoto) {
+		this.thumbPhoto = thumbPhoto;
 	}
 	public void setBalance(Double value) {
 		this.balance = value;

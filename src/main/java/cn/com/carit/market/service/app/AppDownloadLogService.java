@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
+import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
 
@@ -66,4 +67,13 @@ public interface AppDownloadLogService {
 	 * @return map 包含两个key（categories和data），分表代表X轴数据和Y轴数据
 	 */
 	Map<String, Object> appOneMonthDownTrend(int appId);
+	
+	/**
+	 * 查看用户下载应用记录
+	 * @param accountId
+	 * @param local
+	 * @param dgm
+	 * @return
+	 */
+	JsonPage<PortalAppDownloadLog> queryUserDownApps(int accountId, String local, DataGridModel dgm);
 }

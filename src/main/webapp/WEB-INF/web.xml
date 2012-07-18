@@ -26,7 +26,7 @@
 	<!-- Context Configuration locations for Spring XML files -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/resources/spring/*.xml</param-value>
+		<param-value>classpath:resources/spring/spring.xml</param-value>
 	</context-param>
 
 	<!-- Handles all requests into the application -->
@@ -36,7 +36,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				/WEB-INF/classes/resources/spring/applicationContext-controller.xml
+				classpath:resources/spring/spring-controller.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -50,7 +50,7 @@
 	<!-- log4j配置信息 -->
 	<context-param>
 		<param-name>log4jConfigLocation</param-name>
-		<param-value>/WEB-INF/classes/resources/log4j.properties</param-value>
+		<param-value>classpath:resources/log4j.properties</param-value>
 	</context-param>
 	<context-param>
 		<param-name>log4jRefreshInterval</param-name>

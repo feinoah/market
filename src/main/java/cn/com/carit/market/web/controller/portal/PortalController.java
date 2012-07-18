@@ -2,12 +2,15 @@ package cn.com.carit.market.web.controller.portal;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
@@ -29,15 +32,19 @@ import cn.com.carit.market.bean.app.AppComment;
 import cn.com.carit.market.bean.app.AppDeveloper;
 import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.app.SystemMessage;
 import cn.com.carit.market.bean.portal.PortalAccountInfo;
 import cn.com.carit.market.bean.portal.PortalAppCatalog;
 import cn.com.carit.market.bean.portal.PortalAppComment;
+import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.bean.portal.PortalAppVersionFile;
 import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
+import cn.com.carit.market.common.utils.ImageUtils;
 import cn.com.carit.market.common.utils.JsonPage;
+import cn.com.carit.market.common.utils.SphinxUtil;
 import cn.com.carit.market.service.app.AccountInfoService;
 import cn.com.carit.market.service.app.AppCatalogService;
 import cn.com.carit.market.service.app.AppCommentService;
@@ -45,6 +52,7 @@ import cn.com.carit.market.service.app.AppDeveloperService;
 import cn.com.carit.market.service.app.AppDownloadLogService;
 import cn.com.carit.market.service.app.AppVersionFileService;
 import cn.com.carit.market.service.app.ApplicationService;
+import cn.com.carit.market.service.app.SystemMessageService;
 
 @Controller
 @RequestMapping(value="portal")
@@ -71,6 +79,9 @@ public class PortalController{
 	@Resource
 	private AppDeveloperService appDeveloperService;
 	
+	@Resource
+	private SystemMessageService systemMessageService;
+	
 	/**
 	 * 注册帐号<br>
 	 * portal/register
@@ -87,7 +98,7 @@ public class PortalController{
 	@RequestMapping(value="register", method=RequestMethod.POST)
 	@ResponseBody
 	public Map<String, Integer> register(@ModelAttribute AccountInfo accountInfo
-			,BindingResult result, HttpServletRequest req) throws Exception{
+			,BindingResult result, HttpServletRequest req, HttpServletResponse res) throws Exception{
 		Map<String, Integer> map=new HashMap<String, Integer>();
 		if (result.hasErrors()) {
 			log.error(result.hasErrors());
@@ -110,6 +121,11 @@ public class PortalController{
 			return map;
 		}
 		accountInfoService.saveOrUpdate(accountInfo);
+//		cookie.name.user
+		Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), URLEncoder.encode(accountInfo.getNickName(), Constants.CHARACTER_ENCODING_UTF8));
+        cookie.setMaxAge(-1);   
+        cookie.setPath("/");   
+        res.addCookie(cookie);  
 		map.put(Constants.ANSWER_CODE, 1);
 		map.put("accountId", accountInfo.getId());
 		req.getSession().setAttribute(Constants.PORTAL_USER, accountInfo);
@@ -127,16 +143,35 @@ public class PortalController{
 	}
 	
 	/**
+	 * portal/check/nickName?nickName={nickName}<br>
+	 * 检测帐号是否已经注册，返回1表示该邮箱已经被注册，0表示未注册
+	 * @param email
+	 * @return
+	 */
+	@RequestMapping(value="check/nickName", method=RequestMethod.GET)
+	public @ResponseBody int checkNickName(@RequestParam String nickName){
+		return accountInfoService.checkNickName(nickName);
+	}
+	
+	/**
 	 * portal/account/login/check<br>
 	 * 检测登录状态
 	 * @param req
 	 * @return
 	 */
 	@RequestMapping(value="account/login/check", method=RequestMethod.GET)
-	public @ResponseBody PortalAccountInfo checkLogin(HttpServletRequest req){
-		PortalAccountInfo portalAccount=new PortalAccountInfo();
+	public @ResponseBody PortalAccountInfo checkLogin(HttpServletRequest req, HttpServletResponse res){
 		AccountInfo accountInfo=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
-		BeanUtils.copyProperties(accountInfo, portalAccount);
+		PortalAccountInfo portalAccount=null;
+		if (accountInfo!=null) {
+			portalAccount=new PortalAccountInfo();
+			BeanUtils.copyProperties(accountInfo, portalAccount);
+		} else {
+			Cookie cookie = new Cookie((String) SphinxUtil.getValue("cookie.name.user"), "");
+			cookie.setPath("/");   
+			cookie.setMaxAge(0); // delete the cookie.   
+			res.addCookie(cookie);
+		}
 		return portalAccount;
 	}
 	
@@ -150,6 +185,7 @@ public class PortalController{
 	 * @param email
 	 * @param password
 	 * @param req
+	 * @param res
 	 * @return
 	 * @throws Exception
 	 */
@@ -157,7 +193,7 @@ public class PortalController{
 	@ResponseBody
 	public Map<String,Object> login(@RequestParam("email") String email
 			, @RequestParam("password") String password
-			, HttpServletRequest req) throws Exception{
+			, HttpServletRequest req, HttpServletResponse res) throws Exception{
 		HttpSession session=req.getSession();
 		Object obj=session.getAttribute(Constants.PASSWORD_ERROR_COUNT+email);
 		Integer errorCount= obj==null?0:(Integer)obj;
@@ -180,6 +216,11 @@ public class PortalController{
 				session.setAttribute(Constants.PORTAL_USER, account);
 				BeanUtils.copyProperties(account, portalAccount);
 				result.put(Constants.PORTAL_USER, portalAccount);
+//				cookie.name.user
+				Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), URLEncoder.encode(account.getNickName(), Constants.CHARACTER_ENCODING_UTF8));
+	            cookie.setMaxAge(-1);   
+	            cookie.setPath("/");   
+	            res.addCookie(cookie);  
 			}
 			if (answerCode.intValue()==0) {// 密码错误
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);
@@ -194,11 +235,17 @@ public class PortalController{
 	 */
 	@RequestMapping(value="logout", method=RequestMethod.GET)
 	@ResponseBody
-	public int logout(HttpServletRequest req){
+	public int logout(HttpServletRequest req, HttpServletResponse res){
 		HttpSession session=req.getSession();
 		AccountInfo account=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
-		session.setAttribute(Constants.PORTAL_USER, null);
-		session.setAttribute(Constants.USER_ALL_MOUDLE+account.getEmail(), 0);
+		if (account!=null) {
+			session.setAttribute(Constants.PORTAL_USER, null);
+			session.setAttribute(Constants.USER_ALL_MOUDLE+account.getEmail(), 0);
+		}
+		Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), "");
+		cookie.setMaxAge(0); // delete the cookie.   
+        cookie.setPath("/");   
+        res.addCookie(cookie); 
 		return 1;
 	}
 	
@@ -258,6 +305,7 @@ public class PortalController{
 	 * 	<tr><th>属性</th><th>描述</th></tr>
 	 * 	<tr><td>answerCode</td><td>-2：session超时；-1：文件上传失败；1：成功；其它：后台异常</td></tr>
 	 * 	<tr><td>photo</td><td>新头像路径</td></tr>
+	 * 	<tr><td>thumbPhoto</td><td>缩略头像路径</td></tr>
 	 * </table>
 	 * @param request
 	 * @return
@@ -285,23 +333,34 @@ public class PortalController{
 	        	String suffix = multipartFile.getOriginalFilename().substring(
 	        			multipartFile.getOriginalFilename().lastIndexOf("."));
 	        	// 随机文件名
-	        	String fileName =  "user_"+account.getId()+"_"
-	        	+System.nanoTime() + suffix;// 构建文件名称
+	        	String prefix =  "user_"+account.getId()+"_"+System.nanoTime();// 构建文件名称
+	        	String fileName=prefix+suffix;
 	        	File file = AttachmentUtil.getPhotoFile(fileName);
-					multipartFile.transferTo(file);
+				multipartFile.transferTo(file);
 				updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+fileName);
+				// 生成缩略图
+				ImageUtils imgUtils=new ImageUtils(file);
+				imgUtils.resize(24, 24);
+				updateAccount.setThumbPhoto(Constants.BASE_PATH_PHOTOS+prefix+"_thumb"+suffix);
+				// 更新session
+				account.setPhoto(updateAccount.getPhoto());
+				account.setThumbPhoto(updateAccount.getThumbPhoto());
 			}
         } catch (IllegalStateException e) {
-        	log.error("upload file error...", e);
+        	log.error("upload file IllegalStateException...", e);
         	resultMap.put(Constants.ANSWER_CODE, -1);
         	return resultMap;
         } catch (IOException e) {
-        	log.error("upload file error...", e);
+        	log.error("upload file IOException...", e);
         	resultMap.put(Constants.ANSWER_CODE, -1);
         	return resultMap;
-        }
+        } catch (Exception e) {
+        	log.error("upload file Exception...", e);
+        	resultMap.put(Constants.ANSWER_CODE, -1);
+		}
         accountInfoService.saveOrUpdate(updateAccount);
         resultMap.put("photo", updateAccount.getPhoto());
+        resultMap.put("thumbPhoto", updateAccount.getThumbPhoto());
         resultMap.put(Constants.ANSWER_CODE, 1);
     	return resultMap;
 	}
@@ -495,6 +554,7 @@ public class PortalController{
 		AppDownloadLog downlog=new AppDownloadLog();
 		downlog.setAccountId(account.getId());
 		downlog.setAppId(appId);
+		downlog.setVersion(app.getVersion());
 		appDownloadLogService.saveOrUpdate(downlog);
 		return "redirect:/"+fileName;
 	}
@@ -646,4 +706,98 @@ public class PortalController{
 		return appDeveloperService.queryByExemple(developer, dgm);
 	}
 	
+	/**
+	 * 用户下载应用记录</br>
+	 * portal/app/user/down/{accountId}?local=cn|en&page=1&row=
+	 * @param accountId
+	 * @param local
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="app/user/down/{accountId}", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<PortalAppDownloadLog> queryUserDownApps(@PathVariable int accountId
+			, @RequestParam(required=false) String local, DataGridModel dgm){
+		return appDownloadLogService.queryUserDownApps(accountId, local, dgm);
+	}
+	
+	/**
+	 * 获取未读消息数目
+	 * <pre>
+	 * portal/app/user/unread/sysmessage/count/{accountId}
+	 * </pre>
+	 * @return
+	 */
+	@RequestMapping(value="app/user/unread/sysmessage/count/{accountId}")
+	public @ResponseBody int queryUnreadSystemMessageCountByAccount(@PathVariable int accountId){
+		return systemMessageService.queryUnreadCountByAccountId(accountId);
+	}
+	
+	/**
+	 * 获取未读消息
+	 * <pre>
+	 * portal/app/user/unread/sysmessage/{accountId}
+	 * </pre>
+	 * @param req
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="app/user/unread/sysmessage/{accountId}", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<SystemMessage> queryUnreadSystemMessageByAccount(@PathVariable int accountId, DataGridModel dgm){
+		return systemMessageService.queryUnreadByAccount(accountId, dgm);
+	}
+	
+	/**
+	 * 获取所有消息
+	 * <pre>
+	 * portal/app/user/sysmessage/{accountId}
+	 * </pre>
+	 * @param req
+	 * @param dgm
+	 * @return
+	 */
+	@RequestMapping(value="app/user/sysmessage/{accountId}", method=RequestMethod.GET)
+	public @ResponseBody JsonPage<SystemMessage> querySystemMessageByAccount(@PathVariable int accountId, DataGridModel dgm){
+		SystemMessage systemMessage=new SystemMessage();
+		systemMessage.setAccountId(accountId);
+		return systemMessageService.queryByExemple(systemMessage, dgm);
+	}
+	
+	/**
+	 * 将消息置为已读
+	 * <pre>portal/app/user/read/sysmessage/{id}</pre>
+	 * @param id
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="app/user/read/sysmessage/{id}", method=RequestMethod.GET)
+	public @ResponseBody int markSystemMessageRead(@PathVariable int id,HttpServletRequest req){
+		AccountInfo account=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+		if (account==null) {
+			//session超时
+			log.warn("session time out...");
+			return 0;
+		}
+		SystemMessage systemMessage=new SystemMessage();
+		systemMessage.setStatus(SystemMessage.STATUS_READ);
+		systemMessage.setId(id);
+		return systemMessageService.saveOrUpdate(systemMessage);
+	}
+	
+	/**
+	 * 将消息置为已读
+	 * <pre>portal/app/user/delete/sysmessage/{id}</pre>
+	 * @param id
+	 * @param req
+	 * @return
+	 */
+	@RequestMapping(value="app/user/delete/sysmessage/{id}", method=RequestMethod.GET)
+	public @ResponseBody int deleteSystemMessage(@PathVariable int id,HttpServletRequest req){
+		AccountInfo account=(AccountInfo) req.getSession().getAttribute(Constants.PORTAL_USER);
+		if (account==null) {
+			//session超时
+			log.warn("session time out...");
+			return 0;
+		}
+		return systemMessageService.delete(id);
+	}
 }

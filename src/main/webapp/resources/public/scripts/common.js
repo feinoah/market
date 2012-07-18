@@ -1,4 +1,4 @@
-var app={name:'/market'};
+var app={name:''};
 var winTitle;
 var fieldList;
 var statusList;
@@ -85,10 +85,13 @@ $(function (){
 			iconCls:'icon-remove',
 			handler:del
 		} ],
-		onDblClickRow:edit,
+		onDblClickRow:function(rowIndex){
+			edit(rowIndex);
+		},
 		onLoadSuccess:function(){
 			// clear selected
 			$('#tt').datagrid('clearSelections');
+			$('.datagrid-header-check input[type=checkbox]').attr('checked',false);
 		}
 	});
 	$("#submit").bind("click", function(){
@@ -163,12 +166,12 @@ $(function (){
 });
 
 function del(){
-	var m = $('#tt').datagrid('getSelected');
-	if (m) {
+	var ids=getIds();
+	if (ids) {
 		$.messager.confirm('警告','删除同时会删除关联信息，您确认要删除吗?',function(data) {
 			if (data) {
 				var _url=$('#tt').attr('url');
-				_url=_url.substring(0,_url.indexOf('query'))+'delete?id='+m.id;
+				_url=_url.substring(0,_url.indexOf('query'))+'delete?id=0&ids='+ids;
 				$.messager.progress({title:'请稍后',msg:'提交中...'});
 				$.ajax({
 					url : _url,
@@ -198,6 +201,14 @@ function del(){
 			msg : '请先选择要删除的记录。'
 		});
 	}
+}
+
+function getIds(){
+	var ids=[];
+	$.each($('#tt').datagrid("getSelections"),function(i,row){
+		ids.push(row.id);
+	});
+	return ids.join();
 }
 var idCard = function(value) {
 	if (value.length == 18 && 18 != value.length)

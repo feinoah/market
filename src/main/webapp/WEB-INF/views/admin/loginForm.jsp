@@ -30,9 +30,9 @@
 		    		if(data==-3){
 						$.messager.alert('错误', '密码错误次数太多，半小时内限制登录', 'error');
 		    		}else if(data==-2){
-		    			$.messager.alert('提示', '账号已停用！', 'info');
+		    			$.messager.alert('提示', '用户不存在！', 'info');
 		    		}else if(data==-1){
-						$.messager.alert('错误', '用户不存在！', 'error');
+						$.messager.alert('错误', '账号已停用！', 'error');
 					}else if(data==0){
 		    			$.messager.alert('提示', '密码错误！', 'info');
 					}else if(data==1){

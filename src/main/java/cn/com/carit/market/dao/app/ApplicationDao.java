@@ -2,6 +2,7 @@ package cn.com.carit.market.dao.app;
 import java.util.List;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.app.UpdateNotice;
 import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -122,4 +123,10 @@ public interface ApplicationDao {
 	 * @return
 	 */
 	JsonPage<PortalApplication> queryUserDownReferencedApps(String local, int appId, DataGridModel dgm);
+	
+	/**
+	 * 获取用户下载后更新过的应用信息，给用户发送更新消息时使用
+	 * @return
+	 */
+	List<UpdateNotice> queryUpdatedApplication();
 }

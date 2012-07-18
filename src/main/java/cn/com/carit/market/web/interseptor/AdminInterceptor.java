@@ -30,10 +30,11 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 		log.debug("Request for: "+uri);
 		String hostPath="http://"+request.getLocalName();
 		String contexPath="/market";
+		int port=request.getLocalPort();
 		if (uri.indexOf(contexPath)!=-1) { // 开发环境
 			uri=uri.replaceFirst(contexPath, "");
-			hostPath+=":"+request.getLocalPort()+contexPath;
-		} 
+			hostPath+=":"+port+contexPath;
+		}
 		// 初始化附件配置
 		AttachmentUtil.init(hostPath);
 		SphinxUtil.init();
@@ -50,6 +51,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 				return authorized(uri, request, response);
 			}
 		}
+		log.debug("none authorized uri...");
 		return super.preHandle(request, response, handler);
 	}
 

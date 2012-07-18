@@ -109,4 +109,15 @@ public interface AccountInfoService {
 	 * @return
 	 */
 	int checkAccount(String email);
+	
+	/**
+	 * 检查昵称
+	 * @param nickName
+	 * @return
+	 */
+	int checkNickName(String nickName);
+	
+	int batchLockAccount(String ids);
+	
+	int batchUnLockAccount(String ids);
 }

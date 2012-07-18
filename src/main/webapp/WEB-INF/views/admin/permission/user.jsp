@@ -7,7 +7,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=v=v=1.6" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -60,7 +60,12 @@
 				$(this).combobox('clear');
 			});
 		});
-		function edit() {
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
@@ -157,11 +162,12 @@
 					class="easyui-linkbutton" id="reset" iconCls="icon-undo">重 置</a>
 			</div>
 		</form:form>
-		<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" nowrap="false" singleSelect="true" 
+		<table id="tt" style="height: auto" iconCls="icon-blank" title="用户列表" nowrap="false"  
 			idField="id" url="${ctx}/admin/permission/user/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10, 30 ]" sortName="updateTime" sortOrder="desc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="email" width="150" align="center">邮箱</th>
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>

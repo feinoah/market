@@ -121,7 +121,10 @@ public class AccountInfoController {
 	 */
 	@RequestMapping(value="lock", method=RequestMethod.GET)
 	@ResponseBody
-	public int lock(@RequestParam int id){
+	public int lock(@RequestParam(required=false) int id, @RequestParam(required=false)String ids){
+		if (StringUtils.hasText(ids)) {
+			return accountInfoService.batchLockAccount(ids);
+		}
 		return accountInfoService.lockAccount(id);
 	}
 	/**
@@ -132,7 +135,10 @@ public class AccountInfoController {
 	 */
 	@RequestMapping(value="unlock", method=RequestMethod.GET)
 	@ResponseBody
-	public int unlock(@RequestParam int id){
+	public int unlock(@RequestParam(required=false) int id, @RequestParam(required=false)String ids){
+		if (StringUtils.hasText(ids)) {
+			return accountInfoService.batchUnLockAccount(ids);
+		}
 		return accountInfoService.unLockAccount(id);
 	}
 	/**

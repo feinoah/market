@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=v=v=1.6" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/comment');
@@ -50,7 +50,12 @@
 				});
 			});
 		});
-		function edit() {
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
@@ -128,11 +133,12 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="评论列表" align="left" singleSelect="true"  
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="评论列表" align="left"   
 			idField="id" url="${ctx}/admin/app/comment/query?appId=${param.appId}" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="appName" width="100" align="center" >应用名称</th>
 						<th field="enName" width="100" align="center" >英文名称</th>
 						<th field="userName" width="100" align="center" >评论人</th>

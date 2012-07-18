@@ -6,19 +6,14 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#tree').tree({
 				method:'get',
 				checkbox:true,
 				state:'close',
-				url: '${ctx}/back/module/query/all?t='+(new Date().getTime()),
-				onClick: function(node){
-					if(node.attributes.url&&node.attributes.url!=null){
-						addTab(node.text, '${ctx}/'+node.attributes.url);
-					}
-				}
+				url: '${ctx}/back/module/query/all?t='+(new Date().getTime())
 			});	
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/permission/role');
 			checkExisted($('#roleName_edit'),"${ctx}/back/permission/role?name=");
@@ -34,7 +29,7 @@
 							var node = $(this).parent();  
 							nodes.push($.extend({}, $.data(node[0], 'tree-node'), {  						 
 								target: node[0],  
-								checked: node.find('.tree-checkbox').hasClass('tree-checkbox2') 						 
+								checked: node.find('.tree-checkbox').hasClass('tree-checkbox2') 		 
 							}));  
 						 });
 						 //增加实心节点Id
@@ -69,7 +64,12 @@
 				$(this).combobox('clear');
 			});
 		});
-		function edit() {
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
@@ -82,15 +82,22 @@
 				$('#editForm input[name=roleDesc]').val(m.roleDesc);
 				$('#id').val(m.id);
 				// 查询拥有哪些模块
-				var arr = new Array();
+				var arr = [];
+				$.ajaxSettings.async=false;
 				$.getJSON('${ctx}/back/module/query/role/'+m.id, function(data){
 				  	$.each(data, function(i,item){
 				  		var node=$('#tree').tree('find',item.id);
 				  		node.checked=true;
 				  		$('#tree').tree('update', node);
+				  		var children=$('#tree').tree('getChildren',node.target);
+				  		$.each($('#tree').tree('getChildren',node.target), function(j,child){
+				  			child.checked=false;
+				  			$('#tree').tree('update', child);
+				  		});
 				  		arr.push(item.id);
 				  	});
 				});
+				$.ajaxSettings.async=true;
 				$('#modules').val(arr.join());//设置值
 				$('#editWin').show();
 			} else {
@@ -131,11 +138,12 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto" iconCls="icon-blank" title="角色列表" singleSelect="true" 
+			<table id="tt" style="height: auto" iconCls="icon-blank" title="角色列表"  
 			idField="id" url="${ctx}/admin/permission/role/query"" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10, 30 ]" sortName="updateTime" sortOrder="desc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="roleName" width="150" align="center">名称</th>
 						<th field="roleDesc" width="200" align="center">描述</th>
 						<th field="createTime" width="80" align="center">创建时间</th>

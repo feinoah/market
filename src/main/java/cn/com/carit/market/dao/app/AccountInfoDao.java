@@ -89,6 +89,7 @@ public interface AccountInfoDao {
 	 */
 	int lockAccount(int id);
 	
+	
 	/**
 	 * 解封账号
 	 * @param id
@@ -96,11 +97,22 @@ public interface AccountInfoDao {
 	 */
 	int unLockAccount(int id);
 	
+	int batchLockAccount(String ids);
+	
+	int batchUnLockAccount(String ids);
+	
 	/**
 	 * 检查帐号
 	 * @param email
 	 * @return
 	 */
 	int checkAccount(String email);
+	
+	/**
+	 * 检查昵称
+	 * @param nickName
+	 * @return
+	 */
+	int checkNickName(String nickName);
 	
 }

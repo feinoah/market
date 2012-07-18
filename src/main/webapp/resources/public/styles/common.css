@@ -28,8 +28,13 @@ h2,h2 a,h2 a:visited {
 	color: #7B9726;
 	font-size: 21px;
 }
-a,a:visited {
-	color: #3D3D3D;
+a{
+	color:#000000;
+	font-size: 14px;
+	text-decoration: none;
+}
+a:visited {
+	color: purple;
 	font-size: 14px;
 	text-decoration: none;
 }
@@ -185,11 +190,61 @@ background:#9C9C9C;
 	margin-left:360px;
 	BACKGROUND-IMAGE: url(../images/search_input.png);
 }
-#nav div{
-	
-	text-align:right;
-	}
+#nav div ul{width: 100%;height: 28px;}
+#nav div ul li{float: right;line-height: 28px;}
+#nav div ul li span{
+	height: 24px;
+	margin: 0 5px;
+	text-align:center;
+	cursor: pointer;
+	color: #ccc;
+	font-weight: bold;
+}
+#nav div ul li span:hover{
+	color: #FFFFFF;
+}
+#nav div ul li .gbts {
+background: url(../images/h_bedf916a.png);
+_background: url(../images/h_bedf916a.png);
+background-position: -27px -22px;
+border: 0;
+font-size: 0;
+padding: 29px 0 0;
+width: 1px;
+}
+#thumb_photo{margin: 2px;width: 28px;height: 24px;cursor: pointer;}
 #lolginAfter{ display:none;}
+#message{width: 24px;background: url(../images/h_bedf916a.png);background-position: -24px -270px;}
+#message:hover{background: url(../images/h_bedf916a.png);background-position: 1px -270px;}
+/*
+#logout{width: 20px;background: url(../images/h_bedf916a.png);background-position: 0 5px;}
+#logout:hover{background: url(../images/h_bedf916a.png);background-position: -5px -18px;}
+*/
+#profile_tips_content, #message_tips_content{border:none;background:#fff;}
+#profile_tips_content span,#profile_tips_content em, #message_tips_content span, #message_tips_content em{border:none;color:#fff;}
+#profile{margin:5px;}
+#profile img{margin:0 auto;float:left;width: 96px;height: 96px;}
+#profile div{margin:0 auto;width: 135px;height: 96px;float:right;}
+#profile div span{width: 135px;height:26px;color:#000;font-size:14px;font-weight: bold;display:-moz-inline-box; display:inline-block;}
+#profile_email{color:#ccc;font-weight:normal;font-size:12px;}
+#profile div span.operater {background:#4D90FE;height:24px;color:#fff;width: 56px;margin:0 5px; padding-left: 1px;padding-top: 2px;font-size:12px;cursor: pointer;}
+#profile div span.operater:hover{background:#357AE8;}
+.message_tips{margin:10px;margin-bottom:5px;font-size:14px;color:#000}
+.message_tips p{width:340px;}
+.message_tips .title{font-weight: bold;text-align:center;}
+.message_tips label{margin-left:10px;height:26px;text-align: center;display:-moz-inline-box; display:inline-block;color:#A4A4A4;cursor:pointer;}
+.message_tips label:hover{color:#585858}
+.message_tips a{color:#A4A4A4;cursor:pointer;text-decoration: none;}
+.message_tips a:hover{color:#585858}
+.allMsg{margin:10px;text-align:left;font-size:12px;}
+.allMsg #msgContent {margin:10px;position:absolute;top:170px;overflow:auto;height:205px;}
+.allMsg table{width:100%;height:180px;text-align:center;}
+.allMsg table tr{height:24px;cursor:pointer;border-bottom:1px solid #ccc;}
+.allMsg table tr .unread{font-weight: bold;}
+.allMsg table tr th{font-weight: bold;text-align:center;background:#A4A4A4}
+.allMsg table tr:hover{background:#A4A4A4}
+.allMsg table  #pageTR{border:none;}
+.allMsg table  #pageTR:hover{background:none;}
 #nav button{
 background:url(../images/login_bu.png) left top no-repeat;
 width:72px;
@@ -408,7 +463,7 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 
 /*分页控件*/
 
-#pageDiv{height:30px;white-space:nowrap;text-align: right;margin:10px 0;}
+#pageDiv{height:30px;white-space:nowrap;text-align: right;margin:5px 0;}
 #pageDiv span{display:block;float:left;background:#CDCDCD;margin:3px;cursor:pointer;padding:0 5px}
 #pageDiv span:hover{background:#2AC7E1;color:#FFF;}
 #pageDiv label span{display:-moz-inline-box; display:inline-block;width:20px;text-align:center;padding:0;}
@@ -416,6 +471,21 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 #pageDiv .cruLabel {display:;}
 #pageDiv .hideLabel {display:none;}
 
+#footer {
+background-color: #3D3D3D;
+border-top: 4px solid #88B131;
+color: white;
+padding-top: 25px;
+text-align: center;
+zoom: 1;
+height: 25px;
+}
+#footer-tab-edge {
+border-top: 30px solid 
+#3D3D3D;
+border-right: 30px solid 
+transparent;
+}
 #welcome a{
 	text-decoration: none;
 	cursor: pointer;

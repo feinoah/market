@@ -6,7 +6,7 @@
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=v=v=1.6" ></script>
 		<script type="text/javascript">
 		$(function(){
 			checkEditControl('${ctx}/back/permission/account?baseUri=/admin/app/catalog');
@@ -31,7 +31,12 @@
 				$(this).combobox('clear');
 			});
 		});
-		function edit() {
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
@@ -98,11 +103,12 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用分类列表" align="left" singleSelect="true"  
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用分类列表" align="left"   
 			idField="id" url="${ctx}/admin/app/catalog/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="displayIndex" sortOrder="asc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="name" width="150" align="center">分类名称</th>
 						<th field="enName" width="150" align="center">英文名称</th>
 						<th field="description" width="200" align="center">中文描述</th>

@@ -54,3 +54,19 @@ function createFrame(url) {
     var s = '<iframe name="mainFrame" scrolling="no" src="' + url + '" style="width:100%;height:100%;border:0;overflow-x:hidden"></iframe>';
     return s;
 }
+//获得字符串长度
+function getStrLen(str){
+	if(str == null || str == ''){
+		return 0;
+	}
+	var len = 0;
+	var reg = new RegExp("^[\\u4e00-\\u9fa5]+$", "");
+	for(var i=0;i<str.length;i++){
+		if(reg.test(str.charAt(i))){//中文字符
+			len=len+2;
+		}else{
+			len++;
+		}
+	}
+	return len;
+}

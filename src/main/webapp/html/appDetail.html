@@ -5,27 +5,27 @@
 	<title>中通福瑞——应用市场</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="../resources/public/scripts/SlideTrans.js" ></script>
-	<link href="../resources/public/styles/default.css" rel="stylesheet" type="text/css" />
 	<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
 	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/ykb.css" rel="stylesheet" type="text/css" />
 	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/common.css?v=v=v=1.6" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/autoPlayer.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
+	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=v=v=1.6"></script>
+	<script type="text/javascript" src="../resources/public/scripts/index.js?v=v=v=1.6"></script>
 	<script type="text/javascript">
 	function onPicError(){
 		$('.app_detail_icon').error(function(){
 			this.src = '../resources/public/images/app_default.jpg';
 		});
-	$('.container2').error(function(){
-		this.src = '../resources/public/images/big_image_error.png';
-	});
+		$('.container2').error(function(){
+			this.src = '../resources/public/images/big_image_error.png';
+		});
 	}
 
 	function onBigPicError(){
@@ -41,7 +41,11 @@
 	var pics=[];
 	$(function(){
 		$('#write-review-toggle').click(function(){
-			$('#commentForm').show();
+			if($('#lolginAfter').is(":visible")){
+				$('#commentForm').show();
+			}else{
+				loginWin();
+			}
 		});
 		Highcharts.setOptions({
 			chart: {
@@ -113,6 +117,14 @@
 					if(rt==''){
 						return false;
 					}
+					if($('#grade').val()==''){
+						tips('submitBtn','请评分','bottom');
+						return false;
+					}
+					if($('#comment').val()==''){
+						tips('submitBtn','请填写评论','bottom');
+						return false;
+					}
 					$('#appId').val(rt);
 					return true;
 			    }, 
@@ -124,13 +136,23 @@
 								tips('submitBtn','请先下载使用再评论','bottom');
 							}
 							if(map.answerCode==-1){
-								tips('submitBtn','请填内容或评分','bottom');
+								tips('submitBtn','未知错误','bottom');
 							}
 							if(map.answerCode==0){
-								tips('submitBtn','没有登录','bottom');
+								tips('submitBtn','登录超时','bottom');
 							}
 							if(map.answerCode==1){
-								location.reload();
+								$('.star span').each(function(i){
+									if(i%2==0){
+										$('#star_sp'+i).removeClass('starBright_left').addClass('starDark_left');
+									}else{
+										$('#star_sp'+i).removeClass('starBright_right').addClass('starDark_right');
+									}
+								});
+	 							$('#comment').val('');
+	 							$('#grade').val('');
+	 							doPage(1);
+								initCommentStat();
 							}
 						}else{
 							tips('submitBtn','后台系统异常','bottom');
@@ -139,8 +161,9 @@
 						tips('submitBtn','后台系统异常','bottom');
 					}
 			    }
-			}).submit();
+			});
 		});
+		$.ajaxSettings.async=false;
 	 	$.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
 			if(data){
 				$('#label_appname').empty().html(data.appName);
@@ -163,6 +186,12 @@
 					};
 				});
 				//TODO:
+					var price;
+					if(data.price==0){
+						price ="免费";
+					}else{
+						price = '￥'+data.price;
+					}
 				$('#label_count').empty().html(data.downCount);
 				$('#about_count').empty().html(data.downCount);
 				$('#about_date').empty().html(data.updateTime);
@@ -172,7 +201,8 @@
 				$('#about_Category').empty().html(data.catalogName);
 				$('#about_size').empty().html(data.size);
 				$('#app_size').empty().html(data.size);
-				$('#about_price').empty().html(data.price);
+				$('#about_price').empty().html(price);
+				$('#app_price').empty().html(price);
 				$('#about_level').empty().html(data.appLevel);
 				$('#app_description').empty().html(data.description);
 				$('#app_features').empty().html(data.features);
@@ -190,35 +220,49 @@
 				'data':pics
 			});
 			onBigPicError();
+			onPicError();
 		});
-		$.getJSON('../portal/app/query?rows=5', function(data) {
+		
+		$.getJSON('../portal/app/query?rows=5&developer='+developer, function(data) {
 			if(data){
 				$('#author_more').empty();
 				$('#author_more').append('<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
 				$.each(data.rows,function(i,o){
+					var developer_price;
+					if(o.price==0){
+						developer_price = "免费";
+					}else{
+						developer_price = '￥'+o.price;
+					}
 					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
 							+o.id+'"><img class="app_detail_icon" src="../'
 							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'
 					+o.developer+'</label><img src="'
 					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('
-							+o.downCount+')</div><label style="display: block;">￥'+o.price+'</label></div></div><hr class="detail_hr"/>');
+							+o.downCount+')</div><label style="display: block;">'+developer_price+'</label></div></div><hr class="detail_hr"/>');
 				})
 				onPicError();
 			}
 		});
-		
+		$.ajaxSettings.async=true;
 		$.getJSON('../portal/app/down/ref/'+rt+'?rows=6', function(data) {
 			if(data){
 				$('#view_more').empty();
 				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
 				$.each(data.rows,function(i,o){
+					var install_price;
+					if(o.price==0){
+						install_price = "免费";
+					}else{
+						install_price = '￥'+o.price;
+					}
 					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
 							+o.id+'"><img class="app_detail_icon" src="../'
 					+o.icon+'"/></a></div><div class="detail_right_div"><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'+o.developer+'</label><img src="'
-					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('+o.downCount+')</div><label style="display: block;">￥'
-					+o.price+'</label></div></div><hr class="detail_hr"/>');
+					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('+o.downCount+')</div><label style="display: block;">'
+					+install_price+'</label></div></div><hr class="detail_hr"/>');
 				})
 				onPicError();
 			}
@@ -231,7 +275,41 @@
 			}
 		});
 		doPage(1);
-		var _data=[0,0,0,0,0,0]
+		initCommentStat();
+		$.getJSON('../portal/app/month/down/trend/'+rt, function(json){
+			if(json){
+				new Highcharts.Chart({
+					chart: {
+						renderTo: 'downTrend'
+					},
+					xAxis: {
+						type: 'datetime',
+						categories: json.categories,
+						title: {
+							text:null
+						},
+						labels:{enabled:false}
+					},
+					yAxis: {
+						min: 0,
+						title: {
+							text:null
+						},
+					},
+					tooltip: {
+						formatter: function() {
+							return this.x+' '+ this.y +' 人';
+						}
+					},
+					series: [{
+						data: json.data
+					}]
+				});
+			}
+		});
+	});
+	var _data=[0,0,0,0,0,0]
+	function initCommentStat(){
 		$.getJSON('../portal/app/comment/grade/group/'+rt, function(json){
 			$.each(json,function(i,o){
 				if(o.grade%2!=0){
@@ -284,38 +362,7 @@
 				]
 			});
 		});
-		$.getJSON('../portal/app/month/down/trend/'+rt, function(json){
-			if(json){
-				new Highcharts.Chart({
-					chart: {
-						renderTo: 'downTrend'
-					},
-					xAxis: {
-						type: 'datetime',
-						categories: json.categories,
-						title: {
-							text:null
-						},
-						labels:{enabled:false}
-					},
-					yAxis: {
-						min: 0,
-						title: {
-							text:null
-						},
-					},
-					tooltip: {
-						formatter: function() {
-							return this.x+' '+ this.y +' 人';
-						}
-					},
-					series: [{
-						data: json.data
-					}]
-				});
-			}
-		});
-	});
+	}
 	function doPage(page){
 		$.getJSON('../portal/app/comments/'+rt+'?local=cn&page='+page+'&rows=10', function(data) {
 			if(data){
@@ -345,23 +392,33 @@
 		<div id="header">
 			<div id="nav">
 				<div id="loginBefor">
-					<button class="login_bn" id="login">登陆</button>
-					<button id="reg" class="login_bn">注册</button>
+					<ul>
+						<li><span id="reg">注册</span></li>
+						<li><span class="gbts"></span></li>
+						<li><span id="login">登陆</span></li>
+					</ul>
 				</div>
 				<div id="lolginAfter">
-					<span id="welcome"></span>
-					<button id="logout" class="login_bn">退出</button>
+					<ul>
+						<li><span id="logout">退出</span></li>
+						<li><span class="gbts"></span></li>
+						<li id="thumb_photo"></li>
+						<li><span class="gbts"></span></li>
+						<li><span id="message">0</span></li>
+						<li><span class="gbts"></span></li>
+						<li><span id="welcome"></span></li>
+					</ul>
 				</div>
+				<ul>
+					<li><img id="indexPage" src="../resources/public/images/carit_logo1.png"/></li>
+					<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
+					<li><input type="button" class="search_bn" id="search"></input></li>
+				</ul>
 			</div>
-			<ul>
-				<li><a href="../"><img src="../resources/public/images/carit_logo1.png"/></a></li>
-				<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
-				<li><input type="button" class="search_bn" id="search"></input></li>
-			</ul>
 		</div>
 
 		<div id="wrapper">
-			<div>
+		
 				<div class="doc-banner-container-header">
 					<div class="page-banner-heading"></div>
 					<div>
@@ -371,9 +428,10 @@
 					<div style="float:left">
 					    <img id="img_big_icon" class="app_big_icon"/>
 					</div>
-				    <div style="width: 140px;float:right;">
-				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 50px;display:block">版本:<label id="app_version" >4.0.4</label></span>
+				    <div style="width: 160px;float:right;">
+				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 28px;display:block">版本:<label id="app_version" >4.0.4</label></span>
 				     <span style="color:white;font-size:16px;font-weight: bold;">  大小:<label id="app_size" >6.25MB</label></span>
+				        <span style="color:white;font-size:16px;font-weight: bold;display:block">  价格:<label id="app_price" ></label></span>
 				     <img id="img_icon" style="display: inline-block;height: 17px;"/>
 				    <div class="detail_downcount">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;">10,898</label>)</div>
 				     <input type="button" class="download_bn" id="download_btn" value="下载"/>
@@ -389,7 +447,7 @@
 					</ul>
 					<ul class="num" id="idNum"></ul> -->
 				
-			</div>
+		
   
 			<!-- left top -->
 
@@ -419,8 +477,7 @@
   <h2>说明</h2>
   <div id="doc-description-container" class="doc-description-collapsed">
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
-  <div id="doc-original-text"><label id="app_description">Fantasy Tower Defense from the creators of Toy Soldiers &amp; Dark Alliance 
-  "It's an addictive, creative game with some lovely aesthetics and challenging levels. If you're anything like me, it'll probably steal your soul." - KOTAKU</label>
+  <div id="doc-original-text"><label id="app_description"></label>
   </div>
   </div><div class="doc-description-overflow"></div></div>
   
@@ -450,7 +507,7 @@
 	   </div>
    </div>
    </div>
-<div  style="float:right;width:120px;height:531px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-bottom: 0px;border-right: 0px;border-top: 0px">
+<div  style="float:right;width:135px;height:531px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-bottom: 0px;border-right: 0px;border-top: 0px">
 <h4>关于此应用</h4>
 <dt>评分：</dt>
 
@@ -460,7 +517,7 @@
 <dt style="margin-top: 8px">更新日期：</dt>
 <dd><time id="about_date">2012年5月23日</time></dd>
 <dt style="margin-top: 8px">当前版本：</dt>
-<dd id="about_version">1.5.4</dd>
+<dd id="about_version">v=1.6.4</dd>
 <dt itemprop="operatingSystems" style="margin-top: 8px">所需的 Android 版本：</dt>
 <dd><label id="about_android_version">2.3</label>及更高版本</dd>
 <dt style="margin-top: 8px">类别：</dt>
@@ -471,11 +528,10 @@
 		style="width: 105px;height: 105px;" id="downTrend">
 	</div>
 </dd>
-<dt style="margin-top: 8px">大小：</dt>
-   <dd id="about_size" itemprop="fileSize" style="display: inline-block;">49</dd><label style="display: inline-block;">M</label>
-   <dt style="margin-top: 8px">价格：</dt>
-   <dd itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-  <label style="display: inline-block;">￥</label> <label id="about_price" style="display: inline-block;"></label>
+<dt style="margin-top: 8px;">大小：</dt>
+   <dd id="about_size"></dd>
+   <dt style="margin-top: 8px;">价格：</dt>
+   <dd id="about_price"></dd>
    <dt style="margin-top: 8px">内容分级：</dt>
    <label style="margin-left: 10px">心智成熟度-</label >  <label id="about_level"></label >
    
@@ -561,7 +617,28 @@
   </div>
 </div>
 </div>
+
+  <div id="footer" style="margin-top: 10px;float:left;width: 100%;">
+			<table class="box20111120" cellspacing="0" width="980" align="center"
+				border="0">
+				<tbody>
+					<tr>
+						<td align="middle">电话：0755-33309188&nbsp;&nbsp;&nbsp;传真：0755-33309173&nbsp;&nbsp;&nbsp;电子邮件：<a
+							href="mailto:huangjp@carit.com.cn"><font color="#87CEFA">huangjp@carit.com.cn</font></a>&nbsp;&nbsp;&nbsp;邮编：518109
+						</td>
+					</tr>
+					<tr>
+						<td align="middle">&nbsp;&nbsp; 公司地址：深圳市宝安区龙华镇大浪英泰工业区Ｅ区Ｄ栋</td>
+					</tr>
+				</tbody>
+			</table>
+			  <div id="footer-tab-edge" style="margin-top: -14px;"></div>
+		</div>
+      
+        
 </div>
+
+
 <script>
 function showAllComment(){
 		$('.Menubox ul li').removeClass('hover').eq(1).addClass('hover');

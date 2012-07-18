@@ -52,6 +52,9 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			if (StringUtils.hasText(accountInfo.getPhoto())) {
 				AttachmentUtil.deletePhoto(old.getPhoto());
 			}
+			if (StringUtils.hasText(accountInfo.getThumbPhoto())) {
+				AttachmentUtil.deletePhoto(old.getThumbPhoto());
+			}
 			accountInfoDao.update(accountInfo);
 			if (!StringUtils.hasText(accountInfo.getEmail())) {
 				accountInfo.setEmail(old.getEmail());//
@@ -234,6 +237,26 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			return accountInfoDao.checkAccount(email);
 		}
 		return 0;
+	}
+
+	@Override
+	public int checkNickName(String nickName) {
+		if(StringUtils.hasText(nickName)){
+			return accountInfoDao.checkNickName(nickName);
+		}
+		return 0;
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int batchLockAccount(String ids) {
+		return accountInfoDao.batchLockAccount(ids);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Override
+	public int batchUnLockAccount(String ids) {
+		return accountInfoDao.batchUnLockAccount(ids);
 	}
 	
 }

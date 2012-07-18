@@ -48,7 +48,14 @@ $(function() {
 		if(v.length<3||v.length>15){
 			$('#nickNameTip').attr('class', '').addClass('onError').html('请输入3~15位昵称');
 		} else{
-			$('#nickNameTip').attr('class', '').addClass('onCorrect').html('输入正确');
+			$('#nickNameTip').attr('class', '').addClass('onLoad').html('正在检查此昵称是否可用');
+			$.getJSON(app.name+'/portal/check/nickName?nickName='+v, function(data) {
+				if (data>0) {
+					$('#nickNameTip').attr('class', '').addClass('onError').html('该昵称不可用');
+				} else {
+					$('#nickNameTip').attr('class', '').addClass('onSuccess').html('恭喜您，该昵称可用');
+				}
+			});
 		}
 	}).focus(function(){
 		$('#nickNameTip').attr('class', '').addClass('onFocus').html('请输入3~15位昵称');

@@ -180,7 +180,7 @@ public class ApplicationController {
 	 */
 	@RequestMapping(value="delete", method=RequestMethod.GET)
 	@ResponseBody
-	public int delete(@RequestParam int id, @RequestParam(required=false) String ids){
+	public int delete(@RequestParam(required=false) int id, @RequestParam(required=false) String ids){
 		if (StringUtils.hasText(ids)) {
 			return applicationService.batchDelete(ids);
 		}

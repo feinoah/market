@@ -8,8 +8,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -71,8 +69,8 @@ public class MD5Util {
 	public static String md5Hex(File file) throws IOException {
 		@SuppressWarnings("resource")
 		FileInputStream fileInputStream = new FileInputStream(file);
-		MappedByteBuffer byteBuffer = fileInputStream.getChannel().map(FileChannel.MapMode.READ_ONLY, 0,
-				file.length());
+		MappedByteBuffer byteBuffer = fileInputStream.getChannel().map(
+				FileChannel.MapMode.READ_ONLY, 0, file.length());
 		messagedigest.update(byteBuffer);
 		return bufferToHex(messagedigest.digest());
 	}
@@ -99,6 +97,7 @@ public class MD5Util {
 
 	/**
 	 * 校验密码
+	 * 
 	 * @param password
 	 * @param md5PwdStr
 	 * @return
@@ -119,24 +118,27 @@ public class MD5Util {
 
 	/**
 	 * main方法用于测试
-	 * @throws UnsupportedEncodingException 
+	 * 
+	 * @throws UnsupportedEncodingException
 	 */
 	public static void main(String[] args) throws UnsupportedEncodingException {
 		// 字符'a'的MD5码是0cc175b9c0f1b6a831c399e269772661,如果是，则成功。
 		try {
 			System.out.println(MD5Util.md5Hex("a"));
 			System.out.println(MD5Util.getMD5String("a"));
-			System.out.println(md5Hex("12342@1234.com"+md5Hex("@12345")+DISTURBSTR));
+			System.out.println(md5Hex("12342@1234.com" + md5Hex("@12345")
+					+ DISTURBSTR));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// A=APP_AMS_login替换为A=XX 
-		String str="DBSaver=ActionLog||A=APP_AMS_login||C=$7||";
-		System.out.println(str.replaceAll("A=.+?(\\|\\||\\s)", "A=XX||"));
-
-Pattern pattern = Pattern.compile("@.+?(:|\\s)");
-		Matcher matcher = pattern.matcher("@正则表达式:Hello World,@正则表达式  HelloWorld");
-	
-		System.out.println(matcher.replaceAll("Java"));
+		// A=APP_AMS_login替换为A=XX
+		// String str="DBSaver=ActionLog||A=APP_AMS_login||C=$7||";
+		// System.out.println(str.replaceAll("A=.+?(\\|\\||\\s)", "A=XX||"));
+		//
+		// Pattern pattern = Pattern.compile("@.+?(:|\\s)");
+		// Matcher matcher =
+		// pattern.matcher("@正则表达式:Hello World,@正则表达式  HelloWorld");
+		//
+		// System.out.println(matcher.replaceAll("Java"));
 	}
 }

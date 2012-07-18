@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
 		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/kindeditor-min.js"></script>
 		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/lang/zh_CN.js"></script>
 		<script type="text/javascript">
@@ -91,9 +91,6 @@
 			});
 			// 初始化
 			$('#tt').datagrid({
-				width:'100%',
-				method:'get',
-				//frozenColumns:[[{field:'ck',checkbox:true}]],
 				toolbar:[{
 					text:'新增',
 					iconCls:'icon-add',
@@ -136,8 +133,7 @@
 					text :'版本',
 					iconCls:'icon-search',
 					handler:searchVersion
-				} ],
-				onDblClickRow:edit
+				} ]
 			});
 			// edit form
 			$('#edit_submit_app').bind('click',function(){
@@ -164,6 +160,14 @@
 						if(!b){return b;}*/
 						if($('#apkFileTxt').val()==''&&$('#apkFile').val()==''){ //新增时
 							$.messager.alert('提示', "应用文件必须上传", 'info');
+							return false;
+						}
+						if($('#iconFileTxt').val()==''&&$('#iconFile').val()==''){ //新增时
+							$.messager.alert('提示', "图标文件必须上传", 'info');
+							return false;
+						}
+						if($('#bigIconFileTxt').val()==''&&$('#bigIconFile').val()==''){ //新增时
+							$.messager.alert('提示', "大图标文件必须上传", 'info');
 							return false;
 						}
 						$('#editForm input[type=file]').each(function(){
@@ -269,7 +273,12 @@
 			checkExisted($('#appName_edit'),'${ctx}/portal/check/app?local=cn&name=');
 			checkExisted($('#enName_edit'),'${ctx}/portal/check/app?local=en&name=');
 		});
-		function edit() {
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
 			var m = $('#tt').datagrid('getSelected');
 			if (m) {
 				tag=1;
@@ -409,11 +418,12 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left" singleSelect="true"  
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="应用列表" align="left"   
 			idField="id" url="${ctx}/admin/app/application/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="downCount" sortOrder="desc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="appName" width="100" align="center">应用名称</th>
 						<th field="enName" width="100" align="center">英文名称</th>
 						<th field="version" width="60" align="center">版本</th>
@@ -524,7 +534,7 @@
 								</td>
 						</tr>
 						<tr>
-							<td><label>小图标：</label></td>
+							<td><label class="mustInput">小图标：</label></td>
 							<td>
 								<div class="fileinputs">  
 									<input type="file" class="file" name="iconFile" id="iconFile" fileType="jpg|png" onchange="$('#iconFileTxt').val(this.value);"/>
@@ -535,7 +545,7 @@
 							</td>
 						</tr>
 						<tr>
-							<td><label>大图标：</label></td>
+							<td><label class="mustInput">大图标：</label></td>
 							<td>
 								<div class="fileinputs">  
 									<input type="file" class="file" name="bigIconFile" id="bigIconFile" fileType="jpg|png" onchange="$('#bigIconFileTxt').val(this.value);"/>
@@ -551,7 +561,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt1').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt1" style="width:200px;"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt1" style="width:200px;"/><button>浏览</button><button onclick="mgFileTxt1.value=''">删除</button>
 								</div>  
 							</div>
 							</td>
@@ -562,7 +572,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt2').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt2" style="width:200px;"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt2" style="width:200px;"/><button>浏览</button><button onclick="mgFileTxt2.value=''">删除</button>
 								</div>  
 							</div>
 							</td>
@@ -573,7 +583,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt3').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt3" style="width:200px;"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt3" style="width:200px;"/><button>浏览</button><button onclick="mgFileTxt3.value=''">删除</button>
 								</div>  
 							</div>
 							</td>
@@ -584,7 +594,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt4').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt4" style="width:200px;"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt4" style="width:200px;"/><button>浏览</button><button onclick="mgFileTxt4.value=''">删除</button>
 								</div>  
 							</div>
 							</td>
@@ -595,7 +605,7 @@
 							<div class="fileinputs">  
 								<input type="file" class="file" name="imageFile" fileType="jpg|png" onchange="$('#imgFileTxt5').val(this.value).attr('disabled',true);"/>
 								<div class="fakefile">  
-									<input type="text" name="imageArray" id="imgFileTxt5" style="width:200px;"/><button>浏览</button>
+									<input type="text" name="imageArray" id="imgFileTxt5" style="width:200px;"/><button>浏览</button><button onclick="imgFileTxt5.value=''">删除</button>
 								</div>  
 							</div>
 							</td>

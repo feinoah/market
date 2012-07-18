@@ -1,0 +1,64 @@
+<div class="allMsg">
+	<table id="msgTable">
+		<tr><th width="40">序号</th><th>标题</th><th width="80">发送时间</th><th width="50">操作</th></tr>
+		<tr id="pageTR"><td colspan="4"><div id="pageDiv"></div></td></tr>
+	</table>
+	<div id="msgContent">
+		
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+$(function() {
+	doPage(1);
+});
+
+function doPage(page){
+	$.getJSON(app.name+'/portal/app/user/sysmessage/'+account.id+'?rows=5&page='+page, function(data) {
+		if(data){
+			pagination(page, data.totalPage);
+			var html='<tr>'+$('#msgTable tr:first').html()+'</tr>';
+			if(data.rows){
+				$.each(data.rows,function(i,o){
+					html+='<tr onclick="showMsg('+i+')"><td>'+(i+1)+'</td><td align="left" id="msg_title_'+i+'"';
+					if(o.status==0){
+						html+='class="unread"';
+					}
+					html+='>'+o.title+'</td><td>'+o.updateTime+'</td><td><a href="javascript:del('+o.id+')">删除</a></td><td style="display:none" id="msg_content_'+i+'" msgId="'+o.id+'">';
+					if(o.catalog==1){
+						var arr=o.content.split('|');
+						html+='您下载的 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> 已更新至<b>'+arr[3]+'</b>，请 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">更新</a> 您的应用！</td>';
+					} else {
+						html+=o.content;
+					}
+					html+='</tr>';
+				});
+			}
+			html+='<tr id="pageTR">'+$('#msgTable tr:last').html()+'</tr>';
+			$('#msgTable').empty().html(html);
+		}
+	});
+}
+function showMsg(i){
+	var msg=$('#msg_content_'+i);
+	$('#msgContent').html(msg.html());
+	$.getJSON(app.name+'/portal/app/user/read/sysmessage/'+msg.attr('msgId'), function(data) {
+		if(data>0){
+			var count=$('#message').html();
+			if(count>0){
+				$('#message').html(count-1);
+			}
+			$('#msg_title_'+i).removeClass('unread');
+		}
+	});
+}
+
+function del(id){
+	$.getJSON(app.name+'portal/app/user/delete/sysmessage/'+id, function(data) {
+		if(data>0){
+			doPage($('.selected').html());
+		}
+	});
+}
+//-->
+</script>

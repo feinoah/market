@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
 import cn.com.carit.market.bean.app.Application;
+import cn.com.carit.market.bean.app.UpdateNotice;
 import cn.com.carit.market.bean.portal.PortalApplication;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
@@ -557,6 +559,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" order by ")
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
 					.append(" ").append(dgm.getOrder());
+		} else {
+			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());
@@ -727,6 +731,31 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 						jsonPage.getPageSize() }, portalRowMapper);
 		jsonPage.setRows(rows);
 		return jsonPage;
+	}
+
+	@Override
+	public List<UpdateNotice> queryUpdatedApplication() {
+		String sql="select a.id, a.app_name, a.en_name,a.version, b.account_id"
+				+" from t_application a, v_app_download_log_cn b"
+				+" where a.id=b.app_id and a.version!=b.version and a.status>0";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.query(sql, new RowMapper<UpdateNotice>(){
+				@Override
+				public UpdateNotice mapRow(ResultSet rs, int rowNum) throws SQLException {
+					UpdateNotice notice=new UpdateNotice();
+					notice.setAppId(rs.getInt("id"));
+					notice.setAppName(rs.getString("app_name"));
+					notice.setAppEnName(rs.getString("en_name"));
+					notice.setAppVesion(rs.getString("version"));
+					notice.setAccountId(rs.getInt("account_id"));
+					return notice;
+				}
+			});
+		} catch (Exception e) {
+			log.warn("no user downloaded applications are update...");
+		}
+		return Collections.emptyList();
 	}
 	
 }

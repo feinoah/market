@@ -42,6 +42,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			accountInfo.setGender(rs.getByte("gender"));
 			accountInfo.setBirthday(rs.getTimestamp("birthday"));
 			accountInfo.setPhoto(rs.getString("photo"));
+			accountInfo.setThumbPhoto(rs.getString("thumb_photo"));
 			accountInfo.setBalance(rs.getDouble("balance"));
 			accountInfo.setRealName(rs.getString("real_name"));
 			accountInfo.setIdCard(rs.getString("id_card"));
@@ -139,6 +140,10 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		if (StringUtils.hasText(accountInfo.getPhoto())) {
 			sql.append(", photo=?");
 			args.add(accountInfo.getPhoto());
+		}
+		if (StringUtils.hasText(accountInfo.getThumbPhoto())) {
+			sql.append(", thumb_photo=?");
+			args.add(accountInfo.getThumbPhoto());
 		}
 		if (accountInfo.getBalance() != null) {
 			sql.append(", balance=?");
@@ -261,7 +266,6 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 
 	private String buildWhere(List<Object> args,
 			List<Integer> argTypes, AccountInfo accountInfo) {
-		log.debug("gender="+accountInfo.getGender());
 		StringBuilder sql=new StringBuilder();
 		if (StringUtils.hasText(accountInfo.getEmail())) {
 			sql.append(" and email like CONCAT('%',?,'%')");
@@ -382,6 +386,33 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 			log.warn(e.getMessage());
 		}
 		return 0;
+	}
+
+	@Override
+	public int checkNickName(String nickName) {
+		String sql="select 1 from t_account_info where nick_name=?";
+		log.debug(String.format("\n%1$s\n", sql));
+		try {
+			return jdbcTemplate.queryForInt(sql, nickName);
+		} catch (Exception e) {
+			log.warn("no record of the nick_name["+nickName+"]...");
+			log.warn(e.getMessage());
+		}
+		return 0;
+	}
+
+	@Override
+	public int batchLockAccount(String ids) {
+		String sql="update t_account_info set update_time=now(), status=? where id in ("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql, Constants.STATUS_INVALID);
+	}
+
+	@Override
+	public int batchUnLockAccount(String ids) {
+		String sql="update t_account_info set update_time=now(), status=? where id in("+ids+")";
+		log.debug(String.format("\n%1$s\n", sql));
+		return jdbcTemplate.update(sql, Constants.STATUS_VALID);
 	}
 	
 }

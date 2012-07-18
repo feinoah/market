@@ -1,0 +1,172 @@
+<div class="reg account">
+	<div id="info">
+		<form id="accountForm" method="post">
+		<dl>
+			<h3>基本信息</h3>
+			<dd><span class="title">注册邮箱：</span><input class="reg_input" name="email" id="email" type="text" disabled="true"/></dd>
+			<dd><span class="title">昵称：</span><input class="reg_input" name="nickName" id="nickName" type="text" readonly="readonly"/></dd>
+			<dd id="genderR"><span class="title">性别：</span><input class="reg_input" id="genderDesc" type="text" readonly="readonly"/></dd>
+			<dd id="genderE" style="display:none;"><span class="title">性别：</span><select name="gender" id="gender" class="reg_input" style="width:170px;"></select>
+			</dd>
+			<dd><span class="title">余额：</span><input class="reg_input" name="balance" id="balance" type="text" readonly="readonly"/></dd>
+			<h3>扩展信息</h3>
+			<dd><span class="title">真实姓名：</span><input class="reg_input" name="realName" id="realName" type="text" readonly="readonly"/></dd>
+			<dd><span class="title">身份证号码：</span><input class="reg_input" name="idCard" id="idCard" type="text" readonly="readonly"/></dd>
+			<dd><span class="title">手机号码：</span><input class="reg_input" name="mobile" id="mobile" type="text" readonly="readonly"/></dd>
+			<dd><span class="title">办公电话：</span><input class="reg_input" name="officePhone" id="officePhone" type="text" readonly="readonly"/></dd>
+		</dl>
+		</form>
+	</div>
+	<div id="photoCon">
+		<form id="photoForm" method="post" enctype="multipart/form-data">
+		<img id="photo" src=""/>
+		<div class="fileinputs">  
+			<input type="file" class="file" name="file" id="photo" fileType='jpg|png' onchange="photoChange(this)"/>  
+			<div class="fakefile">  
+				<input type="text" value="200*200 jpg|png格式" id="photoTxt" style="width:160px;"/><button id="uploadImg">浏览</button>
+			</div>  
+		</div>
+		</form>
+	</div>
+	<div class="operation">
+		<button id="update">修改</button><button id="accountSubmit" style="display:none;">提交</button>
+		<button id="closeAccountWin" onclick="Util.Dialog.remove('accountWin');">关闭</button>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+var option;
+$(function() {
+	$('#update').click(function(){
+		$(this).hide();
+		$('#accountSubmit').show();
+		$('#accountForm input').each(function(){
+			$(this).attr('readonly',false);
+		});
+		$('#genderR').hide();
+		$('#genderE').show();
+	});
+	$('#email').val(account.email);
+	$('#nickName').val(account.nickName).change(function(){
+		var v=$.trim($(this).val());
+		if(v.length<3||v.length>15){
+			tips('nickName','请输入3~15位昵称','bottom');
+		} else{
+			$.getJSON(app.name+'/portal/check/nickName?nickName='+v, function(data) {
+				if (data>0) {
+					tips('nickName','该昵称不可用','bottom');
+					$(this).val('');
+				} else {
+					tips('nickName','该昵称可用','bottom');
+				}
+			});
+		}
+	});
+	$.getJSON(app.name+'/back/field/query/gender', function(data) {
+		if(data){
+			$.each(data,function(k,v){
+				if(account.gender==v.fieldValue){
+					$('#genderDesc').val(v.displayValue);
+				}
+				option+='<option value="'+v.fieldValue+'">'+v.displayValue+'</option>';
+			});
+			$('#gender').html(option);
+		}
+	});
+	$('#balance').val(account.balance);
+	$('#realName').val(account.realName);
+	$('#idCard').val(account.idCard);
+	$('#mobile').val(account.mobile);
+	$('#officePhone').val(account.officePhone);
+	$('#photo').attr('src',account.photo);
+	$('#accountSubmit').click(function(){
+		$('#accountForm').form({
+				url:app.name+'/portal/account/modify',
+				dataType:'text',  
+				onSubmit:function(){
+					var nickName=$.trim($('#nickName').val());
+					if(nickName==''||nickName.length<3||nickName.length>15){
+						tips('accountSubmit','请输入3~15位昵称','bottom');
+						return false;
+					}
+					return true;
+			    }, 
+		    	success:function(data){
+					if(data){
+						var map=$.parseJSON(data);
+						if(map){
+							if(map.answerCode==-2){
+								tips('accountSubmit','超时，请重新登录','bottom');
+							}
+							if(map.answerCode==-1){
+								tips('accountSubmit','未知错误','bottom');
+							}
+							if(map.answerCode==1){
+								tips('accountSubmit','修改成功','bottom');
+								account=map.portalUser;
+							}
+						}else{
+							tips('accountSubmit','后台系统异','bottom');
+						}
+					}else{
+						tips('accountSubmit','后台系统异','bottom');
+					}
+			    }
+			}).submit();
+	});
+});
+function photoChange(o){
+	$('#photoForm').form({
+		url:app.name+'/portal/account/changephoto',
+		dataType:'text',  
+		onSubmit:function(){
+			var name=$(o).val().toLowerCase();
+			var types=$(o).attr('fileType').toLowerCase()
+			var tArray=types.split('|');
+			var fArray=name.split('.');
+			var suffix=fArray[fArray.length-1];
+			var tag=false;
+			for(var i in tArray){
+				if(suffix==tArray[i]){
+					tag=true;
+				}
+			}
+			if(!tag){
+				tips('uploadImg','请上传'+types+'格式文件','bottom');
+			} else {
+				$('#photoTxt').val(name);
+			}
+			return tag;
+		},
+		success:function(data){
+			if(data){
+				var map=$.parseJSON(data);
+				if(map){
+					if(map.answerCode==-2){
+						tips('uploadImg','超时，请重新登录','bottom');
+					}
+					if(map.answerCode==-1){
+						tips('uploadImg','图片上传失败','bottom');
+					}
+					if(map.answerCode==1){
+						tips('uploadImg','修改成功','bottom');
+						account.photo=map.photo;
+						$('#photo').attr('src',map.photo);
+						account.thumbPhoto=map.thumbPhoto;
+						$('#thumb_photo').css({
+							'background':'url('+app.name+account.thumbPhoto+')',
+							'background-position':''
+						});
+						$('#photoTxt').val('200*200 jpg|png格式');
+					}
+				}else{
+					tips('uploadImg','后台系统异','bottom');
+				}
+			}else{
+				tips('uploadImg','后台系统异','bottom');
+			}
+	    }
+	}).submit();
+}
+//-->
+</script>

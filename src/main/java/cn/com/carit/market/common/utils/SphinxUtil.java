@@ -20,11 +20,11 @@ public class SphinxUtil {
 
 	private static SphinxClient sphinxClient;
 	private static String SPHINX_INDEX;
+	private static Properties properties = new Properties();
 
 	private SphinxUtil() {
 		try {
 			logger.info("init SphinxUtil INSTANCE start...");
-			Properties properties = new Properties();
 			InputStream inStream = getClass().getResourceAsStream(
 					"/resources/dataSource.properties");
 			properties.load(inStream);
@@ -46,7 +46,7 @@ public class SphinxUtil {
 			logger.error(e.getMessage());
 		}
 	}
-
+	
 	public static void init() {
 		if (INSTANCE == null) {
 			synchronized (AttachmentUtil.class) {
@@ -56,7 +56,9 @@ public class SphinxUtil {
 			}
 		}
 	}
-
+	public static String getValue(String key) {
+		return (String) properties.get(key);
+	}
 	public static SphinxMatch[] getMatchs(String keywords)
 			throws SphinxException {
 		if (!StringUtils.hasText(keywords)) {

@@ -5,13 +5,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="resources/favicon.ico" type="image/x-icon" />
 <link rel="icon" href="resources/favicon.ico" type="image/x-icon" />
-<link href="resources/public/styles/index.css?v=1.0" rel="stylesheet" type="text/css" />
-<link href="resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/index.css?v=v=v=1.6" rel="stylesheet" type="text/css" />
+<link href="resources/public/styles/common.css?v=v=v=1.6" rel="stylesheet" type="text/css" />
 <link href="resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=1.0"></script>
+<script type="text/javascript" src="resources/public/scripts/SlideTrans.js?v=v=v=1.6"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
-<script type="text/javascript" src="resources/public/scripts/utils.js?v=1.0"></script>
+<script type="text/javascript" src="resources/public/scripts/utils.js?v=v=v=1.6"></script>
+<script type="text/javascript" src="resources/public/scripts/index.js?v=v=v=1.6"></script>
 <script type="text/javascript">
 
 function submit(id)
@@ -58,15 +59,11 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				onStarError();
 			}
 		});
-		$.getJSON('portal/catalog/all?local=cn', function(data) {
-			if (data) {
-				$('#catalog_con').empty();
-				$.each(data, function(i, o) {
-					$('#catalog_con').append('<li><span class="index_free_catalog">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?catalogId='+o.id+'" target="_blank"><b>'+o.name+'</b></a></li>');
-				});
-				$('#catalog_con').append('<li>');
-			}
+		$('#catalog_con').empty();
+		$.each(catalogs, function(i, o) {
+			$('#catalog_con').append('<li><span class="index_free_catalog">'+(i+1)+'</span><a style="font-size: 18px" href="html/allApp.html?catalogId='+o.id+'" target="_blank"><b>'+o.name+'</b></a></li>');
 		});
+		$('#catalog_con').append('<li>');
 		$.getJSON('portal/app/hot/free/12?local=cn', function(data) {
 			if (data) {
 				$('#con_one_1').empty();
@@ -126,7 +123,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				}
 			});
 		// 畅销游戏
-		$.getJSON('portal/app/query?rows=8&status=2&catalogId=2', function(data) {
+		$.getJSON('portal/app/query?rows=8&catalogId=23&sort=downCount&order=desc', function(data) {
 				if (data.rows) {
 					$('#best-sale-games').empty();
 					$.each(data.rows, function(i, o) {
@@ -154,15 +151,25 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 	<div id="header">
 		<div id="nav">
 			<div id="loginBefor">
-				<button class="login_bn" id="login">登陆</button>
-				<button id="reg" class="login_bn">注册</button>
+				<ul>
+					<li><span id="reg">注册</span></li>
+					<li><span class="gbts"></span></li>
+					<li><span id="login">登陆</span></li>
+				</ul>
 			</div>
 			<div id="lolginAfter">
-				<span id="welcome"></span>
-				<button id="logout" class="login_bn">退出</button>
+				<ul>
+					<li><span id="logout">退出</span></li>
+					<li><span class="gbts"></span></li>
+					<li id="thumb_photo"></li>
+					<li><span class="gbts"></span></li>
+					<li><span id="message">0</span></li>
+					<li><span class="gbts"></span></li>
+					<li><span id="welcome"></span></li>
+				</ul>
 			</div>
 			<ul>
-				<li><img src="resources/public/images/carit_logo1.png"/></li>
+				<li><a href="#"><img src="resources/public/images/carit_logo1.png"/></a></li>
 				<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
 				<li><input type="button" class="search_bn" id="search"></input></li>
 			</ul>
@@ -194,15 +201,9 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 				<div class="Contentbox" style="background-color: white">
 					<div id="con_one_1">
 					
-						<!--  <ul id="freeTop">
+					
 						
-							<li><span class="index_free_a">1</span>
-							<a href="html/appDetail.html?inputStr=27" target="_blank"><b>GoogleMap</b></a>
-								<label>上海大智慧软件</label></li>
-								
-						</ul>-->
-						
-						<hr class="detail_hr"/>
+						<!-- <hr class="detail_hr"/>
 							<div class="detail_left_div">
 								<div class="detail_left1_div">
 								<div class="detail_left_div_num"><span class="index_free_a">1</span></div>
@@ -212,7 +213,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 									<a href="../html/appDetail.html?inputStr=24"><b>GPS测试仪汉化版</b></a><label
 										class="detail_right_label1">上海大智慧软件</label>
 								</div>
-							</div>
+							</div>-->
 							
 							</div>
 					<div id="con_one_2" style="display: none">
@@ -226,11 +227,7 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 			<div id="left_bottom"
 				style="float: left; width: 330px; height: 515px; margin-top: 10px; background-color: white">
 				<div id="con_one_1_1" style="padding: 30px 0;">
-					<font color="#104E8B" size="5px" style="margin-left: 20px"><b>热门免费新品</b></font>
-					<ul id="freeNewTop">
-						<li><span>1</span><a href="d">Maps</a><label>GOOGLEINC.</label></li>
-						<li class="more">全部新应用</li>
-					</ul>
+				
 				</div>
 
 			</div>
@@ -276,13 +273,13 @@ window.open("html/appDetail.html?inputStr=" + id);//传入参数
 			</div>
 			
 			<div class="carousel-more-link">
-						<a href="html/allApp.html?status=2&catalogId=2" target="_blank">查看更多</a><a href="" class="more-arrow-link"><span
+						<a href="html/allApp.html?catalogId=23&sort=downCount&order=desc" target="_blank">查看更多</a><a href="" class="more-arrow-link"><span
 							class="more-arrow" style="margin-right: 45px">›</span></a>
 					</div>
 		</div>
 		
 		
-        <div id="footer">
+        <div id="footer" style="margin-top: 1090px;">
 			<table class="box20111120" cellspacing="0" width="980" align="center"
 				border="0">
 				<tbody>

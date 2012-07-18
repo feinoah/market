@@ -19,13 +19,14 @@ public class AttachmentUtil {
 	private AttachmentUtil(String path){
 		try {
 			logger.info("init AttachmentUtil INSTANCE start...");
+			logger.debug(path+"/attachment.properties");
 			URL url=new URL(path+"/attachment.properties");
 			p.load(url.openStream());
 			logger.info("init AttachmentUtil INSTANCE end...");
 		} catch (MalformedURLException e) {
-			logger.error("read file["+path+"/attachment.properties"+"] error..."+e.getMessage());
+			logger.error("read file["+path+"/attachment.properties"+"] error...", e);
 		} catch (IOException e) {
-			logger.error("init attachment.properties error..."+e.getMessage());
+			logger.error("init attachment.properties error...", e);
 		}
 	}
 	/**

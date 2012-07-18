@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
 import cn.com.carit.market.bean.portal.AppDownStat;
+import cn.com.carit.market.bean.portal.PortalAppDownloadLog;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -135,6 +136,15 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 		resultMap.put("categories", categories);
 		resultMap.put("data", data);
 		return resultMap;
+	}
+
+	@Override
+	public JsonPage<PortalAppDownloadLog> queryUserDownApps(int accountId,
+			String local, DataGridModel dgm) {
+		PortalAppDownloadLog appDownloadLog=new PortalAppDownloadLog();
+		appDownloadLog.setAccountId(accountId);
+		appDownloadLog.setLocal(local);
+		return appDownloadLogDao.queryByExemple(appDownloadLog, dgm);
 	}
 
 }

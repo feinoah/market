@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=v=v=1.6" ></script>
 		<script type="text/javascript">
 		$(function(){
 			// 初始化
@@ -122,8 +122,13 @@
 				$(this).combobox('clear');
 			});
 		});
-		function edit() {
-			var m = $('#tt').datagrid('getSelected');
+		function edit(index) {
+			if(index>-1){//双击
+				// clear selected
+				$('#tt').datagrid('clearSelections');
+				$('#tt').datagrid('selectRow',index); //让双击行选定
+			}
+			var m=$('#tt').datagrid('getSelected');
 			if (m) {
 				$('#editForm input').each(function(){
 					$(this).removeClass('validatebox-invalid');
@@ -154,13 +159,13 @@
 		}
 		
 		function lock() {
-			var m = $('#tt').datagrid('getSelected');
-			if (m) {
+			var ids=getIds();
+			if (ids) {
 				$.messager.confirm('警告','您确认要封号吗?',function(data) {
 					if (data) {
 						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
-							url : '${ctx}/admin/app/account/lock?id='+ m.id,
+							url : '${ctx}/admin/app/account/lock?id=0&ids='+ids,
 							type : 'GET',
 							timeout : 1000,
 							error : function() {
@@ -189,13 +194,13 @@
 			}
 		}
 		function unlock() {
-			var m = $('#tt').datagrid('getSelected');
-			if (m) {
+			var ids=getIds();
+			if (ids) {
 				$.messager.confirm('警告','您确认要解封吗?',function(data) {
 					if (data) {
 						$.messager.progress({title:'请稍后',msg:'提交中...'});
 						$.ajax({
-							url : '${ctx}/admin/app/account/unlock?id='+ m.id,
+							url : '${ctx}/admin/app/account/unlock?id=0&ids='+ids,
 							type : 'GET',
 							timeout : 1000,
 							error : function() {
@@ -302,11 +307,12 @@
 				<a href="javascript:void();" class="easyui-linkbutton" id="reset"
 					iconCls="icon-undo">重 置</a>
 			</div>
-			<table id="tt" style="height: auto;" iconCls="icon-blank" title="账号列表" align="left" singleSelect="true" 
+			<table id="tt" style="height: auto;" iconCls="icon-blank" title="账号列表" align="left"  
 			idField="id" url="${ctx}/admin/app/account/query" pagination="true" rownumbers="true"
 			fitColumns="true" pageList="[ 5, 10]" sortName="updateTime" sortOrder="desc">
 				<thead>
 					<tr>
+						<th field="ck" checkbox="true"></th>
 						<th field="email" width="150" align="center">邮箱</th>
 						<th field="nickName" width="100" align="center">昵称</th>
 						<th field="realName" width="100" align="center">真实姓名</th>
