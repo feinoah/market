@@ -163,11 +163,11 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
 		</dependency>
-		<dependency>
-			<groupId>c3p0</groupId>
-			<artifactId>c3p0</artifactId>
-			<version>0.9.1.2</version>
-		</dependency>
+	    <dependency>
+	        <groupId>com.alibaba</groupId>
+	        <artifactId>druid</artifactId>
+	        <version>0.2.4</version>
+	    </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -180,7 +180,6 @@
 		    <version>1.8.5</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<finalName>market</finalName>
 		<defaultGoal>install</defaultGoal>

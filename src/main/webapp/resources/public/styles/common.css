@@ -467,7 +467,7 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 #pageDiv span{display:block;float:left;background:#CDCDCD;margin:3px;cursor:pointer;padding:0 5px}
 #pageDiv span:hover{background:#2AC7E1;color:#FFF;}
 #pageDiv label span{display:-moz-inline-box; display:inline-block;width:20px;text-align:center;padding:0;}
-#pageDiv .selected{color:#FFF;background:#2AC7E1;}
+#pageDiv .selected{color:#FFF;background:#2AC7E1;cursor:default;}
 #pageDiv .cruLabel {display:;}
 #pageDiv .hideLabel {display:none;}
 
