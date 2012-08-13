@@ -51,7 +51,6 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 				return authorized(uri, request, response);
 			}
 		}
-		log.debug("none authorized uri...");
 		return super.preHandle(request, response, handler);
 	}
 

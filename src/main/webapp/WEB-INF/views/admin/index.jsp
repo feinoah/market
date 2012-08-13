@@ -1,8 +1,8 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>中通福瑞应用市场——后台管理</title>
@@ -24,6 +24,11 @@
 				onClick: function(node){
 					if(node.attributes.url&&node.attributes.url!=null){
 						addTab(node.text, '${ctx}'+node.attributes.url);
+					}
+				},
+				onLoadSuccess: function(node,data){
+					if(data==null||data==''||data==undefined){
+						location.href='${ctx}/back/logout';
 					}
 				}
 			});

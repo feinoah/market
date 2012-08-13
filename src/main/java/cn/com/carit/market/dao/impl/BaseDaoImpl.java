@@ -56,7 +56,7 @@ public class BaseDaoImpl {
 		try {
 			return jdbcTemplate.queryForObject(sql, new Object[]{id}, new int[]{idType}, rowMapper);
 		} catch (Exception e) {
-			log.warn("no record existed...",e);
+			log.warn("no record existed...");
 			return null;
 		}
 	}

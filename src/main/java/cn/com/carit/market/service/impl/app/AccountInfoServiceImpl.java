@@ -175,12 +175,13 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 			resultMap.put(Constants.ANSWER_CODE, 0);
 			return resultMap;
 		}
-		if((accountInfo.getStatus()&Constants.STATUS_LOCKED)!=0){
-			// 帐号被锁定
-			log.error("User["+email+"] does not exist...");
+		if(accountInfo.getStatus()!=Constants.STATUS_VALID){
+			// 帐号没启用
+			log.error("User["+email+"]  not Enabled...");
 			resultMap.put(Constants.ANSWER_CODE, -2);
 			return resultMap;
 		}
+		
 		// 更新登录时间/IP
 		AccountInfo updateAccount=new AccountInfo();
 		updateAccount.setId(accountInfo.getId());

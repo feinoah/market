@@ -141,4 +141,5 @@ public class MD5Util {
 		//
 		// System.out.println(matcher.replaceAll("Java"));
 	}
+	
 }

@@ -1,13 +1,13 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 		
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>CarIt Market</title>
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=v=v=1.6" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.0" ></script>
 		<script type="text/javascript">
 		$(function(){
 			$('#roles').combobox({
@@ -199,7 +199,7 @@
 						<td><form:label	for="realName" path="realName">真实姓名：</form:label></td>
 						<td><form:input path="realName" cssClass="easyui-validatebox"/></td>
 						<td><form:label	for="password" path="password" id="passwordLabel" cssClass="mustInput">密码：</form:label></td>
-						<td><form:password path="password" cssClass="easyui-validatebox" validType="safepass"/></td>
+						<td><form:password path="password" cssClass="easyui-validatebox" validType="safepass" required="true"/></td>
 					</tr>
 					<tr>
 						<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>

@@ -324,7 +324,7 @@ public class PortalController{
 		}
 		AccountInfo updateAccount=new AccountInfo();
 		updateAccount.setId(account.getId());
-		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request; 
+		MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
 		//页面控件的文件流
         MultipartFile multipartFile = multipartRequest.getFile("file");
         try {
@@ -339,9 +339,11 @@ public class PortalController{
 				multipartFile.transferTo(file);
 				updateAccount.setPhoto(Constants.BASE_PATH_PHOTOS+fileName);
 				// 生成缩略图
-				ImageUtils imgUtils=new ImageUtils(file);
-				imgUtils.resize(24, 24);
-				updateAccount.setThumbPhoto(Constants.BASE_PATH_PHOTOS+prefix+"_thumb"+suffix);
+				String resultFile=Constants.BASE_PATH_PHOTOS+prefix+"_thumb"+suffix;
+				String resultFilePath=AttachmentUtil.getPhotoPath(Constants.BASE_PATH_PHOTOS+prefix+"_thumb"+suffix);
+				String srcImageFilePath=AttachmentUtil.getPhotoPath(fileName);
+				ImageUtils.scale(srcImageFilePath, resultFilePath, 24, 24, false);
+				updateAccount.setThumbPhoto(resultFile);
 				// 更新session
 				account.setPhoto(updateAccount.getPhoto());
 				account.setThumbPhoto(updateAccount.getThumbPhoto());

@@ -187,7 +187,7 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 		try {
 			return jdbcTemplate.queryForInt(sql, accountId, SystemMessage.STATUS_UNREAD);
 		} catch (Exception e) {
-			log.warn("there is no message of this account["+accountId+"]", e);
+			log.warn("there is no message of this account["+accountId+"]");
 		}
 		return 0;
 	}
@@ -225,7 +225,7 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 		try {
 			return queryForInt(sql.toString(), args, argTypes);
 		} catch (Exception e) {
-			log.warn("there is no message of this exemple "+systemMessage, e);
+			log.warn("there is no message of this exemple "+systemMessage);
 		}
 		return 0;
 	}

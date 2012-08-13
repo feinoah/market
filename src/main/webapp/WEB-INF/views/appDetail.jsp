@@ -1,7 +1,7 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<script type="text/javascript" src="<c:url value="/resources/public/scripts/SlideTrans.js"/>" ></script>
@@ -241,7 +241,7 @@
 <dt style="margin-top: 8px">更新日期：</dt>
 <dd><time itemprop="datePublished">2012年5月23日</time></dd>
 <dt style="margin-top: 8px">当前版本：</dt>
-<dd itemprop="softwareVersion">v=v=v=1.6.4</dd>
+<dd itemprop="softwareVersion">v=1.0.4</dd>
 <dt itemprop="operatingSystems" content="Android" style="margin-top: 8px">所需的 Android 版本：</dt>
 <dd>2.3 及更高版本</dd>
 <dt style="margin-top: 8px">类别：</dt>
@@ -287,7 +287,7 @@
    <div class="votes">18,191</div></div>
    <div class="doc-review-summary"><div class="doc-review">
    <span class="doc-review-author"><strong>tai</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：v=v=v=1.6.5）
+   <span class="doc-review-date">评论日期：2012年5月23日</span> （版本：v=1.0.5）
    <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
    <div class="doc-review-ratings-line">
 <img src="resources/public/images/star3.jpg" alt="" />
@@ -295,7 +295,7 @@
    <div class="review-footer goog-inline-block"><div class="doc-review-label"></div>
    <div class="per-review-controls goog-inline-block"></div></div></div><hr><div class="doc-review">
    <span class="doc-review-author"><strong>Kwong</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月24日</span> （Samsung Galaxy S2，版本：v=v=v=1.6.5）
+   <span class="doc-review-date">评论日期：2012年5月24日</span> （Samsung Galaxy S2，版本：v=1.0.5）
    <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
    <div class="doc-review-ratings-line">
 <img src="resources/public/images/star3.jpg" alt="" />
@@ -305,7 +305,7 @@
    <div class="doc-review-label"></div>
    <div class="per-review-controls goog-inline-block"></div></div></div><hr>
    <div class="doc-review"><span class="doc-review-author"><strong>家仁</strong></span>
-   <span class="doc-review-date">评论日期：2012年5月23日</span> （Samsung Galaxy S2，版本：v=v=v=1.6.5）
+   <span class="doc-review-date">评论日期：2012年5月23日</span> （Samsung Galaxy S2，版本：v=1.0.5）
    <span><a href=""><div class="goog-inline-block review-permalink" title="指向此评论的链接"></div></a></span>
    <div class="doc-review-ratings-line">
   <img src="resources/public/images/star3.jpg" alt="" />

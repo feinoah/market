@@ -550,10 +550,14 @@
 	float:left;
 }
 .detail_left1_div img{
-	width :80px;height: 80px;
+	width :80px;
+	height: 80px;
+	margin-top: 7px;
 }
 .detail_right_div{
-	float:right;width:65%;
+	float:right;
+	width:65%;
+	margin-top: 7px;
 }
 .detail_right_div img{
 	display: inline-block;
@@ -573,6 +577,7 @@
 }
 .detail_label_left1_top{
 	margin-left:17px;width:300px;font-size: 15px;
+	margin-top: 7px;
 }
 
 .g-doc-1026 {
@@ -799,4 +804,7 @@ background:url(../images/dark_background_stripes.gif);
 	vertical-align:top;
 	color: white;
 	font-weight: bold
+}
+.text_overflow{
+	width:180px;height:75px;
 }

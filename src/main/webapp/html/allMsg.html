@@ -20,7 +20,7 @@ function doPage(page){
 			var html='<tr>'+$('#msgTable tr:first').html()+'</tr>';
 			if(data.rows){
 				$.each(data.rows,function(i,o){
-					html+='<tr onclick="showMsg('+i+')"><td>'+(i+1)+'</td><td align="left" id="msg_title_'+i+'"';
+					html+='<tr onclick="showMsg('+i+')" id="msg_tr_'+i+'"><td>'+(i+1)+'</td><td align="left" id="msg_title_'+i+'"';
 					if(o.status==0){
 						html+='class="unread"';
 					}
@@ -42,11 +42,18 @@ function doPage(page){
 function showMsg(i){
 	var msg=$('#msg_content_'+i);
 	$('#msgContent').html(msg.html());
+	$('#msg_tr_'+i).css('background','#A4A4A4');
 	$.getJSON(app.name+'/portal/app/user/read/sysmessage/'+msg.attr('msgId'), function(data) {
 		if(data>0){
 			var count=$('#message').html();
 			if(count>0){
 				$('#message').html(count-1);
+			}
+			if(count==1){
+				$('#message').css({
+					'background':'url('+app.name+'/resources/public/images/h_bedf916a.png)',
+					'background-position':'-24px -270px'
+				});
 			}
 			$('#msg_title_'+i).removeClass('unread');
 		}

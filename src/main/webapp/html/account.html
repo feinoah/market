@@ -8,7 +8,7 @@
 			<dd id="genderR"><span class="title">性别：</span><input class="reg_input" id="genderDesc" type="text" readonly="readonly"/></dd>
 			<dd id="genderE" style="display:none;"><span class="title">性别：</span><select name="gender" id="gender" class="reg_input" style="width:170px;"></select>
 			</dd>
-			<dd><span class="title">余额：</span><input class="reg_input" name="balance" id="balance" type="text" readonly="readonly"/></dd>
+			<dd><span class="title">余额：</span><input class="reg_input" name="balance" id="balance" type="text" disabled="disabled"/></dd>
 			<h3>扩展信息</h3>
 			<dd><span class="title">真实姓名：</span><input class="reg_input" name="realName" id="realName" type="text" readonly="readonly"/></dd>
 			<dd><span class="title">身份证号码：</span><input class="reg_input" name="idCard" id="idCard" type="text" readonly="readonly"/></dd>
@@ -41,7 +41,9 @@ $(function() {
 		$(this).hide();
 		$('#accountSubmit').show();
 		$('#accountForm input').each(function(){
-			$(this).attr('readonly',false);
+			if(this.id!=='balance'||this.id!='email'){
+				$(this).attr('readonly',false);
+			}
 		});
 		$('#genderR').hide();
 		$('#genderE').show();
@@ -149,7 +151,7 @@ function photoChange(o){
 						tips('uploadImg','图片上传失败','bottom');
 					}
 					if(map.answerCode==1){
-						tips('uploadImg','修改成功','bottom');
+						tips('uploadImg','图片上传成功','bottom');
 						account.photo=map.photo;
 						$('#photo').attr('src',map.photo);
 						account.thumbPhoto=map.thumbPhoto;

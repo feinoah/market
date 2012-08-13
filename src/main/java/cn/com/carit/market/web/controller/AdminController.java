@@ -136,7 +136,7 @@ public class AdminController{
 		BaseUser baseUser=(BaseUser) session.getAttribute(Constants.ADMIN_USER);
 		if(baseUser!=null){
 			session.setAttribute(Constants.ADMIN_USER, null);
-			session.setAttribute(Constants.USER_ALL_MOUDLE+baseUser.getEmail(), 0);
+			session.setAttribute(Constants.ADMIN_USER+baseUser.getEmail(), 0);
 		}
 		return "/admin/loginForm";
 	}
@@ -194,9 +194,14 @@ public class AdminController{
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="back/menu/tree", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Tree>  buildMenuTree(HttpServletRequest req){
+	public List<Tree>  buildMenuTree(HttpServletRequest req, HttpServletResponse resp) throws Exception{
 		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
 				Constants.USER_ALL_MOUDLE);
+		if (moduleList==null) {
+			//转到登录页面
+			req.getRequestDispatcher("/back/loginForm").forward(req, resp);
+			return null;
+		}
 		if (moduleList!=null && moduleList.size()>0) {
 			List<BaseModule> menuList=new ArrayList<BaseModule>();
 			for (BaseModule baseModule : moduleList) {

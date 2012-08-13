@@ -467,7 +467,7 @@ AutoPlayer.prototype = {
 					event = event || window.event;
 					var direction = (event.pageX - jQuery(this).offset().left)
 							/ jQuery(this).width() > 0.5;
-					if (nowDirection != direction) {
+					if (nowDirection != direction & self.data.length>1) {
 						if (direction) {
 							jQuery(this).css(
 									'cursor',

@@ -1,13 +1,11 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
 		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
-		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/kindeditor-min.js"></script>
-		<script charset="utf-8" src="${ctx}/resources/kindeditor-4.1.1/lang/zh_CN.js"></script>
 		<script type="text/javascript">
 		var devs;
 		var descEditer;
@@ -150,14 +148,14 @@
 							$(this).val($(this).combobox('getText'));
 						});
 						var b=true;
-						/*$('#editForm textarea').each(function(){
+						$('#editForm textarea').each(function(){
 							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
-								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(一个中文两个字符)', 'info');
+								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(包括HTML标签，一个中文两个字符)', 'info');
 								b=false;
 								return false;
 							}
 						});
-						if(!b){return b;}*/
+						if(!b){return b;}
 						if($('#apkFileTxt').val()==''&&$('#apkFile').val()==''){ //新增时
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
@@ -217,14 +215,14 @@
 						// 避免 form validate bug
 						$('#version_status_edit').val($('#version_status_edit').combobox('getText'));
 						var b=true;
-						/*$('#editVersionForm textarea').each(function(){
+						$('#editVersionForm textarea').each(function(){
 							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
-								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(一个中文两个字符)', 'info');
+								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(包括HTML标签，一个中文两个字符)', 'info');
 								b=false;
 								return false;
 							}
 						});
-						if(!b){return b;}*/
+						if(!b){return b;}
 						if($('#versionFile').val()==''){
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;

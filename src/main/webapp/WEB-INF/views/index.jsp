@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <title>中通福瑞——应用市场</title>
 <%@ include file="/WEB-INF/views/commons/nocache.jsp"%>
@@ -10,8 +10,8 @@
 <link href="${ctx }/resources/public/styles/index-1.0.css" rel="stylesheet" type="text/css" />
 <link href="${ctx }/resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${ctx }/resources/public/scripts/SlideTrans.js"></script>
-<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
+<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
 <script type="text/javascript" src="${ctx }/resources/public/scripts/utils.js"></script>
 <!--[if lte IE 6]>  
 <div id="ie6-warning"> 

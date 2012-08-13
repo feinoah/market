@@ -53,7 +53,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 			try {//尝试找到有效版本
 				version = appVersionFileDao.queryValidVersionByAppId(id);
 			} catch (Exception e) {//没有有效版本
-				log.warn("no valid version for app["+id+"]...", e);
+				log.warn("no valid version for app["+id+"]...");
 				version=appVersionFileDao.queryByAppIdAndExceptId(id, 0).get(0);
 			}
 			if (StringUtils.hasText(application.getIcon())) {

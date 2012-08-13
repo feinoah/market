@@ -366,7 +366,7 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	public int lockAccount(int id) {
 		String sql="update t_account_info set update_time=now(), status=? where id=?";
 		log.debug(String.format("\n%1$s\n", sql));
-		return jdbcTemplate.update(sql, Constants.STATUS_INVALID, id);
+		return jdbcTemplate.update(sql, Constants.STATUS_LOCKED, id);
 	}
 	@Override
 	public int unLockAccount(int id) {

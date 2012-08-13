@@ -1,6 +1,5 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 	<head>
 	<title>中通福瑞——应用市场</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -9,16 +8,108 @@
 	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/ykb.css" rel="stylesheet" type="text/css" />
 	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/common.css?v=v=v=1.6" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="../resources/jquery-easyui-1.2.6/plugins/jquery.form.js"></script>
+	<script type="text/javascript" src="../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/autoPlayer.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=v=v=1.6"></script>
-	<script type="text/javascript" src="../resources/public/scripts/index.js?v=v=v=1.6"></script>
+	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
+	<script type="text/javascript" src="../resources/public/scripts/index.js?v=1.0"></script>
+<!--[if lte IE 6]>  
+<div id="ie6-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
+您正在使用 Internet Explorer 6 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeme()">X</span>  
+</div>  
+<script type="text/javascript">  
+function closeme() 
+{ 
+   var div = document.getElementById("ie6-warning"); 
+   div.style.display ="none"; 
+} 
+function position_fixed(el, eltop, elleft){  
+// check if this is IE6  
+if(!window.XMLHttpRequest)  
+window.onscroll = function(){  
+el.style.top = (document.documentElement.scrollTop + eltop)+"px";  
+el.style.left = (document.documentElement.scrollLeft + elleft)+"px";
+}  
+else el.style.position = "fixed";  
+}  
+position_fixed(document.getElementById("ie6-warning"),0, 0);  
+</script>  
+<![endif]-->
+<!--[if lte IE 7]>  
+<div id="ie7-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
+您正在使用 Internet Explorer 7 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeIe7()">X</span>  
+</div>  
+<script type="text/javascript">
+function closeIe7() 
+{ 
+   var div = document.getElementById("ie7-warning"); 
+   div.style.display ="none"; 
+} 
+function position_fixed(el, eltop, elleft){  
+// check if this is IE7 
+if(!window.XMLHttpRequest)  
+window.onscroll = function(){  
+el.style.top = (document.documentElement.scrollTop + eltop)+"px";  
+el.style.left = (document.documentElement.scrollLeft + elleft)+"px"; 
+}  
+else el.style.position = "fixed";  
+}  
+position_fixed(document.getElementById("ie7-warning"),0, 0);  
+</script>
+<![endif]-->
+<!--[if lte IE 8]>
+<script type="text/javascript">
+if(document.getElementById("ie7-warning")){
+	closeIe7()
+}  
+</script>
+<div id="ie8-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
+您正在使用 Internet Explorer 8 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeme()">X</span> 
+</div>  
+<script type="text/javascript">  
+function closeme() 
+{ 
+   var div = document.getElementById("ie8-warning"); 
+   div.style.display ="none"; 
+} 
+function position_fixed(el, eltop, elleft){  
+// check if this is IE8 
+if(!window.XMLHttpRequest)  
+window.onscroll = function(){  
+el.style.top = (document.documentElement.scrollTop + eltop)+"px";  
+el.style.left = (document.documentElement.scrollLeft + elleft)+"px"; 
+}  
+else el.style.position = "fixed";  
+}  
+position_fixed(document.getElementById("ie8-warning"),0, 0);  
+</script>  
+<![endif]-->
 	<script type="text/javascript">
+	 var oldValue=new Array();  
+     function checkMaxLen(){  
+    	 //var remain_cm = document.getElementById("remain_comment");
+         var cm_content = document.getElementById("comment");  
+         var cm_maxlength = 200;        
+         var cm_num = 0;           
+         var cm_length = getStrLength(cm_content.value); 
+          $('#remain_comment').empty().html(cm_maxlength - cm_length);
+          if(cm_length>=cm_maxlength){  
+           //alert("评价内容最多输入" + cm_maxlength + "个汉字、字母或数字！");  
+           cm_content.value=oldValue[cm_num];  
+          }  
+          else{  
+           oldValue[cm_num]=cm_content.value;  
+          }  
+          
+     }  
+ 
+
+	
+	
 	function onPicError(){
 		$('.app_detail_icon').error(function(){
 			this.src = '../resources/public/images/app_default.jpg';
@@ -153,6 +244,7 @@
 	 							$('#grade').val('');
 	 							doPage(1);
 								initCommentStat();
+								$('#remain_comment').empty().html("200");
 							}
 						}else{
 							tips('submitBtn','后台系统异常','bottom');
@@ -249,7 +341,7 @@
 		$.getJSON('../portal/app/down/ref/'+rt+'?rows=6', function(data) {
 			if(data){
 				$('#view_more').empty();
-				$('#view_more').append('<h3 class="detaiil_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
+				$('#view_more').append('<h3 class="detail_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
 				$.each(data.rows,function(i,o){
 					var install_price;
 					if(o.price==0){
@@ -452,10 +544,10 @@
 			<!-- left top -->
 
 			<div id="left" style="float:left;width:29%;margin-top:12px">
-				<div id="author_more" style="float:left;width:328px;height:500px;background-color: white;">
+				<div id="author_more" style="float:left;width:328px;height:515px;background-color: white;">
 				</div>
 				<!-- left bottom -->
-				<div id="view_more" style="float:left;width:328px;height:620px;margin-top:13px;background-color: white">
+				<div id="view_more" style="float:left;width:328px;height:605px;margin-top:13px;background-color: white">
 				   <h3>安装此应用的用户还安装了：</h3>
 			    </div>
 		    </div>	
@@ -517,7 +609,7 @@
 <dt style="margin-top: 8px">更新日期：</dt>
 <dd><time id="about_date">2012年5月23日</time></dd>
 <dt style="margin-top: 8px">当前版本：</dt>
-<dd id="about_version">v=1.6.4</dd>
+<dd id="about_version">v=v=1.7.4</dd>
 <dt itemprop="operatingSystems" style="margin-top: 8px">所需的 Android 版本：</dt>
 <dd><label id="about_android_version">2.3</label>及更高版本</dd>
 <dt style="margin-top: 8px">类别：</dt>
@@ -580,7 +672,8 @@
    
    <form action="../portal/app/comment/add" method="post" id="commentForm" style="display: none;">
    <div id="commentInput" style="font-size: 18px">
-       内容：<textarea id="comment" name="comment" style="width: 600px;height: 80px;display: block"></textarea><div class="star">评分：<span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span>
+       内容:<span style="margin-left: 370px;"> 您还可以输入:<label id="remain_comment">200</label>字</span>
+   <textarea id="comment" name="comment" style="width: 600px;height: 80px;display: block" rows="" cols=""></textarea><div class="star">评分：<span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span>
    <button class="comment_submit" id="submitBtn">提交</button></div>
    <input type="hidden" name="grade" id="grade"/>
    <input type="hidden" name="appId" id="appId"/>
@@ -640,6 +733,16 @@
 
 
 <script>
+//firefox下检测状态改变只能用oninput,且需要用addEventListener来注册事件。   
+if(/msie/i.test(navigator.userAgent))    //ie浏览器   
+{  
+   document.getElementById("comment").onpropertychange=checkMaxLen;//ie浏览器下 onpropertychange事件指 属性变化监听（即时的），包括脚本改变对象属性值，onchange只是对象失去焦点后 才激活事件（不即时）,onpropertychange事件firefox、opera、safari、 chrome都不支持，只有IE支持  
+  
+}   
+else   
+{//非ie浏览器，比如Firefox   
+   document.getElementById("comment").addEventListener("input",checkMaxLen,false);   
+}  
 function showAllComment(){
 		$('.Menubox ul li').removeClass('hover').eq(1).addClass('hover');
 		$('div[id^=con_two_]').hide().eq(1).show();
