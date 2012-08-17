@@ -240,7 +240,7 @@ public class PortalController{
 		AccountInfo account=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
 		if (account!=null) {
 			session.setAttribute(Constants.PORTAL_USER, null);
-			session.setAttribute(Constants.USER_ALL_MOUDLE+account.getEmail(), 0);
+			session.setAttribute(Constants.PASSWORD_ERROR_COUNT+account.getEmail(), 0);
 		}
 		Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), "");
 		cookie.setMaxAge(0); // delete the cookie.   

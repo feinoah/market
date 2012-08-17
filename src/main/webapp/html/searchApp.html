@@ -85,12 +85,21 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 </script>  
 <![endif]-->
 		<script type="text/javascript">
+		function text_overflow(str){
+			var maxwidth=59;
+			if(str.length>maxwidth){
+				return str.substring(0,maxwidth)+'...';
+			}else {
+				return str;
+			}
+		}
 		function submit(id){
 			window.open("../html/appDetail.html?inputStr=" + id);//传入参数
 		}
 		
 		var rt = request.QueryString("inputStr");
 		function doPage(page){
+			var regEx=/<[^>]*>/g;
 			$.getJSON('../portal/app/search?q='+rt+'&page='+page+'&rows=9', function(data) {
 				if(data){
 					$('#allApp').empty();
@@ -104,8 +113,8 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 								+o.appName+
 								'</label><label class="app_l2">'
 								+o.developer+
-								'</label><div style="text-overflow:ellipsis;overflow:hidden;width:180px;height:75px">'
-								+o.description+
+								'</label><div class="text_overflow">'
+								+text_overflow(o.description.replace(regEx,''))+
 								'</div></td></tr></table></div>');
 					})
 					$('.search_star').error(function(){

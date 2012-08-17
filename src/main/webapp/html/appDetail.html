@@ -97,9 +97,19 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
          var cm_num = 0;           
          var cm_length = getStrLength(cm_content.value); 
           $('#remain_comment').empty().html(cm_maxlength - cm_length);
+          oldValue[cm_num]=cm_content.value;  
           if(cm_length>=cm_maxlength){  
-           //alert("评价内容最多输入" + cm_maxlength + "个汉字、字母或数字！");  
-           cm_content.value=oldValue[cm_num];  
+        	  
+        	  if((cm_length-cm_maxlength)>2){
+        		  //oldValue[cm_num] = cm_content.value
+        		  cm_content.value = "";
+        		  $('#remain_comment').empty().html("200");
+        		  //cm_content.value =  oldValue[cm_num].substring(0,200);      
+        	  }
+        		  
+           else
+           cm_content.value=oldValue[cm_num].substring(0,199);
+        	  alert("评价内容最多输入" + cm_maxlength + "个汉字、字母或数字！");  
           }  
           else{  
            oldValue[cm_num]=cm_content.value;  
