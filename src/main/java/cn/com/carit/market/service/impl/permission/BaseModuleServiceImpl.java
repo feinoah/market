@@ -14,6 +14,7 @@ import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.permission.BaseModuleDao;
 import cn.com.carit.market.dao.permission.BaseRoleModuleDao;
 import cn.com.carit.market.service.permission.BaseModuleService;
+import cn.com.carit.market.web.CacheManager;
 @Service
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class BaseModuleServiceImpl implements BaseModuleService{
@@ -35,6 +36,8 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 		} else {
 			baseModuleDao.update(baseModule);
 		}
+		//更新缓存
+		CacheManager.getInstance().refreshUserCache();
 	}
 
 	@Override

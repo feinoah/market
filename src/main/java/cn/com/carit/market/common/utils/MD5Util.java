@@ -8,6 +8,10 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -140,6 +144,29 @@ public class MD5Util {
 		// pattern.matcher("@正则表达式:Hello World,@正则表达式  HelloWorld");
 		//
 		// System.out.println(matcher.replaceAll("Java"));
+		
+		Map<Integer, Integer> map1=new HashMap<Integer, Integer>();
+		Map<Integer, Integer> map2=new TreeMap<Integer, Integer>();
+		map1.put(2, 2);
+		map2.put(2, 3);
+		map1.put(1, 1);
+		map2.put(1, 1);
+		map1.put(4, 4);
+		map2.put(4, 4);
+		map1.put(3, 3);
+		map2.put(3, 3);
+		for (Entry<Integer,Integer> e: map1.entrySet()) {
+			System.out.println(e.getKey()+":"+e.getValue());
+		}
+		for (Integer key : map1.keySet()) {
+			System.out.println(key);
+		}
+		for (Entry<Integer,Integer> e: map2.entrySet()) {
+			System.out.println(e.getKey()+":"+e.getValue());
+		}
+		for (Integer key : map2.keySet()) {
+			System.out.println(key);
+		}
 	}
 	
 }

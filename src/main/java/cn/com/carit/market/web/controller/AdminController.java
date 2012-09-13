@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,13 +31,16 @@ import cn.com.carit.market.bean.BaseRole;
 import cn.com.carit.market.bean.BaseUser;
 import cn.com.carit.market.bean.Tree;
 import cn.com.carit.market.bean.TreeMenu;
+import cn.com.carit.market.bean.app.AppVersionFile;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.MD5Util;
+import cn.com.carit.market.service.app.ApplicationService;
 import cn.com.carit.market.service.permission.BaseFieldService;
 import cn.com.carit.market.service.permission.BaseModuleService;
 import cn.com.carit.market.service.permission.BaseRoleService;
 import cn.com.carit.market.service.permission.BaseUserService;
+import cn.com.carit.market.web.CacheManager;
 /**
  * 后台管理入口类， 不受权限控制
  * @author <a href="mailto:xiegengcai@gmail.com">Xie Gengcai</a>
@@ -54,6 +58,8 @@ public class AdminController{
 	private BaseModuleService baseModuleService;
 	@Resource
 	private BaseRoleService baseRoleService;
+	@Resource
+	private ApplicationService applicationService;
 	/**
 	 * admin
 	 * 跳转到后台首页
@@ -95,8 +101,7 @@ public class AdminController{
 	 * @throws Exception 
 	 */
 	@RequestMapping(value="back/login", method=RequestMethod.POST)
-	@ResponseBody
-	public int login(@RequestParam("email") String email
+	public String login(@RequestParam("email") String email
 			, @RequestParam("password") String password
 			, HttpServletRequest req) throws Exception{
 		HttpSession session=req.getSession();
@@ -104,7 +109,7 @@ public class AdminController{
 		Integer errorCount= obj==null?0:(Integer)obj;
 		if (errorCount!=null && errorCount.intValue()>=Constants.MAX_PWD_ERROR_COUNT) {
 			log.error("Limit login:password error count("+errorCount+") >="+Constants.MAX_PWD_ERROR_COUNT);
-			return -3;
+			req.setAttribute("error", "密码连续错误"+Constants.MAX_PWD_ERROR_COUNT+"次，半小时内限制登录");
 		}
 		Map<String, Object> resultMap=baseUserService.login(email, password, req.getRemoteAddr());
 		Integer answerCode=(Integer) resultMap.get(Constants.ANSWER_CODE);
@@ -114,16 +119,21 @@ public class AdminController{
 				BaseUser baseUser=(BaseUser) resultMap.get(email);
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, 0);
 				session.setAttribute(Constants.ADMIN_USER, baseUser);
-				// 得到所有模块
-				List<BaseModule> allModule=baseModuleService.queryByUserId(baseUser.getId());
-				// 缓存模块，权限拦截时需要使用
-				session.setAttribute(Constants.USER_ALL_MOUDLE, allModule);
-			}
-			if (answerCode.intValue()==0) {// 密码错误
+				req.removeAttribute("error");
+				return "redirect:/admin";
+			}else if (answerCode.intValue()==0) {// 密码错误
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);
+				req.setAttribute("error", "密码错误");
+			}else if (answerCode.intValue()==-2) {
+				req.setAttribute("error", "账号不存在");
+			}else if (answerCode.intValue()==-1) {
+				req.setAttribute("error", "账号已停用");
+			} else {
+				req.setAttribute("error", "未知错误");
 			}
 		}
-		return answerCode;
+		req.setAttribute("email", email);
+		return "admin/loginForm";
 	}
 	
 	/**
@@ -191,26 +201,25 @@ public class AdminController{
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value="back/menu/tree", method=RequestMethod.GET)
 	@ResponseBody
 	public List<Tree>  buildMenuTree(HttpServletRequest req, HttpServletResponse resp) throws Exception{
-		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
-				Constants.USER_ALL_MOUDLE);
-		if (moduleList==null) {
+		BaseUser baseUser=(BaseUser) req.getSession().getAttribute(Constants.ADMIN_USER);
+		if (baseUser==null) {
 			//转到登录页面
 			req.getRequestDispatcher("/back/loginForm").forward(req, resp);
-			return null;
-		}
-		if (moduleList!=null && moduleList.size()>0) {
-			List<BaseModule> menuList=new ArrayList<BaseModule>();
-			for (BaseModule baseModule : moduleList) {
-				if (baseModule.getDisplay()) { // 过滤不显示菜单
-					menuList.add(baseModule);
+		}else{
+			List<BaseModule> moduleList=CacheManager.getInstance().getUserModuleCache().get(baseUser.getId());
+			if (moduleList!=null && moduleList.size()>0) {
+				List<BaseModule> menuList=new ArrayList<BaseModule>();
+				for (BaseModule baseModule : moduleList) {
+					if (baseModule.getDisplay()) { // 过滤不显示菜单
+						menuList.add(baseModule);
+					}
 				}
+				TreeMenu menu = new TreeMenu(menuList);
+				return menu.getTreeJson().getChildren();
 			}
-			TreeMenu menu = new TreeMenu(menuList);
-			return menu.getTreeJson().getChildren();
 		}
 		return new ArrayList<Tree>();
 	}
@@ -282,24 +291,29 @@ public class AdminController{
 	 * @param baseUri
 	 * @param req
 	 * @return
+	 * @throws Exception 
 	 */
 	@RequestMapping(value="back/permission/check", method=RequestMethod.GET)
-	@SuppressWarnings("unchecked")
 	@ResponseBody
-	public Map<String, Integer> checkEditControl(@RequestParam("baseUri") String baseUri, HttpServletRequest req){
-		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
-				Constants.USER_ALL_MOUDLE);
+	public Map<String, Integer> checkEditControl(@RequestParam("baseUri") String baseUri, HttpServletRequest req, HttpServletResponse resp) throws Exception{
+		BaseUser baseUser=(BaseUser) req.getSession().getAttribute(Constants.ADMIN_USER);
 		Map<String, Integer> result=new HashMap<String, Integer>();
 		result.put("save", 0);
 		result.put("del", 0);
-		if (moduleList!=null && moduleList.size()>0) {
-			String [] array={"/save","/delete"};
-			for (BaseModule baseModule : moduleList) {
-				if ((baseUri+array[0]).equals(baseModule.getModuleUrl())) {
-					result.put("save", 1);
-				}
-				if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
-					result.put("del", 1);
+		if (baseUser==null) {
+			//转到登录页面
+			req.getRequestDispatcher("/back/loginForm").forward(req, resp);
+		}else{
+			List<BaseModule> moduleList=CacheManager.getInstance().getUserModuleCache().get(baseUser.getId());
+			if (moduleList!=null && moduleList.size()>0) {
+				String [] array={"/save","/delete"};
+				for (BaseModule baseModule : moduleList) {
+					if ((baseUri+array[0]).equals(baseModule.getModuleUrl())) {
+						result.put("save", 1);
+					}
+					if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
+						result.put("del", 1);
+					}
 				}
 			}
 		}
@@ -313,30 +327,36 @@ public class AdminController{
 	 * @return
 	 */
 	@RequestMapping(value="back/permission/account", method=RequestMethod.GET)
-	@SuppressWarnings("unchecked")
 	@ResponseBody
-	public Map<String, Integer> checkAccountControl(@RequestParam("baseUri") String baseUri, HttpServletRequest req){
-		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
-				Constants.USER_ALL_MOUDLE);
-		Map<String, Integer> result=new HashMap<String, Integer>();
+	public Map<String, Integer> checkAccountControl(@RequestParam("baseUri") String baseUri, HttpServletRequest req, HttpServletResponse resp) throws Exception{
+		Map<String, Integer> result = new HashMap<String, Integer>();
 		result.put("save", 0);
 		result.put("del", 0);
 		result.put("lock", 0);
 		result.put("unlock", 0);
-		if (moduleList!=null && moduleList.size()>0) {
-			String [] array={"/save","/delete", "/unlock", "/lock"};
-			for (BaseModule baseModule : moduleList) {
-				if ((baseUri+array[0]).equals(baseModule.getModuleUrl())) {
-					result.put("save", 1);
-				}
-				if ((baseUri+array[1]).equals(baseModule.getModuleUrl())) {
-					result.put("del", 1);
-				}
-				if ((baseUri+array[2]).equals(baseModule.getModuleUrl())) {
-					result.put("unlock", 1);
-				}
-				if ((baseUri+array[3]).equals(baseModule.getModuleUrl())) {
-					result.put("lock", 1);
+		BaseUser baseUser = (BaseUser) req.getSession().getAttribute(
+				Constants.ADMIN_USER);
+		if (baseUser == null) {
+			// 转到登录页面
+			req.getRequestDispatcher("/back/loginForm").forward(req, resp);
+		} else {
+			List<BaseModule> moduleList = CacheManager.getInstance()
+					.getUserModuleCache().get(baseUser.getId());
+			if (moduleList != null && moduleList.size() > 0) {
+				String[] array = { "/save", "/delete", "/unlock", "/lock" };
+				for (BaseModule baseModule : moduleList) {
+					if ((baseUri + array[0]).equals(baseModule.getModuleUrl())) {
+						result.put("save", 1);
+					}
+					if ((baseUri + array[1]).equals(baseModule.getModuleUrl())) {
+						result.put("del", 1);
+					}
+					if ((baseUri + array[2]).equals(baseModule.getModuleUrl())) {
+						result.put("unlock", 1);
+					}
+					if ((baseUri + array[3]).equals(baseModule.getModuleUrl())) {
+						result.put("lock", 1);
+					}
 				}
 			}
 		}
@@ -349,30 +369,38 @@ public class AdminController{
 	 * @return
 	 */
 	@RequestMapping(value="back/permission/app", method=RequestMethod.GET)
-	@SuppressWarnings("unchecked")
 	@ResponseBody
-	public Map<String, Integer> checkApplicationControl(HttpServletRequest req){
-		List<BaseModule> moduleList=(List<BaseModule>) req.getSession().getAttribute(
-				Constants.USER_ALL_MOUDLE);
+	public Map<String, Integer> checkApplicationControl(HttpServletRequest req,HttpServletResponse resp)throws Exception{
 		Map<String, Integer> result=new HashMap<String, Integer>();
 		result.put("save", 0);
 		result.put("del", 0);
 		result.put("searchVersion", 0);
 		result.put("addVersion", 0);
-		if (moduleList!=null && moduleList.size()>0) {
-			String [] array={"/admin/app/application/save","/admin/app/application/delete", "/admin/app/version/query", "/admin/app/version/save"};
-			for (BaseModule baseModule : moduleList) {
-				if (array[0].equals(baseModule.getModuleUrl())) {
-					result.put("save", 1);
-				}
-				if (array[1].equals(baseModule.getModuleUrl())) {
-					result.put("del", 1);
-				}
-				if (array[2].equals(baseModule.getModuleUrl())) {
-					result.put("searchVersion", 1);
-				}
-				if (array[3].equals(baseModule.getModuleUrl())) {
-					result.put("addVersion", 1);
+		BaseUser baseUser = (BaseUser) req.getSession().getAttribute(
+				Constants.ADMIN_USER);
+		if (baseUser == null) {
+			// 转到登录页面
+			req.getRequestDispatcher("/back/loginForm").forward(req, resp);
+		} else {
+			List<BaseModule> moduleList = CacheManager.getInstance()
+					.getUserModuleCache().get(baseUser.getId());
+			if (moduleList != null && moduleList.size() > 0) {
+				String[] array = { "/admin/app/application/save",
+						"/admin/app/application/delete",
+						"/admin/app/version/query", "/admin/app/version/save" };
+				for (BaseModule baseModule : moduleList) {
+					if (array[0].equals(baseModule.getModuleUrl())) {
+						result.put("save", 1);
+					}
+					if (array[1].equals(baseModule.getModuleUrl())) {
+						result.put("del", 1);
+					}
+					if (array[2].equals(baseModule.getModuleUrl())) {
+						result.put("searchVersion", 1);
+					}
+					if (array[3].equals(baseModule.getModuleUrl())) {
+						result.put("addVersion", 1);
+					}
 				}
 			}
 		}
@@ -520,5 +548,18 @@ public class AdminController{
 	@RequestMapping(value="back/field/query/{field}", method=RequestMethod.GET)
 	public @ResponseBody List<BaseField> queryBaseFieldByField(@PathVariable String field){
 		return baseFieldService.queryByField(field);
+	}
+	
+	/**
+	 * 跳转到增加版本页面
+	 * @param appId
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="back/add/app/version/{appId}", method=RequestMethod.GET)
+	public String addVersion(Model model,@PathVariable int appId, HttpServletRequest request){
+		model.addAttribute(new AppVersionFile());
+		model.addAttribute("application", applicationService.queryById(appId));
+		return "admin/app/add_version";
 	}
 }

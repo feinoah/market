@@ -71,7 +71,7 @@ public class AppVersionFileController {
 			return -1;
 		}
 		if (appVersionFile.getAppId()==null||appVersionFile.getAppId().intValue()<=0) {
-			log.error("appId must be bigger than 0 ...");
+			log.error("appId["+appVersionFile.getAppId()+"] must be bigger than 0 ...");
 			return -1;
 		}
 		if (!StringUtils.hasText(appVersionFile.getVersion())) {

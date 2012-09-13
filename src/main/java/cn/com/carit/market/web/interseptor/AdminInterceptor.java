@@ -15,6 +15,7 @@ import cn.com.carit.market.bean.BaseUser;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.SphinxUtil;
+import cn.com.carit.market.web.CacheManager;
 
 /**
  * 后台系统拦截器
@@ -48,7 +49,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 				request.getRequestDispatcher("/back/loginForm").forward(request, response);
 				return false;
 			} else {
-				return authorized(uri, request, response);
+				return authorized(user.getId(), uri, request, response);
 			}
 		}
 		return super.preHandle(request, response, handler);
@@ -62,11 +63,9 @@ public class AdminInterceptor extends HandlerInterceptorAdapter{
 	 * @throws IOException 
 	 * @throws ServletException 
 	 */
-	@SuppressWarnings("unchecked")
-	private boolean authorized(String uri, HttpServletRequest req, HttpServletResponse resp) 
+	private boolean authorized(int userId, String uri, HttpServletRequest req, HttpServletResponse resp) 
 			throws ServletException, IOException{
-		List<BaseModule> allModule=(List<BaseModule>) req.getSession().getAttribute(
-				Constants.USER_ALL_MOUDLE);
+		List<BaseModule> allModule=CacheManager.getInstance().getUserModuleCache().get(userId);
 		for (BaseModule module : allModule) {
 			if (uri.equals(module.getModuleUrl())) { // 有授权
 				return true;

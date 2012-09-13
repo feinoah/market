@@ -392,20 +392,39 @@ public class PortalController{
 			return resultMap;
 		}
 		HttpSession session=request.getSession();
-		AccountInfo account=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
-		if (account==null) {
+		AccountInfo sessionAccount=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
+		if (sessionAccount==null) {
 			//session超时
 			log.warn("session time out...");
 			resultMap.put(Constants.ANSWER_CODE, -2);
 			return resultMap;
 		}
-		accountInfo.setId(account.getId());
-		account=accountInfoService.saveOrUpdate(accountInfo);
+		accountInfo.setId(sessionAccount.getId());
+		accountInfoService.saveOrUpdate(accountInfo);
+		// 更新session
+		if (StringUtils.hasText(accountInfo.getNickName())) {
+			sessionAccount.setNickName(accountInfo.getNickName());
+		}
+		if (accountInfo.getGender()!=null) {
+			sessionAccount.setGender(accountInfo.getGender());
+		}
+		if (StringUtils.hasText(accountInfo.getRealName())) {
+			sessionAccount.setRealName(accountInfo.getRealName());
+		}
+		if (StringUtils.hasText(accountInfo.getIdCard())) {
+			sessionAccount.setIdCard(accountInfo.getIdCard());
+		}
+		if (StringUtils.hasText(accountInfo.getMobile())) {
+			sessionAccount.setMobile(accountInfo.getMobile());
+		}
+		if (StringUtils.hasText(accountInfo.getOfficePhone())) {
+			sessionAccount.setOfficePhone(accountInfo.getOfficePhone());
+		}
 		PortalAccountInfo portalAccount=new PortalAccountInfo();
-		BeanUtils.copyProperties(account, portalAccount);
+		BeanUtils.copyProperties(sessionAccount, portalAccount);
 		resultMap.put(Constants.PORTAL_USER, portalAccount);
 		// 更新session
-		session.setAttribute(Constants.PORTAL_USER, account);
+		session.setAttribute(Constants.PORTAL_USER, sessionAccount);
 		resultMap.put(Constants.ANSWER_CODE, 1);
 		return resultMap;
 	}

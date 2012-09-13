@@ -17,6 +17,7 @@ import cn.com.carit.market.dao.permission.BaseRoleDao;
 import cn.com.carit.market.dao.permission.BaseRoleModuleDao;
 import cn.com.carit.market.dao.permission.BaseUserRoleDao;
 import cn.com.carit.market.service.permission.BaseRoleService;
+import cn.com.carit.market.web.CacheManager;
 @Service
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class BaseRoleServiceImpl implements BaseRoleService{
@@ -54,6 +55,8 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 				baseRoleModuleDao.bathAdd(baseRole);
 			} 
 		}
+		//更新缓存
+		CacheManager.getInstance().refreshUserCache();
 	}
 
 	@Override

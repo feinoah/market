@@ -116,10 +116,13 @@
 					handler:function() {
 						var m = $('#tt').datagrid('getSelected');
 						if (m) {
-							$('#appId').val(m.id);
+							/*
+							$('#appId_editVersion').val(m.id);
 							$('#editVersionWin').window('open');
 							$('#editVersionForm').form('clear');
 							$('#editVersionWin').show();
+							*/
+							location.href='${ctx}/back/add/app/version/'+m.id;
 						} else {
 							$.messager.show({
 								title : '警告',
@@ -660,7 +663,7 @@
 					</td>
 				</tr>
 				</table>
-				<input type="hidden" name="appId" id="appId"/>
+				<input type="hidden" name="appId" id="appId_editVersion"/>
 				<div style="text-align: center; padding: 5px;">
 					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_version"
 						iconCls="icon-save">保 存</a>

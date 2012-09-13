@@ -22,6 +22,7 @@ import cn.com.carit.market.common.utils.MD5Util;
 import cn.com.carit.market.dao.permission.BaseUserDao;
 import cn.com.carit.market.dao.permission.BaseUserRoleDao;
 import cn.com.carit.market.service.permission.BaseUserService;
+import cn.com.carit.market.web.CacheManager;
 @Service
 @Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
 public class BaseUserServiceImpl implements BaseUserService{
@@ -62,6 +63,8 @@ public class BaseUserServiceImpl implements BaseUserService{
 				baseUserRoleDao.bathAdd(baseUser);
 			}
 		}
+		//更新缓存
+		CacheManager.getInstance().refreshUserCache();
 	}
 
 	@Override
@@ -143,7 +146,8 @@ public class BaseUserServiceImpl implements BaseUserService{
 			throw new IllegalArgumentException("password must be not empty...");
 		}
 		Map<String, Object> resultMap=new HashMap<String, Object>();
-		BaseUser baseUser=baseUserDao.queryByEmail(email);
+//		BaseUser baseUser=baseUserDao.queryByEmail(email);
+		BaseUser baseUser=CacheManager.getInstance().getUserCache().get(email);
 		if (baseUser==null) {
 			log.error("User["+email+"] does not exist...");
 			resultMap.put(Constants.ANSWER_CODE, -2);
