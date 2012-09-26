@@ -335,13 +335,14 @@ function catalogFormatter(v){
 }
 
 function appStatusFormatter(v){
-	var result='-';
+	var result='';
 	$.each(appStatusList, function(key,val) {
-		if(v==val.fieldValue){
-			result=val.displayValue;
-			return false;
+		if((v&val.fieldValue)!=0){
+			result+=val.displayValue+',';
+			//return false;
 		}
 	});
+	if(result==''){result='-';}else{result=result.substr(0,result.length-1);}
 	return result;
 }
 function checkEditControl(url){

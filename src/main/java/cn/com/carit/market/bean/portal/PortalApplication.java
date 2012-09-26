@@ -110,6 +110,8 @@ public class PortalApplication implements Serializable {
 	
 	@JsonIgnore
 	private Integer status;
+	
+	private String mainPic;
 
 	public int getId() {
 		return id;
@@ -309,6 +311,14 @@ public class PortalApplication implements Serializable {
 
 	public void setDeveloperEmail(String developerEmail) {
 		this.developerEmail = developerEmail;
+	}
+
+	public String getMainPic() {
+		return mainPic;
+	}
+
+	public void setMainPic(String mainPic) {
+		this.mainPic = mainPic;
 	}
 	
 }

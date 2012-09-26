@@ -114,16 +114,18 @@ public class SphinxUtil {
 			throws SphinxException {
 		StringBuilder ids = new StringBuilder();
 		SphinxMatch[] matches = getMatchs(keywords);
-		int size=0;
-		for (SphinxMatch match : matches) {
-			ids.append(match.docId).append(", ");
-			size++;
+		if (matches != null && matches.length > 0) {
+			int size = 0;
+			for (SphinxMatch match : matches) {
+				ids.append(match.docId).append(", ");
+				size++;
+			}
+			// 删除最后一个
+			if (size > 0) {
+				ids.delete(ids.lastIndexOf(", "), ids.length());
+			}
+			logger.info("Total record(s):" + size);
 		}
-		// 删除最后一个
-		if (size > 0) {
-			ids.delete(ids.lastIndexOf(", "), ids.length());
-		}
-		logger.info("Total record(s):" + size);
 		return ids.toString();
 	}
 

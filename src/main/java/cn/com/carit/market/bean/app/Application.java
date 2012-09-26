@@ -26,6 +26,7 @@ public class Application extends BaseBean implements Serializable {
 	 * version
 	 */
 	private String version;
+	
 	/**
 	 * icon
 	 */
@@ -95,6 +96,8 @@ public class Application extends BaseBean implements Serializable {
 	 * status
 	 */
 	private Integer status;
+	
+	private String mainPic;
 
 	public String[] getImageList() {
 		if (this.images != null && this.images.trim().length() > 0) {
@@ -285,6 +288,14 @@ public class Application extends BaseBean implements Serializable {
 
 	public void setImageArray(String[] imageArray) {
 		this.imageArray = imageArray;
+	}
+
+	public String getMainPic() {
+		return mainPic;
+	}
+
+	public void setMainPic(String mainPic) {
+		this.mainPic = mainPic;
 	}
 
 }

@@ -17,8 +17,7 @@
 
 	<bean id="configBean"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="location"
-			value="/WEB-INF/classes/resources/dataSource.properties" />
+		<property name="location" value="classpath:resources/dataSource.properties" />
 	</bean>
 
 	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 

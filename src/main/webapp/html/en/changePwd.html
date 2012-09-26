@@ -1,0 +1,105 @@
+<div class="reg">
+	<form id="updatePwdForm" method="post">
+	<dl>
+		<dd>
+			<span class="title">Old PWD:</span><input class="reg_input" id="oldPassword" name="oldPassword" type="password" /><span id="oldPasswordTip" class="onShow">Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)</span>
+		</dd>
+		<dd>
+			<span class="title">New PWD:</span><input class="reg_input" id="newPassword" name="newPassword" type="password" /><span id="newPasswordTip" class="onShow">Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)</span>
+		</dd>
+		<dd>
+			<span class="title">Confirm password:</span><input class="reg_input" type="password" id="t_RePass" name="t_RePass" /><span id="t_RePassTip" class="onShow">Pls confirm your password.</span>
+		</dd>
+	</dl>
+	</form>
+	<div class="operation" style="top:170px;">
+		<button id="updatePwd">Update</button><button id="closePwdWin" onclick="Util.Dialog.remove('chPwdWin');">Close</button>
+	</div>
+</div>
+<script type="text/javascript">
+<!--
+$(function() {
+	$('#updatePwd').click(function(){
+		changePwd();
+	});
+	$('#oldPassword').blur(function(){
+		var v=$.trim($(this).val());
+		if(v.length<6||v.length>18){
+			$('#oldPasswordTip').attr('class', '').addClass('onError').html('Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)');
+		}else{
+			$('#oldPasswordTip').attr('class', '').addClass('onCorrect').html('');
+		}
+	}).focus(function(){
+		$('#oldPasswordTip').attr('class', '').addClass('onFocus').html('Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)');
+	});
+	$('#newPassword').blur(function(){
+		var v=$.trim($(this).val());
+		if(v.length<6||v.length>18){
+			$('#newPasswordTip').attr('class', '').addClass('onError').html('Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)');
+		}else{
+			if(chkPwd(v)){
+				$('#newPasswordTip').attr('class', '').addClass('onCorrect').html('OK.');
+			}else{
+				$('#newPasswordip').attr('class', '').addClass('onError').html('Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)');
+			}
+		}
+	}).focus(function(){
+		$('#newPasswordTip').attr('class', '').addClass('onFocus').html('Pls input 6~18 characters(0-9a-zA-Z!@#$%^&*()_)');
+	});
+	$('#t_RePass').blur(function(){
+		var pwd=$.trim($(this).val());
+		if(pwd){
+			if($.trim($('#newPassword').val())==pwd){
+				$('#t_RePassTip').attr('class', '').addClass('onCorrect').html('OK.');
+			}else{
+				$('#t_RePassTip').attr('class', '').addClass('onError').html('Pls input the characters you inputed above.');
+			}
+		}else{
+			$('#t_RePassTip').attr('class', '').addClass('onError').html('Pls input the characters you inputed above.');
+		}
+	}).focus(function(){
+		$('#t_RePassTip').attr('class', '').addClass('onFocus').html('Pls input the characters you inputed above.');
+	}).keydown(function(e){
+		if(e.which==13){
+			var pwd=$.trim($(this).val());
+			if(pwd && $.trim($('#newPassword').val())==pwd){
+				$('#t_RePassTip').attr('class', '').addClass('onCorrect').html('OK.');
+				changePwd();
+			}
+		}
+	});
+});
+function changePwd(){
+	$('#updatePwdForm').form({
+		url:app.name+'/portal/account/changepwd',
+		dataType : 'text',  
+		onSubmit:function(){
+			var tag=true;
+			$('#updatePwdForm span[id$="Tip"]').each(function(){
+				if(!$(this).hasClass('onCorrect')&&!$(this).hasClass('onSuccess')){
+					tag=false;
+					$('#'+$(this).attr('id').substring(0, $(this).attr('id').indexOf('Tip'))).blur();
+					return false;
+				}
+			});
+			return tag;
+		}, 
+		success:function(data){
+			if(data==-4){
+				tips('updatePwd','Timeout, Pls login again.','bottom');
+			}else if(data==-2){
+				tips('updatePwd','Pls input your old pwd and new pwd.','bottom');
+			}else if(data==-1){
+				tips('updatePwd','Old pwd is incorrect.','bottom');
+				$('#oldPasswordTip').attr('class', '').addClass('onFocus').html('Old pwd is incorrect.');
+			}else if(data==1){
+				//tips('updatePwd','修改成功','bottom');
+				Util.Dialog.remove('chPwdWin');
+			}else{
+				tips('updatePwd','Unknow Error.','bottom');
+			}
+		}
+	}).submit();
+}
+//-->
+</script>

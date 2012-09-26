@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	<title>中通福瑞——应用市场</title>
+	<title>Carit-Android Market</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="../resources/public/scripts/SlideTrans.js" ></script>
-	<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-	<link href="../resources/public/styles/ykb.css" rel="stylesheet" type="text/css" />
-	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
-	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
-	<script type="text/javascript" src="../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/jquery.cookie.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/autoPlayer.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
-	<script type="text/javascript" src="../resources/public/scripts/index.js?v=1.0"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/SlideTrans.js" ></script>
+	<link rel="shortcut icon" href="../../resources/favicon.ico" type="image/x-icon"/>
+	<link href="../../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
+	<link href="../../resources/public/styles/ykb.css" rel="stylesheet" type="text/css" />
+	<link rel="icon" href="../../resources/favicon.ico" type="image/x-icon"/>
+	<link href="../../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
+	<link href="../../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="../../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
+	<script type="text/javascript" src="../../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/highcharts.js"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/jquery.cookie.js"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/autoPlayer.js"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/utils_en.js?v=1.0"></script>
+	<script type="text/javascript" src="../../resources/public/scripts/index_en.js?v=1.0"></script>
 <!--[if lte IE 6]>  
 <div id="ie6-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
 您正在使用 Internet Explorer 6 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeme()">X</span>  
@@ -109,7 +109,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
         		  
            else
            cm_content.value=oldValue[cm_num].substring(0,199);
-        	  alert("评价内容最多输入" + cm_maxlength + "个汉字、字母或数字！");  
+        	  alert("The most input " + cm_maxlength + " characters!");  
           }  
           else{  
            oldValue[cm_num]=cm_content.value;  
@@ -122,19 +122,19 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 	
 	function onPicError(){
 		$('.app_detail_icon').error(function(){
-			this.src = '../resources/public/images/app_default.jpg';
+			this.src = '../../resources/public/images/app_default.jpg';
 		});
 		$('.container2').error(function(){
-			this.src = '../resources/public/images/big_image_error.png';
+			this.src = '../../resources/public/images/big_image_error.png';
 		});
 	}
 
 	function onBigPicError(){
 		$('.app_big_icon').error(function(){
-			this.src='../resources/public/images/app_pic.jpg';
+			this.src='../../resources/public/images/app_pic.jpg';
 		});
 		$('.doc-screenshot-img').error(function(){
-			this.src='../resources/public/images/image_error.jpg';
+			this.src='../../resources/public/images/image_error.jpg';
 		});
 	}
 	var rt = request.QueryString("inputStr");
@@ -219,11 +219,11 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 						return false;
 					}
 					if($('#grade').val()==''){
-						tips('submitBtn','请评分','bottom');
+						tips('submitBtn','Please rating.','bottom');
 						return false;
 					}
 					if($('#comment').val()==''){
-						tips('submitBtn','请填写评论','bottom');
+						tips('submitBtn','Please write your review.','bottom');
 						return false;
 					}
 					$('#appId').val(rt);
@@ -234,13 +234,13 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 						var map=$.parseJSON(data);
 						if(map){
 							if(map.answerCode==-2){
-								tips('submitBtn','请先下载使用再评论','bottom');
+								tips('submitBtn','Please download before write a commnet.','bottom');
 							}
 							if(map.answerCode==-1){
-								tips('submitBtn','未知错误','bottom');
+								tips('submitBtn','Unknow error.','bottom');
 							}
 							if(map.answerCode==0){
-								tips('submitBtn','登录超时','bottom');
+								tips('submitBtn','Timeout, please login again.','bottom');
 							}
 							if(map.answerCode==1){
 								$('.star span').each(function(i){
@@ -257,16 +257,16 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 								$('#remain_comment').empty().html("200");
 							}
 						}else{
-							tips('submitBtn','后台系统异常','bottom');
+							tips('submitBtn','System Error.','bottom');
 						}
 					}else{
-						tips('submitBtn','后台系统异常','bottom');
+						tips('submitBtn','System Error.','bottom');
 					}
 			    }
 			});
 		});
 		$.ajaxSettings.async=false;
-	 	$.getJSON('../portal/app/'+rt+'?local=cn', function(data) {
+	 	$.getJSON('../../portal/app/'+rt+'?local=en', function(data) {
 			if(data){
 				$('#label_appname').empty().html(data.appName);
 				$('#label_author').empty().html(data.developer);
@@ -275,24 +275,24 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				$('#comment_star1').attr("src",arrayStar[data.appLevel]);
 				$('#comment_star2').attr("src",arrayStar[data.appLevel]);
 				$('#comment_star3').attr("src",arrayStar[data.appLevel]);
-				$('#img_big_icon').attr("src","../"+data.bigIcon);
+				$('#img_big_icon').attr("src","../../"+data.bigIcon);
 				$('#idContainer').attr('src','../../'+data.mainPic);
 				$('#screen').attr('src','../../'+data.mainPic);
 				$.each(data.imageList,function(i,item){
 					/*if(i==0){
-						$('#idContainer').attr('src','../'+item);
-						$('#screen').attr('src','../'+item);
-						//$('#screen').attr("src",'../resources/public/images/big_image_error.png');
+						$('#idContainer').attr('src','../../'+item);
+						$('#screen').attr('src','../../'+item);
+						//$('#screen').attr("src",'../../resources/public/images/big_image_error.png');
 					}*/
 					pics[i]={
-						'thumbPicUrl':'../'+item,
-						'middlePicUrl':'../'+item
+						'thumbPicUrl':'../../'+item,
+						'middlePicUrl':'../../'+item
 					};
 				});
 				//TODO:
 					var price;
 					if(data.price==0){
-						price ="免费";
+						price ="Free";
 					}else{
 						price = '￥'+data.price;
 					}
@@ -327,20 +327,20 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 			onPicError();
 		});
 		
-		$.getJSON('../portal/app/query?rows=5&developer='+developer, function(data) {
+		$.getJSON('../../portal/app/query?local=en&rows=5&developer='+developer, function(data) {
 			if(data){
 				$('#author_more').empty();
-				$('#author_more').append('<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3><hr class="detail_hr"/>');		
+				$('#author_more').append('<h3 class="detail_label_left1_top">More App Of The Developer:</h3><hr class="detail_hr"/>');		
 				$.each(data.rows,function(i,o){
 					var developer_price;
 					if(o.price==0){
-						developer_price = "免费";
+						developer_price = "Free";
 					}else{
 						developer_price = '￥'+o.price;
 					}
-					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
-							+o.id+'"><img class="app_detail_icon" src="../'
-							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
+					$('#author_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../../html/en/appDetail.html?inputStr='
+							+o.id+'"><img class="app_detail_icon" src="../../'
+							+o.icon+'"/></a></div><div class="detail_right_div""><a href="../../html/en/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'
 					+o.developer+'</label><img src="'
 					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('
@@ -350,20 +350,20 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 			}
 		});
 		$.ajaxSettings.async=true;
-		$.getJSON('../portal/app/down/ref/'+rt+'?rows=6', function(data) {
+		$.getJSON('../../portal/app/down/ref/'+rt+'?local=en&rows=6', function(data) {
 			if(data){
 				$('#view_more').empty();
-				$('#view_more').append('<h3 class="detail_label_left1_top">安装此应用的用户还安装了:</h3><hr class="detail_hr"/>');		
+				$('#view_more').append('<h3 class="detail_label_left1_top">Users who installed this also installed:</h3><hr class="detail_hr"/>');		
 				$.each(data.rows,function(i,o){
 					var install_price;
 					if(o.price==0){
-						install_price = "免费";
+						install_price = "Free";
 					}else{
 						install_price = '￥'+o.price;
 					}
-					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../html/appDetail.html?inputStr='
-							+o.id+'"><img class="app_detail_icon" src="../'
-					+o.icon+'"/></a></div><div class="detail_right_div"><a href="../html/appDetail.html?inputStr='+o.id+'"><b>'
+					$('#view_more').append('<div class="detail_left_div"><div class="detail_left1_div"><a href="../../html/appDetail.html?inputStr='
+							+o.id+'"><img class="app_detail_icon" src="../../'
+					+o.icon+'"/></a></div><div class="detail_right_div"><a href="../../html/en/appDetail.html?inputStr='+o.id+'"><b>'
 					+o.appName+'</b></a><label class="detail_right_label1">'+o.developer+'</label><img src="'
 					+arrayStar[o.appLevel]+'"/><div style="display:inline-block;width:30px;height:20px;vertical-align:top">('+o.downCount+')</div><label style="display: block;">'
 					+install_price+'</label></div></div><hr class="detail_hr"/>');
@@ -373,14 +373,14 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 		});
 		$('#download_btn').click(function(){
 			if($('#lolginAfter').is(":visible")){
-				open('../portal/app/down/'+rt);
+				open('../../portal/app/down/'+rt);
 			}else{
 				loginWin();
 			}
 		});
 		doPage(1);
 		initCommentStat();
-		$.getJSON('../portal/app/month/down/trend/'+rt, function(json){
+		$.getJSON('../../portal/app/month/down/trend/'+rt, function(json){
 			if(json){
 				new Highcharts.Chart({
 					chart: {
@@ -402,7 +402,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 					},
 					tooltip: {
 						formatter: function() {
-							return this.x+' '+ this.y +' 人';
+							return this.x+' '+ this.y +' Person';
 						}
 					},
 					series: [{
@@ -414,7 +414,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 	});
 	var _data=[0,0,0,0,0,0]
 	function initCommentStat(){
-		$.getJSON('../portal/app/comment/grade/group/'+rt, function(json){
+		$.getJSON('../../portal/app/comment/grade/group/'+rt, function(json){
 			$.each(json,function(i,o){
 				if(o.grade%2!=0){
 					o.grade++;
@@ -434,7 +434,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				},
 				tooltip: {
 					formatter: function() {
-						return this.x+' '+this.y +' 人';
+						return this.x+' '+this.y +' Person';
 					}
 				},
 				
@@ -456,7 +456,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				},
 				tooltip: {
 					formatter: function() {
-						return this.x+' '+this.y +' 人';
+						return this.x+' '+this.y +' Person';
 					}
 				},
 				
@@ -468,7 +468,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 		});
 	}
 	function doPage(page){
-		$.getJSON('../portal/app/comments/'+rt+'?local=cn&page='+page+'&rows=10', function(data) {
+		$.getJSON('../../portal/app/comments/'+rt+'?local=en&page='+page+'&rows=10', function(data) {
 			if(data){
 				pagination(page, data.totalPage);
 				if(page==1){
@@ -477,11 +477,11 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				$('#appComment').empty();
 				$.each(data.rows,function(i,o){
 					if(page==1&&i<3){
-						$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author">'+o.nickName+'</span><span class="doc-review-date">评论日期：'
+						$('#appCommentSimple').append('<div class="doc-review"><span class="doc-review-author">'+o.nickName+'</span><span class="doc-review-date">Date:'
 						+o.updateTime+'"</span><div class="doc-review-ratings-line"><img src="'+arrayStar[o.grade]+'" alt="" /></div><p class="review-text">'
 						+o.comment+'</p></div><hr class="detail_comment_hr">');
 					}
-					$('#appComment').append('<div class="doc-review"><span class="doc-review-author">'+o.nickName+'</span><span class="doc-review-date">评论日期：'
+					$('#appComment').append('<div class="doc-review"><span class="doc-review-author">'+o.nickName+'</span><span class="doc-review-date">Date:'
 					+o.updateTime+'</span><img style="display:block" src="'+arrayStar[o.grade]+'" alt="" /><p class="review-text">'
 					+o.comment+'</p><hr class="detail_comment_hr"></div>');
 				});
@@ -497,16 +497,16 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 			<div id="nav">
 				<div id="loginBefor">
 					<ul>
-						<li><span onclick="location.href='/html/en/index.html'"><img src="../../resources/public/images/us.gif" alt="English" title="English"/></span></li>
-						<li><span id="reg">注册</span></li>
+						<li><span onclick="location.href='/'"><img src="../../resources/public/images/zh-cn.gif" alt="简体中文" title="简体中文"/></span></li>
+						<li><span id="reg">Register</span></li>
 						<li><span class="gbts"></span></li>
-						<li><span id="login">登陆</span></li>
+						<li><span id="login">Login</span></li>
 					</ul>
 				</div>
 				<div id="lolginAfter">
 					<ul>
-						<li><span onclick="location.href='/html/en/index.html'"><img src="../../resources/public/images/us.gif" alt="English" title="English"/></span></li>
-						<li><span id="logout">退出</span></li>
+						<li><span onclick="location.href='/'"><img src="../../resources/public/images/zh-cn.gif" alt="简体中文" title="简体中文"/></span></li>
+						<li><span id="logout">Logout</span></li>
 						<li><span class="gbts"></span></li>
 						<li id="thumb_photo"></li>
 						<li><span class="gbts"></span></li>
@@ -516,7 +516,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 					</ul>
 				</div>
 				<ul>
-					<li><img id="indexPage" src="../resources/public/images/carit_logo1.png"/></li>
+					<li><img id="indexPage" src="../../resources/public/images/carit_logo1.png"/></li>
 					<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
 					<li><input type="button" class="search_bn" id="search"></input></li>
 				</ul>
@@ -535,21 +535,21 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 					    <img id="img_big_icon" class="app_big_icon"/>
 					</div>
 				    <div style="width: 160px;float:right;">
-				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 28px;display:block">版本:<label id="app_version" >4.0.4</label></span>
-				     <span style="color:white;font-size:16px;font-weight: bold;">  大小:<label id="app_size" >6.25MB</label></span>
-				        <span style="color:white;font-size:16px;font-weight: bold;display:block">  价格:<label id="app_price" ></label></span>
+				     <span style="color:white;font-size:16px;font-weight: bold;margin-top: 28px;display:block">Current version:<label id="app_version" >4.0.4</label></span>
+				     <span style="color:white;font-size:16px;font-weight: bold;">  Size:<label id="app_size" >6.25MB</label></span>
+				        <span style="color:white;font-size:16px;font-weight: bold;display:block">  Price:<label id="app_price" ></label></span>
 				     <img id="img_icon" style="display: inline-block;height: 17px;"/>
 				    <div class="detail_downcount">(<label id="label_count" style="display: inline-block;font-size: 15px;height: 17px;">10,898</label>)</div>
-				     <input type="button" class="download_bn" id="download_btn" value="下载"/>
+				     <input type="button" class="download_bn" id="download_btn" value="Download"/>
 				   </div>
 				</div>
 				 
 				<img class="container2" id="idContainer" style="float:right;width:686px;"></img>
 					<!-- <ul id="idSlider" > 
-						<li><a href=""><img src="../resources/public/images/carit_logo2.jpg"/></a></li>
-						<li><a href=""><img src="../resources/public/images/carit_logo3.jpg"/></a></li>
-						<li><a href=""><img src="../resources/public/images/carit_logo4.jpg"/></a></li>
-					    <li><a href=""><img src="../resources/public/images/carit_logo5.jpg"/></a></li>
+						<li><a href=""><img src="../../resources/public/images/carit_logo2.jpg"/></a></li>
+						<li><a href=""><img src="../../resources/public/images/carit_logo3.jpg"/></a></li>
+						<li><a href=""><img src="../../resources/public/images/carit_logo4.jpg"/></a></li>
+					    <li><a href=""><img src="../../resources/public/images/carit_logo5.jpg"/></a></li>
 					</ul>
 					<ul class="num" id="idNum"></ul> -->
 				
@@ -562,7 +562,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				</div>
 				<!-- left bottom -->
 				<div id="view_more" style="float:left;width:328px;height:605px;margin-top:13px;background-color: white">
-				   <h3>安装此应用的用户还安装了：</h3>
+				   <h3>Users who installed this also installed:</h3>
 			    </div>
 		    </div>	
 			<!-- left bottom -->
@@ -570,17 +570,17 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 <div id="Tab2" style="float:right;width:67%;margin-top:12px;background-color: white">
 <div class="Menubox">
    <ul>
-       <li class="hover">概览</li>
-       <li>用户评论</li>
-       <li>新功能</li>
-       <li>权限</li>
+       <li class="hover">Overview</li>
+       <li>User Reviews</li>
+       <li>What's New</li>
+       <li>Permissions</li>
     </ul>
       </div>
 <div class="Contentbox2">  
    <div id="con_two_0" >
    <div style="float:left;margin-left: 15px;width:518px">
   <div style="float:left;width:518px;background-color: #FCFCFC">
-  <h2>说明</h2>
+  <h2>Description</h2>
   <div id="doc-description-container" class="doc-description-collapsed">
   <div class="doc-description toggle-overflow-contents" style="font-size: 12px">
   <div id="doc-original-text"><label id="app_description"></label>
@@ -593,13 +593,13 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
   
    <div style="float:left;width:518px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-left: 0px;border-right: 0px;border-bottom: 0px;margin-top:20px">
 	   <div style="margin-top: 20px">
-	   <a href="" target="_blank" id="developerWebsite">访问开发人员网站</a>
+	   <a href="" target="_blank" id="developerWebsite">Visit Developer's Website</a>
 	   <a href="" rel="nofollow" class="more-arrow-link"><span class="more-arrow">›</span></a>
 	   <span class="contact-developer-spacer"></span>
-	   <a href="" id="developerEmail">向开发人员发送电子邮件</a>
+	   <a href="" id="developerEmail">Email Developer</a>
 	   <a href="" rel="nofollow" class="more-arrow-link"><span class="more-arrow">›</span></a>
 	   </div>
-	   <div class="doc-overview-screenshots"><h2>应用屏幕截图</h2>
+	   <div class="doc-overview-screenshots"><h2>App Screenshots</h2>
 		   <div class="imgLib">
 			<div class="imgShow">
 				<div class="singlepic" id="_singlepic">
@@ -614,41 +614,41 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
    </div>
    </div>
 <div  style="float:right;width:135px;height:531px;border-style:solid;border-width:1pt; border-color:#D7D7D7;border-bottom: 0px;border-right: 0px;border-top: 0px">
-<h4>关于此应用</h4>
-<dt>评分：</dt>
+<h4>ABOUT THIS APP</h4>
+<dt>RATING:</dt>
 
 <img id="comment_star1" src="" alt="" style="margin-left: 10px;font-size: 12px"/>
 <dd>(<span id="about_count">15,333</span>)</dd>
 
-<dt style="margin-top: 8px">更新日期：</dt>
+<dt style="margin-top: 8px">UPDATED:</dt>
 <dd><time id="about_date">2012年5月23日</time></dd>
-<dt style="margin-top: 8px">当前版本：</dt>
+<dt style="margin-top: 8px">CURRENT VERSION:</dt>
 <dd id="about_version">v=v=1.7.4</dd>
-<dt itemprop="operatingSystems" style="margin-top: 8px">所需的 Android 版本：</dt>
-<dd><label id="about_android_version">2.3</label>及更高版本</dd>
-<dt style="margin-top: 8px">类别：</dt>
+<dt itemprop="operatingSystems" style="margin-top: 8px">REQUIRES ANDROID:</dt>
+<dd><label id="about_android_version">2.3</label> and up</dd>
+<dt style="margin-top: 8px">CATEGORY:</dt>
 <dd id="about_Category">游戏</dd>
-<dt style="margin-top: 8px">已安装次数：</dt>
+<dt style="margin-top: 8px">INSTALLS:</dt>
 <dd>
 	<div class="normalized-daily-installs-chart"
 		style="width: 105px;height: 105px;" id="downTrend">
 	</div>
 </dd>
-<dt style="margin-top: 8px;">大小：</dt>
+<dt style="margin-top: 8px;">SIZE:</dt>
    <dd id="about_size"></dd>
-   <dt style="margin-top: 8px;">价格：</dt>
+   <dt style="margin-top: 8px;">PRICE:</dt>
    <dd id="about_price"></dd>
-   <dt style="margin-top: 8px">内容分级：</dt>
-   <label style="margin-left: 10px">心智成熟度-</label >  <label id="about_level"></label >
+   <dt style="margin-top: 8px">CONTENT RATING:</dt>
+   <label style="margin-left: 10px">Mental maturity-</label >  <label id="about_level"></label >
    
    </div>
    
-   <div  style="float: left;margin-left: 15px;"><h2>用户评论</h2>  
+   <div  style="float: left;margin-left: 15px;"><h2>User Reviews</h2>  
    <div class="histogram-table goog-inline-block" id="bar_0" style="width: 320px;height: 180px;">
    </div>
    
    <div class="average-rating average-rating-panel goog-inline-block" style="margin-top:20px;">
-   <div class="average-rating-title">平均评分：</div>
+   <div class="average-rating-title">Average rating:</div>
    <div id="av_grade1" class="average-rating-value">4.8</div>
    <div class="average-rating-stars">
   <img id="comment_star2" src="" alt="" />
@@ -661,34 +661,34 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
   
    </div>
    
-   <a class="tabBarLink" onclick="showAllComment()" style="cursor:pointer;">阅读所有用户评论</a>
+   <a class="tabBarLink" onclick="showAllComment()" style="cursor:pointer;">Read All User Reviews</a>
    <a class="more-arrow-link"><span class="more-arrow">›</span></a></div>
    
    </div>
    
    <div id="con_two_1" style="display: none;">
    
-   <div  style="float: left;margin-left: 15px;"><h2>用户评分</h2>  
+   <div  style="float: left;margin-left: 15px;"><h2>User Reviews</h2>  
    <div class="histogram-table goog-inline-block" id="bar_1" style="width: 320px;height: 180px;">
    </div>
    
    <div class="average-rating average-rating-panel goog-inline-block" style="margin-top:20px;">
-   <div class="average-rating-title">平均评分：</div>
+   <div class="average-rating-title">Average rating:</div>
    <div id="av_grade2" class="average-rating-value">4.8</div>
    <div class="average-rating-stars">
   <img id="comment_star3" src="" alt="" />
    </div>
    <div id="app_downcount2" class="votes">18,191</div></div>
    <div style="margin-top: 10px">
-   <h2 class="goog-inline-block middle-vertical-align">用户评论</h2>
-   <div id="write-review-toggle" class="goog-inline-block toggle-button">我要评论 &gt;</div>
+   <h2 class="goog-inline-block middle-vertical-align">User Reviews</h2>
+   <div id="write-review-toggle" class="goog-inline-block toggle-button">Write a comment &gt;</div>
    </div>
    
-   <form action="../portal/app/comment/add" method="post" id="commentForm" style="display: none;">
+   <form action="../../portal/app/comment/add" method="post" id="commentForm" style="display: none;">
    <div id="commentInput" style="font-size: 18px">
-       内容:<span style="margin-left: 370px;"> 您还可以输入:<label id="remain_comment">200</label>字</span>
-   <textarea id="comment" name="comment" style="width: 600px;height: 80px;display: block" rows="" cols=""></textarea><div class="star">评分：<span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span>
-   <button class="comment_submit" id="submitBtn">提交</button></div>
+     Content:<span style="margin-left: 370px;"> You can input<label id="remain_comment">200</label>character</span>
+   <textarea id="comment" name="comment" style="width: 600px;height: 80px;display: block" rows="" cols=""></textarea><div class="star">Rating：<span id="star_sp0" class="starDark_left"></span><span id="star_sp1" class="starDark_right"></span><span id="star_sp2" class="starDark_left"></span><span id="star_sp3" class="starDark_right"></span><span id="star_sp4" class="starDark_left"></span><span id="star_sp5" class="starDark_right"></span><span id="star_sp6" class="starDark_left"></span><span id="star_sp7" class="starDark_right"></span><span id="star_sp8" class="starDark_left"></span><span id="star_sp9" class="starDark_right"></span>
+   <button class="comment_submit" id="submitBtn">Submit</button></div>
    <input type="hidden" name="grade" id="grade"/>
    <input type="hidden" name="appId" id="appId"/>
    </div>
@@ -704,44 +704,34 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
  
  </div>
   <div id="con_two_2" style="display: none;">
-  <h2 style="margin-left: 17px;margin-top: 10px">新功能</h2>
-  	<!--
-	<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3>
-	-->
+  <h2 style="margin-left: 17px;margin-top: 10px">What's New</h2>
   	<div id="app_features" style="margin: 10px 17px;">
-  	
   	</div>
-  
   </div>
   <div id="con_two_3" style="display: none;">
-  <h2 style="margin-left: 17px;margin-top: 10px">权限</h2>
-		<!--
-  		<h3 class="detail_label_left1_top">该开发人员的更多内容:</h3>
-		-->
+  <h2 style="margin-left: 17px;margin-top: 10px">Permissions</h2>
   	<div id="app_permission" style="margin: 10px 17px;">
-  		
   	</div>
   </div>
 </div>
 </div>
 
-  <div id="footer" style="margin-top: 10px;float:left;width: 100%;">
+    <div id="footer" style="margin-top: 10px;float:left;width: 100%;">
 			<table class="box20111120" cellspacing="0" width="980" align="center"
 				border="0">
 				<tbody>
 					<tr>
-						<td align="middle">电话：0755-33309188&nbsp;&nbsp;&nbsp;传真：0755-33309173&nbsp;&nbsp;&nbsp;电子邮件：<a
-							href="mailto:huangjp@carit.com.cn"><font color="#87CEFA">huangjp@carit.com.cn</font></a>&nbsp;&nbsp;&nbsp;邮编：518109
-						</td>
+						<td align="middle">Telephone：0755-33309188&nbsp;&nbsp;&nbsp;Fax：0755-33309173&nbsp;&nbsp;&nbsp;Email：<a
+						href="mailto:huangjp@carit.com.cn"><font color="#87CEFA">huangjp@carit.com.cn</font></a>&nbsp;&nbsp;&nbsp;P.C：518109
+					</td>
 					</tr>
 					<tr>
-						<td align="middle">&nbsp;&nbsp; 公司地址：深圳市宝安区龙华镇大浪英泰工业区Ｅ区Ｄ栋</td>
+						<td align="middle">&nbsp;&nbsp; Address：Zone E,Ying Tai industrial park,Da lang,Long Hua Town,Bao an district,Shenzhen , Guangdong, China</td>
 					</tr>
 				</tbody>
 			</table>
 			  <div id="footer-tab-edge" style="margin-top: -14px;"></div>
 		</div>
-      
         
 </div>
 

@@ -1,0 +1,59 @@
+<div class="reg login" id="loginDiv">
+	<form method="post" id="loginForm">
+		<dl>
+			<div style="height: 17px; overflow: hidden"></div>
+			<dd>
+				<span class="title">Email:</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">Pls input your email.</span>
+			</dd>
+			<dd>
+				<span class="title">Password:</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onShow">Pls input 6~18 password.</span>
+			</dd>
+		</dl>
+		<div class="f_reg_but">
+			<input id="button" type="button" value="Login"
+				class="l_button_en" /><span class="clew_txt">Haven't have account? <a href="#" id="regNow">Register Now</a></span>
+		</div>
+	</form>
+</div>
+<!--注册结束-->
+<script type="text/javascript">
+<!--
+$(function() {
+	$('#email').blur(function(){
+		var email=$.trim($('#email').val());
+		if(chkEmail(email)){
+			$('#emailTip').attr('class', '').addClass('onSuccess').html('');
+		} else {
+			$('#emailTip').attr('class', '').addClass('onError').html('Pls input your email.');
+		}
+	}).focus(function(){
+		$('#emailTip').attr('class', '').addClass('onFocus').html('Pls input your email.');
+	});
+	$('#password').blur(function(){
+		var pwd=$.trim($('#password').val());
+		if(pwd.length<6||pwd.length>18){
+			$('#passwordTip').attr('class', '').addClass('onError').html('Pls input 6~18 password.');
+		}else{
+			$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
+		}
+	}).focus(function(){
+		$('#passwordTip').attr('class', '').addClass('onFocus').html('Pls input 6~18 password.');
+	}).keydown(function(e){
+		if(e.which==13){
+			var pwd=$.trim($('#password').val());
+			if(pwd.length>=6||pwd.length<=18){
+				$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
+				login();
+			}
+		}
+	});
+	$('#button').click(function(){
+		login();
+	});
+	$('#regNow').click(function(){
+		Util.Dialog.remove('loginWin');
+		regWin();
+	});
+});
+//-->
+</script>

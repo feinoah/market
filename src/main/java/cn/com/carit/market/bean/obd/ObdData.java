@@ -1,5 +1,6 @@
 package cn.com.carit.market.bean.obd;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -85,6 +86,14 @@ public class ObdData {
 	}
 	public void setError(String error) {
 		this.error = error;
+	}
+	@Override
+	public String toString() {
+		return "ObdData [id=" + id + ", date=" + date + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", deviceId=" + deviceId
+				+ ", location=" + location + ", error=" + error
+				+ ", createTime=" + createTime + ", values="
+				+ Arrays.toString(values) + "]";
 	}
 	
 }

@@ -264,6 +264,7 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 	text-align:center;font-size:14px;margin-left: 30px;height: 42px;
 }
 
+#header ul li span img{width: 34px;height: 24px;margin: 0 auto;padding: auto;margin-top: 2px;}
 
 .num {
 	position: absolute;
@@ -395,20 +396,32 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 	text-indent: -9000px
 }
 
-.l_button {
+.l_button_en,.r_button_en {
+	background: url(../images/login_button_en.png);
+	background-repeat: no-repeat;
+	width: 118px;
+	height: 39px;
+	border: none;
+	cursor: pointer;
+	display: block;
+	float: left;
+	text-indent: -9000px
+}
+
+.l_button,.l_button_en {
 	background-position: 0 -60px;
 }
 
-.r_button {
+.r_button,.r_button_en {
 	background-position: -138px -60px;
 	margin-right: 4px
 }
 
-.l_button:hover {
+.l_button:hover,.l_button_en:hover {
 	background-position: 0 0;
 }
 
-.r_button:hover {
+.r_button:hover,.r_button_en:hover {
 	background-position: -138px 0;
 }
 

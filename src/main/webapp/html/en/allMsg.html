@@ -1,6 +1,6 @@
 <div class="allMsg">
 	<table id="msgTable">
-		<tr><th width="40">序号</th><th>标题</th><th width="80">发送时间</th><th width="50">操作</th></tr>
+		<tr><th width="40">Index</th><th>Title</th><th width="80">Send Time</th><th width="70">Operation</th></tr>
 		<tr id="pageTR"><td colspan="4"><div id="pageDiv"></div></td></tr>
 	</table>
 	<div id="msgContent">
@@ -26,10 +26,10 @@ function doPage(page){
 					}
 					var t=o.title.split('|');
 					if(t.length>1){t=t[1];}else{t=o.title;}
-					html+='>'+t+'</td><td>'+o.updateTime+'</td><td><a href="javascript:del('+o.id+')">删除</a></td><td style="display:none" id="msg_content_'+i+'" msgId="'+o.id+'">';
+					html+='>'+t+'</td><td>'+o.updateTime+'</td><td><a href="javascript:del('+o.id+')">Delete</a></td><td style="display:none" id="msg_content_'+i+'" msgId="'+o.id+'">';
 					if(o.catalog==1){
 						var arr=o.content.split('|');
-						html+='您下载的 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> 已更新至<b>'+arr[3]+'</b>，请 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">更新</a> 您的应用！</td>';
+						html+='The application <a href="'+app.name+'/html/en/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> you download has updated to <b>'+arr[3]+'</b>，please <a href="'+app.name+'/html/en/appDetail.html?inputStr='+arr[0]+'" target="_blank"> update </a>your application!</td>';
 					} else {
 						html+=o.content;
 					}

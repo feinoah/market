@@ -1,11 +1,11 @@
 package cn.com.carit.market.dao.impl.obd;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ public class ObdDataDaoImpl extends BaseDaoImpl implements ObdDataDao {
 
 	@Override
 	public int add(final ObdData t) {
-		final String sql="insert into t_obd_data(date,device_id,location,create_time"
+		final String sql="insert into t_obd_data(date,device_id,location,create_time,error"
 				+",value_1"
 				+",value_2"
 				+",value_3"
@@ -66,7 +66,7 @@ public class ObdDataDaoImpl extends BaseDaoImpl implements ObdDataDao {
 				+",value_17"
 				+",value_18"
 				+",value_19"
-				+") values(?,?,?,now()"
+				+") values(?,?,?,now(),?"
 				+",?"
 				+",?"
 				+",?"
@@ -98,9 +98,10 @@ public class ObdDataDaoImpl extends BaseDaoImpl implements ObdDataDao {
 				PreparedStatement ps = con.prepareStatement(sql,
 						Statement.RETURN_GENERATED_KEYS);
 				int i=1;
-				ps.setDate(i++, new Date(t.getDate().getTime()));
+				ps.setTimestamp(i++, new Timestamp(t.getDate().getTime()));
 				ps.setString(i++, t.getDeviceId());
 				ps.setString(i++, t.getLocation());
+				ps.setString(i++, t.getError());
 				for (int j = 0; j < t.getValues().length; j++) {
 					ps.setInt(i++, t.getValues()[j]);
 				}
@@ -194,7 +195,7 @@ public class ObdDataDaoImpl extends BaseDaoImpl implements ObdDataDao {
 					.append(StringUtil.splitFieldWords(dgm.getSort()))
 					.append(" ").append(dgm.getOrder());
 		} else {
-			sql.append(" order by date desc");
+			sql.append(" order by create_time desc");
 		}
 		sql.append(" limit ?, ?");
 		args.add(jsonPage.getStartRow());

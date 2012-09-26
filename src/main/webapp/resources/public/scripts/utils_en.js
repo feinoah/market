@@ -24,14 +24,14 @@ $(function() {
 		loginWin();
 	});
 	$.ajaxSettings.async=false;
-	$.getJSON(app.name+'/portal/catalog/all?local=cn', function(data) {
+	$.getJSON(app.name+'/portal/catalog/all?local=en', function(data) {
 		if (data) {
 			catalogs=data;
 		}
 	});
 	$.ajaxSettings.async=true;
 	$('#indexPage').css('cursor','pointer').click(function(){
-		location.href=app.name+'/';
+		location.href=app.name+'/html/en/index.html';
 	});
 });
 
@@ -44,8 +44,8 @@ $(function() {
 function pagination(page,total){
 	var html='';
 	if(page!=1&&total>10){//当前页不是第一页时生成首页和上一页   
-		html+='<span onclick="doPage(1)">首页</span>'
-			+'<span onclick="doPage('+(page-1)+')">« 上一页</span>';
+		html+='<span onclick="doPage(1)">First</span>'
+			+'<span onclick="doPage('+(page-1)+')">« Prev</span>';
 	}
 	if(total<=10){ // 最多10页
 		html+='<label class="cruLabel">';
@@ -100,8 +100,8 @@ function pagination(page,total){
 		}
 	}
 	if(total>10&&page!=total){//当前页不是最后页时生成下一页 末页
-		html+='<span onclick="doPage('+(page+1)+')">下一页 »</span>'
-			+'<span onclick="doPage('+total+')">末页</span>'
+		html+='<span onclick="doPage('+(page+1)+')">Next »</span>'
+			+'<span onclick="doPage('+total+')">Last</span>'
 	}
 	$('#pageDiv').empty().html(html);
 }
@@ -123,10 +123,10 @@ var request ={
 var regWin=function(){
 	Util.Dialog({
 		boxID : 'regWin',
-		title : '用户注册',
-		content : 'url:get?'+app.name+'/html/reg.html',
+		title : 'User Register',
+		content : 'url:get?'+app.name+'/html/en/reg.html',
 		showbg: true,
-		width : 600,
+		width : 635,
 		height : 280
 	});
 	return false;
@@ -134,10 +134,10 @@ var regWin=function(){
 var loginWin=function(){
 	Util.Dialog({
 		boxID : 'loginWin',
-		title : '用户登录',
-		content : 'url:get?'+app.name+'/html/login.html',
+		title : 'User Login',
+		content : 'url:get?'+app.name+'/html/en/login.html',
 		showbg: true,
-		width : 480,
+		width : 485,
 		height : 250
 	});
 	return false;
@@ -146,8 +146,8 @@ var accountWin=function(){
 	Util.Dialog.remove("profile_tips");
 	Util.Dialog({
 		boxID : 'accountWin',
-		title : '用户中心',
-		content : 'url:get?'+app.name+'/html/account.html',
+		title : 'Account Center',
+		content : 'url:get?'+app.name+'/html/en/account.html',
 		showbg: true,
 		width : 580,
 		height : 420
@@ -158,10 +158,10 @@ var chPwdWin=function(){
 	Util.Dialog.remove("profile_tips");
 	Util.Dialog({
 		boxID : 'chPwdWin',
-		title : '修改密码',
-		content : 'url:get?'+app.name+'/html/changePwd.html',
+		title : 'Change Password',
+		content : 'url:get?'+app.name+'/html/en/changePwd.html',
 		showbg: true,
-		width : 600,
+		width : 635,
 		height : 235
 	});
 	return false;
@@ -173,7 +173,7 @@ var profileTip=function(){
 		type: 'tips',
 		boxID: 'profile_tips',
 		referID: 'thumb_photo',
-		width: 250,
+		width: 280,
 		height: 106,
 		border: { opacity: '0', radius: '3'},
 		closestyle: 'gray',
@@ -181,7 +181,7 @@ var profileTip=function(){
 		fixed: false,
 		time: 5000,
 		arrowset: {val: '40px'},
-		content: 'text:<div id="profile"><img src="'+app.name+'/'+account.photo+'" /><div><span>'+account.nickName+'</span><span id="profile_email">'+account.email+'</span><span class="operater" onclick="accountWin();">个人资料</span><span class="operater" onclick="chPwdWin();">修改密码</span></div></div>',
+		content: 'text:<div id="profile"><img src="'+app.name+'/'+account.photo+'" /><div><span>'+account.nickName+'</span><span id="profile_email">'+account.email+'</span><span class="operater" onclick="accountWin();">Profile</span><span class="operater" onclick="chPwdWin();">Edit Pwd</span></div></div>',
 		position: { 
 			left: '-130px', 
 			top: '-50px',
@@ -200,14 +200,14 @@ function getMsg(){
 			if(t.length>1){t=t[1];}else{t=data.rows[0].title;}
 			if(data.rows[0].catalog==1){
 				var arr=data.rows[0].content.split('|');
-				content+='<div class="message_tips"><p class="title">'+t+'</p><p>您下载的 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> 已更新至<b>'+arr[3]+'</b>，请 <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">更新</a> 您的应用！</p>';
+				content+='<div class="message_tips"><p class="title">'+t+'</p><p>The application <a href="'+app.name+'/html/en/appDetail.html?inputStr='+arr[0]+'" target="_blank">'+arr[1]+' '+arr[2]+'</a> you download has updated<b>'+arr[3]+'</b>，please <a href="'+app.name+'/html/appDetail.html?inputStr='+arr[0]+'" target="_blank">Update</a> your application!</p>';
 			} else {
 				content+='<div class="message_tips"><p class="title">'+t+'</p><p>'+data.rows[0].content+'</p>';
 			}
 			msgId=data.rows[0].id;
 		}
 		if(data.totalPage>1){
-			content+='<p style="text-align:right;"><label onclick="nextMsg()">下一条</label>';
+			content+='<p style="text-align:right;"><label onclick="nextMsg()">Next</label>';
 		} else {
 			$('#message').css({
 				'background':'url('+app.name+'/resources/public/images/h_bedf916a.png)',
@@ -215,7 +215,7 @@ function getMsg(){
 			});
 			content+='<p style="text-align:right;">';
 		}
-		content+='<label onclick="allMsgWin()">全部消息>></label></p></div>';
+		content+='<label onclick="allMsgWin()">All>></label></p></div>';
 		$.getJSON(app.name+'/portal/app/user/read/sysmessage/'+msgId, function(data) {
 			if(data>0){
 				msgId=0;
@@ -234,8 +234,8 @@ var allMsgWin=function(){
 	Util.Dialog.remove("message_tips");
 	Util.Dialog({
 		boxID : 'all_system_msg',
-		title : '系统消息',
-		content : 'url:get?'+app.name+'/html/allMsg.html',
+		title : 'System Message',
+		content : 'url:get?'+app.name+'/html/en/allMsg.html',
 		showbg: true,
 		width : 600,
 		height : 400
@@ -247,7 +247,7 @@ var messageTip=function(){
 	if($('#message').html()>0){
 		msg=getMsg();
 	} else {
-		msg='<div class="message_tips"><p>没有未读消息...</p><p style="text-align:right;"><label onclick="allMsgWin()">全部消息>></label></p></div>';
+		msg='<div class="message_tips"><p>Unread Msg...</p><p style="text-align:right;"><label onclick="allMsgWin()">All Msg>></label></p></div>';
 	}
 	Util.Dialog({
 		type: 'tips',
@@ -260,10 +260,10 @@ var messageTip=function(){
 		arrow: 'bottom',
 		fixed: false,
 		time: 20000,
-		arrowset: {val: '192px'},
+		arrowset: {val: '162px'},
 		content: 'text:'+msg+'</div>',
 		position: { 
-			left: '-190px', 
+			left: '-158px', 
 			top: '-50px',
 			lin: true,
 			tin: false

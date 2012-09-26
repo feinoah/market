@@ -471,11 +471,11 @@ AutoPlayer.prototype = {
 						if (direction) {
 							jQuery(this).css(
 									'cursor',
-									'url(../resources/public/images/arrow-r.png),auto')/*.attr('title', '点击跳到下一张>>').attr('alt','点击跳到下一张>>')*/;
+									'url('+app.name+'/resources/public/images/arrow-r.png),auto')/*.attr('title', '点击跳到下一张>>').attr('alt','点击跳到下一张>>')*/;
 						} else {
 							jQuery(this).css(
 									'cursor',
-									'url(../resources/public/images/arrow-l.png),auto')/*.attr('title', '<<点击跳到上一张').attr('alt','<<点击跳到上一张')*/;
+									'url('+app.name+'/resources/public/images/arrow-l.png),auto')/*.attr('title', '<<点击跳到上一张').attr('alt','<<点击跳到上一张')*/;
 						}
 						self._debug("change direction to "
 								+ (direction ? "next" : "prev"));

@@ -90,13 +90,14 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 <![endif]-->
 		<script type="text/javascript">
 		function doPage(page){
-			$.getJSON('../obd/query/data?startDate='+$('#startDate').datebox('getText')+'&endDate='+$('#endDate').datebox('getText')+'&deviceId='+$('#deviceId').val(), function(data) {
+			$.getJSON('../obd/query/data?startDate='+$('#startDate').datebox('getText')+'&endDate='+$('#endDate').datebox('getText')+'&deviceId='+$('#deviceId').val()+'&page='+page, function(data) {
 				if(data){
 					var first=$('#allApp tr:first-child');
-					$('#allApp').empty().append(first);
+					$('#allApp').empty();
 					if(data.totalPage>1){
 						pagination(page, data.totalPage);
 					}
+					$('#allApp').append(first);
 					$.each(data.rows,function(i,o){
 						var $tr=$('<tr>').append('<td>'+o.deviceId+'</td><td>'+o.date+'</td><td>'+o.location+'</td>');
 						for(var i=0;i<o.values.length;i++){
@@ -173,8 +174,10 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 					<th>进气歧管绝对压力</th>
 					<th>OBD类型</th>
 					<th>瞬时油耗（小时）</th>
-					<th>瞬时油耗（公里）
-					<th>
+					<th>瞬时油耗（公里）</th>
+					<th>当前里程</th>
+					<th>保养里程</th>
+					<th>保养天数</th>
 				</tr>
 			</table>
 		</div>

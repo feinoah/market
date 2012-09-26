@@ -110,8 +110,6 @@
 		label {width: 115px;}
 		input {width: 180px;}
 		textarea {width: 490px;height: 80px;}
-		.combo{height:22px;position: relative;}
-		.combo-arrow{top:-13px;position: relative;}
 		</style>
 	</head>
 	<body>

@@ -166,8 +166,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 		for (UpdateNotice notice: list) {
 			SystemMessage message=new SystemMessage();
 			message.setAccountId(notice.getAccountId());
-			message.setTitle(notice.getAppName()
-					+" "+notice.getAppEnName()+"已经更新");
+			message.setTitle(notice.getAppName()+"已经更新|"+notice.getAppEnName()+" has updated");
 			// 拼装消息内容：应用Id|应用中文名称|应用英文名称|应用当前版本号
 			message.setContent(notice.getAppId()+"|"+notice.getAppName()
 					+"|"+notice.getAppEnName()+"|"+notice.getAppVesion());

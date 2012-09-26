@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>中通福瑞——应用市场</title>
+		<title>Carit-Android Market</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<script type="text/javascript" src="../resources/public/scripts/SlideTrans.js" ></script>
-		<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
-		<link href="../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
-		<link rel="shortcut icon" href="../resources/favicon.ico" type="image/x-icon"/>
-		<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-		<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
-		<script type="text/javascript" src="../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
-		<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
-		<script type="text/javascript" src="../resources/public/scripts/index.js?v=1.0"></script>
+		<script type="text/javascript" src="../../resources/public/scripts/SlideTrans.js" ></script>
+		<link href="../../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
+		<link href="../../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
+		<link rel="shortcut icon" href="../../resources/favicon.ico" type="image/x-icon"/>
+		<link rel="icon" href="../../resources/favicon.ico" type="image/x-icon"/>
+		<link href="../../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
+		<script type="text/javascript" src="../../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="../../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
+		<script type="text/javascript" src="../../resources/public/scripts/utils_en.js?v=1.0"></script>
+		<script type="text/javascript" src="../../resources/public/scripts/index_en.js?v=1.0"></script>
 <!--[if lte IE 6]>  
 <div id="ie6-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
 您正在使用 Internet Explorer 6 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeme()">X</span>  
@@ -94,20 +94,20 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 			}
 		}
 		function submit(id){
-			window.open("../html/appDetail.html?inputStr=" + id);//传入参数
+			window.open("../../html/en/appDetail.html?inputStr=" + id);//传入参数
 		}
 		
 		var rt = request.QueryString("inputStr");
 		function doPage(page){
 			var regEx=/<[^>]*>/g;
-			$.getJSON('../portal/app/search?q='+rt+'&page='+page+'&rows=9', function(data) {
+			$.getJSON('../../portal/app/search?local=en&q='+rt+'&page='+page+'&rows=9', function(data) {
 				if(data){
 					$('#allApp').empty();
 					pagination(page, data.totalPage);
 					$.each(data.rows,function(i,o){
 						$('#allApp').append(' <div class="appItem"><table><tr><td width="80px"><input class="allapp_detail_img" onclick="submit('
 								+o.id+
-								')" type="image" src="../'
+								')" type="image" src="../../'
 								+o.icon+
 								'"></input><img class="search_star" src="'+arrayStar[o.appLevel]+'"></img></td><td><label class="app_l1">'
 								+o.appName+
@@ -118,10 +118,10 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 								'</div></td></tr></table></div>');
 					})
 					$('.search_star').error(function(){
-						this.src = '../resources/public/images/comment_star1.png';
+						this.src = '../../resources/public/images/comment_star1.png';
 					});
 					$('.allapp_detail_img').error(function(){
-						this.src = '../resources/public/images/app_default.jpg';
+						this.src = '../../resources/public/images/app_default.jpg';
 					});
 				}
 			});
@@ -136,16 +136,16 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 		<div id="nav">
 			<div id="loginBefor">
 				<ul>
-					<li><span onclick="location.href='/html/en/index.html'"><img src="../../resources/public/images/us.gif" alt="English" title="English"/></span></li>
-					<li><span id="reg">注册</span></li>
+					<li><span onclick="location.href='/'"><img src="../../resources/public/images/zh-cn.gif" alt="简体中文" title="简体中文"/></span></li>
+					<li><span id="reg">Register</span></li>
 					<li><span class="gbts"></span></li>
-					<li><span id="login">登陆</span></li>
+					<li><span id="login">Login</span></li>
 				</ul>
 			</div>
 			<div id="lolginAfter">
 				<ul>
-					<li><span onclick="location.href='/html/en/index.html'"><img src="../../resources/public/images/us.gif" alt="English" title="English"/></span></li>
-					<li><span id="logout">退出</span></li>
+					<li><span onclick="location.href='/'"><img src="../../resources/public/images/zh-cn.gif" alt="简体中文" title="简体中文"/></span></li>
+					<li><span id="logout">Logout</span></li>
 					<li><span class="gbts"></span></li>
 					<li id="thumb_photo"></li>
 					<li><span class="gbts"></span></li>
@@ -155,7 +155,7 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				</ul>
 			</div>
 			<ul>
-				<li><img id="indexPage" src="../resources/public/images/carit_logo1.png"/></li>
+				<li><img id="indexPage" src="../../resources/public/images/carit_logo1.png"/></li>
 				<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
 				<li><input type="button" class="search_bn" id="search"></input></li>
 			</ul>
@@ -170,11 +170,11 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 
 					<tr>
 						<td style="height: 58px"><img
-							src="../resources/public/images/icona.jpg"
+							src="../../resources/public/images/icona.jpg"
 							style="width: 58px; height: 47px; margin-bottom: 15px"></img></td>
 						<td style="height: 58px"><label
 							style="margin-bottom: 15px; color: white; font-size: 23px;"
-							class="goog-inline-block">搜索结果：</label></td>
+							class="goog-inline-block">Search Result:</label></td>
 					</tr>
 
 				</table>
@@ -183,42 +183,27 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 
 				<div id="allApp"
 					style="margin-top: 40px; margin-left: 40px; width: 980px">
-					<!--  <div class="appItem">
-						<table>
-							<tr>
-								<td width="80px"><img
-									src="../resources/public/images/icon78.png"></img> <img
-									src="../resources/public/images/star4.jpg"></img></td>
-								<td><label class="app_l1">Star Chart</label><label
-									class="app_l2">ESCAPIST GAMES LIMITED</label><label
-									class="app_l3">The world wide best selling smart phone
-										astronomy app Star Chart. The best se...</label> <img
-									src="../resources/public/images/install.jpg"></img></td>
-							</tr>
-						</table>
-
-					</div>-->
 				</div>
 				<div id="pageDiv"></div>
 			</div>
 		</div>
 		
-		  <div id="footer">
-			<table class="box20111120" cellspacing="0" width="980" align="center"
-				border="0">
-				<tbody>
-					<tr>
-						<td align="middle">电话：0755-33309188&nbsp;&nbsp;&nbsp;传真：0755-33309173&nbsp;&nbsp;&nbsp;电子邮件：<a
-							href="mailto:huangjp@carit.com.cn"><font color="#87CEFA">huangjp@carit.com.cn</font></a>&nbsp;&nbsp;&nbsp;邮编：518109
-						</td>
-					</tr>
-					<tr>
-						<td align="middle">&nbsp;&nbsp; 公司地址：深圳市宝安区龙华镇大浪英泰工业区Ｅ区Ｄ栋</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-        <div id="footer-tab-edge"></div>
+		 <div id="footer">
+		<table class="box20111120" cellspacing="0" width="980" align="center"
+			border="0">
+			<tbody>
+				<tr>
+					<td align="middle">Telephone：0755-33309188&nbsp;&nbsp;&nbsp;Fax：0755-33309173&nbsp;&nbsp;&nbsp;Email：<a
+						href="mailto:huangjp@carit.com.cn"><font color="#87CEFA">huangjp@carit.com.cn</font></a>&nbsp;&nbsp;&nbsp;P.C：518109
+					</td>
+				</tr>
+				<tr>
+					<td align="middle">&nbsp;&nbsp; Address：Zone E,Ying Tai industrial park,Da lang,Long Hua Town,Bao an district,Shenzhen , Guangdong, China</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+    <div id="footer-tab-edge"></div>
 		
 	</div>
 </body>

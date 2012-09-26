@@ -62,6 +62,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setUpdateTime(rs.getTimestamp("update_time"));
 			application.setBigIcon(rs.getString("big_icon"));
 			application.setDeveloper(rs.getInt("developer"));
+			application.setMainPic(rs.getString("main_pic"));
 			return application;
 		}
 	};
@@ -92,6 +93,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			application.setDeveloperWebsite(rs.getString("website"));
 			application.setDeveloperEmail(rs.getString("email"));
 			application.setUpdateTime(rs.getTimestamp("update_time"));
+			application.setMainPic(rs.getString("main_pic"));
 			return application;
 		}
 	};
@@ -103,8 +105,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
 				+ ", description , permission_desc, en_description , en_permission_desc"
-				+ ", images, status, create_time, update_time, features, en_features"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?)";
+				+ ", images, status, create_time, update_time, features, en_features,main_pic"
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?)";
 		log.debug(String.format("\n%1$s\n", sql));
 		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -130,9 +132,14 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(i++, application.getEnDescription());
 				ps.setString(i++, application.getEnPermissionDesc()); 
 				ps.setString(i++, application.getImages());
+				// 重置状态值
+				if(application.getStatus().intValue()>Constants.STATUS_INVALID){
+					application.setStatus(Constants.STATUS_VALID|application.getStatus());
+				}
 				ps.setInt(i++, application.getStatus());
 				ps.setString(i++, application.getFeatures());
 				ps.setString(i++, application.getEnFeatures());
+				ps.setString(i++, application.getMainPic());
 				return ps;
 			}
 		}, gkHolder);
@@ -224,7 +231,11 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			args.add(application.getEnPermissionDesc());
 		}
 		if (application.getStatus() != null) {
-			sql.append(", status=?");
+			if(application.getStatus().intValue()==Constants.STATUS_INVALID){
+				sql.append(", status=?");
+			} else {
+				sql.append(", status=(status|?)");
+			}
 			args.add(application.getStatus());
 		}
 		if (StringUtils.hasText(application.getImages())) {
@@ -238,6 +249,10 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		if (StringUtils.hasText(application.getFeatures())) {
 			sql.append(", en_features=?");
 			args.add(application.getEnFeatures());
+		}
+		if (StringUtils.hasText(application.getMainPic())) {
+			sql.append(", main_pic=?");
+			args.add(application.getMainPic());
 		}
 		sql.append(" where id=?");
 		args.add(application.getId());
@@ -396,7 +411,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (application.getStatus() != null) {
-			sql.append(" and status=?");
+			sql.append(" and (status&?)!=0");
 			args.add(application.getStatus());
 			argTypes.add(4);// java.sql.Types type
 		}
@@ -411,13 +426,18 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(93);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getFeatures())) {
-			sql.append(", features like CONCAT('%',?,'%')");
+			sql.append(" and features like CONCAT('%',?,'%')");
 			args.add(application.getFeatures());
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (StringUtils.hasText(application.getFeatures())) {
-			sql.append(", en_features like CONCAT('%',?,'%')");
+			sql.append(" and en_features like CONCAT('%',?,'%')");
 			args.add(application.getFeatures());
+			argTypes.add(12);// java.sql.Types type
+		}
+		if (StringUtils.hasText(application.getMainPic())) {
+			sql.append(" and main_pic like CONCAT('%',?,'%')");
+			args.add(application.getMainPic());
 			argTypes.add(12);// java.sql.Types type
 		}
 		return sql.toString();
@@ -546,10 +566,16 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			argTypes.add(12);// java.sql.Types type
 		}
 		if (application.getStatus()!=null) {
-			sql.append(" and status=?");
-			countSql.append(" and status=?");
+			sql.append(" and (status&?)!=0");
+			countSql.append(" and (status&?)!=0");
 			args.add(application.getStatus());
 			argTypes.add(Types.INTEGER);
+		}
+		if (StringUtils.hasText(application.getMainPic())) {
+			sql.append(" and main_pic like CONCAT('%',?,'%')");
+			countSql.append(" and main_pic like CONCAT('%',?,'%')");
+			args.add(application.getMainPic());
+			argTypes.add(12);// java.sql.Types type
 		}
 		log.debug(String.format("\n%1$s\n", countSql));
 		int totalRow = queryForInt(countSql.toString(), args, argTypes);

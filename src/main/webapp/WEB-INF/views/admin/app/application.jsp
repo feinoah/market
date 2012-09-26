@@ -79,7 +79,15 @@
 				data:appStatusList,
 				editable:false,
 				valueField:'fieldValue',
-				textField:'displayValue'
+				textField:'displayValue',
+				onChange:function(newValue, oldValue){
+					if(newValue==4){
+						$('#mainPicLabel').addClass('mustInput');
+						//$('#mainPicTr').show();}else{$('#mainPicTr').hide();
+					} else {
+						$('#mainPicLabel').removeClass('mustInput');
+					}
+				}
 			});
 			$('#version_status_edit').combobox({
 				data:statusList,
@@ -159,17 +167,23 @@
 							}
 						});
 						if(!b){return b;}
-						if($('#apkFileTxt').val()==''&&$('#apkFile').val()==''){ //新增时
+						if($('#apkFileTxt').val()==''){ //新增时
 							$.messager.alert('提示', "应用文件必须上传", 'info');
 							return false;
 						}
-						if($('#iconFileTxt').val()==''&&$('#iconFile').val()==''){ //新增时
+						if($('#iconFileTxt').val()==''){ //新增时
 							$.messager.alert('提示', "图标文件必须上传", 'info');
 							return false;
 						}
-						if($('#bigIconFileTxt').val()==''&&$('#bigIconFile').val()==''){ //新增时
+						if($('#bigIconFileTxt').val()==''){ //新增时
 							$.messager.alert('提示', "大图标文件必须上传", 'info');
 							return false;
+						}
+						if($('#mainPicLabel').hasClass('mustInput')){
+							if($('#mainPicTxt').val()==''){
+								$.messager.alert('提示', "置顶主图必须上传", 'info');
+								return false;
+							}
 						}
 						$('#editForm input[type=file]').each(function(){
 							b=chkFileType($(this).val(),$(this).attr('fileType'));
@@ -300,7 +314,21 @@
 				$('#supportLanguages_edit').combobox('setValue',m.supportLanguages);
 				//$('#appLevel_edit').numberspinner('setValue',m.appLevel);
 				$('#editForm input[name=price]').val(m.price);
-				$('#status_edit').combobox('setValue',m.status);
+				var s=0;
+				// 取最大值
+				$.each(appStatusList, function(key,val) {
+					if((m.status&val.fieldValue)!=0){
+						s=val.fieldValue;
+						return false;
+					}
+				});
+				if(s==4){
+					$('#mainPicLabel').addClass('mustInput');
+					//$('#mainPicTr').show();}else{$('#mainPicTr').hide();
+				} else {
+					$('#mainPicLabel').removeClass('mustInput');
+				}
+				$('#status_edit').combobox('setValue',s);
 				descEditer.html(m.description);
 				enDescEditer.html(m.enDescription);
 				permissionEditer.html(m.permissionDesc);
@@ -317,6 +345,10 @@
 					});
 				}
 				$('input[name=imageArray]').attr('disabled',false);
+				$('#mainPicTxt').val(m.mainPic);
+				if(m.status!=4){
+					$('#mainPicTr').hide();
+				}
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -523,16 +555,19 @@
 					</div>
 					<div title="附件" style="overflow:auto;padding:3px;display:none;"> 
 						<table>
-							<tr>
-								<td><label class="mustInput">应用文件：</label></td>
-								<td>
-								<div class="fileinputs">  
-									<input type="file" class="file" name="apkFile" id="apkFile" fileType='apk' onchange="$('#apkFileTxt').val(this.value);"/>  
-									<div class="fakefile">  
-										<input type="text" value="" id="apkFileTxt" style="width:200px;"/><button>浏览</button>
-									</div>  
+						<tr>
+							<td><label class="mustInput">应用文件：</label></td>
+							<td>
+								<div class="fileinputs">
+									<input type="file" class="file" name="apkFile" id="apkFile"
+										fileType='apk' onchange="$('#apkFileTxt').val(this.value);" />
+									<div class="fakefile">
+										<input type="text" value="" id="apkFileTxt"
+											style="width: 200px;" required="true"/>
+										<button>浏览</button>
+									</div>
 								</div>
-								</td>
+							</td>
 						</tr>
 						<tr>
 							<td><label class="mustInput">小图标：</label></td>
@@ -540,7 +575,7 @@
 								<div class="fileinputs">  
 									<input type="file" class="file" name="iconFile" id="iconFile" fileType="jpg|png" onchange="$('#iconFileTxt').val(this.value);"/>
 									<div class="fakefile">  
-										<input type="text" value="" id="iconFileTxt" style="width:200px;"/><button>浏览</button>
+										<input type="text" value="" id="iconFileTxt" style="width:200px;" required="true" /><button>浏览</button>
 									</div>  
 								</div>
 							</td>
@@ -551,8 +586,21 @@
 								<div class="fileinputs">  
 									<input type="file" class="file" name="bigIconFile" id="bigIconFile" fileType="jpg|png" onchange="$('#bigIconFileTxt').val(this.value);"/>
 									<div class="fakefile">  
-										<input type="text" value="" id="bigIconFileTxt" style="width:200px;"/><button>浏览</button>
+										<input type="text" value="" id="bigIconFileTxt" style="width:200px;" required="true" /><button>浏览</button>
 									</div>  
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td><label id="mainPicLabel">置顶主图：</label></td>
+							<td>
+								<div class="fileinputs">
+									<input type="file" class="file" name="mainPicFile" id="mainPicFile"
+										fileType='jpg|png' onchange="$('#mainPicTxt').val(this.value);" />
+									<div class="fakefile">
+										<input type="text" value="" id="mainPicTxt" style="width: 200px;"/>
+										<button>浏览</button>
+									</div>
 								</div>
 							</td>
 						</tr>

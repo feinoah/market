@@ -105,6 +105,17 @@ public class ApplicationController {
         		multipartFile.transferTo(file);
 	        	application.setIcon(Constants.BASE_PATH_ICON+fileName);
 			}
+	      //页面控件的文件流
+        	MultipartFile mainPicFile = multipartRequest.getFile("mainPicFile");
+	        if (mainPicFile!=null&&mainPicFile.getOriginalFilename().length()>0) { // 有ICON文件
+	        	// 获取文件的后缀 
+	        	suffix = mainPicFile.getOriginalFilename().substring(
+	        			mainPicFile.getOriginalFilename().lastIndexOf("."));
+	        	fileName = (prefix+ suffix).toLowerCase();// 构建文件名称
+	        	File file = AttachmentUtil.getImageFile(fileName);
+	        	mainPicFile.transferTo(file);
+	        	application.setMainPic(Constants.BASE_PATH_IMAGE+fileName);
+			}
 	        MultipartFile bigIconMultipartFile = multipartRequest.getFile("bigIconFile");
 	        if (bigIconMultipartFile!=null&&bigIconMultipartFile.getOriginalFilename().length()>0) { // 有ICON文件
 	        	// 获取文件的后缀 
