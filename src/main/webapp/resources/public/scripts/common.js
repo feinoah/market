@@ -5,6 +5,7 @@ var statusList;
 var appStatusList;
 var catalogs;
 var languages;
+var localList=[{'code':'1','value':'中文地区'},{'code':'2','value':'英文地区'},{'code':'3','value':'中英文地区'}];
 // 扩展
 $.extend($.fn.validatebox.defaults.rules, {  
 	minLength:{validator: function(v, p){return getStrLen($.trim(v))>p[0];},message: '最少输入{0}个字符(一个中文两个字符)'},
@@ -411,4 +412,15 @@ function chkFileType(name,types){
 		}
 	}
 	return false;
+}
+
+function localFormatter(v){
+	var result=v;
+	$.each(localList, function(key,val) {
+		if(v==val.code){
+			result=val.value;
+			return false;
+		}
+	});
+	return result;
 }

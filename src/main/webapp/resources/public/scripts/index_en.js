@@ -1,4 +1,5 @@
 $(function() {
+	$('#index-nav').hide();
 	chkLogin();
 	$('#logout').click(function(){
 		$.getJSON(app.name+'/portal/logout', function(data) {
@@ -7,6 +8,7 @@ $(function() {
 				$('#lolginAfter').hide();
 				$('#welcome').empty().attr('userId','');
 				account={};
+				location.reload();
 			}
 		});
 	});
@@ -68,6 +70,7 @@ var chkLogin=function(){
 					});
 				}
 			});
+			$('#index-nav').hide();
 		}
 	});
 };
@@ -104,6 +107,7 @@ var login=function(){
 						tips('password','Password is incorrect.','bottom');
 					}
 					if(map.answerCode==1){
+						$('#index-nav').hide();
 						account=map.portalUser;
 						$('#loginBefor').hide();
 						$('#lolginAfter').show();

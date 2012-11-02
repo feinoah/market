@@ -59,7 +59,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 				+ ", version, size, file_path, new_features, en_new_features, status"
 				+ ", create_time" + ", update_time" + ") values (?"
 				+ ", ?, ?, ?, ?,?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -84,14 +86,18 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_app_version_file where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int deleteByAppId(int appId) {
 		String sql = "delete from t_app_version_file where app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, appId);
 	}
 
@@ -130,7 +136,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		}
 		sql.append(" where id=?");
 		args.add(appVersionFile.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
@@ -145,20 +153,26 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			sql.append(" and id!=?");
 			args.add(exceptedId);
 		}
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 	@Override
 	public int updateToValidByAppIdAndVersion(int appId, String version) {
 		String sql="update t_app_version_file set update_time=now(), status=? where app_id=? and version=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, Constants.STATUS_VALID, appId, version);
 	}
 
 	@Override
 	public AppVersionFile queryById(int id) {
 		String sql = "select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
@@ -166,14 +180,18 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	@Override
 	public AppVersionFile queryValidVersionByAppId(int appId) {
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=? and a.status=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.queryForObject(sql, new Object[]{appId, Constants.STATUS_VALID}, rowMapper);
 	}
 	
 	@Override
 	public List<AppVersionFile> queryByAppId(int appId) {
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id where a.app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{appId}, rowMapper);
 	}
 
@@ -181,14 +199,18 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 	public List<AppVersionFile> queryByAppIdAndExceptId(int appId, int exceptedId) {
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a " +
 				"left join t_application b on a.app_id=b.id where a.app_id=? and a.id!=? order by a.id desc";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{appId, exceptedId}, rowMapper);
 	}
 
 	@Override
 	public List<AppVersionFile> query() {
 		String sql="select a.*,b.app_name, b.en_name from t_app_version_file a left join t_application b on a.app_id=b.id";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return this.jdbcTemplate.query(sql,rowMapper);
 	}
 
@@ -199,7 +221,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appVersionFile));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -214,7 +238,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		String whereSql=buildWhere(args, argTypes, appVersionFile);
 		sql.append(whereSql);
 		String countSql="select count(1) from t_app_version_file a left join t_application b on a.app_id=b.id where 1=1"+whereSql;
-		log.debug(String.format("\n%1$s\n", countSql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow = queryForInt(countSql, args, argTypes);
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -232,7 +258,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -362,7 +390,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 					.append(" ").append(dgm.getOrder());
 		}
 		sql.append(" limit ?, ?");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		args.add(jsonPage.getStartRow());
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
@@ -378,7 +408,9 @@ public class AppVersionFileDaoImpl extends BaseDaoImpl implements
 			viewName="v_app_version_file_en";
 		}
 		String sql="select * from "+viewName+" where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, portalRowMapper);
 	}
 

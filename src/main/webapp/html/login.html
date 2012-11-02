@@ -3,10 +3,10 @@
 		<dl>
 			<div style="height: 17px; overflow: hidden"></div>
 			<dd>
-				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">请输入邮箱地址</span>
+				<span class="title">邮箱地址：</span><input class="reg_input" name="email" type="text" id="email"/><!--  <span id="emailTip" class="onShow">请输入邮箱地址</span>-->
 			</dd>
 			<dd>
-				<span class="title">登录密码：</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onShow">请输入6~18位密码</span>
+				<span class="title">登录密码：</span><input class="reg_input" id="password" name="password" type="password" /><!-- <span id="passwordTip" class="onShow">请输入6~18位密码</span>-->
 			</dd>
 		</dl>
 		<div class="f_reg_but">
@@ -19,7 +19,7 @@
 <script type="text/javascript">
 <!--
 $(function() {
-	$('#email').blur(function(){
+	/*$('#email').blur(function(){
 		var email=$.trim($('#email').val());
 		if(chkEmail(email)){
 			$('#emailTip').attr('class', '').addClass('onSuccess').html('');
@@ -28,8 +28,8 @@ $(function() {
 		}
 	}).focus(function(){
 		$('#emailTip').attr('class', '').addClass('onFocus').html('请输入邮箱地址');
-	});
-	$('#password').blur(function(){
+	});*/
+	$('#password')/*.blur(function(){
 		var pwd=$.trim($('#password').val());
 		if(pwd.length<6||pwd.length>18){
 			$('#passwordTip').attr('class', '').addClass('onError').html('请输入6~18位密码');
@@ -38,13 +38,13 @@ $(function() {
 		}
 	}).focus(function(){
 		$('#passwordTip').attr('class', '').addClass('onFocus').html('请输入6~18位密码');
-	}).keydown(function(e){
+	})*/.keydown(function(e){
 		if(e.which==13){
 			var pwd=$.trim($('#password').val());
-			if(pwd.length>=6||pwd.length<=18){
-				$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
+			//if(pwd.length>=6||pwd.length<=18){
+				//$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
 				login();
-			}
+			//}
 		}
 	});
 	$('#button').click(function(){

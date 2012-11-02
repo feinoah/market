@@ -152,13 +152,4 @@ public class AttachmentUtil {
 		return deleteFile(getApkPath(fileName));
 	}
 	
-	public static void main(String[] args) throws IOException {
-		init("http://localhost:8080/market");
-		System.out.println(getValue("attachment.icons"));
-		System.out.println(getIconFile("Sina Weibo_19830703190160.png"));
-		System.out.println(getIconPath("test"));
-		System.out.println(getImageFile("test"));
-		
-		System.out.println((int)Math.rint(5.4970));
-	}
 }

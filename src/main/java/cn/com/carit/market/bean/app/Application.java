@@ -98,6 +98,8 @@ public class Application extends BaseBean implements Serializable {
 	private Integer status;
 	
 	private String mainPic;
+	
+	private Integer local;
 
 	public String[] getImageList() {
 		if (this.images != null && this.images.trim().length() > 0) {
@@ -296,6 +298,14 @@ public class Application extends BaseBean implements Serializable {
 
 	public void setMainPic(String mainPic) {
 		this.mainPic = mainPic;
+	}
+
+	public Integer getLocal() {
+		return local;
+	}
+
+	public void setLocal(Integer local) {
+		this.local = local;
 	}
 
 }

@@ -1,44 +1,53 @@
 package cn.com.carit.market.common.utils;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.util.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 
 public class JsonUtil {
 
 	
+public static final ObjectMapper MAPPER = new ObjectMapper();
+	
 	@SuppressWarnings("unchecked")
-	public static Map<Integer,Integer> jsonToMap(String json) throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(json, Map.class);
+	public static <K, V> Map<K,V> jsonToMap(String json) throws Exception{
+		return MAPPER.readValue(json, Map.class);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	public static String mapToStr(Map map) throws Exception{
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.writeValueAsString(map);
+	public static <K, V> String mapToStr(Map<K, V> map) throws Exception{
+		return MAPPER.writeValueAsString(map);
 	}
 	
-	public static String[] jsonToStrArray(String json) throws Exception {
-		if (!StringUtils.hasText(json)) {
+	public static Object [] jsonToStrArray(String json) throws Exception {
+		if (json==null || json.isEmpty()) {
 			json="[]";
 		}
-		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(json, String[].class);
+		return MAPPER.readValue(json, Object[].class);
 	}
 	
-	public static String arrayToStr(String [] array) throws Exception{
+	public static String arrayToStr(Object [] array) throws Exception{
 		if (array!=null && array.length>0) {
-			ObjectMapper mapper = new ObjectMapper();
-			return mapper.writeValueAsString(array);
+			return MAPPER.writeValueAsString(array);
 		}
 		return "[]";
 	}
+	
+	public static <T> Object jsonToObject(String json, Class<T> clazz) throws Exception{
+		return MAPPER.readValue(json, clazz);
+	}
+	
+	public static <T> List<T> jsonToList(String json) throws Exception {
+		return MAPPER.readValue(json, new TypeReference<List<T>>() {
+			
+		});
+	}
+	
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -47,17 +56,18 @@ public class JsonUtil {
 	 */
 	public static void main(String[] args) throws Exception {
 		String json="{\"8\":\"23\",\"9\":\"24\",\"4\":\"152047890\",\"5\":\"19\",\"15\":\"36\",\"6\":\"20\",\"16\":\"37\",\"7\":\"5653\",\"13\":\"34\",\"14\":\"35\",\"1\":\"5\",\"11\":\"32\",\"2\":\"6\",\"12\":\"33\",\"3\":\"1800\",\"10\":\"25\"}";
-		Map<Integer, Integer> map=jsonToMap(json);
-		for (Entry<Integer,Integer> e: map.entrySet()) {
+		Map<String, String> map=jsonToMap(json);
+		for (Entry<String,String> e: map.entrySet()) {
 			System.out.println(e.getKey()+":"+e.getValue());
 		}
 		System.out.println(mapToStr(map));
 		String json2="[\"010201\",\"010302\"]";
-		String [] array=jsonToStrArray(json2);
-		for(String str:array){
+		Object [] array=jsonToStrArray(json2);
+		for(Object str:array){
 			System.out.println(str);
 		}
 		System.out.println(arrayToStr(array));
+		System.out.println("   \t\t\r\nlll".replaceAll("\\W", ""));
 	}
 
 }

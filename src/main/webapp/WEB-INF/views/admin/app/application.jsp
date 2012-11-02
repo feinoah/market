@@ -5,7 +5,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<%@ include file="/WEB-INF/views/commons/easyui.jsp"%>
-		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v=1.4" ></script>
+		<script type="text/javascript" src="${ctx}/resources/public/scripts/common.js?v1.2" ></script>
 		<script type="text/javascript">
 		var devs;
 		var descEditer;
@@ -94,6 +94,18 @@
 				editable:false,
 				valueField:'fieldValue',
 				textField:'displayValue'
+			});
+			$('#local').combobox({
+				data:localList,
+				editable:false,
+				valueField:'code',
+				textField:'value'
+			});
+			$('#local_edit').combobox({
+				data:localList,
+				editable:false,
+				valueField:'code',
+				textField:'value'
 			});
 			// 初始化
 			$('#tt').datagrid({
@@ -349,6 +361,7 @@
 				if(m.status!=4){
 					$('#mainPicTr').hide();
 				}
+				$('#local_edit').combobox('setValue',m.local);
 				$('#id').val(m.id);
 				$('#editWin').show();
 			} else {
@@ -442,6 +455,12 @@
 					<td>
 						<form:input path="status" />
 					</td>
+					<td>
+						<form:label for="local" path="local">地区：</form:label>
+					</td>
+					<td>
+						<form:input path="local" />
+					</td>
 				</tr>
 			</table>
 		</form:form>
@@ -468,6 +487,7 @@
 						<th field="appFilePath" width="100" align="center"  hidden="true">应用文件路径</th>
 						<th field="platform" width="100" align="center" formatter="fieldFormatter">适用平台</th>
 						<th field="supportLanguages" width="80" align="center" formatter="lanFormatter">支持语言</th>
+						<th field="local" width="80" align="center" formatter="localFormatter">地区</th>
 						<th field="price" width="60" align="center">价格</th>
 						<th field="appLevel" width="80" align="center" formatter="gradeFormatter">应用评级</th>
 						<th field="description" width="80" align="center"  hidden="true">描述</th>
@@ -479,7 +499,7 @@
 				</thead>
 			</table>
 		</div>
-		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:500px;padding:3px;overflow: hidden;" modal="true">
+		<div id="editWin" class="easyui-window" title="应用" iconCls="icon-edit" closed="true" style="width:650px;height:520px;padding:3px;overflow: hidden;" modal="true">
 			<form:form modelAttribute="application" id="editForm" action="${ctx}/admin/app/application/save" method="post" cssStyle="padding:5px;" enctype="multipart/form-data">
 				<div id="appTabs" class="easyui-tabs" style="width:620px;overflow: hidden;">
 					<div title="基本信息" style="padding:3px;">  
@@ -519,6 +539,10 @@
 								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" cssStyle="width:200px;"/></td>
 								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
 								<td><form:input path="platform" id="platform_edit" required="true" cssStyle="width:200px;"/></td>
+							</tr>
+							<tr>
+								<td><form:label	for="local" path="local">地区：</form:label></td>
+								<td><form:input path="local" id="local_edit" required="true" cssStyle="width:200px;"/></td>
 							</tr>
 							<tr>
 								<td colspan="4">

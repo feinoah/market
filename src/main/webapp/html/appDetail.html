@@ -8,15 +8,15 @@
 	<link href="../resources/public/styles/XYTipsWindow.css" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/ykb.css" rel="stylesheet" type="text/css" />
 	<link rel="icon" href="../resources/favicon.ico" type="image/x-icon"/>
-	<link href="../resources/public/styles/common.css?v=1.0" rel="stylesheet" type="text/css" />
+	<link href="../resources/public/styles/common.css?v1.2" rel="stylesheet" type="text/css" />
 	<link href="../resources/public/styles/app_detail.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="../resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="../resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/highcharts.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/jquery.cookie.js"></script>
 	<script type="text/javascript" src="../resources/public/scripts/autoPlayer.js"></script>
-	<script type="text/javascript" src="../resources/public/scripts/utils.js?v=1.0"></script>
-	<script type="text/javascript" src="../resources/public/scripts/index.js?v=1.0"></script>
+	<script type="text/javascript" src="../resources/public/scripts/utils.js?v1.2"></script>
+	<script type="text/javascript" src="../resources/public/scripts/index.js?v1.2"></script>
 <!--[if lte IE 6]>  
 <div id="ie6-warning" style="width:100%;z-index:9999999999;background:#9C9C9C;"> 
 您正在使用 Internet Explorer 6 低版本的IE浏览器。为更好的浏览本页，建议您将浏览器升级到 <a href="http://windows.microsoft.com/zh-CN/internet-explorer/downloads/ie-9/worldwide-languages" target="_blank">IE9</a> 或以下浏览器：<a href="http://www.firefox.com.cn/download/">Firefox</a> / <a href="http://www.google.cn/chrome">Chrome</a> / <a href="http://www.apple.com.cn/safari/">Safari</a> / <a href="http://www.Opera.com/">Opera</a><span title="关闭提示" style="color:#ffffff;margin:0 15px;cursor: pointer;" onclick="closeme()">X</span>  
@@ -517,7 +517,13 @@ position_fixed(document.getElementById("ie8-warning"),0, 0);
 				</div>
 				<ul>
 					<li><img id="indexPage" src="../resources/public/images/carit_logo1.png"/></li>
-					<li><div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
+					<li>
+					<ul id="index-nav">
+					<li><a href="/profile">用户中心</a></li>
+					<li class="active"><a href="#">应用商城</a></li>
+					</ul>
+						
+					<div class="index_input_edge"><input class="index_input" id="search_input" name="txtNo"/></div></li>
 					<li><input type="button" class="search_bn" id="search"></input></li>
 				</ul>
 			</div>

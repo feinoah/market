@@ -17,7 +17,9 @@ public class BaseRoleModuleDaoImpl extends BaseDaoImpl  implements
 		@Override
 		public int add(BaseRoleModule baseRoleModule) {
 			String sql = "insert into t_base_role_module ( role_id, module_id) values (?,?)";
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql
 					,baseRoleModule.getRoleId()
 					,baseRoleModule.getModuleId()
@@ -31,7 +33,9 @@ public class BaseRoleModuleDaoImpl extends BaseDaoImpl  implements
 			if(modules==null||modules.length<=0){
 				return null;
 			}
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 				@Override
 				public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -48,20 +52,26 @@ public class BaseRoleModuleDaoImpl extends BaseDaoImpl  implements
 		@Override
 		public int delete(int roleId, int moduleId) {
 			String sql="delete from t_base_role_module where role_id=? and module_id=?";
-			log.debug(String.format("\n%1$s\n", sql, moduleId));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql, roleId, moduleId);
 		}
 		@Override
 		public int deleteByRoleId(int roleId) {
 			String sql="delete from t_base_role_module where role_id=?";
-			log.debug(String.format("\n%1$s\n", sql, roleId));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql, roleId);
 		}
 		@Override
 		public void deleteByModuleId(int moduleId) {
 			String sql="delete from t_base_role_module where module_id=?";
-			log.debug(String.format("\n%1$s\n", sql, moduleId));
-			 jdbcTemplate.update(sql, moduleId);
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
+			jdbcTemplate.update(sql, moduleId);
 		}
 		
 }

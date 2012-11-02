@@ -50,12 +50,13 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 
 	@Override
 	public int add(final AppCatalog appCatalog) {
-		// TODO change values field name to ? and deal with date field
 		final String sql = "insert into t_app_catalog (name, en_name"
 				+ ", description, en_description, display_index, status"
 				+ ", create_time" + ", update_time"
 				+ ") values (?, ?, ?, ?, ?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -78,14 +79,18 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_app_catalog where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int batchDelete(String ids) {
 		String sql = "delete from t_app_catalog where id in ("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
@@ -120,14 +125,18 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		}
 		sql.append(" where id=?");
 		args.add(appCatalog.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
 	@Override
 	public AppCatalog queryById(int id) {
 		String sql = "select * from t_app_catalog where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
@@ -144,7 +153,9 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appCatalog));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -174,7 +185,9 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -239,7 +252,9 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 			viewName="v_app_catalog_en";
 		}
 		String sql="select * from "+viewName;
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, portalRowMapper);
 	}
 
@@ -250,7 +265,9 @@ public class AppCatalogDaoImpl extends BaseDaoImpl implements AppCatalogDao {
 			viewName="v_app_catalog_en";
 		}
 		String sql="select 1 from "+viewName+" where name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		int result=0;
 		try {
 			result=jdbcTemplate.queryForInt(sql, name);

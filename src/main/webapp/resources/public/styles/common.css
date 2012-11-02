@@ -33,6 +33,7 @@ a{
 	font-size: 14px;
 	text-decoration: none;
 }
+a:HOVER{text-decoration: none !important;}
 a:visited {
 	font-size: 14px;
 	text-decoration: none;
@@ -166,16 +167,15 @@ a:hover {
 }
 
 .index_input{
-height: 33px;
-width: 300px;
+height: 28px;
+width: 328px;
 font-size: 20px;
-margin-top: 7px;
-margin-right: 5px;
-	outline: none;
-	background-position-x:right;
-	padding-left:3px;
-	padding-right:3px;
-	border:1px solid white;
+margin-top: 5px;
+background-position-x:right;
+border:1px solid white;
+border-radius:3px;
+-webkit-border-radius:3px;
+-moz-border-radius:3px;
 }
 
 #nav{
@@ -183,12 +183,16 @@ width:100%;
 background:#9C9C9C;
 }
 .index_input_edge{
-	margin-top:18px;
-	height: 47px; 
-	width: 319px; 
-	margin-left:360px;
+	margin-top:22px;
+	height: 39px; 
+	width: 339px;
+	margin-left:380px;
 	BACKGROUND-IMAGE: url(../images/search_input.png);
 }
+#index-nav{width:380px !important;font-size: 16px;display:block;height:40px;padding:0 10px;float: left;}
+#index-nav li{margin:20px 0;float: left;height: 40px !important;width: 122px;line-height: 40px !important;background: url(../images/bt1.png);}
+#index-nav li a {color: white;width: 122px;height: 40px;line-height: 40px;font-weight: bold;}
+#index-nav li:hover, #index-nav .active {background: url(../images/bt1_s.png) !important;color:#fff;}
 #nav div ul{width: 100%;height: 28px;}
 #nav div ul li{float: right;line-height: 28px;}
 #nav div ul li span{
@@ -285,8 +289,10 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 	font-size: 11px;
 	cursor: pointer;
 	margin-left: 3px;
-	border: 2px solid #1C86EE;
-	background-color: #fcf2cf;
+	/*border: 2px solid #1C86EE;
+	background-color: #fcf2cf;*/
+	border: 2px solid #FFBF00;
+	background-color:#FAFAFA;
 }
 
 .num li.on {
@@ -294,7 +300,8 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 	width: 16px;
 	height: 16px;
 	font-size: 11px;
-	background-color: #BFEFFF;
+	/*background-color: #BFEFFF;*/
+	background-color:#F7D358;
 	font-weight: bold;
 	color: #FFF;
 }
@@ -335,16 +342,17 @@ background:url(../images/login_bu_hover.png) left top no-repeat;
 }
 
 .search_bn{
-background:url(../images/search_button.png) left top no-repeat;
+background:url(../images/search_btn.png) left top no-repeat;
+
 width:72px;
-height:29px;	
+height:38px;	
 border:none;
 cursor:pointer;
-margin-left: 20px;
-margin-top:25px;
+margin-left: 2px;
+margin-top:22px;
 }
 .search_bn:hover{
-background:url(../images/search_button_hover.png) left top no-repeat;
+background:url(../images/search_btn_s.png) left top no-repeat;
 }
 
 .index_star{
@@ -440,6 +448,7 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 .reg dl {
 	padding-left: 10px;
 	font-size: 14px;
+	margin: 0 auto;
 }
 
 .reg dl dt {
@@ -447,7 +456,8 @@ background:url(../images/search_button_hover.png) left top no-repeat;
 }
 
 .reg dl dd {
-	padding: 3px 0
+	padding: 3px 0;
+	margin: 0 auto;
 }
 
 .reg .title {

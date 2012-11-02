@@ -66,7 +66,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 				+", now()"
 				+", now()"
 				+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql
 				,baseModule.getModuleName()
 				,baseModule.getModuleUrl()
@@ -83,7 +85,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 	@Override
 	public int delete(int id) {
 		String sql="delete from t_base_module where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
@@ -129,21 +133,27 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 		}
 		sql.append(" where id=?");
 		val.add(baseModule.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), val.toArray());
 	}
 
 	@Override
 	public BaseModule queryById(int id) {
 		String sql="select * from t_base_module where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<BaseModule> query() {
 		String sql="select * from t_base_module";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return this.jdbcTemplate.query(sql, rowMapper);
 	}
 
@@ -153,7 +163,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, baseModule));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -168,7 +180,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 		String whereSql=buildWhere(args, argTypes, baseModule);
 		sql.append(whereSql);
 		String countSql="select count(1) from t_base_module where id>? "+whereSql;
-		log.debug(String.format("\n%1$s\n", countSql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow=queryForInt(countSql, args, argTypes);
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -182,7 +196,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -244,8 +260,9 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 				+ " on m.id=b.module_id where exists "
 				+ "(select r.role_id from t_base_user_role r left join t_base_user u on u.id=r.user_id "
 				+ "where r.role_id=b.role_id and r.user_id=?) group by m.id order by level, display_index";
-		log.debug(String.format("\n%1$s\n", sql));
-		log.debug("userId:"+String.format("\n%1$s\n", userId));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{userId}, new int[]{Types.INTEGER}, rowMapper);
 	}
 
@@ -253,14 +270,18 @@ public class BaseModuleDaoImpl extends BaseDaoImpl  implements
 	public List<BaseModule> queryByRoleId(int roleId) {
 		String sql="select m.* from t_base_module m left join t_base_role_module b"
 				+ " on m.id=b.module_id where b.role_id=? order by level, display_index ";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{roleId}, new int[]{Types.INTEGER}, rowMapper);
 	}
 
 	@Override
 	public int checkModule(String moduleName) {
 		String sql="select 1 from t_base_module where module_name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, moduleName);
 		} catch (Exception e) {

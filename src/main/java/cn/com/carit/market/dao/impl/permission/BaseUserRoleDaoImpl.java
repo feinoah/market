@@ -17,7 +17,9 @@ public class BaseUserRoleDaoImpl extends BaseDaoImpl  implements
 		@Override
 		public int add(BaseUserRole baseUserRole) {
 			String sql = "insert into t_base_user_role (user_id, role_id) values (?,?)";
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql
 					,baseUserRole.getUserId()
 					,baseUserRole.getRoleId()
@@ -32,7 +34,9 @@ public class BaseUserRoleDaoImpl extends BaseDaoImpl  implements
 			if(roles==null || roles.length<=0){
 				return null;
 			}
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 				@Override
 				public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -50,21 +54,27 @@ public class BaseUserRoleDaoImpl extends BaseDaoImpl  implements
 		@Override
 		public int delete(int userId, int roleId) {
 			String sql="delete from t_base_user_role where user_id=? and role_id";
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql, userId, roleId);
 		}
 
 		@Override
 		public int deleteByUserId(int userId) {
 			String sql="delete from t_base_user_role where user_id=?";
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql, userId);
 		}
 
 		@Override
 		public int deleteByRoleId(int roleId) {
 			String sql="delete from t_base_user_role where role_id=?";
-			log.debug(String.format("\n%1$s\n", sql));
+			if (log.isDebugEnabled()) {
+				log.debug(String.format("\n%1$s\n", sql));
+			}
 			return jdbcTemplate.update(sql, roleId);
 		}
 		

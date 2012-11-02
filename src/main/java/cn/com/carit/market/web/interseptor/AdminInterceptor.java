@@ -7,7 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.com.carit.market.bean.BaseModule;
@@ -23,13 +24,19 @@ import cn.com.carit.market.web.CacheManager;
  *
  */
 public class AdminInterceptor extends HandlerInterceptorAdapter{
-	private final Logger log = Logger.getLogger(getClass());
+	private final Logger log = LoggerFactory.getLogger(getClass());
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
 		String uri = request.getRequestURI();
-		log.debug("Request for: "+uri);
-		String hostPath="http://"+request.getLocalName();
+		if (log.isDebugEnabled()) {
+			log.debug("Request for: "+uri);
+		}
+		String hostPath="http://"+request.getServerName();
+		if (log.isDebugEnabled()) {
+			log.debug("hostPath: "+hostPath);
+		}
 		String contexPath="/market";
 		int port=request.getLocalPort();
 		if (uri.indexOf(contexPath)!=-1) { // 开发环境

@@ -167,7 +167,7 @@ public class PortalController{
 			portalAccount=new PortalAccountInfo();
 			BeanUtils.copyProperties(accountInfo, portalAccount);
 		} else {
-			Cookie cookie = new Cookie((String) SphinxUtil.getValue("cookie.name.user"), "");
+			Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), "");
 			cookie.setPath("/");   
 			cookie.setMaxAge(0); // delete the cookie.   
 			res.addCookie(cookie);
@@ -220,7 +220,8 @@ public class PortalController{
 				Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), URLEncoder.encode(account.getNickName(), Constants.CHARACTER_ENCODING_UTF8));
 	            cookie.setMaxAge(-1);   
 	            cookie.setPath("/");   
-	            res.addCookie(cookie);  
+	            res.addCookie(cookie);
+	            
 			}
 			if (answerCode.intValue()==0) {// 密码错误
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);

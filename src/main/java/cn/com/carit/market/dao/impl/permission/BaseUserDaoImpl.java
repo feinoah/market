@@ -57,7 +57,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 				+ ", office_phone" + ", mobile" + ") values (" + " ?" + ", ?"
 				+ ", ?" + ", ?" + ", ?" + ", now()" + ", now()" + ", ?" + ", ?"
 				+ ", ?" + ", ?" + ")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -84,7 +86,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_base_user where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
@@ -139,21 +143,27 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 		}
 		sql.append(" where id=?");
 		val.add(baseUser.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), val.toArray());
 	}
 
 	@Override
 	public BaseUser queryById(int id) {
 		String sql = "select * from t_base_user where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public BaseUser queryByEmail(String email) {
 		String sql = "select * from t_base_user where email=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, email, rowMapper);
 	}
 
@@ -169,7 +179,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, baseUser));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -184,7 +196,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 		sql.append(whereSql);
 		String countSql = "select count(1) from t_base_user where 1=1"
 				+ whereSql;
-		log.debug(String.format("\n%1$s\n", countSql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow = queryForInt(countSql, args, argTypes);
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -201,7 +215,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -270,7 +286,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 	@Override
 	public List<BaseRole> queryRolesByUserId(int userId) {
 		String sql = "select a.* from t_base_role a left join t_base_user_role b on a.id=b.role_id where b.user_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		List<BaseRole> list = jdbcTemplate.queryForList(sql,
 				new Object[] { userId }, new int[] { Types.INTEGER },
 				BaseRole.class);
@@ -292,7 +310,9 @@ public class BaseUserDaoImpl extends BaseDaoImpl implements BaseUserDao {
 			args.add(nickName);
 			argTypes.add(Types.VARCHAR);
 		}
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return queryForInt(sql, args, argTypes);
 		} catch (Exception e) {

@@ -56,7 +56,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		final String sql = "insert into t_app_comment (" + "	app_id"
 				+ ", user_id" + ", grade" + ", comment" + ", create_time"
 				+ ", update_time" + ") values (?, ?, ?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -77,28 +79,36 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_app_comment where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 	
 	@Override
 	public int batchDelete(String ids) {
 		String sql = "delete from t_app_comment where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
 	@Override
 	public int[] batchDelete(String[] ids) {
 		String sql = "delete from t_app_comment where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return batchDeleteById(sql, ids);
 	}
 
 	@Override
 	public int deleteByAppId(int appId) {
 		String sql = "delete from t_app_comment where app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, appId);
 	}
 
@@ -137,21 +147,27 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		}
 		sql.append(" where id=?");
 		args.add(appComment.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
 	@Override
 	public AppComment queryById(int id) {
 		String sql = "select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<AppComment> query() {
 		String sql="select a.*,b.app_name, b.en_name, c.nick_name from t_app_comment a left join t_application b on a.app_id=b.id left join t_account_info c on a.user_id=c.id";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return this.jdbcTemplate.query(sql, rowMapper);
 	}
 
@@ -161,7 +177,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appComment));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -192,7 +210,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -296,14 +316,19 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 		argTypes.add(Types.INTEGER);
 		// 更新
 		jsonPage.setTotal(totalRow);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));
 		return jsonPage;
 	}
 	
+	@Override
 	public double queryAvgGrade(int appId) {
 		String sql="select avg(grade) from t_app_comment where app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForObject(sql, Double.class, appId);
 		} catch (Exception e) {
@@ -316,7 +341,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	@Override
 	public Map<String,Object> statComment(int appId) {
 		String sql="select count(1) count, avg(grade) avg, sum(grade) sum from t_app_comment where app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForMap(sql, appId);
 		} catch (Exception e) {
@@ -329,7 +356,9 @@ public class AppCommentDaoImpl extends BaseDaoImpl implements AppCommentDao {
 	@Override
 	public List<Map<String, Object>> statCommentGrade(int appId) {
 		String sql="select grade, count(1) total from t_app_comment where app_id=? group by grade";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForList(sql, appId);
 		} catch (Exception e) {

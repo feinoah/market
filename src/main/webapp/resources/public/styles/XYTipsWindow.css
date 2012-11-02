@@ -3,6 +3,8 @@
  */
 
 .ui_dialog{ position: absolute; }
+.ui_dialog table,.ui_dialog tbody td {border: none;}
+.ui_dialog td,.ui_dialog th{padding:0 0;}
 .ui_table_wrap{ position: relative; z-index: 10715; }
 .ui_title_wrap, .ui_bottom button { font-size:12px 'Microsoft Yahei', Arial; }
 .ui_content{ min-width:9em; position: relative; padding: 20px; vertical-align: middle;}

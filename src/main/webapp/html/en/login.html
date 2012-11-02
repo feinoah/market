@@ -3,10 +3,10 @@
 		<dl>
 			<div style="height: 17px; overflow: hidden"></div>
 			<dd>
-				<span class="title">Email:</span><input class="reg_input" name="email" type="text" id="email"/><span id="emailTip" class="onShow">Pls input your email.</span>
+				<span class="title">Email:</span><input class="reg_input" name="email" type="text" id="email"/><!-- <span id="emailTip" class="onShow">Pls input your email.</span>-->
 			</dd>
 			<dd>
-				<span class="title">Password:</span><input class="reg_input" id="password" name="password" type="password" /><span id="passwordTip" class="onShow">Pls input 6~18 password.</span>
+				<span class="title">Password:</span><input class="reg_input" id="password" name="password" type="password" /><!-- <span id="passwordTip" class="onShow">Pls input 6~18 password.</span>-->
 			</dd>
 		</dl>
 		<div class="f_reg_but">
@@ -19,6 +19,7 @@
 <script type="text/javascript">
 <!--
 $(function() {
+	/*
 	$('#email').blur(function(){
 		var email=$.trim($('#email').val());
 		if(chkEmail(email)){
@@ -28,8 +29,8 @@ $(function() {
 		}
 	}).focus(function(){
 		$('#emailTip').attr('class', '').addClass('onFocus').html('Pls input your email.');
-	});
-	$('#password').blur(function(){
+	});*/
+	$('#password')/*.blur(function(){
 		var pwd=$.trim($('#password').val());
 		if(pwd.length<6||pwd.length>18){
 			$('#passwordTip').attr('class', '').addClass('onError').html('Pls input 6~18 password.');
@@ -38,13 +39,13 @@ $(function() {
 		}
 	}).focus(function(){
 		$('#passwordTip').attr('class', '').addClass('onFocus').html('Pls input 6~18 password.');
-	}).keydown(function(e){
+	})*/.keydown(function(e){
 		if(e.which==13){
 			var pwd=$.trim($('#password').val());
-			if(pwd.length>=6||pwd.length<=18){
-				$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
+			//if(pwd.length>=6||pwd.length<=18){
+				//$('#passwordTip').attr('class', '').addClass('onCorrect').html('');
 				login();
-			}
+			//}
 		}
 	});
 	$('#button').click(function(){

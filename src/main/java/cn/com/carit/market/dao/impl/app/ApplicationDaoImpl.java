@@ -36,34 +36,35 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 
 		@Override
 		public Application mapRow(ResultSet rs, int rowNum) throws SQLException {
-			Application application = new Application();
-			application.setId(rs.getInt("id"));
-			application.setAppName(rs.getString("app_name"));
-			application.setEnName(rs.getString("en_name"));
-			application.setVersion(rs.getString("version"));
-			application.setIcon(rs.getString("icon"));
-			application.setCatalogId(rs.getInt("catalog_id"));
-			application.setSize(rs.getString("size"));
-			application.setAppFilePath(rs.getString("app_file_path"));
-			application.setPlatform(rs.getString("platform"));
-			application.setSupportLanguages(rs.getInt("support_languages"));
-			application.setPrice(rs.getDouble("price"));
-			application.setDownCount(rs.getInt("down_count"));
-			application.setAppLevel(rs.getInt("app_level"));
-			application.setDescription(rs.getString("description"));
-			application.setEnDescription(rs.getString("en_description"));
-			application.setPermissionDesc(rs.getString("permission_desc"));
-			application.setEnPermissionDesc(rs.getString("en_permission_desc"));
-			application.setFeatures(rs.getString("features"));
-			application.setEnFeatures(rs.getString("en_features"));
-			application.setImages(rs.getString("images"));
-			application.setStatus(rs.getInt("status"));
-			application.setCreateTime(rs.getTimestamp("create_time"));
-			application.setUpdateTime(rs.getTimestamp("update_time"));
-			application.setBigIcon(rs.getString("big_icon"));
-			application.setDeveloper(rs.getInt("developer"));
-			application.setMainPic(rs.getString("main_pic"));
-			return application;
+			Application t = new Application();
+			t.setId(rs.getInt("id"));
+			t.setAppName(rs.getString("app_name"));
+			t.setEnName(rs.getString("en_name"));
+			t.setVersion(rs.getString("version"));
+			t.setIcon(rs.getString("icon"));
+			t.setCatalogId(rs.getInt("catalog_id"));
+			t.setSize(rs.getString("size"));
+			t.setAppFilePath(rs.getString("app_file_path"));
+			t.setPlatform(rs.getString("platform"));
+			t.setSupportLanguages(rs.getInt("support_languages"));
+			t.setPrice(rs.getDouble("price"));
+			t.setDownCount(rs.getInt("down_count"));
+			t.setAppLevel(rs.getInt("app_level"));
+			t.setDescription(rs.getString("description"));
+			t.setEnDescription(rs.getString("en_description"));
+			t.setPermissionDesc(rs.getString("permission_desc"));
+			t.setEnPermissionDesc(rs.getString("en_permission_desc"));
+			t.setFeatures(rs.getString("features"));
+			t.setEnFeatures(rs.getString("en_features"));
+			t.setImages(rs.getString("images"));
+			t.setStatus(rs.getInt("status"));
+			t.setCreateTime(rs.getTimestamp("create_time"));
+			t.setUpdateTime(rs.getTimestamp("update_time"));
+			t.setBigIcon(rs.getString("big_icon"));
+			t.setDeveloper(rs.getInt("developer"));
+			t.setMainPic(rs.getString("main_pic"));
+			t.setLocal(rs.getInt("local"));
+			return t;
 		}
 	};
 	
@@ -99,15 +100,17 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 	};
 
 	@Override
-	public int add(final Application application) {
+	public int add(final Application t) {
 		final String sql = "insert into t_application (app_name"
 				+ ", en_name, version, icon, big_icon, developer, catalog_id"
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
 				+ ", description , permission_desc, en_description , en_permission_desc"
-				+ ", images, status, create_time, update_time, features, en_features,main_pic"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?)";
-		log.debug(String.format("\n%1$s\n", sql));
+				+ ", images, status, create_time, update_time, features, en_features,main_pic, local"
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?, ?)";
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder(); 
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -115,31 +118,32 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 					throws SQLException {
 				PreparedStatement ps=con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				int i=1;
-				ps.setString(i++, application.getAppName());
-				ps.setString(i++, application.getEnName());
-				ps.setString(i++, application.getVersion());
-				ps.setString(i++, application.getIcon());
-				ps.setString(i++, application.getBigIcon());
-				ps.setInt(i++, application.getDeveloper());
-				ps.setInt(i++, application.getCatalogId());
-				ps.setString(i++, application.getSize()); 
-				ps.setString(i++, application.getAppFilePath());
-				ps.setString(i++, application.getPlatform());
-				ps.setInt(i++, application.getSupportLanguages());
-				ps.setDouble(i++, application.getPrice()==null?0:application.getPrice()); 
-				ps.setString(i++, application.getDescription());
-				ps.setString(i++, application.getPermissionDesc());
-				ps.setString(i++, application.getEnDescription());
-				ps.setString(i++, application.getEnPermissionDesc()); 
-				ps.setString(i++, application.getImages());
+				ps.setString(i++, t.getAppName());
+				ps.setString(i++, t.getEnName());
+				ps.setString(i++, t.getVersion());
+				ps.setString(i++, t.getIcon());
+				ps.setString(i++, t.getBigIcon());
+				ps.setInt(i++, t.getDeveloper());
+				ps.setInt(i++, t.getCatalogId());
+				ps.setString(i++, t.getSize()); 
+				ps.setString(i++, t.getAppFilePath());
+				ps.setString(i++, t.getPlatform());
+				ps.setInt(i++, t.getSupportLanguages());
+				ps.setDouble(i++, t.getPrice()==null?0:t.getPrice()); 
+				ps.setString(i++, t.getDescription());
+				ps.setString(i++, t.getPermissionDesc());
+				ps.setString(i++, t.getEnDescription());
+				ps.setString(i++, t.getEnPermissionDesc()); 
+				ps.setString(i++, t.getImages());
 				// 重置状态值
-				if(application.getStatus().intValue()>Constants.STATUS_INVALID){
-					application.setStatus(Constants.STATUS_VALID|application.getStatus());
+				if(t.getStatus().intValue()>Constants.STATUS_INVALID){
+					t.setStatus(Constants.STATUS_VALID|t.getStatus());
 				}
-				ps.setInt(i++, application.getStatus());
-				ps.setString(i++, application.getFeatures());
-				ps.setString(i++, application.getEnFeatures());
-				ps.setString(i++, application.getMainPic());
+				ps.setInt(i++, t.getStatus());
+				ps.setString(i++, t.getFeatures());
+				ps.setString(i++, t.getEnFeatures());
+				ps.setString(i++, t.getMainPic());
+				ps.setInt(i++, t.getLocal());
 				return ps;
 			}
 		}, gkHolder);
@@ -149,7 +153,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_application where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
@@ -254,30 +260,42 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(", main_pic=?");
 			args.add(application.getMainPic());
 		}
+		if (application.getLocal()!=null) {
+			sql.append(", local=?");
+			args.add(application.getLocal());
+		}
 		sql.append(" where id=?");
 		args.add(application.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 	
 	@Override
 	public int updateById(int id) {
 		String updateSql="update t_application a set app_file_path=(select file_path from t_app_version_file where id =(select max(id) from t_app_version_file where app_id=?)) where id=?";
-		log.debug(String.format("\n%1$s\n", updateSql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", updateSql));
+		}
 		return jdbcTemplate.update(updateSql, id, id);
 	}
 
 	@Override
 	public Application queryById(int id) {
 		String sql = "select * from t_application where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<Application> query() {
 		String sql="select * from t_application";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, rowMapper);
 	}
 
@@ -288,7 +306,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, application));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -320,7 +340,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql+", "+jsonPage.getStartRow())+", "+jsonPage.getPageSize());
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql+", "+jsonPage.getStartRow())+", "+jsonPage.getPageSize());
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -439,6 +461,11 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" and main_pic like CONCAT('%',?,'%')");
 			args.add(application.getMainPic());
 			argTypes.add(12);// java.sql.Types type
+		}
+		if (application.getLocal()!=null) {
+			sql.append(" and (local&?)!=0");
+			args.add(application.getLocal());
+			argTypes.add(Types.INTEGER);
 		}
 		return sql.toString();
 	}
@@ -595,18 +622,23 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		argTypes.add(Types.INTEGER);
 		// 更新
 		jsonPage.setTotal(totalRow);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, portalRowMapper));
 		return jsonPage;
 	}
 	
+	@Override
 	public PortalApplication query(int id, String local){
 		String viewName="v_application_cn";
 		if (Constants.LOCAL_EN.equalsIgnoreCase(local)) {
 			viewName="v_application_en";
 		}
 		String sql = "select * from "+viewName+" where id=?";
-		log.debug(String.format("\n%1$s\n", sql, id));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql, id));
+		}
 		return query(sql, id, portalRowMapper);
 	}
 
@@ -617,7 +649,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			viewName="v_application_en";
 		}
 		String sql="select * from "+viewName+" where price=0 order by down_count desc limit ?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{limit}, portalRowMapper);
 	}
 
@@ -628,7 +662,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			viewName="v_application_en";
 		}
 		String sql="select * from "+viewName+" where price=0 order by down_count,update_time desc limit ?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{limit}, portalRowMapper);
 	}
 
@@ -639,7 +675,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			viewName="v_application_en";
 		}
 		String sql="select 1 from "+viewName+" where app_name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		int result=0;
 		try {
 			result=jdbcTemplate.queryForInt(sql, appName);
@@ -665,7 +703,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				viewName).append(" where id in (").append(ids).append(")");
 		StringBuilder countSql=new StringBuilder("select count(1) from ").append(
 				viewName).append(" where id in (").append(ids).append(")");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow = jdbcTemplate.queryForInt(countSql.toString());
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -679,7 +719,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		List<PortalApplication> rows=jdbcTemplate.query(sql.toString(), new Object[]{jsonPage.getStartRow(), jsonPage.getPageSize()}, portalRowMapper);
 		jsonPage.setRows(rows);
 		return jsonPage;
@@ -699,7 +741,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		StringBuilder countSql = new StringBuilder("select count(1) from ")
 				.append(viewName)
 				.append(" a where exists (select 1 from t_app_download_log where app_id=a.id and account_id=?)");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow = jdbcTemplate.queryForInt(countSql.toString(), userId);
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -713,7 +757,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		List<PortalApplication> rows = jdbcTemplate.query(
 				sql.toString(),
 				new Object[] { userId, jsonPage.getStartRow(),
@@ -736,7 +782,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		StringBuilder countSql = new StringBuilder("select count(distinct a.id) from ")
 				.append(viewName)
 				.append(" a left join t_app_download_log b on a.id=b.app_id left join t_app_download_log c on b.account_id=c.account_id where c.app_id=? and b.app_id!=?");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", countSql));
+		}
 		int totalRow = jdbcTemplate.queryForInt(countSql.toString(), appId, appId);
 		// 更新
 		jsonPage.setTotal(totalRow);
@@ -750,7 +798,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			sql.append(" order by update_time desc");
 		}
 		sql.append(" limit ?, ?");
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		List<PortalApplication> rows = jdbcTemplate.query(
 				sql.toString(),
 				new Object[] { appId, appId, jsonPage.getStartRow(),
@@ -764,7 +814,9 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		String sql="select a.id, a.app_name, a.en_name,a.version, b.account_id"
 				+" from t_application a, v_app_download_log_cn b"
 				+" where a.id=b.app_id and a.version!=b.version and a.status>0";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.query(sql, new RowMapper<UpdateNotice>(){
 				@Override

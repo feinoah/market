@@ -55,7 +55,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 	public int add(final AppDownloadLog appDownloadLog) {
 		final String sql = "insert into t_app_download_log (account_id"
 				+ ", app_id, version, download_time" + ") values (?, ?, ?, now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -76,14 +78,18 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_app_download_log where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int deleteByAppId(int appId) {
 		String sql = "delete from t_app_download_log where app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, appId);
 	}
 
@@ -107,21 +113,27 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		}
 		sql.append(" where id=?");
 		args.add(appDownloadLog.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
 	@Override
 	public AppDownloadLog queryById(int id) {
 		String sql = "select * from t_app_download_log where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<AppDownloadLog> query() {
 		String sql="select a.*,b.app_name, b.en_name, c.nick_name from t_app_download_log a left join t_application b on a.app_id=b.id left join t_account_info c on a.account_id=c.id";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return this.jdbcTemplate.query(sql,rowMapper);
 	}
 
@@ -132,7 +144,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, appDownloadLog));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -165,7 +179,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -253,7 +269,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
 		jsonPage.setTotal(totalRow);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, new RowMapper<PortalAppDownloadLog>() {
 
 			@Override
@@ -273,7 +291,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 	@Override
 	public int checkUserDownLog(int accountId, int appId) {
 		String sql="select count(1) from t_app_download_log where account_id=? and app_id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, accountId, appId);
 		} catch (Exception e) {
@@ -288,7 +308,9 @@ public class AppDownloadLogDaoImpl extends BaseDaoImpl implements
 		String sql="select download_time date, count(1) count" 
 				+ " from t_app_download_log where app_id=? and download_time>?"
 				+ " group by date_format(download_time,'%Y-%c-%d')";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{appId, startDate}
 		, new int[]{Types.INTEGER, Types.TIMESTAMP}, new RowMapper<AppDownStat>() {
 			@Override

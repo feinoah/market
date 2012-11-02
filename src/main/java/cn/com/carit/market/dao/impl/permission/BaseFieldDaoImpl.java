@@ -42,7 +42,9 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		String sql = "insert into t_base_field(field, field_name, field_value," +
 				" display_value, enabled, sort, create_time, update_time) " +
 				"values(?, ?, ?, ?, ?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql
 				, field.getField()
 				, field.getFieldName()
@@ -56,14 +58,18 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	@Override
 	public int delete(int id) {
 		String sql="delete from t_base_field where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int batchDelete(String ids) {
 		String sql="delete from t_base_field where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
@@ -96,28 +102,36 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		}
 		sql.append(" where id=?");
 		val.add(field.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), val.toArray());
 	}
 
 	@Override
 	public BaseField queryById(int id) {
 		String sql="select * from t_base_field where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<BaseField> queryByField(String filed) {
 		String sql="select * from t_base_field where field=? order by field_value desc";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{filed}, new int[]{Types.VARCHAR}, rowMapper);
 	}
 
 	@Override
 	public List<Map<String,Object>> queryGroupByField() {
 		String sql="select * from t_base_field group by field";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.queryForList(sql);
 	}
 
@@ -127,7 +141,9 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, field));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -157,7 +173,9 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -201,7 +219,9 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	@Override
 	public int checkField(String field) {
 		String sql="select 1 from t_base_field where field=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, field);
 		} catch (Exception e) {
@@ -214,7 +234,9 @@ public class BaseFieldDaoImpl extends BaseDaoImpl implements BaseFieldDao {
 	@Override
 	public List<BaseField> queryByField(String field, int limit) {
 		String sql="select field, field_name from t_base_field where field like CONCAT('%',?,'%') limit ?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, new Object[]{field, limit}, rowMapper);
 	}
 	

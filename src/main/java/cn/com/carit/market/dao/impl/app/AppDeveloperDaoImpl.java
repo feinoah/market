@@ -39,7 +39,9 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 	public int add(AppDeveloper developer) {
 		String sql = "insert into t_app_developer(name, website, email, remark"
 				+", status, create_time, update_time) values(?, ?, ?, ?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, developer.getName(),
 				developer.getWebsite(), developer.getEmail(),
 				developer.getRemark(), developer.getStatus());
@@ -67,35 +69,45 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 		}
 		sql.append(" where id=?");
 		val.add(developer.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), val.toArray());
 	}
 
 	@Override
 	public int delete(int id) {
 		String sql="delete from t_app_developer where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int batchDelete(String ids) {
 		String sql="delete from t_app_developer where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
 	@Override
 	public AppDeveloper queryById(int id) {
 		String sql="select * from t_app_developer where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public AppDeveloper queryByName(String name) {
 		String sql="select * from t_app_developer where name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, name, rowMapper);
 	}
 
@@ -105,7 +117,9 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 		List<Object> args=new ArrayList<Object>();
 		List<Integer> argTypes=new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, developer));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -136,7 +150,9 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -175,7 +191,9 @@ public class AppDeveloperDaoImpl extends BaseDaoImpl implements AppDeveloperDao 
 	@Override
 	public int checkExisted(String name) {
 		String sql="select 1 from t_app_developer where name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, name);
 		} catch (Exception e) {

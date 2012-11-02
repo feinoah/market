@@ -67,7 +67,9 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 				+ ", create_time" + ") values (" + "	?" + ", ?" + ", ?" + ", ?"
 				+ ", ?" + ", ?" + ", ?" + ", ?" + ", ?" + ", ?" + ", ?" + ", ?"
 				+ ", now()" + ", now()" + ")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		KeyHolder gkHolder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
 			@Override
@@ -101,14 +103,18 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	@Override
 	public int delete(int id) {
 		String sql = "delete from t_account_info where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int batchDelete(String ids) {
 		String sql = "delete from t_account_info where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
@@ -191,21 +197,27 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		}
 		sql.append(" where id=?");
 		args.add(accountInfo.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
 	@Override
 	public AccountInfo queryById(int id) {
 		String sql = "select * from t_account_info where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public AccountInfo queryByEmail(String email) {
 		String sql = "select * from t_account_info where email=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		AccountInfo account=null;
 		try {
 			account=query(sql, email, rowMapper);
@@ -229,7 +241,9 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, accountInfo));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -259,7 +273,9 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
@@ -358,27 +374,35 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	@Override
 	public int updatePwd(int id, String newPassword) {
 		String sql="update t_account_info set update_time=now(), password=? where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, newPassword, id);
 	}
 
 	@Override
 	public int lockAccount(int id) {
 		String sql="update t_account_info set update_time=now(), status=? where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, Constants.STATUS_LOCKED, id);
 	}
 	@Override
 	public int unLockAccount(int id) {
 		String sql="update t_account_info set update_time=now(), status=? where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, Constants.STATUS_VALID, id);
 	}
 
 	@Override
 	public int checkAccount(String email) {
 		String sql="select 1 from t_account_info where email=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, email);
 		} catch (Exception e) {
@@ -391,7 +415,9 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	@Override
 	public int checkNickName(String nickName) {
 		String sql="select 1 from t_account_info where nick_name=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		try {
 			return jdbcTemplate.queryForInt(sql, nickName);
 		} catch (Exception e) {
@@ -404,14 +430,18 @@ public class AccountInfoDaoImpl extends BaseDaoImpl implements AccountInfoDao {
 	@Override
 	public int batchLockAccount(String ids) {
 		String sql="update t_account_info set update_time=now(), status=? where id in ("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, Constants.STATUS_INVALID);
 	}
 
 	@Override
 	public int batchUnLockAccount(String ids) {
 		String sql="update t_account_info set update_time=now(), status=? where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, Constants.STATUS_VALID);
 	}
 	

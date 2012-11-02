@@ -1,4 +1,5 @@
 $(function() {
+	$('#index-nav').hide();
 	chkLogin();
 	$('#logout').click(function(){
 		$.getJSON(app.name+'/portal/logout', function(data) {
@@ -7,6 +8,8 @@ $(function() {
 				$('#lolginAfter').hide();
 				$('#welcome').empty().attr('userId','');
 				account={};
+				$('#index-nav').hide();
+				location.reload();
 			}
 		});
 	});
@@ -68,6 +71,7 @@ var chkLogin=function(){
 					});
 				}
 			});
+			$('#index-nav').show();
 		}
 	});
 };
@@ -104,6 +108,7 @@ var login=function(){
 						tips('password','密码错误','bottom');
 					}
 					if(map.answerCode==1){
+						$('#index-nav').show();
 						account=map.portalUser;
 						$('#loginBefor').hide();
 						$('#lolginAfter').show();

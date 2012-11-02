@@ -39,7 +39,9 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 	public int add(SystemMessage systemMessage) {
 		String sql="insert into t_sys_message(account_id, catalog,title, content, create_time, update_time)"
 				+" values (?, ?,?, ?, now(), now())";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql
 				, systemMessage.getAccountId()
 				, systemMessage.getCatalog()
@@ -50,14 +52,18 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 	@Override
 	public int delete(int id) {
 		String sql="delete from t_sys_message where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql, id);
 	}
 
 	@Override
 	public int batchDelete(String ids) {
 		String sql = "delete from t_sys_message where id in("+ids+")";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql);
 	}
 
@@ -88,21 +94,27 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 		}
 		sql.append(" where id=?");
 		args.add(systemMessage.getId());
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.update(sql.toString(), args.toArray());
 	}
 
 	@Override
 	public SystemMessage queryById(int id) {
 		String sql="select * from t_sys_message where id=?";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql, id, rowMapper);
 	}
 
 	@Override
 	public List<SystemMessage> query() {
 		String sql="select * from t_sys_message";
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return jdbcTemplate.query(sql, rowMapper);
 	}
 
@@ -113,7 +125,9 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 		List<Object> args = new ArrayList<Object>();
 		List<Integer> argTypes = new ArrayList<Integer>();
 		sql.append(buildWhere(args, argTypes, systemMessage));
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		return query(sql.toString(), args, argTypes, rowMapper);
 	}
 
@@ -146,7 +160,9 @@ public class SystemMessageDaoImpl extends BaseDaoImpl implements SystemMessageDa
 		args.add(jsonPage.getPageSize());
 		argTypes.add(Types.INTEGER);
 		argTypes.add(Types.INTEGER);
-		log.debug(String.format("\n%1$s\n", sql));
+		if (log.isDebugEnabled()) {
+			log.debug(String.format("\n%1$s\n", sql));
+		}
 		jsonPage.setRows(query(sql.toString(), args, argTypes, rowMapper));
 		return jsonPage;
 	}
