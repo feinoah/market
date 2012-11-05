@@ -7,6 +7,7 @@
 <script type="text/javascript">
 $(function (){
 	$('#nav-right').show();
+	var tooltips=$('[title]').tooltip();
 });
 </script>
 </head>

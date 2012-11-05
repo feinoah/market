@@ -101,6 +101,8 @@ header{height: 100px;}
 .dialog{display:none;}
 .dialog td,.dialog th{line-height:1em;}
 .dialog #pageDiv{float:right;}
+.dialog dd label{min-width:80px;width:120px;}
+.dialog dd button{margin:0 1em;}
 
 #loginRegister{width:100%;padding:5px;height:500px;margin:0 auto;}
 #loginForm,#registerForm{height:500px;margin:0 auto;}

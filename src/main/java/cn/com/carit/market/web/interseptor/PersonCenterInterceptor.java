@@ -30,16 +30,14 @@ public class PersonCenterInterceptor extends HandlerInterceptorAdapter{
 				||"/obd".equals(uri)
 				||"/poi".equals(uri)) {
 			
-			String hl=request.getParameter("hl");
 			
-			if ("en".equals(hl)) {
+			if ("en".equals(request.getParameter("hl"))) {
 				localeResolver.setDefaultLocale(Locale.US);
 			} else {
 				localeResolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
 			}
 			AccountInfo accountInfo=(AccountInfo) request.getSession().getAttribute(Constants.PORTAL_USER);
 			if (accountInfo==null) {
-				request.setAttribute("call_back", uri);
 				request.getRequestDispatcher("loginForm").forward(request, response);
 				return false;
 			}

@@ -151,7 +151,7 @@ function login(){
 			$(tooltips[3]).tooltip('option', 'content', '<spring:message code="tips.login.password.error"/>');
 			$(tooltips[3]).tooltip('open');
 		} else if(data.answerCode==1){
-			location.href='${call_back}';
+			location.reload();
 		} else {
 			$(tooltips[2]).tooltip('option', 'content', '<spring:message code="tips.system.error.unknown"/>');
 			$(tooltips[2]).tooltip('open');
@@ -170,7 +170,7 @@ function register(){
 	if(tag){
 		$.post('${ctx}/portal/register?email='+$('#email').val()+'&nickName='+$('#nickName').val()+'&password='+$('#password').val(),function(data){
 			if(data.answerCode==1){
-				location.href='${call_back}';
+				location.reload();
 			}else if(data.answerCode==-2){
 				$(tooltips[8]).tooltip('option', 'content', '<spring:message code="tips.system.error.unknown"/>');
 				$(tooltips[8]).tooltip('open');

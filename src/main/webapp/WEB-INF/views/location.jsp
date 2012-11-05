@@ -7,6 +7,7 @@
 <script type="text/javascript">
 $(function (){
 	$('#nav-right').show();
+	var tooltips=$('[title]').tooltip();
 	$('.reg_input').css('width',120);
 	$('#timeRange').hide();
 	var json=$.parseJSON('${obdCurrentDataList}');
@@ -27,8 +28,18 @@ $(function (){
     $('#endTime').change(function(){
     	$('#map-frame').attr('src','${ctx}/location_map?deviceId='+$('#deviceId').val()+'&type=2&startTime='+$('#startTime').val()+'&endTime='+$('#endTime').val());
     });
-    $('#startTime').datepicker();
-    $('#endTime').datepicker();
+    $('#startTime').datepicker({
+		onClose: function( selectedDate ) {
+			$('#endTime').datepicker( "option", "minDate", selectedDate );
+		}
+    });
+    $('#startTime').datepicker('option', 'dateFormat', 'yy-mm-dd');  
+    $('#endTime').datepicker({
+		onClose: function( selectedDate ) {
+			$('#startTime').datepicker( "option", "maxDate", selectedDate );
+		}
+    });
+    $('#endTime').datepicker('option', 'dateFormat', 'yy-mm-dd');
 });
 function refresh(){
 	if($('#type').val()==2){

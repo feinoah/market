@@ -8,6 +8,7 @@
 <script type="text/javascript">
 var index=0;
 $(function (){
+	var tooltips=$('[title]').tooltip();
 	$('#nav-right').show();
 	$('#startTime').datepicker({
 		changeMonth: true,
