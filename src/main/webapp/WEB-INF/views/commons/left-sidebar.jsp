@@ -1,5 +1,5 @@
 <%@ include file="/WEB-INF/views/commons/taglibs.jsp"%>
-<div class="ym-g15 ym-gl left-container">
+<div class="ym-g20 ym-gl left-container">
 	<div id="sidebar">
 		<dl>
 			<dt <c:if test="${param.index eq 1}">class="select"><span id="person-info-sidebar"><spring:message code="Sidebar.user.info"/></span></c:if><c:if test="${param.index!=1}">><a href="${ctx}/profile?hl=${param.hl}" id="person-info-sidebar"><spring:message code="Sidebar.user.info"/></a></c:if></dt>

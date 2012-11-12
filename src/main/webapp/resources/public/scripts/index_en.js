@@ -1,5 +1,4 @@
 $(function() {
-	$('#index-nav').hide();
 	chkLogin();
 	$('#logout').click(function(){
 		$.getJSON(app.name+'/portal/logout', function(data) {
@@ -51,7 +50,7 @@ var chkLogin=function(){
 			$('#thumb_photo').click(profileTip);
 			if(account.thumbPhoto){
 				$('#thumb_photo').css({
-					'background':'url('+app.name+'/'+account.thumbPhoto+')',
+					'background':'url('+account.thumbPhoto+')',
 					'background-position':''
 				});
 			} else {
@@ -70,7 +69,6 @@ var chkLogin=function(){
 					});
 				}
 			});
-			$('#index-nav').hide();
 		}
 	});
 };
@@ -107,7 +105,6 @@ var login=function(){
 						tips('password','Password is incorrect.','bottom');
 					}
 					if(map.answerCode==1){
-						$('#index-nav').hide();
 						account=map.portalUser;
 						$('#loginBefor').hide();
 						$('#lolginAfter').show();
@@ -115,7 +112,7 @@ var login=function(){
 						$('#thumb_photo').click(profileTip);
 						if(account.thumbPhoto){
 							$('#thumb_photo').css({
-								'background':'url('+app.name+'/'+account.thumbPhoto+')',
+								'background':'url('+account.thumbPhoto+')',
 								'background-position':''
 							});
 						} else {

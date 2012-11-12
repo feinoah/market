@@ -167,10 +167,11 @@ a:hover {
 }
 
 .index_input{
+	position:relative;
+	top:-14px;
 height: 28px;
 width: 328px;
 font-size: 20px;
-margin-top: 5px;
 background-position-x:right;
 border:1px solid white;
 border-radius:3px;
@@ -185,14 +186,15 @@ background:#9C9C9C;
 .index_input_edge{
 	margin-top:22px;
 	height: 39px; 
-	width: 339px;
+	width: 340px;
 	margin-left:380px;
 	BACKGROUND-IMAGE: url(../images/search_input.png);
 }
 #index-nav{width:380px !important;font-size: 16px;display:block;height:40px;padding:0 10px;float: left;}
 #index-nav li{margin:20px 0;float: left;height: 40px !important;width: 122px;line-height: 40px !important;background: url(../images/bt1.png);}
-#index-nav li a {color: white;width: 122px;height: 40px;line-height: 40px;font-weight: bold;}
-#index-nav li:hover, #index-nav .active {background: url(../images/bt1_s.png) !important;color:#fff;}
+#index-nav li a,#index-nav li label {color: white;width: 122px;height: 40px;line-height: 40px;font-weight: bold;}
+#index-nav li:hover, #index-nav .active {background: url(../images/bt1_s.png) !important;}
+#index-nav li:hover a, #index-nav .active label{color:#000!important;}
 #nav div ul{width: 100%;height: 28px;}
 #nav div ul li{float: right;line-height: 28px;}
 #nav div ul li span{

@@ -11,8 +11,11 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.annotation.Resource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import cn.com.carit.market.common.utils.JsonUtil;
 import cn.com.carit.platform.response.LogonResponse;
@@ -26,7 +29,8 @@ import cn.com.carit.platform.response.LogonResponse;
  * @date 2012-9-24
  */
 public class CaritClient {
-	
+	@Resource
+	private CookieLocaleResolver localeResolver;
 	private static final Logger logger=LoggerFactory.getLogger(CaritClient.class);
 	
 	public enum MessageFormat{
@@ -121,7 +125,7 @@ public class CaritClient {
 		paramValues.put(SYSTEM_PARAM_METHOD, method);
 		paramValues.put(SYSTEM_PARAM_APPKEY, appKey);
 		paramValues.put(SYSTEM_PARAM_VERSION, version);
-		paramValues.put(SYSTEM_PARAM_LOCALE, Local.zh_CN.toString());
+		paramValues.put(SYSTEM_PARAM_LOCALE, locale);
 		paramValues.put(SYSTEM_PARAM_MESSAGE_FORMAT, CaritClient.MessageFormat.json.toString());
 		return paramValues;
 	}
@@ -131,7 +135,7 @@ public class CaritClient {
 		paramValues.put(SYSTEM_PARAM_METHOD, method);
 		paramValues.put(SYSTEM_PARAM_APPKEY, appKey);
 		paramValues.put(SYSTEM_PARAM_VERSION, version);
-		paramValues.put(SYSTEM_PARAM_LOCALE, Local.zh_CN.toString());
+		paramValues.put(SYSTEM_PARAM_LOCALE, locale);
 		paramValues.put(SYSTEM_PARAM_MESSAGE_FORMAT, CaritClient.MessageFormat.json.toString());
 		paramValues.put(SYSTEM_PARAM_SESSION_ID, sessionId);
 		return paramValues;

@@ -52,7 +52,7 @@ public class IndexController extends BaseController {
 			paramValues.put("endTime", String.valueOf(endTime.getTime()));
 		}
 		// 不需要签名的参数放后面
-				paramValues.put("sign", ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+				paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		return caritClient.getHttpResponse(paramValues);
 	}
 	
@@ -61,13 +61,13 @@ public class IndexController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="profile", method=RequestMethod.GET)
-	public String profile(@RequestParam(required=false, defaultValue="zh_CN") String hl){
+	public String profile(){
 		setObdCurrentData();
 		return "profile";
 	}
 	
 	@RequestMapping(value="obd", method=RequestMethod.GET)
-	public String obdIndex(@RequestParam(required=false, defaultValue="zh_CN") String hl){
+	public String obdIndex(){
 		setObdCurrentData();
 		return "obd-info";
 	}
@@ -77,7 +77,7 @@ public class IndexController extends BaseController {
 		paramValues.put("deviceId", deviceId);
 		paramValues.put("accountId", accountId);
 		// 不需要签名的参数放后面
-		paramValues.put("sign", ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+		paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		return caritClient.getHttpResponse(paramValues);
 	}
 	
@@ -115,17 +115,17 @@ public class IndexController extends BaseController {
 			paramValues.put("endTime", String.valueOf(endTime.getTime()));
 		}
 		// 不需要签名的参数放后面
-				paramValues.put("sign", ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+				paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		return caritClient.getHttpResponse(paramValues);
 	}
 	
 	@RequestMapping(value="poi", method=RequestMethod.GET)
-	public String poiInfo(@RequestParam(required=false, defaultValue="zh_CN") String hl){
+	public String poiInfo(){
 		return "poi";
 	}
 	
 	@RequestMapping(value="location", method=RequestMethod.GET)
-	public String location(@RequestParam(required=false, defaultValue="zh_CN") String hl){
+	public String location(){
 		setObdCurrentData();
 		return "location";
 	}
@@ -140,8 +140,22 @@ public class IndexController extends BaseController {
 		Map<String, String> paramValues=caritClient.buildParamValues("platform.obd.currentData", "1.0");
 		paramValues.put("accountId", String.valueOf(account.getId()));
 		// 不需要签名的参数放后面
-				paramValues.put("sign", ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+				paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		String dataList = caritClient.getHttpResponse(paramValues);
 		session.setAttribute("obdCurrentDataList",dataList);
+	}
+	
+	@RequestMapping(value="forget_pwd", method=RequestMethod.GET)
+	public String forgetPwd(){
+		return "get-back-pwd";
+	}
+	
+	@RequestMapping(value="get_back_pwd", method=RequestMethod.GET)
+	public @ResponseBody String getBackPwd(@RequestParam String email){
+		Map<String, String> paramValues=caritClient.buildParamValues("account.getback.password", "1.0");
+		paramValues.put("email", email);
+		// 不需要签名的参数放后面
+		paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+		return caritClient.getHttpResponse(paramValues);
 	}
 }

@@ -31,9 +31,9 @@ $(function (){
 	    height:400,
 		width:600,
 	    autoOpen: false,
-	    show: 'blind',
-	    modal: true,
-	    hide: 'explode'
+	    show: 'clip',
+        hide:'highlight',
+	    modal: true
     });
 	$('label.bottom').click(function(){
 		$( "#dialog" ).dialog('open');
@@ -120,7 +120,7 @@ function pagination(page,total){
 		<jsp:include page="/WEB-INF/views/commons/left-sidebar.jsp" flush="true">
     		<jsp:param value="2" name="index"/>
     	</jsp:include>
-		<div class="ym-g85 ym-gl main-container">
+		<div class="ym-g80 ym-gl main-container">
 			<div id="obd-info">
 				<div id="obd-info-top">
 					<label><spring:message code="title.userInfo.device.id" /></label><select id="deviceId"></select><label><spring:message code="title.obd.value_4"/></label><span id="value_4">0</span><label><spring:message code="unit.obd.4"/></label><label class="total-odo"><spring:message code="title.obd.value_17"/></label><span id="value_17">0</span><label><spring:message code="unit.obd.17"/></label>
@@ -155,7 +155,7 @@ function pagination(page,total){
 	</div>
 	<%@ include file="/WEB-INF/views/commons/footer.jsp"%>
 	<div id="dialog" title="<spring:message code="botton.obd.more"/>" class="dialog">
-		<p><label>From</label><input type="text" id="startTime" tabindex="-2"/><label>to</label><input type="text" id="endTime" tabindex="-1"/></p>
+		<p><label><spring:message code="title.location.startTime"/></label><input type="text" id="startTime" tabindex="-2"/><label><spring:message code="title.location.endTime"/></label><input type="text" id="endTime" tabindex="-1"/></p>
 	    <table id="rows">
 		</table>
 		<div id="pageDiv"><label class="cruLabel"><span class="selected">1</span><span onclick="doPage(2)">2</span></label></div>

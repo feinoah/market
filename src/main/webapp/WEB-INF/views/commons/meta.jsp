@@ -21,4 +21,15 @@
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
 	<script type="text/javascript" src="resources/public/scripts/utils.js?v1.2"></script>
-	<script type="text/javascript" src="resources/public/scripts/index.js?v1.2"></script>
+	<script type="text/javascript">
+	$(function (){
+		$('#logout').click(function(){
+			$.getJSON(app.name+'/portal/logout', function(data) {
+				if (data==1) {
+					account={};
+					location.reload();
+				}
+			});
+		});
+	});
+	</script>

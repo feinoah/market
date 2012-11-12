@@ -9,6 +9,7 @@
 .group { zoom: 1 }
 </style>
 <script type="text/javascript" src="${ctx}/resources/public/scripts/config.js?v1.2"></script>
+<script type="text/javascript" src="${ctx}/resources/jquery-easyui-1.3/plugins/jquery.form.js"></script>
 <script type="text/javascript">
 var closePwdWin=false;
 var closeAccountWin=false;
@@ -49,11 +50,8 @@ $(function (){
 	    modal: true,
 	    hide: 'highlight'
 	});
-    $('#person-info').accordion({
-        header: '> div > h3',
-        collapsible: true,
-        heightStyle: 'content',
-        event: "click hoverintent"
+    $('#person-info').tabs({
+        event:'click'
     });
     var json=$.parseJSON('${obdCurrentDataList}');
     $.each(json,function(i,o){
@@ -158,6 +156,58 @@ $(function (){
     	$('#updateAccount input:not(:first)').val('');
     });
 });
+
+function uploadPhoto(o){
+	$('#photoForm').form({
+		dataType:'text',  
+		onSubmit:function(){
+			var name=$(o).val().toLowerCase();
+			var types=$(o).attr('fileType').toLowerCase()
+			var tArray=types.split('|');
+			var fArray=name.split('.');
+			var suffix=fArray[fArray.length-1];
+			var tag=false;
+			for(var i in tArray){
+				if(suffix==tArray[i]){
+					tag=true;
+				}
+			}
+			if(!tag){
+				$('#prompt p').html('<spring:message code="dialog.upload.fileType.error"/>');
+				$('#prompt').dialog('option','title','<spring:message code="dialog.title.error"/>');
+				$('#prompt').dialog('open');
+			} else {
+				$('#photoTxt').val(name);
+			}
+			return tag;
+		},
+		success:function(data){
+			var map=$.parseJSON(data);
+			if(map){
+				if(map.answerCode==-2){
+					location.reload();
+				}
+				if(map.answerCode==-1){
+					$('#prompt p').html('<spring:message code="dialog.upload.fail"/>');
+					$('#prompt').dialog('option','title','<spring:message code="dialog.title.prompt"/>');
+					$('#prompt').dialog('open');
+				}
+				if(map.answerCode==1){
+					$('#prompt p').html('<spring:message code="dialog.success.message" />');
+					$('#prompt').dialog('option','title','<spring:message code="dialog.title.prompt"/>');
+					$('#prompt').dialog('open');
+					$('#photo').attr('src',map.photo);
+					account.thumbPhoto=map.thumbPhoto;
+					$('#photoTxt').val('200*200 jpg|png');
+				}
+			}else{
+				$('#prompt p').html('<spring:message code="tips.system.exception"/>');
+				$('#prompt').dialog('option','title','<spring:message code="dialog.title.error"/>');
+				$('#prompt').dialog('open');
+			}
+	    }
+	}).submit();
+}
 </script>
 </head>
 <body>
@@ -167,21 +217,34 @@ $(function (){
 			flush="true">
 			<jsp:param value="1" name="index" />
 		</jsp:include>
-		<div class="ym-g85 ym-gl main-container">
+		<div class="ym-g80 ym-gl main-container">
 			<div id="person-info">
-				<div class="group">
-					<h3><spring:message code="title.userInfo.basic" /></h3>
-					<ul>
-						<li><label><spring:message code="title.userInfo.account" /></label><span>${portalUser.email}</span><a href="javascript:$('#updatePwd').dialog('open');"><spring:message code="title.userInfo.update.pwd" /></a></li>
-						<li><label><spring:message code="title.userInfo.nickname" /></label><span>${portalUser.nickName}</span><a href="javascript:$('#updateAccount').dialog('open');"><spring:message code="title.userInfo.update" /></a></li>
-					</ul>
+		    <ul>
+		        <li><a href="#tabs-1"><spring:message code="title.userInfo.basic" /></a></li>
+		        <li><a href="#tabs-2"><spring:message code="title.userInfo.device" /></a></li>
+		    </ul>
+		    <div id="tabs-1">
+		        <ul class="ym-g66 ym-gl">
+					<li><label><spring:message code="title.userInfo.account"/></label><span>${portalUser.email}</span><a href="javascript:$('#updatePwd').dialog('open');"><spring:message code="title.userInfo.update.pwd" /></a></li>
+					<li><label><spring:message code="title.userInfo.nickname" /></label><span>${portalUser.nickName}</span><a href="javascript:$('#updateAccount').dialog('open');"><spring:message code="title.userInfo.update" /></a></li>
+				</ul>
+				<div class="ym-g33 ym-gr">
+					<img id="photo" alt="" src="${portalUser.photo}">
+					<form action="${ctx}/portal/account/changephoto" id="photoForm" method="post" enctype="multipart/form-data">
+					<div class="fileinputs">
+						<input type="file" class="file" name="file" id="photo" fileType='jpg|png' onchange="uploadPhoto(this)"/>  
+						<div class="fakefile">  
+							<input type="text" value="200*200 jpg|png" id="photoTxt" class="reg_input" style="width:125px;"/><button id="uploadImg"><spring:message code="botton.browse" /></button>
+						</div>  
+					</div>
+					</form>
 				</div>
-				<div class="group">
-					<h3><spring:message code="title.userInfo.device" /></h3>
-					<table id="currentDataList">
-						<tr><th><spring:message code="title.userInfo.device.id" /></th><th><spring:message code="title.userInfo.device.currLocation" /></th><th><spring:message code="title.userInfo.device.mileage" /></th><th><spring:message code="title.userInfo.device.faultMsg" /></th></tr>
-					</table>
-				</div>
+		    </div>
+		    <div id="tabs-2">
+		        <table id="currentDataList">
+					<tr><th><spring:message code="title.userInfo.device.id" /></th><th><spring:message code="title.userInfo.device.currLocation" /></th><th><spring:message code="title.userInfo.device.mileage" /></th><th><spring:message code="title.userInfo.device.faultMsg" /></th></tr>
+				</table>
+		    </div>
 			</div>
 		</div>
 	</div>

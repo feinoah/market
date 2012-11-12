@@ -348,23 +348,21 @@ public class PortalController{
 				// 更新session
 				account.setPhoto(updateAccount.getPhoto());
 				account.setThumbPhoto(updateAccount.getThumbPhoto());
+				accountInfoService.saveOrUpdate(updateAccount);
+		        resultMap.put("photo", updateAccount.getPhoto());
+		        resultMap.put("thumbPhoto", updateAccount.getThumbPhoto());
+		        resultMap.put(Constants.ANSWER_CODE, 1);
 			}
         } catch (IllegalStateException e) {
         	log.error("upload file IllegalStateException...", e);
         	resultMap.put(Constants.ANSWER_CODE, -1);
-        	return resultMap;
         } catch (IOException e) {
         	log.error("upload file IOException...", e);
         	resultMap.put(Constants.ANSWER_CODE, -1);
-        	return resultMap;
         } catch (Exception e) {
         	log.error("upload file Exception...", e);
         	resultMap.put(Constants.ANSWER_CODE, -1);
 		}
-        accountInfoService.saveOrUpdate(updateAccount);
-        resultMap.put("photo", updateAccount.getPhoto());
-        resultMap.put("thumbPhoto", updateAccount.getThumbPhoto());
-        resultMap.put(Constants.ANSWER_CODE, 1);
     	return resultMap;
 	}
 	

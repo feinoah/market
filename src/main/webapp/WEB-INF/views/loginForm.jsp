@@ -125,6 +125,12 @@ $(function (){
 			login();
 		}
 	});
+	$('#reset_reg').click(function(){
+		$('#registerForm input').val('');
+	});
+	$('button').button().click(function( event ) {
+        event.preventDefault();
+    });
 });
 
 function login(){
@@ -151,7 +157,11 @@ function login(){
 			$(tooltips[3]).tooltip('option', 'content', '<spring:message code="tips.login.password.error"/>');
 			$(tooltips[3]).tooltip('open');
 		} else if(data.answerCode==1){
-			location.reload();
+			if('${param.call_back}'){
+				location.href='${param.call_back}';
+			}else{
+				location.reload();
+			}
 		} else {
 			$(tooltips[2]).tooltip('option', 'content', '<spring:message code="tips.system.error.unknown"/>');
 			$(tooltips[2]).tooltip('open');
@@ -185,9 +195,10 @@ function register(){
 </head>
 <body>
     <%@ include file="/WEB-INF/views/commons/header.jsp"%>
-	<div id="main" class="ym-grid" style="width:1024px;">
+	<div id="main" class="ym-grid">
 		<div class="ym-grid" id="loginRegister">
-			<form class="ym-g45 ym-gl" method="post" id="loginForm">
+			<div class="ym-g50 ym-gl">
+			<form  method="post" id="loginForm">
 				<h3><spring:message code="title.login"/></h3>
 				<dl>
 					<dd>
@@ -196,12 +207,15 @@ function register(){
 					<dd>
 						<span class="title"><spring:message code="title.userInfo.password"/></span><input class="reg_input" name="password" id="login_password" type="password" title="<spring:message code="tips.passwrod"/>"/>
 					</dd>
-					<dd>
-						<input type="button" onclick="login()" value="<spring:message code="title.login"/>"/>
+					<dd style="margin:0 auto;text-align: center;">
+						<button onclick="login()"><spring:message code="title.login"/></button>
+						<button onclick="location.href='${ctx}/forget_pwd?hl=${param.hl}';"><spring:message code="title.forget.pwd"/></button>
 					</dd>
 				</dl>
 			</form>
-			<form class="ym-g52 ym-gl" id="registerForm">
+			</div>
+			<div class="ym-g50 ym-gr">
+			<form id="registerForm">
 				<h3><spring:message code="title.register.title"/></h3>
 				<dl>
 					<dd>
@@ -216,11 +230,12 @@ function register(){
 					<dd>
 						<span class="title"><spring:message code="title.userInfo.confirm.password"/></span><input class="reg_input" type="password" id="t_RePass" name="t_RePass" title="<spring:message code="tips.confirm.password.onShow"/>"/><span id="t_RePassTip" class="onShow"></span>
 					</dd>
-					<dd>
-						<input type="button" onclick="register()" value="<spring:message code="title.register"/>" title=""/>
-					</dd
+					<dd style="margin:0 auto;text-align: center;">
+						<button onclick="register()"><spring:message code="title.register"/></button><button id="reset_reg"><spring:message code="botton.reset" /></button>
+					</dd>
 				</dl>
 			</form>
+			</div>
 		</div>
 	</div>
 	<%@ include file="/WEB-INF/views/commons/footer.jsp"%>

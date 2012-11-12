@@ -17,7 +17,7 @@ $(function (){
 		<jsp:include page="/WEB-INF/views/commons/left-sidebar.jsp" flush="true">
     		<jsp:param value="3" name="index"/>
     	</jsp:include>
-		<div class="ym-g85 ym-gl main-container">
+		<div class="ym-g80 ym-gl main-container">
 			<div id="poi-info">
 			</div>
 		</div>
