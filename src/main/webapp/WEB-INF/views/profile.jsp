@@ -53,9 +53,9 @@ $(function (){
     $('#person-info').tabs({
         event:'click'
     });
-    var json=$.parseJSON('${obdCurrentDataList}');
+    var json=$.parseJSON('${equipmentList}');
     $.each(json,function(i,o){
-    	$('#currentDataList').append('<tr><td>'+o.deviceId+'</td><td>'+o.location+'</td><td>'+o.values[16]+'</td><td>'+(o.error!=null?o.error:"")+'</td></tr>');
+    	$('#equipmentList').append('<tr><td>'+o.deviceId+'</td></tr>');
     });
     
     $('button').button().click(function( event ) {
@@ -144,6 +144,7 @@ $(function (){
 						$('#prompt').dialog('option','title','<spring:message code="dialog.title.prompt"/>');
 						$('#prompt').dialog('open');
 						account=map.portalUser;
+						location.reload();
 					}else{
 						$('#prompt p').html('<spring:message code="tips.system.exception"/>');
 						$('#prompt').dialog('option','title','<spring:message code="dialog.title.error"/>');
@@ -223,10 +224,17 @@ function uploadPhoto(o){
 		        <li><a href="#tabs-1"><spring:message code="title.userInfo.basic" /></a></li>
 		        <li><a href="#tabs-2"><spring:message code="title.userInfo.device" /></a></li>
 		    </ul>
+		</dl>
 		    <div id="tabs-1">
 		        <ul class="ym-g66 ym-gl">
 					<li><label><spring:message code="title.userInfo.account"/></label><span>${portalUser.email}</span><a href="javascript:$('#updatePwd').dialog('open');"><spring:message code="title.userInfo.update.pwd" /></a></li>
 					<li><label><spring:message code="title.userInfo.nickname" /></label><span>${portalUser.nickName}</span><a href="javascript:$('#updateAccount').dialog('open');"><spring:message code="title.userInfo.update" /></a></li>
+			    	<li><label><spring:message code="title.userInfo.gender" /></label><span><c:if test="${portalUser.gender eq 0}"><spring:message code="title.userInfo.gender.female" /></c:if>
+						<c:if test="${portalUser.gender eq 1}"><spring:message code="title.userInfo.gender.male" /></c:if>
+						<c:if test="${portalUser.gender eq 2}"><spring:message code="title.userInfo.gender.privary" /></c:if></span></li>
+			    	<li><label><spring:message code="title.userInfo.realname" /></label><span>${portalUser.realName}</span></li>
+					<li><label><spring:message code="title.userInfo.idCard" /></label><span>${portalUser.idCard}</span></li>
+					<li><label><spring:message code="title.userInfo.mobile" /></label><span>${portalUser.mobile}</span></li>
 				</ul>
 				<div class="ym-g33 ym-gr">
 					<img id="photo" alt="" src="${portalUser.photo}">
@@ -241,8 +249,8 @@ function uploadPhoto(o){
 				</div>
 		    </div>
 		    <div id="tabs-2">
-		        <table id="currentDataList">
-					<tr><th><spring:message code="title.userInfo.device.id" /></th><th><spring:message code="title.userInfo.device.currLocation" /></th><th><spring:message code="title.userInfo.device.mileage" /></th><th><spring:message code="title.userInfo.device.faultMsg" /></th></tr>
+		        <table id="equipmentList">
+					<tr><th><spring:message code="title.userInfo.device.id" /></th><!-- <th><spring:message code="title.userInfo.device.currLocation" /></th><th><spring:message code="title.userInfo.device.mileage" /></th><th><spring:message code="title.userInfo.device.faultMsg" /></th>--></tr>
 				</table>
 		    </div>
 			</div>

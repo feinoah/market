@@ -53,6 +53,7 @@ import cn.com.carit.market.service.app.AppDownloadLogService;
 import cn.com.carit.market.service.app.AppVersionFileService;
 import cn.com.carit.market.service.app.ApplicationService;
 import cn.com.carit.market.service.app.SystemMessageService;
+import cn.com.carit.platform.client.CaritClient;
 
 @Controller
 @RequestMapping(value="portal")
@@ -81,6 +82,8 @@ public class PortalController{
 	
 	@Resource
 	private SystemMessageService systemMessageService;
+	@Resource
+	private CaritClient caritClient;
 	
 	/**
 	 * 注册帐号<br>
@@ -221,7 +224,6 @@ public class PortalController{
 	            cookie.setMaxAge(-1);   
 	            cookie.setPath("/");   
 	            res.addCookie(cookie);
-	            
 			}
 			if (answerCode.intValue()==0) {// 密码错误
 				session.setAttribute(Constants.PASSWORD_ERROR_COUNT+email, errorCount+1);
@@ -240,8 +242,9 @@ public class PortalController{
 		HttpSession session=req.getSession();
 		AccountInfo account=(AccountInfo) session.getAttribute(Constants.PORTAL_USER);
 		if (account!=null) {
-			session.setAttribute(Constants.PORTAL_USER, null);
-			session.setAttribute(Constants.PASSWORD_ERROR_COUNT+account.getEmail(), 0);
+			session.removeAttribute(Constants.PORTAL_USER);
+			session.removeAttribute(Constants.PASSWORD_ERROR_COUNT+account.getEmail());
+			session.removeAttribute(Constants.EQUIPMENT_LIST);
 		}
 		Cookie cookie = new Cookie(SphinxUtil.getValue("cookie.name.user"), "");
 		cookie.setMaxAge(0); // delete the cookie.   

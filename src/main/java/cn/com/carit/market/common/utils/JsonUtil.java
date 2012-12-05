@@ -1,6 +1,9 @@
 package cn.com.carit.market.common.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -48,6 +51,10 @@ public static final ObjectMapper MAPPER = new ObjectMapper();
 		});
 	}
 	
+	public static <T> String listToJson(List<T> list) throws Exception {
+		return MAPPER.writeValueAsString(list);
+	}
+	
 	/**
 	 * @param args
 	 * @throws IOException 
@@ -68,6 +75,20 @@ public static final ObjectMapper MAPPER = new ObjectMapper();
 		}
 		System.out.println(arrayToStr(array));
 		System.out.println("   \t\t\r\nlll".replaceAll("\\W", ""));
+		
+		
+		List<Map<String,String>> list=new ArrayList<Map<String,String>>();
+		Calendar c=Calendar.getInstance();
+		for (int i = 0; i < 100000; i++) {
+			Map<String,String> temp=new HashMap<String,String>();
+			temp.put("name", "姓名"+i);
+			temp.put("num", "13800013800");
+			temp.put("gender", String.valueOf(i%2));
+			temp.put("time", String.valueOf(c.getTimeInMillis()));
+			list.add(temp);
+		}
+		
+		System.out.println(listToJson(list));
 	}
 
 }

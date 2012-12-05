@@ -44,7 +44,7 @@ public class StringUtil {
 		SimpleDateFormat sdf = new SimpleDateFormat(formatter);
 		return sdf.parse(dateStr);
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		System.out.println(splitFieldWords("updateTime"));
 		Calendar calendar=Calendar.getInstance();// 当前时间
 		calendar.add(Calendar.DATE, -30);

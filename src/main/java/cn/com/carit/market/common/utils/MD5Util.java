@@ -145,6 +145,11 @@ public class MD5Util {
 		Matcher matcher = pattern.matcher("2012-12-12 20:20:20");
 		System.out.println(matcher.replaceAll(""));
 		System.out.println("2012-12-12 20:20:20".replaceAll("-|:|\\s", ""));
+		String [] arr = "aaa@|@bbb".split("@\\|@");
+		for (String str : arr) {
+			System.out.println(str);
+		}
+		
 	}
 	
 }

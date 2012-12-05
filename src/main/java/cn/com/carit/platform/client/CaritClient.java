@@ -8,8 +8,6 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.annotation.Resource;
 
@@ -69,9 +67,6 @@ public class CaritClient {
     
     private String messageFormat=MessageFormat.json.toString();
     
-    private Timer timer;
-    
-
 	public String getSessionId() {
 		return sessionId;
 	}
@@ -142,43 +137,24 @@ public class CaritClient {
 	}
 	
 	/**
-	 * 获取session
+	 * 获取1.0 session
 	 * @throws Exception
 	 */
-	public void getSession() throws Exception{
-		if(this.getSessionId()==null){
-			Map<String, String> paramValues=this.buildParamValues("platform.getSession", "1.0");
-			// 生成签名
-			String sign=ClientUtils.sign(paramValues, this.appSecret);
-			// 不需要签名的参数放后面
-			paramValues.put(SYSTEM_PARAM_SIGN, sign);
-			// 获取响应
-			String resonse=getHttpResponse(ClientUtils.buildRequestUrl(this.serverUrl, paramValues), "POST");
-			try{
-				LogonResponse response=(LogonResponse) JsonUtil.jsonToObject(resonse, LogonResponse.class);
-				// 给客户端实例设置sessionId
-				this.setSessionId(response.getSessionId());
-				// 开启一个延时5分钟每间隔5分钟执行一次的定时器模拟长链接
-				timer=new Timer("keep connection timer", false);
-				timer.schedule(new TimerTask() {
-					
-					@Override
-					public void run() {
-						Map<String, String> paramValues=buildParamValues("platform.heartbeat", "1.0", getSessionId());
-						// 生成签名
-						String sign=ClientUtils.sign(paramValues, appSecret);
-						// 不需要签名的参数放后面
-						paramValues.put(SYSTEM_PARAM_SIGN, sign);
-						// 获取响应
-						getHttpResponse(paramValues);
-					}
-					
-				}, 5*60*1000, 5*60*1000);
-			} catch (Exception e) {
-				logger.error(e.getMessage(), e);
-			}
+	public String getSession() throws Exception{
+		Map<String, String> paramValues=this.buildParamValues("platform.getSession", "1.0");
+		// 生成签名
+		String sign=ClientUtils.sign(paramValues, this.appSecret);
+		// 不需要签名的参数放后面
+		paramValues.put(SYSTEM_PARAM_SIGN, sign);
+		// 获取响应
+		String resonse=getHttpResponse(ClientUtils.buildRequestUrl(this.serverUrl, paramValues), "POST");
+		try{
+			LogonResponse response=(LogonResponse) JsonUtil.jsonToObject(resonse, LogonResponse.class);
+			return response.getSessionId();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
 		}
-		
+		return null;
 	}
 	
 	/**
