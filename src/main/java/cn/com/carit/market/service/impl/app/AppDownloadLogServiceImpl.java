@@ -10,7 +10,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cn.com.carit.market.bean.app.AppDownloadLog;
@@ -28,7 +27,7 @@ import cn.com.carit.market.service.app.AppDownloadLogService;
  * Auto generated Code
  */
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 	
 	private final Logger logger=Logger.getLogger(getClass());
@@ -37,7 +36,7 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 	private AppDownloadLogDao appDownloadLogDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public void saveOrUpdate(AppDownloadLog appDownloadLog) {
 		if (appDownloadLog==null) {
 			throw new NullPointerException("appDownloadLog object is null...");
@@ -50,7 +49,7 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -58,7 +57,7 @@ public class AppDownloadLogServiceImpl implements AppDownloadLogService{
 		return appDownloadLogDao.delete(id);
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int deleteByAppId(int appId) {
 		if (appId<=0) {

@@ -4,7 +4,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +23,7 @@ import cn.com.carit.market.service.app.AppVersionFileService;
  * Auto generated Code
  */
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class AppVersionFileServiceImpl implements AppVersionFileService{
 	
 	@Resource
@@ -33,7 +32,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 	private ApplicationDao applicationDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public void saveOrUpdate(AppVersionFile appVersionFile) {
 		if (appVersionFile==null) {
 			throw new NullPointerException("appVersionFile object is null...");
@@ -52,7 +51,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		int exceptedId = 0;
 		if (appVersionFile.getId()==0) {
 			if (appVersionFile.getStatus()!=null 
-					&& appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) {
+					&& (appVersionFile.getStatus().intValue()&Constants.STATUS_VALID)!=0) {
 				app.setStatus(Constants.STATUS_VALID);
 				// 新增/编辑的是有效版本，标记更新应用
 				updateApp=true;
@@ -61,7 +60,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 			exceptedId=appVersionFileDao.add(appVersionFile);
 		} else {
 			exceptedId=appVersionFile.getId();
-			if (appVersionFile.getStatus().intValue()==Constants.STATUS_VALID) { // 标记更新应用
+			if ((appVersionFile.getStatus().intValue()&Constants.STATUS_VALID)!=0) { // 标记更新应用
 				app.setStatus(Constants.STATUS_VALID);
 				updateApp=true;
 			} else {
@@ -88,7 +87,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -124,7 +123,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			String [] array=ids.split(",");
@@ -165,6 +164,7 @@ public class AppVersionFileServiceImpl implements AppVersionFileService{
 		return appVersionFileDao.queryByExemple(appVersionFile, dgm);
 	}
 
+	@Override
 	public JsonPage<PortalAppVersionFile> queryByExemple(PortalAppVersionFile appVersionFile,
 			DataGridModel dgm) {
 		return appVersionFileDao.queryByExemple(appVersionFile, dgm);

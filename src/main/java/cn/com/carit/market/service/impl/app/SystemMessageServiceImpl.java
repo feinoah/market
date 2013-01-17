@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -20,7 +19,7 @@ import cn.com.carit.market.dao.app.ApplicationDao;
 import cn.com.carit.market.dao.app.SystemMessageDao;
 import cn.com.carit.market.service.app.SystemMessageService;
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class SystemMessageServiceImpl implements SystemMessageService {
 	private final Logger logger = Logger.getLogger(getClass());
 	
@@ -32,7 +31,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 	private AccountInfoDao accountInfoDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int saveOrUpdate(SystemMessage systemMessage) {
 		if (systemMessage==null) {
 			logger.error("systemMessage object is null...", new NullPointerException());
@@ -77,7 +76,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			logger.error("id must be bigger than 0...", new IllegalArgumentException());
@@ -87,7 +86,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			return systemMessageDao.batchDelete(ids);
@@ -158,7 +157,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
 		return systemMessageDao.queryUnreadCountByAccountId(accountId);
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public void addAppUpdateNotice() {
 		// 获取到用户下载应用记录中所有和应用当前版本不一致的列表

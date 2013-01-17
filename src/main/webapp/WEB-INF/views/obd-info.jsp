@@ -46,6 +46,14 @@ $(function (){
      });
      $('#deviceId').change(function(){
     	 $.getJSON('${ctx}/obd/'+this.value+'/${portalUser.id}', function(data) {
+			 if(data=='null'||data==''){
+				$('span[id^=value_]').html('0');
+				$('#issue_count').html('0');
+				$('li[id^=value_]').removeClass('warn').each(function(){
+					$(this).children('.center').children('span:first').html('');
+				});
+				return;
+			 }
     		 var json=$.parseJSON(data);
     		 if(json.data){
 				$.each(json.data,function(i){
@@ -64,12 +72,6 @@ $(function (){
 					}
 				});
 				$('#issue_count').html($('.warn').size());
-			} else {
-				$('span[id^=value_]').html('0');
-				$('#issue_count').html('0');
-				$('li[id^=value_]').removeClass('warn').each(function(){
-					$(this).children('.center').children('span:first').html('');
-				});
 			}
     	 });
      }).change();

@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -19,7 +18,7 @@ import cn.com.carit.market.dao.permission.BaseUserRoleDao;
 import cn.com.carit.market.service.permission.BaseRoleService;
 import cn.com.carit.market.web.CacheManager;
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class BaseRoleServiceImpl implements BaseRoleService{
 	
 	@Resource
@@ -32,7 +31,7 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 	private BaseUserRoleDao baseUserRoleDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public void saveOrUpdate(BaseRole baseRole) {
 		if (baseRole==null) {
 			throw new NullPointerException("baseRole object is null...");
@@ -60,7 +59,7 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -73,7 +72,7 @@ public class BaseRoleServiceImpl implements BaseRoleService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			String [] array=ids.split(",");

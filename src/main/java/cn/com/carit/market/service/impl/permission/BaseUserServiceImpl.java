@@ -9,7 +9,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -24,7 +23,7 @@ import cn.com.carit.market.dao.permission.BaseUserRoleDao;
 import cn.com.carit.market.service.permission.BaseUserService;
 import cn.com.carit.market.web.CacheManager;
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class BaseUserServiceImpl implements BaseUserService{
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -34,7 +33,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 	private BaseUserRoleDao baseUserRoleDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public void saveOrUpdate(BaseUser baseUser) throws Exception {
 		if (baseUser==null) {
 			throw new NullPointerException("baseUser object is null...");
@@ -68,7 +67,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -79,7 +78,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			String [] array=ids.split(",");
@@ -136,7 +135,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 		return baseUserDao.queryByExemple(baseUser, dgm);
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public Map<String, Object> login(String email, String password, String ip) throws Exception {
 		if (!StringUtils.hasText(email)) {
@@ -186,7 +185,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 		return baseUserDao.checkUser(email, nickName);
 	}
 	
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int updatePassword(int id, String oldPassword, String password) throws Exception {
 		if (id<=0) {
@@ -210,7 +209,7 @@ public class BaseUserServiceImpl implements BaseUserService{
 		updateUser.setPassword(password);
 		return baseUserDao.update(updateUser);
 	}
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int updateUser(BaseUser baseUser) {
 		if (baseUser==null) {

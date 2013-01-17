@@ -17,6 +17,7 @@ import cn.com.carit.market.bean.app.AccountInfo;
 import cn.com.carit.market.common.Constants;
 import cn.com.carit.market.common.utils.JsonUtil;
 import cn.com.carit.market.common.utils.StringUtil;
+import cn.com.carit.market.web.CacheManager;
 import cn.com.carit.platform.client.CaritClient;
 import cn.com.carit.platform.client.ClientUtils;
 
@@ -62,7 +63,7 @@ public class IndexController extends BaseController {
 			paramValues.put("endTime", String.valueOf(StringUtil.strToDate(endTime, Constants.DATE_HOUR_MIN_FORMATTER).getTime()));
 		}
 		// 不需要签名的参数放后面
-				paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
+		paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		return caritClient.getHttpResponse(paramValues);
 	}
 	
@@ -200,5 +201,11 @@ public class IndexController extends BaseController {
 		// 不需要签名的参数放后面
 		paramValues.put(CaritClient.SYSTEM_PARAM_SIGN, ClientUtils.sign(paramValues, caritClient.getAppSecret()));
 		return caritClient.getHttpResponse(paramValues);
+	}
+	
+	@RequestMapping(value="nav", method=RequestMethod.GET)
+	public String navIndex(){
+		addAttribute("catalogList", CacheManager.getInstance().getNavCatalogs(), false);
+		return "nav_index";
 	}
 }

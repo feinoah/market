@@ -191,8 +191,10 @@
 						<td><label id="enName_label"/></td>
 				</tr>
 				<tr>
+				<!-- 
 						<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 						<td><form:input path="version"  cssClass="easyui-validatebox"  required="true" validType="length[1,50]"/></td>
+				 -->
 						<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
 						<td>
 						<div class="fileinputs">  
@@ -218,7 +220,7 @@
 							<div title="中文" style="padding:3px;overflow:hidden;">  
 								<form:textarea path="newFeatures" cssStyle="width:470px;"/>
 							</div>  
-							<div title="英文" style="overflow:hidden;padding:3px;">  
+							<div title="英文" style="padding:3px;overflow:hidden;">  
 								<form:textarea path="enNewFeatures" cssStyle="width:470px;"/>
 							</div> 
 						</div>  

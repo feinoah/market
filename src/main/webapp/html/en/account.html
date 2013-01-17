@@ -64,6 +64,42 @@ $(function() {
 			});
 		}
 	});
+	$('#realName').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(v.length<3||v.length>15){
+			tips('realName','Pls input 3~15 characters as real name.','bottom');
+		}
+	});
+	$('#idCard').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(!isIdCardNo(v)){
+			tips('idCard','Pls input 15/18 characters as IDCard NO.','bottom');
+		}
+	});
+	$('#mobile').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(!chkMobile(v)){
+			tips('mobile','Pls input 11 digital.','bottom');
+		}
+	});
+	$('#officePhone').change(function(){
+		var v=$.trim($(this).val());
+		if(v.length>18){
+			tips('mobile','Limited 18 characters.','bottom');
+		}
+	});
 	$.getJSON(app.name+'/back/field/query/gender', function(data) {
 		if(data){
 			$.each(data,function(k,v){

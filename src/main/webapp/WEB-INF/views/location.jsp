@@ -42,7 +42,7 @@
 	var index=0;
 	var maxLen;
 	var timmer;
-	var delay=3000;
+	var delay=300;
 	var page=1;//默认页码
 	var rows=25;
 	var totalPage=1;//总页数

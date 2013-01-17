@@ -113,7 +113,7 @@
 		</style>
 	</head>
 	<body>
-		<form:form modelAttribute="appVersionFile" id="editForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;width:600px;"  enctype="multipart/form-data">
+		<form:form modelAttribute="appVersionFile" id="editForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;width:100%"  enctype="multipart/form-data">
 			<table>
 				<tr>
 					<td><form:label	for="appName" path="appName">应用名称：</form:label></td>
@@ -122,8 +122,18 @@
 					<td><label id="enName_label"/>${application.enName}</td>
 			</tr>
 			<tr>
+					<td><form:label	for="size" path="size"  cssClass="mustInput">文件大小：</form:label></td>
+					<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
+				<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
+				<td>
+					<form:input path="status" id="status_edit" cssClass="easyui-validatebox" cssStyle="width:180px;"/>
+				</td>
+			</tr>
+			<tr>
+					<!-- 
 					<td><form:label	for="version" path="version"  cssClass="mustInput">版本：</form:label></td>
 					<td><form:input path="version"  cssClass="easyui-validatebox"  required="true" validType="length[1,50]"/></td>
+					 -->
 					<td><form:label	for="filePath" path="filePath" >应用文件：</form:label></td>
 					<td>
 					<div class="fileinputs">  
@@ -135,22 +145,14 @@
 					</td>
 			</tr>
 			<tr>
-					<td><form:label	for="size" path="size"  cssClass="mustInput">文件大小：</form:label></td>
-					<td><form:input path="size" cssClass="easyui-validatebox" required="true"/></td>
-				<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
-				<td>
-					<form:input path="status" id="status_edit" cssClass="easyui-validatebox" cssStyle="width:180px;"/>
-				</td>
-			</tr>
-			<tr>
 				<td><form:label for="newFeatures" path="newFeatures" cssClass="easyui-validatebox">新特效：</form:label></td>
 				<td colspan="3">
 					<div id="descTabs" class="easyui-tabs" style="width:500px;height:180px;overflow:hidden;">  
 						<div title="中文" style="padding:3px;overflow:hidden;">  
-							<form:textarea path="newFeatures"/>
+							<form:textarea path="newFeatures" cssStyle="width:490px;"/>
 						</div>  
 						<div title="英文" style="overflow:hidden;padding:3px;">  
-							<form:textarea path="enNewFeatures"/>
+							<form:textarea path="enNewFeatures" cssStyle="width:490px;"/>
 						</div> 
 					</div>  
 				</td>

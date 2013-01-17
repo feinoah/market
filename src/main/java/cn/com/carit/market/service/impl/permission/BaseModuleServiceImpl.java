@@ -4,7 +4,6 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +15,7 @@ import cn.com.carit.market.dao.permission.BaseRoleModuleDao;
 import cn.com.carit.market.service.permission.BaseModuleService;
 import cn.com.carit.market.web.CacheManager;
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class BaseModuleServiceImpl implements BaseModuleService{
 	
 	@Resource
@@ -26,7 +25,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	private BaseRoleModuleDao baseRoleModuleDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public void saveOrUpdate(BaseModule baseModule) {
 		if (baseModule==null) {
 			throw new NullPointerException("baseModule object is null...");
@@ -41,7 +40,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=BaseModule.MAX_SYSTEM_MODULE_ID) {//权限管理模块不能删除
 			throw new IllegalArgumentException("id must be bigger than "+BaseModule.MAX_SYSTEM_MODULE_ID);
@@ -53,7 +52,7 @@ public class BaseModuleServiceImpl implements BaseModuleService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			String [] array=ids.split(",");

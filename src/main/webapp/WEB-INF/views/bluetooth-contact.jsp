@@ -19,7 +19,6 @@ $(function (){
 	doPage(1);
 });
 
-
 function doPage(page){
 	$('#rows').empty();
 	$('#pageDiv').empty();
@@ -104,7 +103,7 @@ function pagination(page,total){
 			<div id="contact-list">
 				<table id=rows>
 				</table>
-				<div id="pageDiv"><label class="cruLabel"><span class="selected">1</span><span onclick="doPage(2)">2</span></label></div>
+				<div id="pageDiv"></div>
 			</div>
 		</div>
 	</div>

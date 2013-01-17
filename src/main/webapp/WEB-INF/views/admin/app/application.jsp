@@ -136,12 +136,6 @@
 					handler:function() {
 						var m = $('#tt').datagrid('getSelected');
 						if (m) {
-							/*
-							$('#appId_editVersion').val(m.id);
-							$('#editVersionWin').window('open');
-							$('#editVersionForm').form('clear');
-							$('#editVersionWin').show();
-							*/
 							location.href='${ctx}/back/add/app/version/'+m.id;
 						} else {
 							$.messager.show({
@@ -236,64 +230,7 @@
 				featuresEditer.html('');
 				enFeaturesEditer.html('');
 			});
-			$('#edit_submit_version').bind('click',function(){
-				$('#editVersionForm').form({
-					onSubmit:function(){
-						newFeaturesEditer.sync();
-						enNewFeaturesEditer.sync();
-						// 避免 form validate bug
-						$('#version_status_edit').val($('#version_status_edit').combobox('getText'));
-						var b=true;
-						$('#editVersionForm textarea').each(function(){
-							if(getStrLen($.trim($(this).val()))>$(this).attr('maxLen')){
-								$.messager.alert('提示', $(this).attr('msg')+'超出'+$(this).attr('maxLen')+'字符(包括HTML标签，一个中文两个字符)', 'info');
-								b=false;
-								return false;
-							}
-						});
-						if(!b){return b;}
-						if($('#versionFile').val()==''){
-							$.messager.alert('提示', "应用文件必须上传", 'info');
-							return false;
-						} else {
-							b=chkFileType($('#versionFile').val(),$('#versionFile').attr('fileType'));
-							if(!b){
-								$.messager.alert('提示', '请上传 '+$('#versionFile').attr('fileType')+' 类型的文件', 'info');
-								b=false;
-								return false;
-							}
-						}
-						if(!b){return b;}
-						b=$(this).form('validate');
-						if(b){
-							$.messager.progress({title:'请稍后',msg:'提交中...'});
-						}
-						return b;
-					},
-					success:function(data){
-						$.messager.progress('close');
-			    		if(data==-1){
-							$.messager.alert('错误', "编辑失败", 'error');
-			    		} else if(data>0){
-							$.messager.alert('成功', "编辑成功", 'info');
-				        	$('#editVersionWin').window('close');
-				        	// update rows
-				        	$('#tt').datagrid('reload');
-						}else{
-			    			$.messager.alert('异常', "后台系统异常", 'error');
-						}
-				    }
-				}).submit();
-			});
-			$('#edit_reset_version').click(function(){
-				$('#editVersionForm').form('clear');
-				newFeaturesEditer.html('');
-				enNewFeaturesEditer.html('');
-			});
 			checkEditControl();
-			$('#editVersionWin').window({onClose:function(){
-				$('.validatebox-tip').remove();
-			}});
 			$('.combobox-f').each(function(){
 				$(this).combobox('clear');
 			});
@@ -517,30 +454,30 @@
 								<td><input type="text" name="size" id="size_edit" class="easyui-validatebox" required="true" style="width:200px;"/></td>
 							</tr>
 							<tr>
+								<!-- 
 								<td><label	for="version" class="mustInput">版本：</label></td>
 								<td><form:input path="version" required="true" validType="length[1,50]" class="easyui-validatebox" cssStyle="width:200px;"/></td>
+								 -->
+								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
+								<td>
+									<form:input path="status" id="status_edit" required="true" cssStyle="width:200px;"/>
+								</td>
 								<td><label for="catalogId" class="mustInput">分类：<label></td>
 								<td><form:input path="catalogId" id="catalogId_edit" required="true" editable='false' cssStyle="width:200px;"/></td>
 							</tr>
 							<tr>
 							</tr>
 							<tr>
-								<td><form:label	for="status" path="status" cssClass="mustInput">状态：</form:label></td>
-								<td>
-									<form:input path="status" id="status_edit" required="true" cssStyle="width:200px;"/>
-								</td>
 								<td><form:label	for="supportLanguages" path="supportLanguages" cssClass="mustInput">支持语言：</form:label></td>
 								<td>
 									<form:input path="supportLanguages" id="supportLanguages_edit" required="true" cssStyle="width:200px;"/>
 								</td>
-							</tr>
-							<tr>
 								<td><form:label	for="price" path="price">价格：</form:label></td>
 								<td><form:input path="price" cssClass="easyui-validatebox" validType="number" cssStyle="width:200px;"/></td>
-								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
-								<td><form:input path="platform" id="platform_edit" required="true" cssStyle="width:200px;"/></td>
 							</tr>
 							<tr>
+								<td><form:label	for="platform" path="platform">适用平台：</form:label></td>
+								<td><form:input path="platform" id="platform_edit" required="true" cssStyle="width:200px;"/></td>
 								<td><form:label	for="local" path="local">地区：</form:label></td>
 								<td><form:input path="local" id="local_edit" required="true" cssStyle="width:200px;"/></td>
 							</tr>
@@ -695,54 +632,5 @@
 			</div>
 		</div>
 		
-		<div id="editVersionWin" class="easyui-window" iconCls="icon-add" title="添加版本" closed="true" style="width:625px;height:350px;padding:5px;" modal="true">
-			<form id="editVersionForm" action="${ctx}/admin/app/version/save" method="post" cssStyle="padding:10px 20px;"  enctype="multipart/form-data">
-				<table>
-					<tr>
-						<td><label for="filePath" class="mustInput">应用文件：</label></td>
-						<td>
-						<div class="fileinputs">  
-							<input type="file" class="file" name="file" id="versionFile" fileType="apk" onchange="$('#versionFileTxt').val(this.value);"/>
-							<div class="fakefile">  
-								<input type="text" value="" id="versionFileTxt"/><button>浏览</button>
-							</div>  
-						</div>
-						</td>
-						<td><label	for="size" class="mustInput">文件大小：</label></td>
-						<td>
-						<input type="text" name="size" id="size" class="easyui-validatebox" required="true"/>
-						</td>
-				</tr>
-				<tr>
-					<td><label	for="version" class="mustInput">版本：</label></td>
-					<td><input type="text" name="version" id="version" required="true" validType="length[1,50]" class="easyui-validatebox"/></td>
-					<td><label	for="status" class="mustInput">状态：</label></td>
-					<td>
-						<input name="status" id="version_status_edit" required="true" editable='false' />
-					</td>
-				</tr>
-				<tr>
-					<td><label class="easyui-validatebox">新特性：</label></td>
-					<td colspan="3">
-						<div id="new_features_tabs" title="新特性" class="easyui-tabs" style="width:490px;height:170px;overflow:hidden;">
-							<div title="中文" style="overflow:hidden;padding:3px;">
-								<textarea name="newFeatures" style="width: 480px;"></textarea>
-							</div>  
-							<div title="英文" style="overflow:hidden;padding:3px;">  
-								<textarea name="enNewFeatures" style="width: 480px;"></textarea>
-							</div> 
-						</div>
-					</td>
-				</tr>
-				</table>
-				<input type="hidden" name="appId" id="appId_editVersion"/>
-				<div style="text-align: center; padding: 5px;">
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_submit_version"
-						iconCls="icon-save">保 存</a>
-					<a href="javascript:void(0)" class="easyui-linkbutton" id="edit_reset_version"
-						iconCls="icon-undo">重 置</a>
-				</div>
-			</form>
-		</div>
 	</body>
 </html>

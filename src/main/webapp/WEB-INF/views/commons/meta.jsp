@@ -18,19 +18,31 @@
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-	<script type="text/javascript" src="http://code.jquery.com/ui/1.9.0/jquery-ui.min.js"></script>
-	<script type="text/javascript" src="resources/public/scripts/jquery-ui-timepicker-addon.js"></script>
-	<script type="text/javascript" src="resources/public/scripts/utils.js?v1.2"></script>
+	<script type="text/javascript" src="${ctx }/resources/jquery-easyui-1.3/jquery-1.7.2.min.js"></script>
+	<script src="${ctx }/resources/public/scripts/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="${ctx }/resources/public/scripts/jquery-ui-timepicker-addon.js"></script>
+	<script type="text/javascript" src="${ctx }/resources/public/scripts/utils.js?v1.2"></script>
 	<script type="text/javascript">
 	$(function (){
 		$('#logout').click(function(){
+			<c:choose>
+				<c:when test="${param.index eq 1}">
+			$.ajax({
+			  url: '${ctx}/partner/logout',
+			  success: function(data) {
+				  location.href='${ctx}/partner/index';
+			  }
+			});
+				</c:when>
+				<c:otherwise>
 			$.getJSON(app.name+'/portal/logout', function(data) {
 				if (data==1) {
 					account={};
 					location.reload();
 				}
 			});
+				</c:otherwise>
+			</c:choose>
 		});
 	});
 	</script>

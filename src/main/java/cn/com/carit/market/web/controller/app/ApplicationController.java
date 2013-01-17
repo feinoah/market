@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import cn.com.carit.market.bean.app.Application;
 import cn.com.carit.market.common.Constants;
+import cn.com.carit.market.common.utils.AnalysisApkUtils;
 import cn.com.carit.market.common.utils.AttachmentUtil;
 import cn.com.carit.market.common.utils.DataGridModel;
 import cn.com.carit.market.common.utils.JsonPage;
@@ -91,8 +92,14 @@ public class ApplicationController {
         				apkMultipartFile.getOriginalFilename().lastIndexOf("."));
         		fileName = (prefix+ suffix).toLowerCase();// 构建文件名称
         		File apkFile=AttachmentUtil.getApkFile(fileName);
+        		
         		apkMultipartFile.transferTo(apkFile);
         		application.setAppFilePath(Constants.BASE_PATH_APK+fileName);
+        		
+        		// 设置版本和软件包信息
+        		AnalysisApkUtils.analysis(apkFile);
+        		application.setVersion(AnalysisApkUtils.getVersionName());
+        		application.setPackageName(AnalysisApkUtils.getPackage());
 			}
         	//页面控件的文件流
         	MultipartFile multipartFile = multipartRequest.getFile("iconFile");

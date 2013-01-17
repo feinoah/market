@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -25,7 +24,7 @@ import cn.com.carit.market.service.app.AppCommentService;
  * Auto generated Code
  */
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class AppCommentServiceImpl implements AppCommentService{
 	private final Logger log = Logger.getLogger(getClass());
 	@Resource
@@ -35,7 +34,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 	@Resource
 	private AppDownloadLogDao appDownloadLogDao;
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int saveOrUpdate(AppComment appComment) {
 		if (appComment==null) {
 //			throw new NullPointerException("appComment object is null...");
@@ -70,7 +69,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -79,7 +78,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 	}
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			return appCommentDao.batchDelete(ids);
@@ -87,7 +86,7 @@ public class AppCommentServiceImpl implements AppCommentService{
 		return 0;
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int deleteByAppId(int appId) {
 		if (appId<=0) {

@@ -120,7 +120,7 @@ public class CaritClient {
 		paramValues.put(SYSTEM_PARAM_METHOD, method);
 		paramValues.put(SYSTEM_PARAM_APPKEY, appKey);
 		paramValues.put(SYSTEM_PARAM_VERSION, version);
-		paramValues.put(SYSTEM_PARAM_LOCALE, locale);
+		paramValues.put(SYSTEM_PARAM_LOCALE, getLocale());
 		paramValues.put(SYSTEM_PARAM_MESSAGE_FORMAT, CaritClient.MessageFormat.json.toString());
 		return paramValues;
 	}
@@ -130,7 +130,7 @@ public class CaritClient {
 		paramValues.put(SYSTEM_PARAM_METHOD, method);
 		paramValues.put(SYSTEM_PARAM_APPKEY, appKey);
 		paramValues.put(SYSTEM_PARAM_VERSION, version);
-		paramValues.put(SYSTEM_PARAM_LOCALE, locale);
+		paramValues.put(SYSTEM_PARAM_LOCALE, getLocale());
 		paramValues.put(SYSTEM_PARAM_MESSAGE_FORMAT, CaritClient.MessageFormat.json.toString());
 		paramValues.put(SYSTEM_PARAM_SESSION_ID, sessionId);
 		return paramValues;
@@ -149,7 +149,7 @@ public class CaritClient {
 		// 获取响应
 		String resonse=getHttpResponse(ClientUtils.buildRequestUrl(this.serverUrl, paramValues), "POST");
 		try{
-			LogonResponse response=(LogonResponse) JsonUtil.jsonToObject(resonse, LogonResponse.class);
+			LogonResponse response=JsonUtil.jsonToObject(resonse, LogonResponse.class);
 			return response.getSessionId();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);

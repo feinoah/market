@@ -26,7 +26,7 @@
 	<!-- Context Configuration locations for Spring XML files -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:resources/spring/spring.xml</param-value>
+		<param-value>classpath:resources/spring.xml</param-value>
 	</context-param>
 
 	<!-- Handles all requests into the application -->
@@ -36,7 +36,7 @@
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
 			<param-value>
-				classpath:resources/spring/spring-controller.xml
+				classpath:resources/spring.xml
 			</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>

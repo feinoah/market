@@ -41,7 +41,7 @@ public static final ObjectMapper MAPPER = new ObjectMapper();
 		return "[]";
 	}
 	
-	public static <T> Object jsonToObject(String json, Class<T> clazz) throws Exception{
+	public static <T> T jsonToObject(String json, Class<T> clazz) throws Exception{
 		return MAPPER.readValue(json, clazz);
 	}
 	
@@ -53,6 +53,10 @@ public static final ObjectMapper MAPPER = new ObjectMapper();
 	
 	public static <T> String listToJson(List<T> list) throws Exception {
 		return MAPPER.writeValueAsString(list);
+	}
+	
+	public static <T> String objToJson(T t) throws Exception{
+		return MAPPER.writeValueAsString(t);
 	}
 	
 	/**

@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 import org.apache.log4j.Logger;
 import org.sphx.api.SphinxException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -28,7 +27,7 @@ import cn.com.carit.market.service.app.ApplicationService;
  * Auto generated Code
  */
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class ApplicationServiceImpl implements ApplicationService{
 	private final Logger log = Logger.getLogger(getClass());
 	@Resource
@@ -39,7 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	private AppVersionFileDao appVersionFileDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int saveOrUpdate(Application application)  {
 		if (application == null) {
 			throw new NullPointerException("application object is null...");
@@ -101,7 +100,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int updateDownCount(int id, int downCount) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -117,7 +116,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -141,7 +140,7 @@ public class ApplicationServiceImpl implements ApplicationService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			String [] array=ids.split(",");

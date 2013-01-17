@@ -8,8 +8,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
@@ -133,23 +131,5 @@ public class MD5Util {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// A=APP_AMS_login替换为A=XX
-		// String str="DBSaver=ActionLog||A=APP_AMS_login||C=$7||";
-		// System.out.println(str.replaceAll("A=.+?(\\|\\||\\s)", "A=XX||"));
-		//
-//		 Pattern pattern = Pattern.compile("@.+?(:|\\s)");
-//		 Matcher matcher = pattern.matcher("@正则表达式:Hello World,@正则表达式  HelloWorld");
-//		
-//		 System.out.println(matcher.replaceAll("Java"));
-		Pattern pattern = Pattern.compile("-|:|\\s");
-		Matcher matcher = pattern.matcher("2012-12-12 20:20:20");
-		System.out.println(matcher.replaceAll(""));
-		System.out.println("2012-12-12 20:20:20".replaceAll("-|:|\\s", ""));
-		String [] arr = "aaa@|@bbb".split("@\\|@");
-		for (String str : arr) {
-			System.out.println(str);
-		}
-		
 	}
-	
 }

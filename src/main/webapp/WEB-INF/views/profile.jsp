@@ -224,7 +224,6 @@ function uploadPhoto(o){
 		        <li><a href="#tabs-1"><spring:message code="title.userInfo.basic" /></a></li>
 		        <li><a href="#tabs-2"><spring:message code="title.userInfo.device" /></a></li>
 		    </ul>
-		</dl>
 		    <div id="tabs-1">
 		        <ul class="ym-g66 ym-gl">
 					<li><label><spring:message code="title.userInfo.account"/></label><span>${portalUser.email}</span><a href="javascript:$('#updatePwd').dialog('open');"><spring:message code="title.userInfo.update.pwd" /></a></li>

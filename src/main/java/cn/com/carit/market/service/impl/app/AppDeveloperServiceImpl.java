@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -16,7 +15,7 @@ import cn.com.carit.market.common.utils.JsonPage;
 import cn.com.carit.market.dao.app.AppDeveloperDao;
 import cn.com.carit.market.service.app.AppDeveloperService;
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class AppDeveloperServiceImpl implements AppDeveloperService {
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -24,7 +23,7 @@ public class AppDeveloperServiceImpl implements AppDeveloperService {
 	private AppDeveloperDao appDeveloperDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int saveOrUpdate(AppDeveloper developer) {
 		if (developer==null) {
 			log.error("developer object is null..."
@@ -38,7 +37,7 @@ public class AppDeveloperServiceImpl implements AppDeveloperService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			log.error("id must be bigger than 0..."
@@ -49,7 +48,7 @@ public class AppDeveloperServiceImpl implements AppDeveloperService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			return appDeveloperDao.batchDelete(ids);

@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -19,13 +18,13 @@ import cn.com.carit.market.dao.permission.BaseFieldDao;
 import cn.com.carit.market.service.permission.BaseFieldService;
 
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class BaseFieldServiceImpl implements BaseFieldService {
 	@Resource
 	private BaseFieldDao baseFieldDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int saveOrUpdate(BaseField field) {
 		if (field==null) {
 			throw new NullPointerException("field object is null...");
@@ -38,7 +37,7 @@ public class BaseFieldServiceImpl implements BaseFieldService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if(id<=0){
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -47,7 +46,7 @@ public class BaseFieldServiceImpl implements BaseFieldService {
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			return baseFieldDao.batchDelete(ids);

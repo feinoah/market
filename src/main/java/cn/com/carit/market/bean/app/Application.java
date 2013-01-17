@@ -100,6 +100,8 @@ public class Application extends BaseBean implements Serializable {
 	private String mainPic;
 	
 	private Integer local;
+	/**软件包名（唯一），如微信:com.tencent.mm*/
+	private String packageName;
 
 	public String[] getImageList() {
 		if (this.images != null && this.images.trim().length() > 0) {
@@ -306,6 +308,14 @@ public class Application extends BaseBean implements Serializable {
 
 	public void setLocal(Integer local) {
 		this.local = local;
+	}
+
+	public String getPackageName() {
+		return packageName;
+	}
+
+	public void setPackageName(String packageName) {
+		this.packageName = packageName;
 	}
 
 }

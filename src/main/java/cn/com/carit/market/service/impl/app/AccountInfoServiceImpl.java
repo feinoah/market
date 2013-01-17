@@ -8,7 +8,6 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -26,7 +25,7 @@ import cn.com.carit.market.service.app.AccountInfoService;
  * Auto generated Code
  */
 @Service
-@Transactional(propagation=Propagation.SUPPORTS,readOnly=true)
+@Transactional(readOnly=true)
 public class AccountInfoServiceImpl implements AccountInfoService{
 	private final Logger log = Logger.getLogger(getClass());
 	
@@ -34,7 +33,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	private AccountInfoDao accountInfoDao;
 	
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public AccountInfo saveOrUpdate(AccountInfo accountInfo) throws Exception {
 		if (accountInfo==null) {
 			throw new NullPointerException("accountInfo object is null...");
@@ -103,7 +102,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int delete(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -112,7 +111,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int batchDelete(String ids) {
 		if (StringUtils.hasText(ids)) {
 			return accountInfoDao.batchDelete(ids);
@@ -150,7 +149,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public Map<String, Object> login(String email, String password, String ip)
 			throws Exception {
 		if (!StringUtils.hasText(email)) {
@@ -194,7 +193,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int updatePwd(int id, String oldPassword, String newPassword) throws Exception {
 		if (!StringUtils.hasText(newPassword)) {
 			throw new IllegalArgumentException("newPassword must be not empty...");
@@ -215,7 +214,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int lockAccount(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -224,7 +223,7 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 	}
 
 	@Override
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	public int unLockAccount(int id) {
 		if (id<=0) {
 			throw new IllegalArgumentException("id must be bigger than 0...");
@@ -248,13 +247,13 @@ public class AccountInfoServiceImpl implements AccountInfoService{
 		return 0;
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int batchLockAccount(String ids) {
 		return accountInfoDao.batchLockAccount(ids);
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=false)
+	@Transactional(readOnly=false)
 	@Override
 	public int batchUnLockAccount(String ids) {
 		return accountInfoDao.batchUnLockAccount(ids);

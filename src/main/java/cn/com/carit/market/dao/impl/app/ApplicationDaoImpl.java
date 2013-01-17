@@ -64,6 +64,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 			t.setDeveloper(rs.getInt("developer"));
 			t.setMainPic(rs.getString("main_pic"));
 			t.setLocal(rs.getInt("local"));
+			t.setPackageName(rs.getString("package_name"));
 			return t;
 		}
 	};
@@ -106,8 +107,8 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				+ ", size, app_file_path, platform"
 				+ ", support_languages, price"
 				+ ", description , permission_desc, en_description , en_permission_desc"
-				+ ", images, status, create_time, update_time, features, en_features,main_pic, local"
-				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?, ?)";
+				+ ", images, status, create_time, update_time, features, en_features,main_pic, local, package_name"
+				+ ") values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,now(),now(),?,?,?, ?, ?)";
 		if (log.isDebugEnabled()) {
 			log.debug(String.format("\n%1$s\n", sql));
 		}
@@ -144,6 +145,7 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 				ps.setString(i++, t.getEnFeatures());
 				ps.setString(i++, t.getMainPic());
 				ps.setInt(i++, t.getLocal());
+				ps.setString(i++, t.getPackageName());
 				return ps;
 			}
 		}, gkHolder);
@@ -263,6 +265,10 @@ public class ApplicationDaoImpl extends BaseDaoImpl implements ApplicationDao {
 		if (application.getLocal()!=null) {
 			sql.append(", local=?");
 			args.add(application.getLocal());
+		}
+		if (StringUtils.hasText(application.getPackageName())) {
+			sql.append(", package_name=?");
+			args.add(application.getPackageName());
 		}
 		sql.append(" where id=?");
 		args.add(application.getId());

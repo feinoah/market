@@ -64,6 +64,42 @@ $(function() {
 			});
 		}
 	});
+	$('#realName').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(v.length<3||v.length>15){
+			tips('realName','请输入3~15位姓名','bottom');
+		}
+	});
+	$('#idCard').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(!isIdCardNo(v)){
+			tips('idCard','请输入15或18位身份证号码','bottom');
+		}
+	});
+	$('#mobile').change(function(){
+		var v=$(this).val();
+		if(v=''){
+			return;
+		}
+		var v=$.trim(v);
+		if(!chkMobile(v)){
+			tips('mobile','请输入11位手机号码','bottom');
+		}
+	});
+	$('#officePhone').change(function(){
+		var v=$.trim($(this).val());
+		if(v.length>18){
+			tips('mobile','18位以内','bottom');
+		}
+	});
 	$.getJSON(app.name+'/back/field/query/gender', function(data) {
 		if(data){
 			$.each(data,function(k,v){
