@@ -23,7 +23,7 @@ public class Partner {
 	}
 	public void setFirmName(String firmName) {
 		this.firmName = firmName;
-	}
+	} 
 	public String getCity() {
 		return city;
 	}
